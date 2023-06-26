@@ -1,0 +1,17 @@
+// Information Section
+.information-sec {
+    ul {
+        li {
+            h5 {
+                margin-bottom: 10px;
+            }
+            p {
+                margin-bottom: 0;
+                text-align: justify;
+            }
+            + li {
+                margin-top: 24px;
+            }
+        }
+    }
+}

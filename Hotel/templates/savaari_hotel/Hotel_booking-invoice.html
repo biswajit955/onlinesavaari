@@ -1,0 +1,488 @@
+{%load static%}
+{% include "savaari_hotel/hotel_header.html" %}
+<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+<!-- Popper Min -->
+<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<link href="{% static 'admin/assets/css/components/custom-modal.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/assets/css/elements/infobox.css' %}" rel="stylesheet" type="text/css" />
+<style>
+  .img-title {
+    position: absolute;
+    top: 30px;
+    left: 195px;
+    background-color: rgba(255, 255, 255, 0.5);
+
+    font-size: 26px;
+  }
+
+  .p-title {
+    position: absolute;
+    top: 63px;
+    left: 199px;
+    background-color: rgba(255, 255, 255, 0.5);
+
+    font-size: 14px;
+  }
+
+  .h-day {
+    position: absolute;
+    top: 90px;
+    left: 500px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 5px;
+    font-size: 18px;
+
+  }
+
+  .h-room {
+    position: absolute;
+    top: 118px;
+    left: 500px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 5px;
+    font-size: 18px;
+
+  }
+
+  .h1-day {
+    position: absolute;
+    top: 90px;
+    left: 212px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 5px;
+    font-size: 18px;
+
+  }
+
+  .h2-room {
+    position: absolute;
+    top: 118px;
+    left: 212px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 5px;
+    font-size: 18px;
+
+  }
+</style>
+
+<main class="main-body" style="background-color: #F2F2F2;padding-top: 50px;">
+  <section class="details-pg">
+    <div class="row" style="background-image: linear-gradient(to right,#d3d3d3,#dfe1e7);padding: 4.8em;">
+    </div>
+    <div class="container" style="margin-top: -3.5em;padding-top: 0;">
+      <div class="row">
+        <div class="col-lg-8 left-sec" style="position: relative;">
+          <!-- <div class="title" style="position: absolute;top:-1.8em;">
+              <p class="m-0 p-0">Booking Id <b></b></p>
+            </div> -->
+          <!-- <div class="date" style="position: absolute;top:-1.7em;right: 2em;">
+              <p class="m-0 p-0">Booking on <b></b></p>
+            </div> -->
+          <div class="box-one review-box">
+            <div class="flight-info">
+
+
+              <div class="flight-sec mt-3 d-flex" style="align-items: flex-start;">
+                <div class="flight-img d-flex" style="align-items: center;gap:0.5em;">
+                  <img style="object-fit: contain;width: 150px;" src="data:image/png;base64,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"
+                    alt="">
+                  <div class="img-title"><b>{{objects.hotel_name}}</b></div>
+                </div>
+                <div class="da-info  d-flex" style="justify-content: space-evenly;flex: 1 1 80%;">
+                  <div class="a-info">
+
+                    <hr style="margin: 0.5em 0;">
+                    <p class="p-title"> {{objects.full_address}}</p>
+
+                    <p class="h1-day"><b>{{objects.check_in_date}}</b></p>
+                    <p class="h2-room">10:00</p>
+
+                    <p class="h-day"><b>{{objects.total_day_night}}</b></p>
+                    <p class="h-room"><small>{{objects.room_type}}</small></p>
+
+
+                  </div>
+                  <div class="total-time small">
+
+                  </div>
+
+                </div>
+              </div>
+              <div class="sec3">
+                <div class="p-2" style="background-color: #F2F2F2;border-radius: 2px;">
+                  <ul class="pax-info" style="
+                      display: flex;
+                      width: 100%;
+                      margin: 0.5em 0;
+                      " ;>
+                    <li style="flex: 4;">TRAVELLER</li>
+                    <li style="flex: 3;">BOOKING NO</li>
+                    <li style="flex: 3">Insurance policy number</li>
+                  </ul>
+                  <ul class="pax-info" style="
+                      display: flex;
+                      width: 100%;
+                      margin: 0.8em 0;
+                      " ;>
+                    <li style="flex: 4;">
+                      <P class="m-0" style="font-size: 0.7rem;">
+                        <strong style="font-size: 0.8rem;">{{objects.roomInfo}}</strong>
+                      </P>
+                    </li>
+                    <li style="flex: 3;"><strong>
+                        {{objects.osh_bookingId}}
+                      </strong>
+                    </li>
+
+                    <li id="policy" style="flex: 3;"></li>
+                  </ul>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+          <!-- important -->
+          <div class="box-one cancel-box" style="background-color: #FEEDD1;">
+            <div class="flight-title" style="margin-left: -16px;padding-left: 9px;border-left: 5px solid #C37600;">
+              <h3 class="m-0 p-0" style="display:flex;gap: 0.2em;color: #CF9233;">IMPORTANT INFORMATION</h3>
+            </div>
+            <ul style="list-style-type:disc;">
+              <li style="margin-left: 1em;margin-top: 0.5em;">
+                <h5 class="m-0">
+                  Valid ID proof needed:
+                </h5>
+              </li>
+              <p class="m-0">
+                Carry a valid photo Identification proof (Driver Licence, Aadhar Card, Pan Card or any other Government
+                recognised photo Identification)
+              </p>
+            </ul>
+          </div>
+          <div class="box-one mb-4">
+            <div class="flight-title" style="margin-left: -16px;padding-left: 9px;border-left: 5px solid #B1B4BB;">
+              <h4 class="m-0 p-0" style="display:flex;gap: 0.2em">
+                CONTACT INFORMATION
+              </h4>
+              <P class="m-0">
+                Information about primary traveller. Any communication by airlines will be sent to these details.
+              </P>
+            </div>
+            <div class="contact-detail pt-3">
+              <ul>
+                <li><b>Name</b></li>
+                <li>Email ID:- {{objects.email}}</li>
+                <li>Phone Number:- {{objects.mobile}}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Download Booking Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
+                          <label class="custom-control-label" for="customCheck1">
+                            <h6>Add Markup</h6>
+                            <small style="font-size: 0.65rem;">
+                              Add the mark-up amount charged to the customer.
+                            </small>
+                          </label>
+                        </div>
+                        <div>
+                          <div class="input-group mt-2">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">₹</span>
+                            </div>
+                            <input id="addmarkup_amount" type="number" class="form-control" aria-label="Amount">
+                          </div>
+                          <p>
+                            <small>This amount will be added to Frees & Surcharges</small>
+                          </p>
+                        </div>
+                        <hr>
+                        <p class="m-0"><strong>Payment Details</strong></p>
+                        <p class="m-0 d-flex justify-content-between"><small>Base Charges</small> <small id="base_fare">₹ {{data.itemInfos.AIR.totalPriceInfo.totalFareDetail.fC.BF}}</small></p>
+                        <p class="m-0 d-flex justify-content-between"><small>Fees & Surcharges</small><small id="fee_fare">₹ {{data.itemInfos.AIR.totalPriceInfo.totalFareDetail.fC.TAF}}</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                        <button id="custom_markup" type="button" class="btn btn-danger">Download</button>
+                    </div>
+                </div>
+            </div>
+          </div> -->
+        <!-- <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Raise a Claim:Select flights or Passengers</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div> -->
+        <!-- <div class="modal-body">
+                      <div class="title">
+                        <h4>
+                          I directly cancelled with the airline
+                        </h4>
+                        <small class="text-success">Choose this option if you have already cancelled your ticket directly with the concerned airline.</small>
+                        <div class="infobox-1 p-0" style="width: 100%;">
+                          <h5 style="padding: 0.5em;">Route Details</h5>
+                          <div id="routes_details" class="d-flex align-center ml-2">
+                            <div class="m-1">
+                                <label class="">
+                                  <input type="checkbox" class="form-control-input">
+                                  <span class="new-control-indicator"></span>Primary
+                                </label>
+                            </div>
+                            <div class="m-1">
+                                <label class="new-control new-checkbox checkbox-primary">
+                                  <input type="checkbox" class="new-control-input">
+                                  <span class="new-control-indicator"></span>Primary
+                                </label>
+                            </div>
+                          </div>
+                          <h5 style="padding: 0.5em;">Passenger Details</h5>
+                          <table class="table">
+                            <thead>
+                            <tr id="table-header">
+                              <th scope="col">#</th>
+                              <th scope="col">Title</th>
+                              <th scope="col">First Name</th>
+                              <th scope="col">Last Name</th>
+                              <th scope="col">PNR</th>
+                            </tr>
+                            </thead>
+                            <tbody id="table-body">
+                            </tbody>
+                          </table>
+                      </div>
+                      </div>
+                    </div> -->
+        <!-- <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                        <button type="button" class="btn btn-danger">Submit</button>
+                    </div> -->
+        <!-- </div>
+            </div>
+          </div> -->
+        <div class="col-lg-4 right-sec" style="margin-top: 30px; top: 0;">
+          <div class="box-one">
+            <div class="title">
+              <h4 style="font-weight: 700;">Submit Refund Request</h4>
+            </div>
+            <ul class="ml-3">
+
+              <li><a href="#" type="button" class="" data-toggle="modal" data-target="#exampleModal1">
+                  I want to cancel my booking
+                </a></li>
+
+              <li><a href="#">I want to reschedule my booking</a></li>
+              <!-- <li><a href="/rescheduleclaim?bookingId={{os_bookingId}}{{sdata.data.booking_id}}">flight rescheduled & did not travel</a></li> -->
+            </ul>
+            <hr>
+            <!-- <div class="title">
+                <h4 style="font-weight: 700;">Ticket(s)</h4>
+              </div> -->
+            <ul class="ml-3">
+              <!-- <li><a href="">Download E-ticket(s)</a></li>
+                <li><a href="">Email/SMS E-Ticket(s)</a></li> -->
+              <!-- <li><a href="#" id="btnExport">E-ticket</a></li>   
+                <li><a href="#" id="btnExport2">Invoice</a></li>
+               
+                <li><a href="#" type="button" class="" data-toggle="modal" data-target="#exampleModal">
+                  Customer Booking confirmation
+                </a></li> -->
+
+
+              <!-- <li><a href="{% url 'booking_history' %}">Customer Booking confirmation</a></li> -->
+          </div>
+          <div class="box-one" style="margin: 1em 0;">
+            <!-- <div class="title">
+                <h4 style="font-weight: 700;">Price Breakup</h4>
+              </div> -->
+            <ul>
+
+
+              <!-- <li>
+                  <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                    <span>Base Price</span>
+                    <span><b>₹ {{data.itemInfos.AIR.totalPriceInfo.totalFareDetail.fC.BF}}</b></span>
+                  </div>
+                </li> -->
+              <!-- <li>
+                  <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                    <span>Airline Taxes and Fees</span>
+                    <span><b>₹ {{data.itemInfos.AIR.totalPriceInfo.totalFareDetail.afC.TAF.MF}}</b></span>
+                  </div>
+                </li> -->
+              <!-- <li>
+                  <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                    <span>Management Fee</span>
+                    <span><b>₹ {{data.itemInfos.AIR.totalPriceInfo.totalFareDetail.fC.TAF}}</b></span>
+                  </div>
+                </li> -->
+              <!-- <li>
+                  <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                    <span>Meal/ Seat/Baggage/ Misc Charges</span>
+                    <span><b>₹ 0.00</b></span>
+                  </div>
+                </li> -->
+
+              <!-- <li>
+                  <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);">
+                    <span>
+                      <b>
+                        Total Amount
+                      </b>
+                    </span>
+                    <span><b>₹ {{ amount }}</b></span>
+                  </div>
+                </li> -->
+
+
+              <li>
+                <div class="d-flex"
+                  style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>Base Price</span>
+                  <span><b>₹ {{objects.base_price}} </b></span>
+                </div>
+              </li>
+              <li>
+                <div class="d-flex"
+                  style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>Taxes and Fees</span>
+                  <span><b>₹ {{objects.taxes_fees}} </b></span>
+                </div>
+              </li>
+              {% comment %} <li>
+                <div class="d-flex"
+                  style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>Management Fee</span>
+                  <span><b>₹ 0</b></span>
+                </div>
+              </li> {% endcomment %}
+              <!-- <li>
+                  <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                    <span>Meal/ Seat/Baggage/ Misc Charges</span>
+                    <span><b>₹ {{db_data.meal}}/{{db_data.seat}}/{{db_data.baggage}}</b></span>
+                  </div>
+                </li> -->
+
+              <li>
+                <div class="d-flex"
+                  style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>
+                    <b>
+                      Total Amount
+                    </b>
+                  </span>
+                  <span><b>₹ {{objects.total_price}}</b></span>
+                </div>
+              </li>
+
+
+              <!-- <li>
+                  <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);">
+                    <span>
+                      <b>
+                        Total Amount
+                      </b>
+                    </span>
+                    <span><b>₹ {{ amount }}</b></span>
+                  </div>
+                </li> -->
+
+            </ul>
+          </div>
+
+
+          <!-- <div id="insurance" class="box-one" style="margin: 1em 0;display: none;">
+            <div class="title">
+              <h4 style="font-weight: 700;">insurance</h4>
+            </div>
+            <ul>
+              <li>
+                <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>policy</span>
+                  <span class="policy"><b></b></span>
+                </div>
+              </li>
+              <li>
+                <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>pdf link</span>
+                  <a href="" class="url-ins" target="_blank">pdf</a>
+                </div>
+              </li>
+              <li>
+                <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>reference</span>
+                  <span class="ref"></span>
+                </div>
+              </li>
+              <li>
+                <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>
+                    <b>
+                      claim code
+                    </b>
+                  </span>
+                  <span class="claim"><b>$ 8700</b></span>
+                </div>
+              </li>
+            </ul>
+        </div>                         -->
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% include "savaari_hotel/hotel_footer.html" %}
+
+<!-- Jquery min -->
+<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+<!-- Popper Min -->
+<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+<!-- Jquery UI -->
+<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+<!-- Owl Carousel -->
+<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+<!-- Star Rating -->
+<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+<!-- Quantity -->
+<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+<!-- Phone -->
+<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+</body>
+
+</html>

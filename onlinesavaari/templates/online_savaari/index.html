@@ -1,0 +1,1779 @@
+{% load static%}
+{% include "online_savaari/header.html" %}
+<style>
+	.pos_rel {
+		position: relative;
+	}
+
+	#result {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: #fff;
+		z-index: 111;
+		align-items: flex-start;
+		margin: 0;
+		padding: 0.5em 1.5em;
+		flex-direction: column;
+		align-items: stretch;
+		overflow: hidden;
+	}
+
+	#result .adj {
+		flex: 0 0 10%;
+		margin: 0;
+		background: white;
+	}
+
+	/* #result .adj .flight-group {
+		max-width: 50%;
+	} */
+	#list {
+		flex: 1 1 80%;
+		overflow: scroll;
+	}
+
+	.user-info>* {
+		margin: 0;
+		margin-bottom: 0.3em;
+	}
+
+	#list ul {
+		margin-top: 0;
+		padding: 0;
+	}
+
+	#list li {
+		cursor: pointer;
+		padding: 0.4em 0;
+		display: flex;
+		align-items: center;
+		margin: 0.5em 0;
+		border-radius: 10px;
+	}
+
+	#list li input {
+		display: none;
+	}
+
+	/* #dfrom,
+	#dto {
+		border-bottom: 1px solid red;
+	} */
+	.close_btn {
+		display: flex;
+		align-items: center;
+		margin-bottom: 0.2em;
+	}
+
+	.close_btn .title {
+		margin: 0 auto;
+	}
+
+	.close_btn .title h4 {
+		margin: 0;
+	}
+
+	.exit_slt {
+		padding: 0;
+		background: transparent;
+		border: 0;
+		margin: 0;
+	}
+
+	.exit_slt h2 {
+		margin: 0;
+	}
+
+	.exit_slt:focus {
+		outline: 0;
+	}
+</style>
+<main class="main-body">
+	<section class="home-pg">
+		<div class="container">
+			{% csrf_token %}
+			<div class="row">
+				<div class="col-lg-5 left-sec">
+					<div class="booking-box box-one pos_rel">
+						<form method="get" action="flight/search_flight/">
+							<h4>Book Flights and Hotels</h4>
+							<ul class="trip-type-radio">
+								<li>
+									<label class="text-radio">
+										<input id="one-way" type="radio" name="radio1" value="one-way" checked="checked"
+											onclick="waySelect('one-way')">
+										<span class="checkmark"></span>
+										<span class="trip-label">one way</span>
+									</label>
+								</li>
+								<li>
+									<label class="text-radio">
+										<input id="round-trip" type="radio" name="radio1"
+											onclick="waySelect('round-trip')" value="two-way">
+										<span class="checkmark"></span>
+										<span class="trip-label">round trip</span>
+									</label>
+								</li>
+								<li>
+									<label class="text-radio">
+										<input id="multi-city" type="radio" name="radio1"
+											onclick="waySelect('multi-city')" value="multi-way">
+										<span class="checkmark"></span>
+										<span class="trip-label">multi-city</span>
+									</label>
+								</li>
+							</ul>
+							<div id="twoWay" class="flight-input">
+								<div class="flight-group">
+									<label for="">Depart From</label>
+									<!-- <input id=airport-depart type="text" placeholder="depart From"> -->
+									<input name="fromCityOrAirport" id="departFrom" type="text" list="airport"
+										placeholder="New Delhi" value="DEL">
+									<p class="small m-0">Delhi</p>
+									<!-- <input type="text" value="New Delhi"> -->
+
+
+									<!-- <select name="departFrom" id="" class="form-control">
+										<option value="PHW">Phalaborwa, South Africa</option>
+										<option value="JNB">Johanessberg, South Africa</option>
+										<option value="CPT">Cape Town, South Africa</option>
+										<option value="KIM">Kimbereley, Soth Africa</option>
+										<option value="BFN">Bloemfantin, South Africa</option>
+									</select> -->
+								</div>
+								<button type="button" onclick="switchText()">
+									<img src="{% static '/main/images/icon/swip.png' %}" alt="">
+								</button>
+
+								<div class="flight-group">
+									<label for="">Going To</label>
+									<input name="toCityOrAirport" id="departTo" list="airport" type="text"
+										placeholder="Mumbai" value="BOM">
+									<p class="small m-0">Mumbai</p>
+									<!-- <select name="departTo" id="" class="form-control">
+										<option value="PHW">Phalaborwa, South Africa</option>
+										<option value="JNB">Johanessberg, South Africa</option>
+										<option value="CPT">Cape Town, South Africa</option>
+										<option value="KIM">Kimbereley, Soth Africa</option>
+										<option value="BFN">Bloemfantin, South Africa</option>
+									</select> -->
+								</div>
+							</div>
+							<div id="multiCity1" class="flight-input flight-input-two">
+								<div class="flight-group">
+									<label for="">Depart From</label>
+									<input class="multi_depart_from1 multiselfrom" name="fromCityOrAirport1"
+										id="departFrom" list="airport" type="text" placeholder="New Delhi">
+									<p class="small m-0">Delhi</p>
+								</div>
+								<div class="flight-group">
+									<label for="">Going To</label>
+									<input class="multi_depart_to1 multiselto" name="toCityOrAirport1" type="text"
+										placeholder="Mumbai" id="departTo" list="airport">
+									<p class="small m-0">Mumbai</p>
+								</div>
+								<div class="flight-group">
+									<label for="">Departure Date</label>
+									<input id="multiReturnDate" type="text" class="datepicker" value=""
+										name="travel1Date">
+								</div>
+							</div>
+							<div id="multiCity2" class="flight-input flight-input-two">
+								<table id="dynamic_field">
+									<tr id="row1">
+										<td>
+											<div class="flight-group">
+												<label for="">Depart From</label>
+												<input class="multi_depart_from2 multiselfrom" name="fromCityOrAirport2"
+													type="text" placeholder="Mumbai" id="departTo" list="airport">
+												<p class="small m-0">Mumbai</p>
+											</div>
+										</td>
+										<td>
+											<div class="flight-group">
+												<label for="">Going To</label>
+												<input class="multi_depart_to2 multiselto" name="toCityOrAirport2"
+													type="text" id="departTo" list="airport" placeholder="">
+												<p class="small m-0"></p>
+											</div>
+										</td>
+										<td class="">
+											<div class="flight-group">
+												<label for="">Departure Date</label>
+												<input id="multiReturnDate1" type="text" class="datepicker"
+													name="travel2Date">
+											</div>
+										</td>
+										<td><button type="button" onclick="selectOneWay()"><img
+													src="{% static '/main/images/icon/close.png'%}" alt=""></button>
+										</td>
+
+									</tr>
+								</table>
+								<!-- <div class="flight-group">
+										<label for="">Depart From</label>
+										<input type="text" value="New Delhi">
+									</div>
+									<div class="flight-group">
+										<label for="">Going To</label>
+										<input type="text" value="Mumbai">
+									</div>
+									<div class="flight-group">
+										<label for="">Departure Date</label>
+										<input id="multiReturnDate" type="text" class="datepicker" value="">
+									</div>
+									<div class="flight-group">
+										<img src="{% static '/main/images/icon/close.png' %}" alt="" >
+									</div> -->
+							</div>
+							<div id="addCity" class="add-more-btn">
+								<button onclick="addData()" type="button">Add city</button>
+							</div>
+							<div id="dateDiv" class="flight-input">
+								<div class="flight-group">
+									<label for="">Departure Date</label>
+									<input type="text" class="datepicker" id="startDate" value="" name="travelDate">
+								</div>
+								<img id=calImg src="{% static '/main/images/icon/calendar.png' %}" alt="">
+								<div class="flight-group" id="returnGrp">
+									<label for="">Return Date</label>
+									<input id="returnDate" type="text" class="datepicker" value="" name="travelDate1">
+								</div>
+							</div>
+							<div class="person-select">
+								<label for="">Traveller(s), Class</label>
+								<div class="accordion-two" id="accordiontraveller">
+									<h2 id="countData" data-toggle="collapse" data-target="#collapse1"
+										aria-expanded="true" aria-controls="collapse1">
+										1 Traveller, Economy <i class="fa-solid fa-angle-down"></i>
+									</h2>
+									<div id="collapse1" class="collapse" aria-labelledby="heading1"
+										data-parent="#accordiontraveller">
+										<div class="add-person">
+											<div class="person-box">
+												<span>Adult</span>
+												<div class="quantity-box">
+													<button type="button" class="sub adult-sub">-</button>
+													<input type="number" id="three-max" value="1" min="1" max="9"
+														name="ADULT" />
+													<button type="button" class="add">+</button>
+												</div>
+											</div>
+											<div class="person-box">
+												<span>Child
+													<small> [2-12 YRS] </small></span>
+												<div class="quantity-box">
+													<button type="button" class="sub">-</button>
+													<input type="number" id="nine-max" value="0" min="0" max="9"
+														name="CHILD" />
+													<button type="button" class="add">+</button>
+												</div>
+											</div>
+											<div class="person-box">
+												<span>Infant
+													<small>[Below 2 YRS]</small></span>
+												<div class="quantity-box">
+													<button type="button" class="sub">-</button>
+													<input type="number" id="six-max" value="0" min="0" max="9"
+														name="INFANT" />
+													<button type="button" class="add">+</button>
+												</div>
+											</div>
+										</div>
+										<ul class="filter-list">
+											<li>
+												<label class="custom-radio">Economy
+													<input id="economy" checked="checked" name="cabinClass" type="radio"
+														value="ECONOMY" onclick="checkRadio('Economy')">
+													<span class="checkmark"></span>
+												</label>
+											</li>
+											<li>
+												<label class="custom-radio">Premium Economy
+													<input id="premimum_economy" name="cabinClass" type="radio"
+														value="PREMIUM_ECONOMY"
+														onclick="checkRadio('Premimum Economy')">
+													<span class="checkmark"></span>
+												</label>
+											</li>
+											<li>
+												<label class="custom-radio">Business
+													<input id="business" name="cabinClass" type="radio" value="BUSINESS"
+														onclick="checkRadio('Business')">
+													<span class="checkmark"></span>
+												</label>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<ul class="filter-list bt_filter">
+								<li>
+									<label class="custom-checkbox">Non Stop Flights
+										<!-- <input checked="checked" type="checkbox"> -->
+										<input type="checkbox" name="isDirectFlight" value="True">
+										<span class="checkmark"></span>
+									</label>
+								</li>
+								<li>
+									<label class="custom-checkbox-radio">Student Fare
+										<input id="student_box" type="checkbox" name="Special" value="STUDENT">
+										<span class="checkmark"></span>
+									</label>
+								</li>
+								<li>
+									<label class="custom-checkbox-radio">Armed Forces
+										<input id="armed_box" type="checkbox" name="Special" value="MIL">
+										<span class="checkmark"></span>
+									</label>
+								</li>
+								<li>
+									<label class="custom-checkbox-radio">Senior Citizen
+										<input id="senior_box" type="checkbox" name="Special" value="SENIOR_CITIZEN">
+										<span class="checkmark"></span>
+									</label>
+								</li>
+							</ul>
+							<div class="text-right mt-4">
+								<button class="btn btn-red">
+									Search Flights
+									<span><i class="la la-long-arrow-right la-lg"></i></span>
+								</button>
+							</div>
+						</form>
+						<div id="result" style="display: none;">
+							<div class="close_btn">
+								<button class="exit_slt">
+									<h2>
+										<< /h2>
+								</button>
+								<div class="title">
+									<h4>Select City</h4>
+								</div>
+							</div>
+							<div class="flight-input adj">
+								<div class="flight-group" id="search_from">
+									<label for="">Depart From</label>
+									<input name="fromCityOrAirport1" id="dfrom" list="airport" type="text"
+										placeholder="New Delhi">
+									<p class="small m-0 city-name">New Delhi</p>
+								</div>
+								<div class="flight-group" id="search_to">
+									<label for="">Depart To</label>
+									<input name="fromCityOrAirport1" id="dto" list="airport" type="text"
+										placeholder="New Delhi">
+									<p class="small m-0 city-name">Mumbai</p>
+								</div>
+							</div>
+							<div id="list">
+								<ul>
+									<li class="radio_btn">
+										<label for="airports">DEL</label>
+										<input type="radio" name="airpots" value="del">
+									</li>
+									<li class="radio_btn">
+										<label for="airports">BOM</label>
+										<input type="radio" name="airpots" value="kol">
+									</li>
+									<li class="radio_btn">
+										<label for="airports">DEL</label>
+										<input type="radio" name="airpots" value="raj">
+									</li>
+									<li class="radio_btn">
+										<label for="airports">DEL</label>
+										<input type="radio" name="airpots" value="ccu">
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-7 right-sec">
+					<!-- Ad Banner -->
+					<section class="add-banner">
+						<div class="row">
+							<div class="col-12">
+								<a href="#" class="add-box">
+									<img src="media/{{big_banner}}" alt="">
+								</a>
+							</div>
+							<div class="col-6">
+								<a href="#" class="add-box">
+									<img src="media/{{small_banner}}" alt="" height="120" width="20">
+								</a>
+							</div>
+
+							<div class="col-6">
+								<a href="#" class="add-box">
+									<img src="media/{{small_banner1}}" alt="" height="120" width="20">
+								</a>
+							</div>
+						</div>
+					</section>
+
+					<!-- Offer -->
+					<section class="offer-sec pt-5">
+						<div class="row">
+							<div class="col-12">
+								<div class="heading-one">
+									<h3>
+										Our Specials
+										<a href="#">view all <i class="fa fa-angle-double-right"></i></a>
+									</h3>
+								</div>
+								<div class="owl-carousel owl-theme owl-top-nav" id="offer-slider">
+
+									{% for item in promocode %}
+										<div class="item-promocode">
+											<a href="#" class="offer-box box-one">
+												<div class="left-sec">
+													<img src="{% static 'main/images/offers/1.jpg' %}" alt="">
+													<span class="offer-time">00d:09h:01m</span>
+												</div>
+												<div class="right-sec">
+													<p class="small m-0">{{ item.name }}</p>
+													<h4>{{ item.description }}</h4>
+													<p>Book your flight with best deal</p>
+												</div>
+												<div class="bottom-sec">
+													<span class="small">* T&C's Apply</span>
+													<span>
+														Code: <b>{{ item.promo_code }}</b>
+													</span>
+													<input type="hidden" value="{{ item.start_date }}" id="promo_start">
+													<input type="hidden" value="{{ item.end_date }}" id="promo_end">
+												
+												</div>
+											</a>
+										</div>
+									{% endfor %}
+									<!-- <div class="item">
+										<a href="#" class="offer-box box-one">
+											<div class="left-sec">
+												<img src="{% static 'main/images/offers/1.jpg' %}" alt="">
+												<span class="offer-time">00d:09h:01m</span>
+											</div>
+											<div class="right-sec">
+												<p class="small m-0">Trip to Europe</p>
+												<h4>Chance To Win A Trip to Europe</h4>
+												<p>use the code to perticipate on lucky draw and win Europe trip.</p>
+											</div>
+											<div class="bottom-sec">
+												<span class="small">* T&C's Apply</span>
+												<span>
+													Code: <b>EUROWIN</b>
+												</span>
+												<span><b>Book Now</b></span>
+											</div>
+										</a>
+									</div> -->
+									<!-- <div class="item">
+		                                    <a href="#" class="offer-box box-one">
+		                                        <div class="left-sec">
+		                                            <img src="{% static 'main/images/offers/1.jpg' %}" alt="">
+		                                            <span class="offer-time">00d:09h:01m</span>
+		                                        </div>
+		                                        <div class="right-sec">
+		                                            <p class="small m-0">Dom Hotels</p>
+		                                            <h4>Grab FLAT 8% OFF* on 10-Degree Stays</h4>
+		                                            <p>& get ready to Unsummer with a chilled-out break.</p>
+		                                        </div>
+		                                        <div class="bottom-sec">
+		                                            <span class="small">* T&C's Apply</span>
+		                                            <span>
+		                                                Code: <b>MMTSBI</b>
+		                                            </span>
+		                                            <span><b>Book Now</b></span>
+		                                        </div>
+		                                    </a>
+		                                </div> -->
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<!-- Flights -->
+					<section class="flight-sec pt-5">
+						<div class="row">
+							<div class="col-12">
+								<div class="heading-one">
+									<h3>Popular Domestic Flight Routes</h3>
+								</div>
+								<div class="tab-box-one">
+									<!-- <ul class="nav nav-pills" role="tablist">
+										<span>From -</span>
+										<li class="nav-item">
+											<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab"
+												role="tab" aria-controls="one-tab" aria-selected="true">NEW
+												DELHI</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab"
+												role="tab" aria-controls="two-tab" aria-selected="false">MUMBAI</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab"
+												role="tab" aria-controls="three-tab" aria-selected="false">OTHERS</a>
+										</li>
+									</ul> -->
+									<div class="tab-content">
+										<div class="tab-pane fade show active" id="one-tab" role="tabpanel"
+											aria-labelledby="tab-one">
+											<div class="owl-carousel owl-theme flights-slider owl-top-nav">
+												{% for item in max_domestic_search %}
+												<div class="item">
+													<form method="get" action="{% url 'search_flight' %}">
+														<div class="journey-box box-one">
+															<div class="top-sec">
+																<!-- <img src="{% static 'main/images/airline/1.png' %}" alt=""> -->
+																<h4>{{ item.origin_city }}<i class="la la-exchange mx-2"></i>{{ item.dest_city }}</h4>
+															</div>
+															<p class="time" id="dep_date">{% now "d M, Y" %}</p>
+															
+															<div class="bottom-sec">
+																<span>From <b><i class="la la-rupee"></i>{{ item.price }}</b></span>
+															</div>
+															<div class="mt-4 ml-2">
+																<input type="submit" name="submit_btn" value="Explore" class="btn btn-red">
+																<input type="hidden" value="{{item.origin}}" name="fromCityOrAirport">
+																<input type="hidden" value="{{item.destination}}" name="toCityOrAirport">
+																<input type="hidden" value="one-way" name="radio1">
+																<input type="hidden" value="ECONOMY" name="cabinClass">
+																<input type="hidden" value="{% now 'd-m-Y' %}" name="travelDate">
+																<input type="hidden" value="1" name="ADULT">
+																<input type="hidden" value="0" name="CHILD">
+																<input type="hidden" value="0" name="INFANT">
+																<input type="hidden" value="" name="Special">
+																<input type="hidden" value="" name="isDirectFlight">
+															</div>
+														</div>
+													</form>
+												</div>
+												
+												{% endfor %}
+											</div>
+										</div>
+
+										<!-- <div class="tab-pane fade" id="two-tab" role="tabpanel"
+											aria-labelledby="tab-two">
+											<div class="owl-carousel owl-theme flights-slider owl-top-nav">
+												<div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/5.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/6.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/7.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/8.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div>
+											</div>
+										</div> -->
+
+										<!-- <div class="tab-pane fade" id="three-tab" role="tabpanel"
+											aria-labelledby="tab-three">
+											<div class="owl-carousel owl-theme flights-slider owl-top-nav">
+												<div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/9.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/10.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/11.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/12.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div>
+											</div>
+										</div> -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<!-- Collection -->
+					<!-- <section class="collection-sec pt-5">
+		                    <div class="row">
+		                        <div class="col-12">
+		                            <div class="heading-one">
+		                                <h3>Handpicked Collections for You</h3>
+		                            </div>
+		                            <div class="owl-carousel owl-theme collection-slider owl-top-nav">
+		                                <div class="item">
+		                                    <a class="collection-box" href="#">
+		                                        <div class="img-sec">
+		                                            <img src="{% static 'main/images/collection/1.jpg' %}" alt="">
+		                                        </div>
+		                                        <div class="meta">
+		                                            <span>Top 11</span>
+		                                            <p>Romantic Destinations</p>
+		                                        </div>
+		                                    </a>
+		                                </div>
+		                                <div class="item">
+		                                    <a class="collection-box" href="#">
+		                                        <div class="img-sec">
+		                                            <img src="{% static 'main/images/collection/2.jpg' %}" alt="">
+		                                        </div>
+		                                        <div class="meta">
+		                                            <span>Top 11</span>
+		                                            <p>Romantic Destinations</p>
+		                                        </div>
+		                                    </a>
+		                                </div>
+		                                <div class="item">
+		                                    <a class="collection-box" href="#">
+		                                        <div class="img-sec">
+		                                            <img src="{% static 'main/images/collection/3.jpg' %}" alt="">
+		                                        </div>
+		                                        <div class="meta">
+		                                            <span>Top 11</span>
+		                                            <p>Romantic Destinations</p>
+		                                        </div>
+		                                    </a>
+		                                </div>
+		                                <div class="item">
+		                                    <a class="collection-box" href="#">
+		                                        <div class="img-sec">
+		                                            <img src="{% static 'main/images/collection/1.jpg' %}" alt="">
+		                                        </div>
+		                                        <div class="meta">
+		                                            <span>Top 11</span>
+		                                            <p>Romantic Destinations</p>
+		                                        </div>
+		                                    </a>
+		                                </div>
+		                                <div class="item">
+		                                    <a class="collection-box" href="#">
+		                                        <div class="img-sec">
+		                                            <img src="{% static 'main/images/collection/2.jpg' %}" alt="">
+		                                        </div>
+		                                        <div class="meta">
+		                                            <span>Top 11</span>
+		                                            <p>Romantic Destinations</p>
+		                                        </div>
+		                                    </a>
+		                                </div>
+		                                <div class="item">
+		                                    <a class="collection-box" href="#">
+		                                        <div class="img-sec">
+		                                            <img src="{% static 'main/images/collection/3.jpg' %}" alt="">
+		                                        </div>
+		                                        <div class="meta">
+		                                            <span>Top 11</span>
+		                                            <p>Romantic Destinations</p>
+		                                        </div>
+		                                    </a>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </section> -->
+
+					<!-- Flights -->
+					<section class="flight-sec pt-5">
+						<div class="row">
+							<div class="col-12">
+								<div class="heading-one">
+									<h3>Popular International Flight Routes</h3>
+								</div>
+								<div class="tab-box-one">
+									<!-- <ul class="nav nav-pills" role="tablist">
+										<span>From- </span>
+										<li class="nav-item">
+											<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab"
+												role="tab" aria-controls="one-tab" aria-selected="true">NEW
+												DELHI</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab"
+												role="tab" aria-controls="two-tab" aria-selected="false">MUMBAI</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab"
+												role="tab" aria-controls="three-tab" aria-selected="false">OTHERS</a>
+										</li>
+									</ul> -->
+									<div class="tab-content">
+										<div class="tab-pane fade show active" id="one-tab" role="tabpanel"
+											aria-labelledby="tab-one">
+											<div class="owl-carousel owl-theme flights2-slider owl-top-nav">
+												{% for item in max_international_search %}
+												<div class="item">
+													<form method="get" action="{% url 'search_flight' %}">
+														<div class="journey-box box-one">
+															<div class="top-sec">
+																<!-- <img src="{% static 'main/images/airline/1.png' %}" alt=""> -->
+																<h4>{{ item.origin_city }} <i class="la la-exchange mx-2"></i>{{ item.dest_city }}</h4>
+															</div>
+															<p class="time" id="dep_date">{% now "d M, Y" %}</p>
+												
+															<div class="bottom-sec">
+																<span>From <b><i class="la la-rupee"></i>{{ item.price }}</b></span>
+															</div>
+															<div class="mt-4 ml-2">
+																<input type="submit" name="submit_btn" value="Explore" class="btn btn-red">
+																<input type="hidden" value="{{item.origin}}" name="fromCityOrAirport">
+																<input type="hidden" value="{{item.destination}}" name="toCityOrAirport">
+																<input type="hidden" value="one-way" name="radio1">
+																<input type="hidden" value="ECONOMY" name="cabinClass">
+																<input type="hidden" value="{% now 'd-m-Y' %}" name="travelDate">
+																<input type="hidden" value="1" name="ADULT">
+																<input type="hidden" value="0" name="CHILD">
+																<input type="hidden" value="0" name="INFANT">
+																<input type="hidden" value="" name="Special">
+																<input type="hidden" value="" name="isDirectFlight">
+															</div>
+														</div>
+													</form>
+												</div>
+												
+												{% endfor %}
+												<!-- <div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/1.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/2.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/3.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div> 
+												<div class="item">
+													<a class="journey-box box-one" href="#">
+														<div class="top-sec">
+															<img src="{% static 'main/images/airline/4.png' %}" alt="">
+															<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+														</div>
+														<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+														<div class="bottom-sec">
+															<span>
+																From
+																<b><i class="la la-rupee"></i>140</b>
+															</span>
+															<span>See details<i class="la la-angle-right"></i></span>
+														</div>
+													</a>
+												</div> -->
+											</div>
+										</div>
+
+										<!-- <div class="tab-pane fade" id="two-tab" role="tabpanel"
+											aria-labelledby="tab-two">
+											<div class="owl-carousel owl-theme flights2-slider owl-top-nav">
+												 <div class="item">
+													<a class="journey-box2 box-one" href="#">
+														<div class="top-sec">
+															<div class="place-name top">Delhi</div>
+															<div class="time">Fri, 15 Jul</div>
+															<div class="place-name bottom">Chennai</div>
+														</div>
+														<div class="bottom-sec">
+															<small>Starting From</small>
+															<span>
+																<i class="la la-rupee"></i>5,672
+															</span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box2 box-one" href="#">
+														<div class="top-sec">
+															<div class="place-name top">Delhi</div>
+															<div class="time">Fri, 15 Jul</div>
+															<div class="place-name bottom">Chennai</div>
+														</div>
+														<div class="bottom-sec">
+															<small>Starting From</small>
+															<span>
+																<i class="la la-rupee"></i>5,672
+															</span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box2 box-one" href="#">
+														<div class="top-sec">
+															<div class="place-name top">Delhi</div>
+															<div class="time">Fri, 15 Jul</div>
+															<div class="place-name bottom">Chennai</div>
+														</div>
+														<div class="bottom-sec">
+															<small>Starting From</small>
+															<span>
+																<i class="la la-rupee"></i>5,672
+															</span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box2 box-one" href="#">
+														<div class="top-sec">
+															<div class="place-name top">Delhi</div>
+															<div class="time">Fri, 15 Jul</div>
+															<div class="place-name bottom">Chennai</div>
+														</div>
+														<div class="bottom-sec">
+															<small>Starting From</small>
+															<span>
+																<i class="la la-rupee"></i>5,672
+															</span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box2 box-one" href="#">
+														<div class="top-sec">
+															<div class="place-name top">Delhi</div>
+															<div class="time">Fri, 15 Jul</div>
+															<div class="place-name bottom">Chennai</div>
+														</div>
+														<div class="bottom-sec">
+															<small>Starting From</small>
+															<span>
+																<i class="la la-rupee"></i>5,672
+															</span>
+														</div>
+													</a>
+												</div>
+											</div>
+										</div> -->
+
+										<!-- <div class="tab-pane fade" id="three-tab" role="tabpanel"
+											aria-labelledby="tab-three">
+											<div class="owl-carousel owl-theme flights2-slider owl-top-nav">
+												<div class="item">
+													<a class="journey-box2 box-one" href="#">
+														<div class="top-sec">
+															<div class="place-name top">Delhi</div>
+															<div class="time">Fri, 15 Jul</div>
+															<div class="place-name bottom">Chennai</div>
+														</div>
+														<div class="bottom-sec">
+															<small>Starting From</small>
+															<span>
+																<i class="la la-rupee"></i>5,672
+															</span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box2 box-one" href="#">
+														<div class="top-sec">
+															<div class="place-name top">Delhi</div>
+															<div class="time">Fri, 15 Jul</div>
+															<div class="place-name bottom">Chennai</div>
+														</div>
+														<div class="bottom-sec">
+															<small>Starting From</small>
+															<span>
+																<i class="la la-rupee"></i>5,672
+															</span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box2 box-one" href="#">
+														<div class="top-sec">
+															<div class="place-name top">Delhi</div>
+															<div class="time">Fri, 15 Jul</div>
+															<div class="place-name bottom">Chennai</div>
+														</div>
+														<div class="bottom-sec">
+															<small>Starting From</small>
+															<span>
+																<i class="la la-rupee"></i>5,672
+															</span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box2 box-one" href="#">
+														<div class="top-sec">
+															<div class="place-name top">Delhi</div>
+															<div class="time">Fri, 15 Jul</div>
+															<div class="place-name bottom">Chennai</div>
+														</div>
+														<div class="bottom-sec">
+															<small>Starting From</small>
+															<span>
+																<i class="la la-rupee"></i>5,672
+															</span>
+														</div>
+													</a>
+												</div>
+												<div class="item">
+													<a class="journey-box2 box-one" href="#">
+														<div class="top-sec">
+															<div class="place-name top">Delhi</div>
+															<div class="time">Fri, 15 Jul</div>
+															<div class="place-name bottom">Chennai</div>
+														</div>
+														<div class="bottom-sec">
+															<small>Starting From</small>
+															<span>
+																<i class="la la-rupee"></i>5,672
+															</span>
+														</div>
+													</a>
+												</div>
+											</div>
+										</div>  -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<!-- Information -->
+					<section class="information-sec pt-5">
+						<div class="row">
+							<div class="col-12">
+								<div class="heading-one">
+									<h3>Why book with Online Savaari?</h3>
+								</div>
+								<ul>
+									<li>
+										<h5>Search flights and hotels</h5>
+										<p>
+											Search for exclusive deals on flights and hotels. Find cheap air tickets to
+											any destination you like. Choose from its vast
+											repository of hotels -
+											from budget, mid-range, five-star to niche boutique properties. Widen your
+											choices with options like flexi stay, pay directly at
+											hotel, and
+											guaranteed standard amenities. Extremely efficient and easy.
+										</p>
+									</li>
+									<li>
+										<h5>secure flight booking through Online Savaari</h5>
+										<p>
+											Enjoy cancellation protection on domestic flights. Benefit from fare drop
+											protection, same day cancellation protection, hold now -
+											pay later, on
+											international flight bookings. Great filters, fantastic navigation.
+										</p>
+									</li>
+									<!-- <li>
+		                                    <h5>A holiday to suit every pocket</h5>
+		                                    <p>
+		                                        Plan a honeymoon, a weekend getaway, or an adventure activity. Select from an array of domestic and international destinations
+		                                        well-suited to every
+		                                        spectrum of traveller. Be it flights, hotels, pre-planned itinerary, transport upon arrival/departure or sightseeing - you are
+		                                        covered. Attractive
+		                                        pricing, well-researched itineraries.
+		                                    </p>
+		                                </li>
+		                                <li>
+		                                    <h5>Find the best combination, tailor your trip</h5>
+		                                    <p>
+		                                        Your one-stop-shop to get the best combination of flights, hotels, activities, package holidays along with train and bus tickets.
+		                                        Travelz's powerful
+		                                        search engine lets you zero in on with precision.
+		                                    </p>
+		                                </li>
+		                                <li>
+		                                    <h5>No need to queue up at the ticketing window of a monument</h5>
+		                                    <p>
+		                                        Buy tickets to all ASI-protected monuments online. Its hassle-free and saves you from waiting in a queue under a scorching sun.
+		                                        Imagine gaining a
+		                                        breezy entry into the Taj Mahal!
+		                                    </p>
+		                                </li> -->
+									<li>
+										<h5>New deal every season</h5>
+										<p>The onset of the festive season, an upcoming long weekend or a gazetted
+											holiday, expect an attractive deal on flights, hotels and
+											holidays coming
+											your way. From cashback offers to promo code discounts, you are in for a hot
+											deal.</p>
+									</li>
+									<li>
+										<h5>Online Savaari's customer service</h5>
+										<p>
+											Our expert customer service team supports you before, during and after the
+											booking.
+										</p>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+
+<div class="airport">
+	{% for i in airport %}
+	{% endfor%}
+</div>
+
+{% include "online_savaari/footer.html" %}
+<datalist id="airport">
+	{% for i in airport %}
+	<option value="{{i.code}}"> {{i.name}}- {{i.city}}</option>
+	{% endfor%}
+</datalist>
+
+<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+<!-- Popper Min -->
+<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+<!-- Jquery UI -->
+<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+<!-- Owl Carousel -->
+<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+<!-- Star Rating -->
+<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+<!-- Quantity -->
+<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+<script src="{% static 'main/js/my-quantity.js' %}"></script>
+
+<!-- Phone -->
+<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+<!-- Select -->
+
+<script src="https://kit.fontawesome.com/3135e7d8c5.js" crossorigin="anonymous"></script>
+
+<!-- Custom -->
+<script src="{% static 'main/js/default.js' %}"></script>
+<script type="text/javascript">
+	window.sessionStorage.clear()
+	const listItems = [];
+	// const filterList = [];
+	const india = [];
+	const australia = [];
+	const brazil = [];
+	const united_states = [];
+	const united_kingdom = [];
+	const otherport = [];
+	getData();
+
+	$(".popular-flights").on('click', function () {
+		alert("inside onclick");
+		let jsonObject =
+		{
+			fromCityOrAirport: $('#origin').text(),
+			toCityOrAirport: $('#destination').text(),
+			radio1: 'one-way',
+			cabinClass: 'ECONOMY',
+			travelDate: new Date().toLocaleDateString(),
+			ADULT: 1,
+			CHILD: 0,
+			INFANT: 0,
+			Special: "",
+			isDirectFlight: ""
+
+		}
+
+		console.log(jsonObject);
+		//window.location.href = "{% url 'search_flight' %}";
+		$.ajax({
+			type: "GET",
+			url: "{% url 'search_flight' %}",
+			data: jsonObject,
+			contentType: 'application/json; charset=utf-8',
+			dataType: 'json',
+			success: function (data) {
+				alert("Success");
+			},
+			error: function (data) {
+				alert("fail");
+			}
+		});
+
+
+	});
+
+	async function getData() {
+		const res = await fetch("{% static 'flight/airport_list.json' %}")
+		const data = await res.json();
+		data.forEach(user => {
+			if (user.country === "India") {
+				india.push(user);
+			} else if (user.country === "Australia") {
+				australia.push(user);
+			} else if (user.country === "Brazil") {
+				brazil.push(user);
+			} else if (user.country === "United States") {
+				united_states.push(user);
+			} else if (user.country === "United Kingdom") {
+				united_kingdom.push(user);
+			} else {
+				otherport.push(user);
+			}
+		});
+		listItems.push(india);
+		listItems.push(united_kingdom);
+		listItems.push(australia);
+		listItems.push(brazil);
+		listItems.push(united_states);
+		listItems.push(otherport);
+	}
+
+	function filterData(searchTerm, num, name) {
+		let filterList = [];
+		// filterList.splice(0,filterList.length)
+		if (searchTerm === "") {
+			india.forEach(it => {
+				filterList.push(it);
+			})
+		} else {
+			listItems.forEach(item => {
+				if (filterList.length <= 20) {
+					item.forEach(it => {
+						if ((it.city.toLowerCase().includes(searchTerm.toLowerCase())) || (it.code.toLowerCase().includes(searchTerm.toLowerCase()))) {
+							if (!(filterList.includes(it))) {
+								filterList.push(it)
+							}
+						}
+					})
+				}
+			})
+		}
+
+		const list = document.querySelector('#list ul');
+		document.querySelector('#list ul').innerHTML = '';
+		filterList.forEach(e => {
+			const li = document.createElement('li');
+
+			li.innerHTML = `
+					<label class="user-info">
+						<h4>${e.city} (${e.code})</h4>
+						<p>${e.name}</p>
+					</label>
+					<input type="radio" value=${e.code} name="airpots">
+					<input id="city-value" type='hidden' value=${e.city}>
+				`
+			li.classList.add(`radio_btn${name}${num}`)
+			list.appendChild(li)
+			document.querySelectorAll('#list li').forEach(item => {
+				item.addEventListener('mouseover', function () {
+					this.style.background = '#FAFBFD';
+				})
+				item.addEventListener('mouseleave', function () {
+					this.style.background = 'white';
+				})
+			})
+		})
+	}
+
+	function getradiodata(search = "", name, num) {
+		document.querySelector('#list ul').innerHTML = '';
+		filterData(search, num, name)
+		$(`.radio_btn${name}${num}`).click(function () {
+			$(`.radio_btn${name}${num}`).find('input').prop('checked', false)
+			$(this).find('input').prop('checked', true)
+			if (name === "dfrom") {
+				$(`#${name}`).val(($(this).find('input').val()));
+				$(`#${name}`).next().text($(this).find('#city-value').val());
+				$('#departFrom').val($(this).find('input').val());
+				$('#departFrom').next().text($(this).find('#city-value').val());
+				$('#dto').focus();
+			} else if (name === "dto") {
+				$(`#${name}`).val(($(this).find('input').val()));
+				$(`#${name}`).next().text($(this).find('#city-value').val());
+				$('#departTo').val($(this).find('input').val());
+				$('#departTo').next().text($(this).find('#city-value').val());
+				$('#result').hide();
+			} else {
+				$(`.${name}`).val(($(this).find('input').val()));
+				$(`.${name}`).next().text($(this).find('#city-value').val());
+				$('#result').hide();
+			}
+		});
+	}
+
+	let multifrom;
+	let multito;
+
+	$('#dfrom').on('focus', function () {
+		this.value = "";
+		$(this).next().text("");
+		if ($('#one-way').prop('checked') || $('#round-trip').prop('checked')) {
+			console.log($('#one-way').prop('checked') || $('#round-trip').prop('checked'))
+			getradiodata(this.value, "dfrom", 1)
+		}
+		// else {
+		// 	document.querySelectorAll('.multiselfrom').forEach(item => {
+		// 		getradiodata(this.value, item.classList[0], 3)
+		// 	})
+		// }
+	});
+
+	$('#dto').on('focus', function () {
+		this.value = ""
+		$(this).next().text("");
+		if ($('#one-way').prop('checked') || $('#round-trip').prop('checked')) {
+			getradiodata(this.value, "dto", 1)
+		}
+		// else {
+		// 	document.querySelectorAll('.multiselto').forEach(item => {
+		// 		getradiodata(this.value, item.classList[0], 3)
+		// 	})
+		// }
+	});
+
+	$('#dfrom').on('input', (e) => {
+		if ($('#one-way').prop('checked') || $('#round-trip').prop('checked')) {
+			getradiodata(e.target.value, "dfrom", 1)
+		} else {
+			getradiodata(e.target.value, multifrom, 3)
+		}
+	})
+
+	$('#dto').on('input', (e) => {
+		if ($('#one-way').prop('checked') || $('#round-trip').prop('checked')) {
+			getradiodata(e.target.value, "dto", 1)
+		} else {
+			getradiodata(e.target.value, multito, 3)
+		}
+	})
+
+	$('#departFrom').focus(function () {
+		$('#search_to').show();
+		$('#search_from').show()
+		$('#result').css("display", "flex");
+		$('#dfrom').focus();
+	})
+	$('#departTo').focus(function () {
+		$('#search_from').show();
+		$('#search_to').show()
+		$('#result').css("display", "flex");
+		$('#dto').focus()
+	})
+
+	afteraddmulticity()
+
+	function afteraddmulticity() {
+		$('.multiselfrom').focus(function () {
+			multifrom = this.classList[0];
+			getradiodata("", this.classList[0], 3)
+			$('#search_to').hide();
+			$('#search_from').show();
+			$('#result').css("display", "flex");
+			$('#dfrom').focus()
+		})
+
+		$('.multiselto').focus(function () {
+			multito = this.classList[0];
+			getradiodata("", this.classList[0], 3)
+			$('#search_from').hide();
+			$('#search_to').show();
+			$('#result').css("display", "flex");
+			$('#dto').focus()
+		})
+	}
+
+
+	// document.querySelectorAll('.multiselfrom').forEach(item => {
+	// 	console.log(item.classList[0])
+	// })
+
+	// multicity option
+	// $('#dfrom').on('input', (e) => {
+	// 	console.log(e.target.value)
+	// 	getradiodata(e.target.value, "multi_depart_from", 3)
+	// })
+
+
+
+
+	$("#startDate").datepicker({ minDate: 0, dateFormat: 'dd-mm-yy' });
+	$("#returnDate").datepicker({ minDate: 0, dateFormat: 'dd-mm-yy' });
+	$("#multiReturnDate").datepicker({ minDate: 0, dateFormat: 'dd-mm-yy' });
+	var i = 0;
+
+	$(document).ready(function () {
+		if (document.getElementById("one-way").checked) {
+			//$('#returnDate').prop('disabled', true);
+			//$('#returnDate').hide();
+			$('#returnGrp').css("visibility", "hidden");
+			$('#calImg').css("visibility", "hidden");
+			$('#multiCity1').hide();
+			$('#multiCity2').hide();
+			$('#addCity').hide();
+			$('#twoWay').show();
+			$('#dateDiv').show();
+		} else if (document.getElementById("round-trip").checked) {
+			$('#returnGrp').css("visibility", "visible");
+			$('#calImg').css("visibility", "visible");
+			$('#multiCity1').hide();
+			$('#multiCity2').hide();
+			$('#addCity').hide();
+			$('#twoWay').show();
+			$('#dateDiv').show();
+		} else {
+			i = 1;
+			multiDate();
+			$('#returnGrp').css("visibility", "visible");
+			$('#calImg').css("visibility", "visible");
+			$('#multiCity1').show();
+			$('#multiCity2').show();
+			$('#addCity').show();
+			$('#twoWay').hide();
+			$('#dateDiv').hide();
+			garb();
+		}
+	})
+
+
+	$('#student_box').change(function () {
+		if (this.checked) {
+			console.log('student check')
+			$(this).prop("checked", true);
+			$('#armed_box').prop('checked', false);
+			$('#senior_box').prop('checked', false);
+		} else {
+			console.log('student not check')
+			$(this).prop("checked", false);
+			$('#armed_box').prop('checked', false);
+			$('#senior_box').prop('checked', false);
+		}
+	});
+
+	$('#armed_box').change(function () {
+		if (this.checked) {
+			$(this).prop("checked", true);
+			$('#student_box').prop('checked', false);
+			$('#senior_box').prop('checked', false);
+		} else {
+			$(this).prop("checked", false);
+			$('#student_box').prop('checked', false);
+			$('#senior_box').prop('checked', false);
+		}
+	});
+
+	$('#senior_box').change(function () {
+		if (this.checked) {
+			$(this).prop("checked", true);
+			$('#armed_box').prop('checked', false);
+			$('#student_box').prop('checked', false);
+		} else {
+			$(this).prop("checked", false);
+			$('#armed_box').prop('checked', false);
+			$('#student_box').prop('checked', false);
+		}
+	});
+
+
+	function switchText() {
+		let obj1 = document.getElementById("departFrom");
+		let obj2 = document.getElementById("departTo");
+
+		let temp = obj1.value;
+		obj1.value = obj2.value;
+		obj2.value = temp;
+	}
+
+	function checkRadio(name) {
+		var adult = parseInt(document.getElementById("three-max").value);
+		var child = parseInt(document.getElementById("nine-max").value);
+		var infant = parseInt(document.getElementById("six-max").value);
+		var num = infant + child + adult;
+		var data = num.toString().concat(" traveller, ").concat(name);
+		$("#countData").text(data);
+		$("#countData").append('<i class="fa-solid fa-angle-down"></i>');
+	}
+
+	function waySelect(val) {
+		if (val == 'round-trip') {
+			i = 0;
+			$('#returnGrp').css("visibility", "visible");
+			$('#calImg').css("visibility", "visible");
+			$('#multiCity1').hide();
+			$('#multiCity2').hide();
+			$('#addCity').hide();
+			$('#twoWay').show();
+			$('#dateDiv').show();
+			$('#returnDate').datepicker('setDate', new Date());
+			$('#returnDate').datepicker('option', 'minDate', $('#startDate').datepicker('getDate'));
+		} else if (val == 'one-way') {
+			i = 0;
+			$('#returnGrp').css("visibility", "hidden");
+			$('#calImg').css("visibility", "hidden");
+			$('#multiCity1').hide();
+			$('#multiCity2').hide();
+			$('#addCity').hide();
+			$('#twoWay').show();
+			$('#dateDiv').show();
+			$('#startDate').datepicker('setDate', new Date());
+			$('#startDate').datepicker('option', 'maxDate', 730);
+			$('#returnDate').datepicker('option', 'minDate', $('#startDate').datepicker('getDate'));
+		} else {
+			i = 1;
+			$('#multiCity1').show();
+			$('#multiCity2').show();
+			$('#addCity').show();
+			$('#twoWay').hide();
+			$('#dateDiv').hide();
+			garb()
+		}
+		multiDate();
+	}
+
+	function selectOneWay() {
+		i = 0;
+		$('#returnGrp').css("visibility", "hidden");
+		$('#calImg').css("visibility", "hidden");
+		$('#multiCity1').hide();
+		$('#multiCity2').hide();
+		$('#addCity').hide();
+		$('#twoWay').show();
+		$('#dateDiv').show();
+		$("#one-way").prop("checked", true);
+		$("#round-trip").prop("checked", false);
+		$("#multi-city").prop("checked", false);
+
+	}
+
+	// $(document).ready(function() {
+	//     var i = 1;
+	//     // $(document).on('click', '.remove', function() {
+	//     //     var button_id = $(this).attr("id");
+	//     //     $('#row' + button_id + '').remove();
+	//     // });
+	//     // $('#submit').click(function() {
+	//     //     $.ajax({
+	//     //         url: "name.php",
+	//     //         method: "POST",
+	//     //         data: $('#add_name').serialize(),
+	//     //         success: function(data) {
+	//     //             alert(data);
+	//     //             $('#add_name')[0].reset();
+	//     //         }
+	//     //     });
+	//     // });
+	// });
+
+	function multiDate() {
+		if (i <= 0) return;
+		let tom = new Date();
+		tom.setDate(tom.getDate() + i)
+		for (let j = 1; j <= i; j++) {
+			$(`#multiReturnDate${j}`).datepicker({ minDate: 0, dateFormat: 'dd-mm-yy' });
+			if (!($(`#multiReturnDate${j}`).datepicker('getDate'))) {
+				$(`#multiReturnDate${j}`).datepicker('setDate', tom);
+				// let mindate;
+				// if((j-1)===0){
+				// 	mindate = $(`#multiReturnDate`).datepicker('getDate');
+				// } else {
+				// 	mindate = $(`#multiReturnDate${j-1}`).datepicker('getDate');
+				// }
+				// $(`#multiReturnDate${j}`).datepicker('option', 'minDate', mindate);
+			}
+		}
+	}
+
+
+	let next = 1;
+	function addData() {
+		console.log(" add data call");
+		if ((document.getElementById("multi-city").checked) && ($("[name=toCityOrAirport" + (i + 1) + "]").val() !== "") && ($("[name=fromCityOrAirport" + (i + 1) + "]").val() !== "")) {
+			if (i < 4) {
+				i++;
+				next = i + 1;
+				console.log("i value is ", i)
+				$('#dynamic_field').append('<tr id="row' + i + '"><td><div class="flight-group pd-3"><label for="">Depart From</label><input class="multi_depart_from' + next + ' multiselfrom" name="fromCityOrAirport' + (next) + '" type="text id="departTo" list="airport"><p class="m-0 city-name small"></p></div></td><td><div class="flight-group"><label for="">Going To</label><input class="multi_depart_to' + next + ' multiselto" name="toCityOrAirport' + next + '" type="text" id="departTo" list="airport"><p class="m-0 city-name small"></p></div></td><td><div class="flight-group"><label for="">Departure Date</label><input id="multiReturnDate' + i + '"  type="text" class="datepicker" name="travel' + next + 'Date"></div></td><td><button type="button" onclick="dlt(' + i + ')"><img src="{% static ' / main / images / icon / close.png'%}" alt="" ></button></td></tr>');
+				$("[name=fromCityOrAirport" + (next) + "]").val($("[name=toCityOrAirport" + (i) + "]").val())
+				$("[name=fromCityOrAirport" + (next) + "]").next().text($("[name=toCityOrAirport" + (i) + "]").next().text())
+				multiDate()
+				if (i == 4) {
+					$('#addCity').hide();
+				}
+				afteraddmulticity();
+			}
+		}
+	}
+
+	function garb() {
+		num = $('#dynamic_field tr').length;
+		for (let j = 0; j <= num; j++) {
+			if (j > i) {
+				$('#row' + j + '').remove();
+			}
+		}
+	}
+
+	function dlt(button_id) {
+		//var button_id=i;
+		if (i == 4) {
+			$('#addCity').show();
+		}
+		$('#row' + button_id + '').remove();
+		i--;
+	}
+
+	// 		$(document).ready(function() {
+	//     $('.minus').click(function() {
+	//         var $input = $(this).parent().find('input');
+	//         var count = parseInt($input.val()) - 1;
+	//         count = count < 1 ? 0 : count;
+	//         $input.val(count);
+	//         $input.change();
+	//         return false;
+	//     });
+	//     $('.plus').click(function() {
+	//         var $input = $(this).parent().find('input');
+
+
+	//         if ($input.val() < 9) {
+	//             $input.val(parseInt($input.val()) + 1);
+	//             $input.change();
+	//             return false;
+	//         }
+
+	//     });
+	// });
+
+
+
+
+
+	$('.exit_slt').click(function () {
+		$('#result').css("display", "none");
+	})
+	function checkData(code) {
+		console.log(code);
+	}
+	// function customRadio() {
+	// 	$('.radio_btn').click(function() {
+	// 		$('.radio_btn').find('input').prop('checked', false)
+	// 		$(this).find('input').prop('checked', true)
+	// 		$('#dfrom').val(($(this).find('input').val()))
+	// 		$('#dto').focus()
+	// 	});
+	// }
+
+	/*const tom = new Date();
+	
+	tom.setHours(tom.getHours() + 9)
+
+	function setDate() {
+		const now = new Date();
+		const time = Math.round((tom - now) / 1000)
+		const seconds = time % 60;
+		const mins = Math.floor((time % 3600) / 60);
+		const hour = Math.floor(time / 3600);
+		$('.offer-time').text(`00d${hour}h${mins}m${seconds}s`)
+	}
+
+	setInterval(setDate, 1000);
+
+	setDate();*/
+	let d
+	$('.item-promocode').each(function () {
+		console.log('slot found: ');
+		$('.offer-time').text("hi");
+
+		let endDate = document.getElementById('promo_end').value;
+		d = new Date(endDate).getTime();
+		
+		
+	});
+
+	var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
+	//alert(countDownDate);
+
+
+	// Update the count down every 1 second
+	setInterval(function () {
+
+		// Get today's date and time
+		var now = new Date().getTime();
+		//$(".offer-time").text("Hi");
+
+		// Find the distance between now and the count down date
+		var distance = d - now;
+		//alert(distance);
+		// Time calculations for days, hours, minutes and seconds
+		var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+		//alert(`${days} + ${hours} + ${minutes} + ${seconds}`);
+		
+		// Display the result in the element with id="demo"
+		$(".offer-time").text(days + "d " + hours + "h "
+			+ minutes + "m " + seconds + "s ");
+
+		// If the count down is finished, write some text
+		if (distance < 0) {
+			clearInterval(x);
+			document.getElementById("offer-time").innerHTML = "EXPIRED";
+		}
+	}, 1000);
+
+	
+
+</script>
+</body>
+
+</html>

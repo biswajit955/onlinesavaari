@@ -1,0 +1,184 @@
+// Offer Page
+.offer-pg {
+    padding-top: 30px;
+}
+
+// Offer Details One
+.offer-details-one {
+    padding-top: 4em;
+    padding-bottom: 2em;
+    background-size: cover;
+    background-position: top center;
+    background-repeat: no-repeat;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        padding-top: 2em;
+    }
+    .offer-provider {
+        // Max 767px
+        @media (max-width: $break-767) {
+            text-align: center;
+            display: none;
+        }
+        .img-sec {
+            img {
+                height: 60px;
+
+                // Max 767px
+                @media (max-width: $break-767) {
+                    height: 36px;
+                }
+            }
+        }
+        h2 {
+            font-size: 1.2em;
+            font-style: italic;
+            margin: 10px 0;
+            color: $clr-333333;
+        }
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+
+            // Max 767px
+            @media (max-width: $break-767) {
+                justify-content: center;
+            }
+            li {
+                height: 100%;
+                position: relative;
+                background-color: $white-clr;
+                + li {
+                    padding-left: 6px;
+                    &:before {
+                        content: "";
+                        width: 1px;
+                        height: 50px;
+                        position: absolute;
+                        left: 3px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background-color: $clr-96bfe0;
+                    }
+                }
+            }
+        }
+    }
+    .bg-search {
+        background-color: $white-clr;
+        .cus-col {
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            // Max 767px
+            @media (max-width: $break-767) {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+            + .cus-col {
+                border-left: 1px solid $clr-c5c5c5;
+            }
+        }
+        .hotel-input {
+            .hotel-group {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                width: 50%;
+                border-bottom: none;
+                input {
+                    background-color: $no-clr;
+                    font-size: 1em;
+                    font-weight: normal;
+                    line-height: 1.6;
+                    padding: 10px 0;
+                }
+                i {
+                    color: $clr-999999;
+                }
+                + .hotel-group {
+                    border-left: 1px solid $clr-c5c5c5;
+                }
+            }
+            &.hotel-input-full {
+                .hotel-group {
+                    width: 100%;
+                }
+            }
+        }
+        .add-person {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            .person-quantity {
+                width: 35%;
+                span {
+                    line-height: 1;
+                }
+            }
+            .add-room {
+                a {
+                    color: $clr-333333;
+                    font-weight: 600;
+                    text-decoration: underline;
+                    &:hover {
+                        color: $red-clr;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Offer Details Two
+.offer-details-two {
+    padding-top: 4em;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        padding-top: 2em;
+    }
+    .box-one {
+        + .box-one {
+            margin-top: 2em;
+        }
+    }
+    .box-two {
+        + .box-two {
+            margin-top: 2em;
+        }
+        p,
+        ul,
+        table {
+            font-size: 13px;
+        }
+        .icon-sec {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+
+            // Max 767px
+            @media (max-width: $break-767) {
+                justify-content: center;
+            }
+            li {
+                text-align: center;
+                width: 20%;
+
+                // Max 767px
+                @media (max-width: $break-767) {
+                    width: 45%;
+                }
+                p {
+                    margin-top: 5px;
+                    margin-bottom: 0;
+                    b {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}

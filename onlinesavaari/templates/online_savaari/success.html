@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>booking status</title>
+</head>
+<body>
+<h1>Hello, Your Flight have been
+{% if data.status.success %}
+    Booked! Contrats....
+{% else %}
+    not Booked....Ooops!
+{% endif %}</h1>
+
+<form action="{% url 'get_details' %}" method="post">
+	{% csrf_token %}
+	<input type="hidden" name="bookingId" value="{{bookingId}}">
+	<input type="hidden" name="cabinClass" value="{{cabinClass}}">
+	<input type="hidden" name="amount" value="{{amount}}">
+	<input type="hidden" name="Person" value="{{Person}}">
+	<input type="hidden" name="src" value="{{src}}">
+	<input type="hidden" name="dest" value="{{dest}}">
+<button type="submit"> Profile </button>
+</form>
+</body>
+</html>

@@ -1,0 +1,38 @@
+// Google Font
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
+
+// Bootstrap
+@import "../plugins/bootstrap/scss/bootstrap.scss";
+
+// Jquery UI
+@import "../plugins/Jquery-ui/jquery-ui.css";
+
+// Font Awesome
+@import "../plugins/font-awesome/scss/font-awesome.scss";
+
+// LaLa Icon
+@import "../plugins/lala-icon/line-awesome.css";
+
+// Owl Carousel
+@import "../plugins/owl-carousel/scss/owl.carousel.scss";
+@import "../plugins/owl-carousel/scss/owl.theme.default.scss";
+
+// Star Rating
+@import "../plugins/star_rating/star_rating.scss";
+
+// Phone
+@import "../plugins/phone/phone.css";
+
+// Components
+@import "components/variables";
+@import "components/reset";
+@import "components/buttons";
+@import "components/form";
+@import "components/header";
+@import "components/footer";
+@import "components/components";
+@import "components/section";
+
+// Pages
+@import "pages/login";
+@import "pages/home";

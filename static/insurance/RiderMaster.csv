@@ -1,0 +1,40 @@
+﻿rider_code,name,amount,RestrictedAmount, Deductibles,DeductibleText,Currency
+fda13096-9584-438b-b67c-3271c649c1e7,Trip Cancellation/Interruption*(Travel Inconvenien,20000,,500,False,INR
+63a0dbb9-90ef-4e52-9ed1-0c5c36e2eb9d,Emergency Medical Cover *(Adventurous Sports Cover,Included in Emergency Accidental,,-,False,INR
+ed163d28-8d51-471f-b6a5-d16d08761f0a,Cruise Cover,500,,-,False,USD
+e2e03200-4c83-4492-8907-c48a1fc1dfff,Cruise Cover,1000,,100,False,USD
+85b7c931-56fd-4c52-bf75-5dfb47d75e0f,Cruise Cover,1000,,100,False,USD
+a19212e5-64b5-4164-801b-091a4a02c047,Cruise Cover,1000,,100,False,USD
+577ed43a-b41b-4551-b4d8-37ea0b16d22b,Loss of Gadgets,500,,100,False,USD
+357450e6-805d-4ba3-9cdf-99eee8da740d,Political Risk and Catastrophe Evacuation,2500,,100,False,USD
+333e4c7d-3132-4892-948e-71133e7cefb0,Flight Delay(Airlines),500,,3Hrs,False,USD
+cc88ef79-0857-41b2-a0c1-05cd866dfd3b,Financial Emergency Assistance,500,,-,False,USD
+4960f904-d2ea-420b-8f51-07fd7868fde9,Bail Bond,500,,100,False,USD
+f58e04fa-bd41-4690-a8ef-e1c56d6385c0,Loss of Gadgets,500,,100,False,USD
+3c9c9025-1f9f-4d0b-acbd-588edeadc052,Political Risk and Catastrophe Evacuation,2500,,500,False,USD
+10cdd4f7-1517-45b4-9b08-a95c4d3e291a,Flight Delay(Airlines),500,,3Hrs,False,USD
+2ac3dc28-749f-47ef-bbd6-6635ed7c9d83,Financial Emergency Assistance,500,,-,False,USD
+fbe495cc-525f-4c96-818c-0d68143fcc9a,Bail Bond,500,,100,False,USD
+53598818-171e-483f-94e6-0b1c30084411,Compassionate Visit,1000,,100,False,USD
+9e7bed8f-8b27-4f56-8804-ddc2fec2b3fd,Travel Inconvenience,500,,100,False,USD
+bf4f0372-155c-4bcb-bdd7-83743af2aef2,Cruise Cover,1000,,100,False,USD
+d2c0cc71-dca1-411c-9de9-cd7a4d6ba1b7,Loss of Gadgets,500,,100,False,USD
+46789cb9-e98f-4deb-b04a-dda13c435652,Medical Sublimit-Waiver off,Up to  Medical Sum Insured,,-,False,USD
+47ebcf73-aedb-4236-bd67-170b59071fbd,Political Risk and Catastrophe Evacuation,5000,,100,False,USD
+44242ec7-aaa4-4470-855e-6096c053df86,Over Booked-Common Carrier,300,,6 Hrs,False,USD
+30d471b3-a695-4c48-abd0-ef16dc6a2fc5,Legal expenses,1000,,100,False,USD
+918bb577-741f-4e99-9e02-acfb0b3d6efd,Home fire Insurance-Contents (in INR),50000,,As per erst while fire tariff,False,INR
+61d6e81f-a39a-46e6-a273-3f34de4996d5,Flight Delay(Airlines),500,,3Hrs,False,USD
+8c3b69d5-d729-4cb3-a20e-ceb085ee0afc,Financial Emergency Assistance,500,,-,False,USD
+6fbe20f1-952b-4313-9804-18f3a645e91b,Bail Bond,1000,,100,False,USD
+20c2a442-ad82-4619-a6ee-a2797504492d,Political Risk and Catastrophe Evacuation,2500,,100,False,USD
+90564253-958e-4ede-9a7e-7d1801e61b01,Flight Delay(Airlines),500,,3Hrs,False,USD
+7c8212eb-a27d-4529-9dad-d61877d28822,Financial Emergency Assistance,500,,-,False,USD
+34ec8058-44b7-44f7-9674-acb4d21f9459,Loss of Gadgets,500,,100,False,USD
+d9972df9-c6e8-4ec1-a0fb-fd1d21782cd3,Political Risk and Catastrophe Evacuation,2500,,100,False,USD
+63ce6ce1-b2fc-48f3-98bc-1fc058104eb9,Flight Delay(Airlines),500,,3Hrs,False,USD
+2e2b3539-bd97-4a09-932a-e092f88c08a0,Financial Emergency Assistance,500,,-,False,USD
+2df9a6d2-cf8f-40d3-971d-e088b11e9360,Bail Bond,500,,100,False,USD
+d788f8f5-2eb9-4e2a-b04d-740ad17fc111,Travel Loan Secure (IN INR),50000,,2000,False,INR
+592ca994-b318-4375-8a95-42d50f1c6f06,Travel Inconvenience,500,,100,False,USD
+f9400be4-932b-4c6f-82a8-dadd434fadaf,Travel Loan Secure (IN INR),25000,,-,False,INR

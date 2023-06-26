@@ -1,0 +1,612 @@
+{% load static %}
+{% load flight_tags %}
+{% include "online_savaari/header.html" %}
+
+
+<style type="text/css">
+	:root {
+		--grid: 9;
+	}
+	td{
+		padding: 6px;
+	}
+	.availableSeat{
+		cursor: pointer;
+	}
+	#seat-layout {
+		display: grid;
+		grid-template-rows: repeat(var(--grid), auto);
+		grid-auto-flow: column;
+		grid-gap: 0.5em;
+		padding: 1.5em 1em;
+		box-shadow: 0 0 10px 0px rgb(0 0 0 / 20%);
+		overflow-x: scroll;
+	}
+	.row-no {
+		margin: 0 0.5em;
+		padding-top: 1.5px;
+	}
+	.cn-st {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2em;
+		border: 1px solid black;
+		border-radius: 10px;
+	}
+	.num {
+		display: flex;
+		justify-content: center;
+	}
+	.wt-sp {
+		height: 20px;
+	}
+	.af-st {
+		position: relative;
+		z-index: 5;
+	}
+	.af-st img {
+		position: relative;
+		z-index: 33;
+	}
+	.af-st::after {
+		content: '';
+		display: block;
+		position: absolute;
+		top: 3.5px;
+		left: 0;
+		right: 0;
+		bottom: 7px;
+		background-color: #4BB9F0;
+		transform: translateY(2px);
+		z-index: 2;
+	}
+</style>
+<main class="main-body">
+	<section class="details-pg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 left-sec">
+					<div class="title-sec">
+						<h3>
+							<span>
+								<img src="{% static 'main/images/icon/plus-circle.png' %}" alt=""> Service Requests <span>(Optional)</span>
+							</span>
+						</h3>
+					</div>
+
+					<div class="box-one service-box">
+						<div class="heading-one">
+							<h4>Select Seat</h4>
+							<p><b>Pro Tip :</b> Grab your favourite seat before it gets sold.</p>
+						</div>
+						<form action="{% url 'get_payment' %}" method="POST">
+							{% csrf_token %}
+							<input type="hidden" name="meal_code" value="{{meal_code}}">
+							<input type="hidden" name="insurance_checked" value="{{insurance_checked}}">
+							<input type="hidden" name="gstno" value="{{gstno}}">
+							<input type="hidden" name="company_name" value="{{company_name}}">
+							<input type="hidden" name="gst_email" value="{{gst_email}}">
+							<input type="hidden" name="gst_mobile" value="{{gst_mobile}}">
+							<input type="hidden" name="address" value="{{address}}">
+							<input type="hidden" name="bagg_code" value="{{bagg_code}}">
+							<input type="hidden" name="Person" value="{{Person}}">
+							<input type="hidden" name="rtype" value="{{rtype}}">
+						    <input type="hidden" name="apiamount" value="{{ apiamount }}">
+						    <input type="hidden" name="pp" value="{{pp}}">
+						    <input type="hidden" name="cabinClass" value="{{cabinClass}}">
+							<input type="hidden" name="key" value="{{key}}">
+							<input type="hidden" name="bookingId" value="{{ bookingId }}">
+							<input type="hidden" name="amount" value="{{amount}}">
+							<input type="hidden" name="bid" value="{{ bid }}">
+							<input type="hidden" name="meal" value="{{meal}}">
+							<input type="hidden" name="origin" value="{{origin}}">
+							<input type="hidden" name="destination" value="{{destination}}">
+							<input type="hidden" name="baggage" value="{{baggage}}">
+							<input type="hidden" name="seat_no" value="Not Selected">
+							<input type="hidden" name="panno" value="None">
+							<input type="hidden" name="stop" value="0">
+							<input type="hidden" name="flightcode" value="{{flightcode}}">
+							<input type="hidden" name="flightno" value="{{flightno}}">
+							<input type="hidden" name="passport_no" value="None">
+							<input type="hidden" name="title" value="{{title1}}">
+							<input type="hidden" name="first_name" value="{{first_name1}}">
+							<input type="hidden" name="last_name" value="{{last_name1}}">
+							<input type="hidden" name="email" value="{{email}}">
+							<input type="hidden" name="mobile" value="{{mobile}}">
+							<input type="hidden" name="dest" value="{{dest}}">
+							<input type="hidden" name="src" value="{{src}}">
+							<input type="hidden" name="departure_date" value="{{departure_date}}">
+							<input type="hidden" name="arrival_date" value="{{arrival_date}}">
+							{% for k,v in addPerson.items %}
+							<input type="hidden" name="{{k}}" value="{{v}}">
+							{% endfor %}
+
+
+							<div class="seat-booking"> 
+								<div class="cn-st">
+									<div id="seat-layout">
+										<div class="seat-li row-no">
+											F
+										</div>
+										{% if data.sInfo|length > 23 %}
+										<div class="seat-li row-no wt-sp">
+											E 
+										</div>
+										{% endif %}
+										<div class="seat-li row-no">
+											D
+										</div>
+										<div class="seat-li row-no wt-sp"></div>
+										<div class="seat-li row-no wt-sp"></div>
+										<div class="seat-li row-no">
+											C
+										</div>
+										{% if data.sInfo|length > 23 %}
+										<div class="seat-li row-no wt-sp">
+											 B 
+										</div>
+										{% endif %}
+										<div class="seat-li row-no">
+											A
+										</div>
+										<div class="seat-li row-no wt-sp"></div>
+										
+										{% for i in data.sInfo %}
+											{% firstof i.seatPosition.column as kr %}
+										{% if data.sInfo|length > 23 %}
+												{% for j in data.sInfo %}
+												{% if i.seatPosition.row == j.seatPosition.row and kr == "7" %}
+												{% ifchanged kr %}<input type="hidden" id="grid" value=9>{% endifchanged %}
+												
+												<button data-placement="top" class="p-0" style="border: 0; cursor: pointer;" type="button" title="{{j.seatNo}} {{j.amount}}" data-animation="false" data-loop="{{forloop.counter0}}" data-seatno="{{j.seatNo}}" data-seatRow="{{j.seatPosition.row}}" data-seatColumn="{{j.seatPosition.column}}" data-isBooked="{{j.isBooked}}" data-isLegroom="{{j.isLegroom}}" data-amount="{{j.amount}}" {% if not j.isBooked %} onclick="bookSeat('{{j.seatNo}}', '{{j.amount}}')" class="availableSeat" data-selected="false" {% endif %} >
+
+												{% if j.isBooked %}
+												<img id="{{j.seatNo}}" src="{%static 'main/images/icon/seat/booked.png'%}">
+												{% else %}
+												<img id="{{j.seatNo}}" src="{%static 'main/images/icon/seat/available.png'%}">
+												{% endif %}
+													
+												</button>
+													{% if j.seatPosition.column == 5 %}
+														<div class="row-no wt-sp"></div>
+														<div class="row-no wt-sp"></div>
+													{% endif %}
+												{% endif %}
+											{% endfor %}
+												{% if kr == "7" %}
+												<div class="num">
+													{{i.seatPosition.row}}
+												</div>	
+												{% endif %}
+
+										{% else %}
+												{% for j in data.sInfo %}
+												{% if i.seatPosition.row == j.seatPosition.row and kr == "5" %}
+												{% ifchanged kr %}<input type="hidden" id="grid" value=7>{% endifchanged %}
+														
+												<button data-placement="top" class="p-0" style="border: 0; cursor: pointer;" type="button" title="{{j.seatNo}} {{j.amount}}" data-animation="false" data-loop="{{forloop.counter0}}" data-seatno="{{j.seatNo}}" data-seatRow="{{j.seatPosition.row}}" data-seatColumn="{{j.seatPosition.column}}" data-isBooked="{{j.isBooked}}" data-isLegroom="{{j.isLegroom}}" data-amount="{{j.amount}}" {% if not j.isBooked %} onclick="bookSeat('{{j.seatNo}}', '{{j.amount}}')" class="availableSeat" data-selected="false" {% endif %} >
+
+												{% if j.isBooked %}
+												<img id="{{j.seatNo}}" src="{%static 'main/images/icon/seat/booked.png'%}">
+												{% else %}
+												<img id="{{j.seatNo}}" src="{%static 'main/images/icon/seat/available.png'%}">
+												{% endif %}
+													
+												</button>
+													{% if j.seatPosition.column == 4 %}
+														<div class="row-no wt-sp"></div>
+														<div class="row-no wt-sp"></div>
+													{% endif %}
+												{% endif %}
+											{% endfor %}
+											{% if kr == "5" %}
+											<div class="num">
+												{{i.seatPosition.row}}
+											</div>	
+											{% endif %}
+
+										{% endif %}	
+										{% endfor%}
+
+
+									</div>
+								</div>
+
+
+								
+								<ul class="seat-info">
+									<li style="background-image:url({% static 'main/images/icon/seat/available.png' %});">Available Seat</li>
+									<li style="background-image:url({% static 'main/images/icon/seat/booked.png' %});">Booked Seat</li>
+									<li style="background-image:url({% static 'main/images/icon/seat/selected.png' %});">Selected Seat</li>
+								</ul>
+								
+								<div id="makepayment" class="col-md-4 mt-3">
+									<button class="btn btn-block btn-red" type="submit" >
+									SKIP
+									<i class="la la-long-arrow-right la-lg"></i>
+									</button>
+								</div>			
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 right-sec">
+					<div class="title-sec">
+						<h4>Fare Details <a href="javascript:void(0)" class="fare-sidebar-open">View Fare Rules</a></h4>
+					</div>
+					<div class="box-one fare-box">
+							<hr>
+							<h4>
+								<span>Total Fare</span>
+								<span>{{amount}}</span>
+							</h4>
+							<p>
+								<span>
+									Savari Promo Offer
+									<a href="javascript:void(0)" class="close">
+										<i class="fa fa-close"></i>
+									</a>
+								</span>
+								<span class="green">(-) ₹ 0</span>
+							</p>
+							<div class="promocode-add">
+								<h3 id="total-amount">
+									<span>You Pay :</span>
+									{{ amount }}
+								</h3>
+
+								<h5 class="green">
+									<span>Total Savings</span>
+									<span>₹ 0</span>
+								</h5>
+							</div>
+					</div>
+					<div class="title-sec">
+						<h4>Promo Code</h4>
+					</div>
+					<div class="box-one promocode-box">
+						<h4>Select a Promo Code</h4>
+						<div class="input-sec">
+							<input type="text" value="YRCITI" placeholder="Your Promo Code">
+							<button class="active">
+								Applied
+								<i class="la la-check"></i>
+							</button>
+						</div>
+						<div class="promocode-applied">
+							<i class="fa fa-check-circle green"></i>
+							<small>Congrats! You have availed a discount of Rs.853 , TnC apply.</small>
+						</div>
+						<ul>
+							<li>
+								<label class="promo-radio2">
+									<input type="radio" name="promocode2" checked="checked">
+									<span class="checkmark"></span>
+									<div class="promo-info">
+										<span class="code">YRCITI</span>
+										<span class="price yellow">Save ₹ 853</span>
+										<p class="small m-0">FLat 13% off on using CITI Bank Credit & Debit cards</p>
+									</div>
+								</label>
+								<div class="promo-terms">
+									<a href="#">Terms & Conditions</a>
+								</div>
+							</li>
+							<li>
+								<label class="promo-radio2">
+									<input type="radio" name="promocode2">
+									<span class="checkmark"></span>
+									<div class="promo-info">
+										<span class="code">YRCITI</span>
+										<span class="price yellow">Save ₹ 853</span>
+										<p class="small m-0">FLat 13% off on using CITI Bank Credit & Debit cards</p>
+									</div>
+								</label>
+								<div class="promo-terms">
+									<a href="#">Terms & Conditions</a>
+								</div>
+							</li>
+							<li>
+								<label class="promo-radio2">
+									<input type="radio" name="promocode2">
+									<span class="checkmark"></span>
+									<div class="promo-info">
+										<span class="code">YRCITI</span>
+										<span class="price yellow">Save ₹ 853</span>
+										<p class="small m-0">FLat 13% off on using CITI Bank Credit & Debit cards</p>
+									</div>
+								</label>
+								<div class="promo-terms">
+									<a href="#">Terms & Conditions</a>
+								</div>
+							</li>
+							<li>
+								<label class="promo-radio2">
+									<input type="radio" name="promocode2">
+									<span class="checkmark"></span>
+									<div class="promo-info">
+										<span class="code">YRCITI</span>
+										<span class="price yellow">Save ₹ 853</span>
+										<p class="small m-0">FLat 13% off on using CITI Bank Credit & Debit cards</p>
+									</div>
+								</label>
+								<div class="promo-terms">
+									<a href="#">Terms & Conditions</a>
+								</div>
+							</li>
+							<li>
+								<label class="promo-radio2">
+									<input type="radio" name="promocode2">
+									<span class="checkmark"></span>
+									<div class="promo-info">
+										<span class="code">YRCITI</span>
+										<span class="price yellow">Save ₹ 853</span>
+										<p class="small m-0">FLat 13% off on using CITI Bank Credit & Debit cards</p>
+									</div>
+								</label>
+								<div class="promo-terms">
+									<a href="#">Terms & Conditions</a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Fare Rules Sidebar -->
+	<div class="fare-rules-sidebar">
+		<button class="fare-sidebar-close">
+			<img src="{% static 'main/images/icon/close-w.png' %}" alt="">
+		</button>
+		<div class="fare-body">
+			<h3>Fare Rules</h3>
+			<div class="flight-code">DEL-GOI-BLR</div>
+			<table class="table table-bordered mb-4">
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>Airline Cancellation Fee</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<span>DURATION (Prior to the date/time of departure)</span>
+						</td>
+						<td>
+							<span>Per Passenger</span>
+						</td>
+					</tr>
+					<tr>
+						<td>0 hour to 2 hours</td>
+						<td>Non Refundable</td>
+					</tr>
+					<tr>
+						<td>2 hours to 4 days</td>
+						<td><i class="la la-rupee"></i>3,500</td>
+					</tr>
+					<tr>
+						<td>> 4 days</td>
+						<td><i class="la la-rupee"></i>3,000</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table table-bordered mb-4">
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>Airline Date Change Fee</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<span>DURATION (Prior to the date/time of departure)</span>
+						</td>
+						<td>
+							<span>Per Passenger</span>
+						</td>
+					</tr>
+					<tr>
+						<td>2 hours to 4 days</td>
+						<td><i class="la la-rupee"></i>3,250</td>
+					</tr>
+					<tr>
+						<td>> 4 days</td>
+						<td><i class="la la-rupee"></i>2,750</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table table-bordered mb-4">
+				<thead>
+					<tr>
+						<th colspan="2">Savari Service Fee (YSF)*</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="2">
+							<span>(charged per passenger in addition to airline fee as applicable)</span>
+						</td>
+					</tr>
+					<tr>
+						<td>Online Cancellation Service Fee</td>
+						<td><i class="la la-rupee"></i>400</td>
+					</tr>
+					<tr>
+						<td>Offline Cancellation Service Fee</td>
+						<td><i class="la la-rupee"></i>400</td>
+					</tr>
+					<tr>
+						<td>Online Rescheduling Service Fee</td>
+						<td><i class="la la-rupee"></i>400</td>
+					</tr>
+					<tr>
+						<td>Offline Rescheduling Service Fee</td>
+						<td><i class="la la-rupee"></i>1,250</td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="small">*Please note: Savari Service Fee is over and above the airline cancellation fee due to which refund type may vary.</p>
+			<p class="small">
+				In case of full/partial cancellation the offer stands void and the customer will not be eligible for the discount. Savari will refund the amount after adjusting
+				the discount and any other applicable charges/penalties.
+			</p>
+		</div>
+	</div>
+</main>
+<div class="modal fade login-modal" id="loginModal2" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header" id="loginModalLabel" style="display: flex;flex-direction: column;justify-content: center;align-items: center;gap:2em;">
+				<h3 class="modal-title" style="color: red;">Session Expired</h3>
+				<img src="{% static 'main/images/icons8-alarm-clock.gif' %}" alt="" style="width: 150px;height: 150px;object-fit: contain;">
+				<div style="text-align: center;">
+					<h4>Timed Out</h4>
+					<p>Please recheck Fare & Availability of your selected flight(s) as air fares are dynamic and subject to change</p>
+				</div>
+			</div>
+			<div class="modal-body d-flex" style="justify-content: center;gap:1em;">
+				<button id="search-again" class="btn btn-blue">New Search</button>
+				<button id="refresh" class="btn btn-red px-4">Search Result</button>
+			</div>
+		</div>
+	  </div>
+</div>
+
+{% include "online_savaari/footer.html" %}
+<div style="position: fixed;bottom: 0;width: 100%;background: #000;color: white;text-align: center;z-index: 999999;">
+	<h4 class="m-0 py-3" style="display: flex;align-items: center;justify-content: center;gap:0.2em">
+		<svg class="mr-2" width="25px" height="25px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path style="fill:white;" d="M232 120C232 106.7 242.7 96 256 96C269.3 96 280 106.7 280 120V243.2L365.3 300C376.3 307.4 379.3 322.3 371.1 333.3C364.6 344.3 349.7 347.3 338.7 339.1L242.7 275.1C236 271.5 232 264 232 255.1L232 120zM256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256z"/></svg>
+		Session Expires in <span id="session-timer"></span></h4>
+</div>
+	<!-- Jquery min -->
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+	<!-- Custom -->
+	<script src="{% static 'main/js/default.js' %}"></script>
+
+</body>
+
+<script type="text/javascript">
+	
+	let wantSeat = $("[name='Person']").val();
+	let mainAmount = parseInt($("[name='amount']").val());
+	let apiAmount = parseFloat($("[name='apiamount']").val());
+	let selSeat = 0;
+	let amountadd = 0;
+	const r = document.querySelector(':root');
+	r.style.setProperty('--grid', $('#grid').val());
+
+	function bookSeat(seatNo, amount){
+		// console.log(seatNo, amount)
+
+		if($('#'+seatNo).parent().data('selected') && selSeat > 0) {
+			$('#'+seatNo).parent().data('selected', false)
+			$('#'+seatNo).parent().removeClass('af-st')
+			$(`#seat-number${seatNo}`).remove()
+			$(`#seat${seatNo}`).remove()
+			if(selSeat == 1){
+				$(`[name="seat_no"]`).val("");
+			}
+			mainAmount -= parseInt(amount)
+			apiAmount -= parseFloat(amount)
+			selSeat--;
+			console.log(selSeat)
+			$('#total-amount').html(`<span>You Pay :</span>${mainAmount}`)
+			$("[name='amount']").val(mainAmount)
+			$("[name='apiamount']").val(apiAmount)
+		}
+		else if((selSeat < wantSeat) && (!($('#'+seatNo).parent().data('data-selected')))) {
+			mainAmount += parseInt(amount)
+			apiAmount += parseFloat(amount)
+			$('#'+seatNo).parent().data('selected', true)
+			$('#'+seatNo).parent().addClass('af-st')
+			// $('#form-data').prepend(`<input type="hidden" name="seat_no${selSeat}" value="${seatNo}">`)
+			
+			selSeat++;
+			console.log(selSeat)
+			$('form').append(`
+			<div id="seat-number${seatNo}" class="col-md-4 mt-3">
+				<p>Person Seat number: ${seatNo}, Amount: ${amount}</p>
+			</div>
+			`)
+			if(selSeat == 1){
+				$(`[name="seat_no"]`).val(seatNo);
+			}else {
+				$('form').prepend(`
+				<input id="seat${seatNo}" type="hidden" name="seat_no${selSeat}" value=${seatNo}>
+				`)
+			}
+			$('#total-amount').html(`<span>You Pay :</span>${mainAmount}`)
+			$("[name='amount']").val(mainAmount)
+			$("[name='apiamount']").val(apiAmount)
+		}
+		if(selSeat != 0){
+			$('#makepayment').html(`<button class="btn btn-block btn-red" type="submit" >Make Payment<i class="la la-long-arrow-right la-lg"></i></button>`)
+		}else {
+			$('#makepayment').html(`<button class="btn btn-block btn-red" type="submit" >SKIP<i class="la la-long-arrow-right la-lg"></i></button>`)
+		}
+	}
+
+	$('#refresh').click(function(){
+		let url =  window.sessionStorage.getItem('search_result');
+		window.sessionStorage.removeItem('search_result')
+		location.href = url;
+	})
+
+	$('#search-again').click(function(){
+		location.href = '/';
+	})
+
+	const session_time = setInterval(() => {
+		let block_ses_time = window.sessionStorage.getItem('stimer');
+		if(block_ses_time >= 0){
+			dtime = block_ses_time - 1
+			window.sessionStorage.setItem('stimer', dtime)
+			let min = Math.floor(window.sessionStorage.getItem('stimer')/60);
+			let sec = window.sessionStorage.getItem('stimer')%60;
+			$('#session-timer').text(`${min} min ${sec} sec`)
+			if(dtime <= 0){
+				window.sessionStorage.removeItem('stimer')
+				clearInterval(session_time);
+				console.log('refresh')
+				$('#loginModal2').addClass('show') 
+				$('#loginModal2').css({"display": "block", "padding-right": "8px"}) 
+				$('body').addClass('modal-open')
+				$('body').append(`<div class="modal-backdrop fade show"></div>`)
+			}
+		}
+	}, 1000);
+</script>
+</html>

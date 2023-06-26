@@ -1,0 +1,99 @@
+// Main Body
+.main-body {
+    padding-top: 87px;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        padding-top: 121px;
+    }
+}
+
+// Main Body Two
+.main-body2 {
+    padding-top: 67px;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        padding-top: 63px;
+    }
+}
+
+// Booking Box One
+.booking-box-one {
+    background-color: $white-clr;
+    border: 1px solid $clr-e4e4e4;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba($black-clr, 0.1);
+    padding: 25px;
+    height: calc(100vh - 130px);
+    margin-top: 30px;
+    position: sticky;
+    top: 117px;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        padding: 15px;
+    }
+    .label-span {
+        color: $clr-999999;
+    }
+    .trip-type-radio {
+        display: flex;
+        align-items: center;
+        li {
+            .text-radio {
+                font-size: 10px;
+                min-width: 80px;
+            }
+            + li {
+                margin-left: 15px;
+            }
+        }
+    }
+    .flight-input {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 24px;
+        .flight-group {
+            width: 40%;
+            border-bottom: 1px solid $clr-e4e4e4;
+            input {
+                padding: 0;
+                padding-bottom: 5px;
+                border: none;
+                font-size: 18px;
+                font-weight: 500;
+                width: 100%;
+
+                @media (max-width: $break_767) {
+                    font-size: 15px;
+                }
+            }
+        }
+        button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            img {
+            }
+        }
+    }
+    .person-select {
+        margin-top: 24px;
+        .add-person {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+    .filter-list {
+        margin-top: 24px;
+        li {
+            + li {
+                margin-top: 15px;
+            }
+        }
+    }
+}

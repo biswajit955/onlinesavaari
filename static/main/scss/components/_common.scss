@@ -1,0 +1,19 @@
+// Main Body
+.main-body {
+    padding-top: 90px;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        padding-top: 98px;
+    }
+}
+
+// Main Body Two
+.main-body2 {
+    padding-top: 69px;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        padding-top: 65px;
+    }
+}

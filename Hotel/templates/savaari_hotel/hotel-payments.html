@@ -1,0 +1,782 @@
+{%load static%}
+{% include "savaari_hotel/hotel_header.html" %}
+<link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+<link href="{% static 'admin/plugins/animate/animate.css' %}" rel="stylesheet" type="text/css" />
+<script src="{% static 'admin/plugins/sweetalerts/promise-polyfill.js' %}"></script>
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/assets/css/components/custom-sweetalert.css' %}" rel="stylesheet" type="text/css" />
+<!-- {% csrf_token %} -->
+
+<style>
+	#loader{
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background: rgba(0, 0, 0, 0.231);
+		z-index: 11111;
+	}
+
+	:root {
+/* 	Size is a variable for both - height and width dimensions of the circle  */
+	--size: 300px;
+/* 	First Color Value */
+	--clrFirstSpin: lightpink;
+/* 	Second Color Value */
+	--clrSecondSpin: aqua;
+/* 	Third Color Value */
+	--clrThirdSpin: purple;
+/* 	Duration for text blinking animation  */
+	--displayingTextTime: 2500ms;
+	--spinnerFont: calc(var(--size)/10);
+}
+
+body.active #loader {
+	display: flex;
+	align-items:center;
+	justify-content:center;
+	min-height:100vh;
+	margin:0;
+	font-family:'Verdana', sans-serif;
+}
+
+.spinner {
+	display: flex;
+	align-items:center;
+	justify-content:center;
+	width:var(--size);
+	height:var(--size);
+	position:relative;
+
+}
+
+.spinner-area {
+	border: 15px solid transparent;
+	position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+	animation: rotate var(--duration) var(--timing) infinite;
+  mix-blend-mode: overlay;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-third {
+	border-top-color:var(--clrThirdSpin);
+	--duration: 1.5s;
+	--timing: ease-in;	
+}
+
+.spinner-second {
+	border-left-color:var(--clrSecondSpin);
+	--duration: 2s;
+	--timing: ease-in
+}
+
+.spinner-first {
+	border-bottom-color: var(--clrFirstSpin);
+	--duration: 3s;
+	--timing: ease-in-out
+}
+
+.spinner p {
+	font-size: var(--spinnerFont);
+	text-transform:none;
+	animation: displaying-text var(--displayingTextTime) ease-in-out infinite;
+	color: #fff;
+}
+
+@keyframes displaying-text {
+  0% {
+    opacity:1;
+  }
+	50% {
+    opacity: 0.2;
+  }
+	100% {
+	opacity:1;
+	}
+}
+
+
+
+.spinner:after {
+	content:'Nothing will be loaded!';
+  width:100px;
+  padding:15px;
+  height:50px;
+  display:block;
+  position:absolute;
+  top:-85px;
+  right:-40px;
+	background:white;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 42% 75%, 22% 100%, 22% 75%, 0% 75%);
+/* 	animation: displayMessage 2s linear 3s; */
+		animation-name:displayMessage;
+		animation-duration:3s;
+		animation-timing-function:ease-in-out;
+		animation-delay: 5s;
+		animation-iteration-count: 1;
+  	animation-fill-mode: forwards;
+		animation-play-state:pause;
+		opacity:0;
+}
+body.active {margin: 0; height: 100%; overflow: hidden}
+</style>
+
+<div id="loader">
+	<div class="spinner">
+		<p>loading...</p>
+		<div class="spinner-area spinner-first"></div>
+		<div class="spinner-area spinner-second"></div>
+		<div class="spinner-area spinner-third"></div>
+	</div>
+</div>
+<!-- Main -->
+	<div class="loader mx-auto"></div>
+	<main class="main-body">
+	<form id="booking-form" action="{% url 'hotel_payments' %}" method="post">
+		{% csrf_token %}	
+		<section class="payment-pg">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8 left-sec">
+						<div class="title-sec">
+							<h3>
+								<span>
+									<img src="{% static 'main/images/icon/credit-card.png' %}" alt=""> Payment Method
+								</span>
+							</h3>
+						</div>
+						<div class="box-one">
+							<div class="tab-box-three">
+								<ul class="nav nav-pills" role="tablist" style="justify-content: flex-start;">
+									<li class="nav-item">
+										<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab" role="tab" aria-controls="one-tab" aria-selected="true">Instant Payment</a>
+									</li>
+									<!-- <li class="nav-item">
+										<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab" role="tab" aria-controls="two-tab" aria-selected="false">UPI</a>
+									</li> -->
+
+									<li class="nav-item">
+										<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab" role="tab" aria-controls="three-tab" aria-selected="false">Savaari Wallet</a>
+									</li>
+									<!-- <li class="nav-item">
+										<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab" role="tab" aria-controls="two-tab" aria-selected="false">Credit Card</a>
+									</li> -->
+									<li class="nav-item" style="display: none;">
+										<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab" role="tab" aria-controls="three-tab" aria-selected="false">Debit
+											Card</a>
+									</li>
+									<li class="nav-item" style="display: none;">
+										<a class="nav-link" id="tab-four" data-toggle="pill" href="#four-tab" role="tab" aria-controls="four-tab" aria-selected="false">Net
+											Banking</a>
+									</li>
+									<li class="nav-item" style="display: none;">
+										<a class="nav-link" id="tab-five" data-toggle="pill" href="#five-tab" role="tab" aria-controls="five-tab" aria-selected="false">Buy
+											Now Pay Later</a>
+									</li>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane fade show active" id="one-tab" role="tabpanel" aria-labelledby="tab-one">
+										<div class="paybox">
+											<h4>Pay Instant</h4>
+											<div class="row justify-content-center">
+												<div class="col-md-4 col-6">
+													<div class="upi-step-box">
+														<img src="{% static 'main/images/icon/upi/1.png' %}" alt="">
+														<p>
+															Keep UPI app open on your mobile phone.
+														</p>
+													</div>
+												</div>
+												<div class="col-md-4 col-6">
+													<div class="upi-step-box">
+														<img src="{% static 'main/images/icon/upi/2.png' %}" alt="">
+														<p>
+															Enter VPA and click on Pay Now.
+														</p>
+													</div>
+												</div>
+												<div class="col-md-4 col-6">
+													<div class="upi-step-box">
+														<img src="{% static 'main/images/icon/upi/3.png' %}" alt="">
+														<p>
+															Savari will send a payment request to your UPI app.
+														</p>
+													</div>
+												</div>
+												<div class="col-md-4 col-6">
+													<div class="upi-step-box">
+														<img src="{% static 'main/images/icon/upi/4.png' %}" alt="">
+														<p>
+															Enter MPIN on your UPI app to authorize payment.
+														</p>
+													</div>
+												</div>
+												<div class="col-md-4 col-6">
+													<div class="upi-step-box">
+														<img src="{% static 'main/images/icon/upi/5.png' %}" alt="">
+														<p>
+															Congratulations your payment is done.
+														</p>
+													</div>
+												</div>
+											</div>
+											<!-- <div class="row">
+												<div class="col-lg-5 col-md-6 col-12 mt-5">
+													<div class="form-group m-0">
+														<label for="">Virtual Payment Address</label>
+														<input type="text" class="form-control">
+													</div>
+												</div>
+											</div> -->
+											<div class="row">
+												<div class="col-12 mt-4">
+													<div class="total-pay">
+														<h1>₹ {{data.hInfo.ops.0.ris.0.tp}}</h1>
+														<button type="button" class="btn btn-red" id="rzp-button1">Pay Now</button>
+													</div>
+													<p class="small m-0">
+														By clicking on Pay Now, you are agreeing to our Terms & Conditions , Privacy policy, User Agreement and Covid-19 Guidelines.
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+						
+									<div class="tab-pane fade" id="two-tab" role="tabpanel" aria-labelledby="tab-two">
+										<div class="paybox">
+											<h4>Pay with UPI</h4>
+											<div class="row justify-content-center">
+												<div class="col-md-4 col-6">
+													<div class="upi-step-box">
+														<img src="{% static 'main/images/icon/upi/1.png' %}" alt="">
+														<p>
+															Keep UPI app open on your mobile phone.
+														</p>
+													</div>
+												</div>
+												<div class="col-md-4 col-6">
+													<div class="upi-step-box">
+														<img src="{% static 'main/images/icon/upi/2.png' %}" alt="">
+														<p>
+															Enter VPA and click on Pay Now.
+														</p>
+													</div>
+												</div>
+												<div class="col-md-4 col-6">
+													<div class="upi-step-box">
+														<img src="{% static 'main/images/icon/upi/3.png' %}" alt="">
+														<p>
+															Savari will send a payment request to your UPI app.
+														</p>
+													</div>
+												</div>
+												<div class="col-md-4 col-6">
+													<div class="upi-step-box">
+														<img src="{% static 'main/images/icon/upi/4.png' %}" alt="">
+														<p>
+															Enter MPIN on your UPI app to authorize payment.
+														</p>
+													</div>
+												</div>
+												<div class="col-md-4 col-6">
+													<div class="upi-step-box">
+														<img src="{% static 'main/images/icon/upi/5.png' %}" alt="">
+														<p>
+															Congratulations your payment is done.
+														</p>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-5 col-md-6 col-12 mt-5">
+													<div class="form-group m-0">
+														<label for="">Virtual Payment Address</label>
+														<input type="text" class="form-control">
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 mt-4">
+													<div class="total-pay">
+														<h1>₹ {{data.hInfo.ops.0.ris.0.tp}}</h1>
+														<button class="btn btn-red" >Pay Now</button>
+													</div>
+													<p class="small m-0">
+														By clicking on Pay Now, you are agreeing to our Terms & Conditions , Privacy policy, User Agreement and Covid-19 Guidelines.
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+										<div class="tab-pane fade" id="three-tab" role="tabpanel" aria-labelledby="three-tab">
+											<div class="paybox">
+												<h4>Pay with Savaari Wallet</h4>
+												<div class="" style="display: flex;justify-content: space-between;align-items: center;">                                    
+													<div class="balance">
+														<h4 style="margin: 0;">Savaari Balance</h4>
+														
+														<p id="balance-status" class="m-0" style="color: red;font-size:0.6rem;text-align:start;"></p>
+														
+														<h2 style="text-align: start;border-bottom: 0.5px dashed black;">₹ <span id="wallet-amount">{{wallet_balance}}</span></h2>
+													</div>
+													<!-- <div class="topup">
+														<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#loginModal">
+															TOPUP
+														</button>
+													</div> -->
+												</div>
+												<div class="row">
+													<div class="col-12 mt-4">
+														<div class="total-pay">
+															<h1>₹ {{data.hInfo.ops.0.ris.0.tp}}</h1>
+		
+															{% comment %} <button  ></button> {% endcomment %}
+															<input type="submit" class="btn btn-red" id="btn-wallet" value="Pay Now">
+														</div>
+														<p class="small m-0">
+															By clicking on Pay Now, you are agreeing to our Terms & Conditions , Privacy policy, User Agreement and Covid-19 Guidelines.
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									<!-- <div class="tab-pane fade" id="two-tab" role="tabpanel" aria-labelledby="tab-two">
+										<div class="paybox">
+											<h4>Pay with Credit Card</h4>
+											<div class="row">
+												<div class="col-lg-5 col-md-6 col-12">
+													<div class="form-group">
+														<label for="">Credit Card Number</label>
+														<input type="text" class="form-control">
+													</div>
+												</div>
+												<div class="col-lg-5 col-md-6 col-12">
+													<div class="form-group">
+														<label for="">Name On Card</label>
+														<input type="text" class="form-control">
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-5 col-md-6 col-12">
+													<div class="form-group">
+														<label for="">Expiry Date</label>
+														<div class="row">
+															<div class="col-6 pr-1">
+																<select name="" id="" class="form-control">
+																	<option value="">Month</option>
+																</select>
+															</div>
+															<div class="col-6 pl-1">
+																<select name="" id="" class="form-control">
+																	<option value="">Year</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-4">
+													<div class="form-group">
+														<label for="">CVV</label>
+														<input type="text" class="form-control">
+													</div>
+												</div>
+												<div class="col-12">
+													<label class="custom-checkbox">Save your card for faster payment. CVV will not be saved.
+														<input checked="checked" type="checkbox">
+														<span class="checkmark"></span>
+													</label>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 mt-4">
+													<div class="total-pay">
+														<h1>₹ {{amount}}</h1>
+														<button class="btn btn-red">Pay Now</button>
+													</div>
+													<p class="small m-0">
+														By clicking on Pay Now, you are agreeing to our Terms & Conditions , Privacy policy, User Agreement and Covid-19 Guidelines.
+													</p>
+												</div>
+											</div>
+										</div>
+									</div> -->
+									<div class="tab-pane fade" id="three-tab" role="tabpanel" aria-labelledby="tab-three">
+										<div class="paybox">
+											<h4>Pay with Debit Card</h4>
+											<div class="row">
+												<div class="col-lg-5 col-md-6 col-12">
+													<div class="form-group">
+														<label for="">Debit Card Number</label>
+														<input type="text" class="form-control">
+													</div>
+												</div>
+												<div class="col-lg-5 col-md-6 col-12">
+													<div class="form-group">
+														<label for="">Name On Card</label>
+														<input type="text" class="form-control">
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-5 col-md-6 col-12">
+													<div class="form-group">
+														<label for="">Expiry Date</label>
+														<div class="row">
+															<div class="col-6 pr-1">
+																<select name="" id="" class="form-control">
+																	<option value="">Month</option>
+																</select>
+															</div>
+															<div class="col-6 pl-1">
+																<select name="" id="" class="form-control">
+																	<option value="">Year</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-4">
+													<div class="form-group">
+														<label for="">CVV</label>
+														<input type="text" class="form-control">
+													</div>
+												</div>
+												<div class="col-12">
+													<label class="custom-checkbox">Save your card for faster payment. CVV will not be saved.
+														<input checked="checked" type="checkbox">
+														<span class="checkmark"></span>
+													</label>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 mt-4">
+													<div class="total-pay">
+														<h1>₹ {{data.hInfo.ops.0.ris.0.tfcs.TAF}}</h1>
+														<button class="btn btn-red">Pay Now</button>
+													</div>
+													<p class="small m-0">
+														By clicking on Pay Now, you are agreeing to our Terms & Conditions , Privacy policy, User Agreement and Covid-19 Guidelines.
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane fade" id="four-tab" role="tabpanel" aria-labelledby="tab-four">
+										<div class="paybox">
+											<h4>Pay with Net Banking</h4>
+											<div class="row">
+												<div class="col-12">
+													<ul class="bank-list">
+														<li>
+															<label class="custom-radio custom-radio-img">
+																<img src="{% static 'main/images/icon/bank/hdfc.png' %}" alt="">
+																<input checked="checked" name="radio1" type="radio">
+																<span class="checkmark"></span>
+															</label>
+														</li>
+														<li>
+															<label class="custom-radio custom-radio-img">
+																<img src="{% static 'main/images/icon/bank/sbi.png' %}" alt="">
+																<input name="radio1" type="radio">
+																<span class="checkmark"></span>
+															</label>
+														</li>
+														<li>
+															<label class="custom-radio custom-radio-img">
+																<img src="{% static 'main/images/icon/bank/icici.png' %}" alt="">
+																<input name="radio1" type="radio">
+																<span class="checkmark"></span>
+															</label>
+														</li>
+														<li>
+															<label class="custom-radio custom-radio-img">
+																<img src="{% static 'main/images/icon/bank/idbi.png' %}" alt="">
+																<input name="radio1" type="radio">
+																<span class="checkmark"></span>
+															</label>
+														</li>
+														<li>
+															<label class="custom-radio custom-radio-img">
+																<img src="{% static 'main/images/icon/bank/canara.png' %}" alt="">
+																<input name="radio1" type="radio">
+																<span class="checkmark"></span>
+															</label>
+														</li>
+														<li>
+															<label class="custom-radio custom-radio-img">
+																<img src="{% static 'main/images/icon/bank/charterd.png' %}" alt="">
+																<input name="radio1" type="radio">
+																<span class="checkmark"></span>
+															</label>
+														</li>
+														<li>
+															<label class="custom-radio custom-radio-img">
+																<img src="{% static 'main/images/icon/bank/city.png' %}" alt="">
+																<input name="radio1" type="radio">
+																<span class="checkmark"></span>
+															</label>
+														</li>
+													</ul>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-5 col-md-6 col-12">
+													<div class="form-group m-0">
+														<label for="">Other Banks</label>
+														<select name="" id="" class="form-control">
+															<option value="">Select your bank</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 mt-4">
+													<div class="total-pay">
+														<h1>₹ 4000</h1>
+														<button class="btn btn-red">Pay Now</button>
+													</div>
+													<p class="small m-0">
+														By clicking on Pay Now, you are agreeing to our Terms & Conditions , Privacy policy, User Agreement and Covid-19 Guidelines.
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane fade" id="five-tab" role="tabpanel" aria-labelledby="tab-five">
+										<div class="paybox">
+											<h4>Pay Later with</h4>
+											<div class="row">
+												<div class="col-lg-5 col-md-6 col-12">
+													<div class="form-group m-0">
+														<label class="custom-radio custom-radio-img">
+															<img src="{% static 'main/images/icon/bank/lazypay.png' %}" alt="">
+															<input checked="checked" name="radio2" type="radio">
+															<span class="checkmark"></span>
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 mt-4">
+													<div class="total-pay">
+														<h1>₹ {{amount}}</h1>
+														<button class="btn btn-red">Pay Now</button>
+													</div>
+													<p class="small m-0">
+														By clicking on Pay Now, you are agreeing to our Terms & Conditions , Privacy policy, User Agreement and Covid-19 Guidelines.
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+						<input type="hidden" name="key" value="{{key}}">
+						<input type="hidden" name="gstno" value="{{gstno}}">
+						<input type="hidden" name="company_name" value="{{company_name}}">
+						<input type="hidden" name="gst_email" value="{{gst_email}}">
+						<input type="hidden" name="gst_mobile" value="{{gst_mobile}}">
+						<input type="hidden" name="address" value="{{address}}">
+						<input type="hidden" name="insurance_checked" value="{{insurance_checked}}">
+						<input type="hidden" name="pay_id" value="{{payment.id}}">
+						<input type="hidden" name="pay_amount" value="{{payment.amount}}">
+						<input type="hidden" name="meal_code" value="{{meal_code}}">
+						<input type="hidden" name="bagg_code" value="{{bagg_code}}">
+						<input type="hidden" name="rtype" value="{{rtype}}">
+						<input type="hidden" name="sbookindId" value="{{sbookindId}}">
+						<input type="hidden" name="token" value="{{token}}">
+						<input type="hidden" name="ticketid" value="{{ticketid}}">
+						<input type="hidden" name="adult" value="{{adult}}">
+						<input type="hidden" name="child" value="{{child}}">
+						<input type="hidden" name="infant" value="{{infant}}">
+						<input type="hidden" name="departure_date" value="{{departure_date}}">
+						<input type="hidden" name="arrival_date" value="{{arrival_date}}">
+						<input type="hidden" name="flight_num" value="{{flight_num}}">
+						<input type="hidden" name="apiamount" value="{{ apiamount }}">
+						<input type="hidden" name="src" value="{{src}}">
+						<input type="hidden" name="dest" value="{{dest}}">
+						<input type="hidden" name="cabinClass" value="{{cabinClass}}">
+						<input type="hidden" name="Person" value="{{Person}}">
+						<input type="hidden" name="title" value="{{title1}}">
+						<input type="hidden" name="first_name" value="{{first_name1}}">
+						<input type="hidden" name="last_name" value="{{last_name1}}">
+						<input type="hidden" name="pp" value="{{pp1}}">
+						<input type="hidden" name="email" value="{{email}}">
+						<input type="hidden" name="mobile" value="{{mobile}}">
+						<input type="hidden" name="bookingId" value="{{bookingId}}">
+						<input type="hidden" name="amount" value="{{amount}}">
+						<input type="hidden" name="bid" value="{{bid}}">
+						<input type="hidden" name="meal" value="{{meal}}">
+						<input type="hidden" name="origin" value="{{origin}}">
+						<input type="hidden" name="destination" value="{{destination}}">
+						<input type="hidden" name="baggage" value="{{baggage}}">
+						<input type="hidden" name="seat_no" value="{{seat_no}}">
+						<input type="hidden" name="panno" value="{{panno}}">
+						<input type="hidden" name="stop" value="{{stop}}">
+						<input type="hidden" name="passport_no" value="{{passport_no}}">
+						
+						
+						<input class="add-person" type="hidden" name="{{k}}" value="{{v}}">
+						
+					<div class="col-lg-4 right-sec">
+						<div class="title-sec">
+							<h4>Payment Details</h4>
+						</div>
+						<div class="box-one payment-box">
+							
+							<p>
+								<span>Total Room Price</span>
+								<span>₹ {{data.hInfo.ops.0.ris.0.tfcs.BF}}</span>
+							</p>
+							
+							
+							<p>
+								<span>Convenience Fee</span>
+								<span>₹ {{data.hInfo.ops.0.ris.0.tfcs.TAF}}</span>
+							</p>
+							<div class="total-pay">
+								<h3>
+									<span>You Pay :</span>
+									<span>₹ {{data.hInfo.ops.0.ris.0.tp}}</span>
+								</h3>
+							</div>
+						</div>
+						<div class="title-sec">
+							<h4>Booking Summary</h4>
+						</div>
+						<div class="box-one flight-box">
+							<div class="top-sec">
+								<img src="" alt="">
+								<span><b>{{data.hInfo.name}}</b></span>
+							</div>
+							<div class="bottom-sec">
+								<div>
+									<span>{{data.hInfo.ad.adr2}},{{data.hInfo.ad.city.name}},{{data.hInfo.ad.state.name}},{{data.hInfo.ad.postalCode}}</span>
+									<span class="small">Rooms 1: Adults {{data.hInfo.ops.0.ris.0.adt}} & Child {{data.hInfo.ops.0.ris.0.chd}}</span>
+								</div>
+								
+								<div>
+									<span></span>
+									<span class="small"></span>
+								</div>
+							</div>
+						</div>
+						<div class="title-sec">
+							<h4 style="display: flex;align-items: center;">Contact Details 
+								<button type="button" class="btn" data-toggle="modal" data-target="#loginModal">
+                                    Edit
+                                </button>
+							</h4>
+						</div>
+						<div class="box-one contact-box">
+							<div class="bottom-sec">
+								<p>
+									<span>Email : {{ email }}</span>
+								</p>
+								<p>
+									<span>Phone : </span>+91-{{ mobile }}
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	    </form>
+	</main>
+
+{% include "savaari_hotel/hotel_footer.html" %}
+
+	<script>
+		let jsondata = JSON.parse('{{easebuzzjson|escapejs}}') // easebuzz url jsondata
+
+		// $('#booking-form').submit(function(e){
+		// 	e.preventDefault()
+		// 	console.log('no error')
+		// })
+		$('#rzp-button1').click(function(){
+			console.log('no error easebuzz')
+			location.href = jsondata.data;
+		})
+	</script>
+
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+	<!-- Custom -->
+	<!-- <script src="{% static 'main/js/default.js' %}"></script> -->
+
+	<script src="{% static 'admin/assets/js/libs/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'admin/assets/js/app.js' %}"></script>
+
+	<script src="{% static 'admin/plugins/sweetalerts/sweetalert2.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/sweetalerts/custom-sweetalert.js' %}"></script>
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+	
+	<script>
+		// $(document).ready(function(){
+		// 	window.sessionStorage.clear();
+		// 	let data = JSON.parse('{{review_data|escapejs}}')
+		// 	let booking = '{{request.session.booking_body|escapejs}}'
+		// 	booking = booking.replace(/'/g, '"');
+		// 	window.sessionStorage.setItem('booking_body', JSON.stringify(JSON.parse(booking)))
+		// 	window.sessionStorage.setItem('review_data', JSON.stringify(data))
+		// })
+		$(document).ready(function(){
+			let data = {}
+			$('#booking-form').find('select, input').map(function() {
+				data[$(this).attr('name')] = $(this).val()
+			})
+			window.sessionStorage.setItem('review_data', JSON.stringify(data))
+		})
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,892 @@
+{% load flight_tags %}
+{% load static %}
+{% include "online_savaari/header.html" %}
+<link href="{% static 'admin/plugins/flatpickr/flatpickr.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'admin/plugins/flatpickr/custom-flatpickr.css' %}" rel="stylesheet" type="text/css">
+<!-- Main -->
+<main class="main-body">
+	<section class="user-pg">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<ul class="breadcumb">
+						<li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+						<li><span>Your Profile</span></li>
+					</ul>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-3 col-md-4 col-12 left-sec">
+
+					<ul class="sidemenu">
+						<li>
+							<a href="{% url 'dashboard'%}">Dashboard</a>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" href="#" id="bookingDropdown" role="button"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Booking</a>
+							<div class="dropdown-menu" aria-labelledby="bookingDropdown">
+								<a class="dropdown-item" href="{% url 'cancel'%}">Cancel</a>
+								<a class="dropdown-item" href="{% url 'dashboard'%}">Reschedule</a>
+								<a class="dropdown-item" href="{% url 'booking_history'%}">All Bookings</a>
+							</div>
+						</li>
+						{% comment %} <li class="dropdown">
+							<a class="dropdown-toggle" href="#" id="ticketDropdown" role="button" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Ticket</a>
+							<div class="dropdown-menu" aria-labelledby="ticketDropdown">
+								<a class="dropdown-item" href="ticket.html">SMS/Email Ticket</a>
+								<a class="dropdown-item" href="print-ticket.html">Print Ticket</a>
+								<a class="dropdown-item" href="print-invoice.html">Print Invoice/Receipt</a>
+							</div>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" href="#" id="fareDropdown" role="button" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Fare</a>
+							<div class="dropdown-menu" aria-labelledby="fareDropdown">
+								<a class="dropdown-item" href="fare-details.html">Fare Details</a>
+								<a class="dropdown-item" href="make-payment.html">Make Payment</a>
+							</div>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" href="#" id="refundDropdown" role="button" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Refund</a>
+							<div class="dropdown-menu" aria-labelledby="refundDropdown">
+								<a class="dropdown-item" href="refund-status.html">Track Flight Refund Status</a>
+								<a class="dropdown-item" href="check-refund.html">Check your Refund</a>
+							</div>
+						</li>{% endcomment %}
+						<li>
+							<a href="{% url 'profile'%}">Profile</a>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" href="{% url 'savaari_cash' %}" id="ecashDropdown" role="button"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Savaari Cash</a>
+							<div class="dropdown-menu" aria-labelledby="ecashDropdown">
+								<a class="dropdown-item" href="{% url 'savaari_cash' %}">Check balance</a>
+								<a class="dropdown-item" href="{% url 'savaari_cash' %}">All Transactions</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="col-lg-9 col-md-8 col-12 right-sec">
+					<div class="box-one profile-box">
+						<div class="title-sec">
+							<h4>Profile</h4>
+							<a href="javascript:void(0)" data-toggle="modal" data-target="#edit-profile"
+								id="btn">edit</a>
+						</div>
+						{% if error_mgs %}
+						<h4 class="text-danger"> {{error_mgs}} </h4>
+						{% endif %}
+						{% if success_mgs %}
+						<h4 class="text-success"> {{success_mgs}} </h4>
+						{% endif %}
+						<div class="profile-detail">
+							<ul>
+								{% if request.user|has_group:"Agent" %}
+								<li>
+									<div class="left-label">
+										<h5>Agent ID</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{agent.agent_id}}</h5>
+									</div>
+								</li>
+								{% endif %}
+								<li>
+									<div class="left-label">
+										<h5>name</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{user.first_name}} {{user.last_name}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>email</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{user.email}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>Phone No.</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{customer.mobile}}{{agent.mobile}}{{corporat.mobile}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>Password</h5>
+									</div>
+									<div class="right-details">
+										<h5>******</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>Address</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{customer.address}}{{agent.agency_address}}{{corporat.address}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>State</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{customer.gst_state}}{{agent.gst_state}}{{corporat.gst_state}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>City</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{customer.agency_address}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>Zip</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{customer.pincode}}{{agent.pincode}}{{corporat.pincode}}</h5>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<hr>
+
+
+						<div class="title-sec">
+							<h4>GST Number</h4>
+							<a href="javascript:void(0)" data-toggle="modal" data-target="#gst-profile">edit</a>
+						</div>
+						<div class="profile-detail">
+							<ul>
+								<li>
+									<div class="left-label">
+										<h5>GST Number</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{customer.gstin}}{{agent.gstin}}{{corporat.gstin}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>Company Name</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{agent.agency_name}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>Phone No.</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{agent}}{{agent.mobile}}{{corporat.mobile}}{{customer.mobile}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>Email</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{user.email}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>Address</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{agent.agency_address}}{{corporat.address}}{{customer.address}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>State</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{customer.gst_state}}{{agent.gst_state}}{{corporat.gst_state}}</h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>City</h5>
+									</div>
+									<div class="right-details">
+										<h5></h5>
+									</div>
+								</li>
+								<li>
+									<div class="left-label">
+										<h5>Zip</h5>
+									</div>
+									<div class="right-details">
+										<h5>{{customer.pincode}}{{agent.pincode}}{{corporat.pincode}}</h5>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<hr>
+						<div class="title-sec">
+							<h4>Travellers added</h4>
+							<a href="javascript:void(0)" data-toggle="modal" data-target="#travellers-profile">edit</a>
+						</div>
+						<div class="profile-detail">
+							<ul>
+								{% if passenger.passenger_type == "1" %}
+								<li>
+									<div class="left-label">
+										<h5>Adult</h5>
+									</div>
+									<div class="right-details">
+										<div class="table-responsive">
+											<table class="table">
+												<thead>
+													<tr>
+														<th scope="col">First Name</th>
+														<th scope="col">Last Name</th>
+														<th scope="col">DOB</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{{passenger.first_name}}</td>
+														<td>{{passenger.last_name}}</td>
+														<td>{{passenger.date_of_birth}}</td>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</li>
+								{% elif passenger.passenger_type == "2" %}
+								<li>
+									<div class="left-label">
+										<h5>Child</h5>
+									</div>
+									<div class="right-details">
+										<div class="table-responsive">
+											<table class="table">
+												<thead>
+													<tr>
+														<th scope="col">First Name</th>
+														<th scope="col">Last Name</th>
+														<th scope="col">DOB</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{{passenger.first_name}}</td>
+														<td>{{passenger.last_name}}</td>
+														<td>{{passenger.date_of_birth}}</td>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</li>
+								{% elif passenger.passenger_type == "3" %}
+								<li>
+									<div class="left-label">
+										<h5>Infant</h5>
+									</div>
+									<div class="right-details">
+										<div class="table-responsive">
+											<table class="table">
+												<thead>
+													<tr>
+														<th scope="col">First Name</th>
+														<th scope="col">Last Name</th>
+														<th scope="col">DOB</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{{passenger.first_name}}</td>
+														<td>{{passenger.last_name}}</td>
+														<td>{{passenger.date_of_birth}}</td>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</li>
+								{% endif %}
+							</ul>
+						</div>
+						{% if request.user|has_group:"Agent" %}
+
+						<hr>
+						<div class="title-sec">
+							<h4>Logo</h4>
+							<a href="javascript:void(0)" data-toggle="modal" data-target="#logo">edit</a>
+						</div>
+						{% if agent.agency_logo %}
+						<div class="profile-detail">
+							<a href="{{ agent.agency_logo.url }}"><img class=" rounded-circle" style="height: 150px; width: 150px;" src="{{ agent.agency_logo.url }}"></a>
+						</div>
+						{% endif %}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+
+<!-- Profile Edit -->
+<div class="modal fade edit-profile-modal" id="edit-profile" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel">Edit Profile</h4>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+					<img src="{% static 'main/images/icon/close.png' %}" alt="">
+				</button>
+			</div>
+			<div class="modal-body">
+				{% if error_mgs %}
+				<h4 class="text-danger"> {{error_mgs}} </h4>
+				{% endif %}
+				<form action="" method="POST">
+
+					{% csrf_token %}
+					<div class="row">
+						<div class="col-12">
+							<label>User Name:</label>
+						</div>
+						<div class="col-md-2 col-4 pr-0">
+							<div class="form-group">
+								<select name="gn-type" id="" class="form-control">
+									<option value="0" selected>Title</option>
+									<option value="Mr">Mr.</option>
+									<option value="Mis">Mis.</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-5 col-8">
+							<div class="form-group">
+								<input type="text" class="form-control" name="edit_first_name"
+									value="{{user.first_name}}">
+							</div>
+						</div>
+						<div class="col-md-5">
+							<div class="form-group">
+								<input type="text" class="form-control" name="edit_last_name"
+									value="{{user.last_name}}">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Email:</label>
+								<input type="text" class="form-control" name="edit_email" value="{{user.email}}">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Phone Number:</label>
+								<input type="phone" class="form-control" name="edit_phone"
+									value="{{agent.mobile}}{{corporat.mobile}}{{customer.mobile}}"></input>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Old Password:</label>
+								<input type="password" class="form-control" name="edit_old_password"
+									placeholder="*****">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>New Password:</label>
+								<input type="password" class="form-control" name="edit_new_password"
+									placeholder="*****">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Confirm Password:</label>
+								<input type="password" class="form-control" name="edit_confirm_password"
+									placeholder="*****">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Address:</label>
+								<input type="text" class="form-control" name="edit_address"
+									value="{{customer.address}}{{agent.agency_address}}{{corporat.address}}">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>State:</label>
+								<select name="edit_State" id="mySelect" class="form-control">
+									<option value="" selected>Select State</option>
+									<option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+									<option value="Andhra Pradesh">Andhra Pradesh</option>
+									<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+									<option value="Assam">Assam</option>
+									<option value="Bihar">Bihar</option>
+									<option value="Chandigarh">Chandigarh</option>
+									<option value="Chhattisgarh">Chhattisgarh</option>
+									<option value="Dadra & Nagar Haveli and Daman & Diu">Dadra & Nagar Haveli and Daman
+										& Diu</option>
+									<option value="Delhi">Delhi</option>
+									<option value="Goa">Goa</option>
+									<option value="Gujarat">Gujarat</option>
+									<option value="Haryana">Haryana</option>
+									<option value="Himachal Pradesh">Himachal Pradesh</option>
+									<option value="Jammu and Kashmir">Jammu and Kashmir</option>
+									<option value="Jharkhand">Jharkhand</option>
+									<option value="Karnataka">Karnataka</option>
+									<option value="Kerala">Kerala</option>
+									<option value="Ladakh">Ladakh</option>
+									<option value="Lakshadweep">Lakshadweep</option>
+									<option value="Madhya Pradesh">Madhya Pradesh</option>
+									<option value="Maharashtra">Maharashtra</option>
+									<option value="Manipur">Manipur</option>
+									<option value="Meghalaya">Meghalaya</option>
+									<option value="Mizoram">Mizoram</option>
+									<option value="Nagaland">Nagaland</option>
+									<option value="Odisha">Odisha</option>
+									<option value="Puducherry">Puducherry</option>
+									<option value="Punjab">Punjab</option>
+									<option value="Rajasthan">Rajasthan</option>
+									<option value="Sikkim">Sikkim</option>
+									<option value="Tamil Nadu">Tamil Nadu</option>
+									<option value="Telangana">Telangana</option>
+									<option value="Tripura">Tripura</option>
+									<option value="Uttar Pradesh">Uttar Pradesh</option>
+									<option value="Uttarakhand">Uttarakhand</option>
+									<option value="West Bengal">West Bengal</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>City:</label>
+								<input type="text" class="form-control" name="edit_city" placeholder="Enter city">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Company Name</label>
+								<input type="text" class="form-control" name="edit_company_name"
+									value="{{agent.agency_name}}">
+
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>GST Number</label>
+								<input type="text" class="form-control" name="edit_gstin"
+									value="{{customer.gstin}}{{agent.gstin}}{{corporat.gstin}}">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Zip:</label>
+								<input type="text" class="form-control" name="edit_pin"
+									value="{{customer.pincode}}{{agent.pincode}}{{corporat.pincode}}">
+							</div>
+						</div>
+						{% comment %} <div class="col-12">
+							<ul class="checkbox-list">
+								<li>
+									<label class="custom-checkbox">SMS Alerts
+										<input type="checkbox">
+										<span class="checkmark"></span>
+									</label>
+								</li>
+								<li>
+									<label class="custom-checkbox">Low Fare Alerts
+										<input type="checkbox">
+										<span class="checkmark"></span>
+									</label>
+								</li>
+								<li>
+									<label class="custom-checkbox">I would also like to receive my booking details on
+										WhatsApp.
+										<input type="checkbox">
+										<span class="checkmark"></span>
+									</label>
+								</li>
+								<li>
+									<label class="custom-checkbox">Subscribe to receive special promotions and offers by
+										Yatra.
+										<input type="checkbox">
+										<span class="checkmark"></span>
+									</label>
+								</li>
+							</ul>
+						</div> {% endcomment %}
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+						<button type="submit" class="btn btn-red">Save changes</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- GST Edit -->
+<div class="modal fade edit-profile-modal" id="gst-profile" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel">Add GST Information</h4>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+					<img src="{% static 'main/images/icon/close.png' %}" alt="">
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<form action="" method="POST">
+					{% csrf_token %}
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>First Name</label>
+								<input type="text" class="form-control" name="edit_first_name"
+									value="{{user.first_name}}">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Last Name</label>
+								<input type="text" class="form-control" name="edit_last_name"
+									value="{{user.last_name}}">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>GST Number</label>
+								<input type="text" class="form-control" name="edit_gstin"
+									value="{{customer.gstin}}{{agent.gstin}}{{corporat.gstin}}">
+								<input type="hidden" class="form-control" name="edit_old_password">
+								<input type="hidden" class="form-control" name="edit_new_password">
+								<input type="hidden" class="form-control" name="edit_confirm_password">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Company Name</label>
+								<input type="text" class="form-control" name="edit_company_name"
+									value="{{agent.agency_name}}">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Phone Number:</label>
+								<input type="phone" class="form-control" name="edit_phone"
+									value="{{agent.mobile}}{{corporat.mobile}}{{customer.mobile}}"></input>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Email:</label>
+								<input type="text" class="form-control" name="edit_email" value="{{user.email}}">
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Address:</label>
+								<input type="text" class="form-control" name="edit_address"
+									value="{{agent.agency_address}}{{corporat.address}}{{customer.address}}">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>State:</label>
+								<select name="edit_State" id="mystate" class="form-control">
+									<option value="" selected>Select State</option>
+									<option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+									<option value="Andhra Pradesh">Andhra Pradesh</option>
+									<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+									<option value="Assam">Assam</option>
+									<option value="Bihar">Bihar</option>
+									<option value="Chandigarh">Chandigarh</option>
+									<option value="Chhattisgarh">Chhattisgarh</option>
+									<option value="Dadra & Nagar Haveli and Daman & Diu">Dadra & Nagar Haveli and Daman
+										& Diu</option>
+									<option value="Delhi">Delhi</option>
+									<option value="Goa">Goa</option>
+									<option value="Gujarat">Gujarat</option>
+									<option value="Haryana">Haryana</option>
+									<option value="Himachal Pradesh">Himachal Pradesh</option>
+									<option value="Jammu and Kashmir">Jammu and Kashmir</option>
+									<option value="Jharkhand">Jharkhand</option>
+									<option value="Karnataka">Karnataka</option>
+									<option value="Kerala">Kerala</option>
+									<option value="Ladakh">Ladakh</option>
+									<option value="Lakshadweep">Lakshadweep</option>
+									<option value="Madhya Pradesh">Madhya Pradesh</option>
+									<option value="Maharashtra">Maharashtra</option>
+									<option value="Manipur">Manipur</option>
+									<option value="Meghalaya">Meghalaya</option>
+									<option value="Mizoram">Mizoram</option>
+									<option value="Nagaland">Nagaland</option>
+									<option value="Odisha">Odisha</option>
+									<option value="Puducherry">Puducherry</option>
+									<option value="Punjab">Punjab</option>
+									<option value="Rajasthan">Rajasthan</option>
+									<option value="Sikkim">Sikkim</option>
+									<option value="Tamil Nadu">Tamil Nadu</option>
+									<option value="Telangana">Telangana</option>
+									<option value="Tripura">Tripura</option>
+									<option value="Uttar Pradesh">Uttar Pradesh</option>
+									<option value="Uttarakhand">Uttarakhand</option>
+									<option value="West Bengal">West Bengal</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>City:</label>
+								<input type="text" class="form-control" name="edit_city" value="Enter city">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Zip:</label>
+								<input type="text" class="form-control" name="edit_pin"
+									value="{{customer.pincode}}{{agent.pincode}}{{corporat.pincode}}">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+						<button type="submit" class="btn btn-red">Save changes</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Profile Edit -->
+<div class="modal fade edit-profile-modal" id="travellers-profile" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel">Add Traveller</h4>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+					<img src="{% static 'main/images/icon/close.png' %}" alt="">
+				</button>
+			</div>
+			<div class="modal-body">
+				<form action="" method="POST">
+					{% csrf_token %}
+					<div class="row">
+						<div class="col-12">
+							<ul class="radio-list">
+								<li>
+									<label class="custom-radio">Adult
+										<input value="1" checked="checked" name="radio" type="radio">
+										<span class="checkmark"></span>
+									</label>
+								</li>
+								<li>
+									<label class="custom-radio">Child
+										<input name="radio" value="2" type="radio">
+										<span class="checkmark"></span>
+									</label>
+								</li>
+								<li>
+									<label class="custom-radio">Infant
+										<input value="3" name="radio" type="radio">
+										<span class="checkmark"></span>
+									</label>
+								</li>
+							</ul>
+						</div>
+						<div class="col-12">
+							<div class="form-group pax-title">
+								<select name="title" id="" class="form-control" required="">
+									<option value="" selected="" disabled="" hidden="">Title</option>
+									<option value="Mr">MR.</option>
+									<option value="Mrs">MRS.</option>
+									<option value="Ms">MS.</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label>First Name<sup>*</sup></label>
+								<input type="text" class="form-control" value="{{passenger.first_name}}"
+									name="passenger_first_name" placeholder="First Name">
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label>Last Name</label>
+								<input type="text" class="form-control" value="{{passenger.last_name}}"
+									name="passenger_last_name" placeholder="Last Name">
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group dob" style="display: none;">
+								<label>Date of Birth<sup>*</sup></label>
+								<input name="passenger_dob" id="basicFlatpickr"
+									class="form-control flatpickr flatpickr-input active" type="text"
+									placeholder="Select Date.." readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-red">Submit</button>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<div class="modal fade edit-profile-modal" id="logo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel">Add GST Information</h4>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+					<img src="{% static 'main/images/icon/close.png' %}" alt="">
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<form action="" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<input type="file" name="myfile" />
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+						<button type="submit" class="btn btn-red">Save changes</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	{% include "online_savaari/footer.html" %}
+
+	<!-- Jquery min -->
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+	<!-- Custom -->
+	<script src="{% static 'main/js/default.js' %}"></script>
+
+	<script src="{% static 'admin/plugins/flatpickr/flatpickr.js' %}"></script>
+	<script src="{% static 'admin/plugins/noUiSlider/nouislider.min.js' %}"></script>
+
+	<script src="{% static 'admin/plugins/flatpickr/custom-flatpickr.js' %}"></script>
+
+	<script>
+		$(".datepicker").datepicker({ dateFormat: "dd-mm-yy" });
+		var temp = "{{customer.gst_state}}{{agent.gst_state}}{{corporat.gst_state}}";
+		var mySelect = document.getElementById('mySelect');
+
+		for (var i, j = 0; i = mySelect.options[j]; j++) {
+			if (i.value == temp) {
+				mySelect.selectedIndex = j;
+				break;
+			}
+		}
+
+		var temp = "{{customer.gst_state}}{{agent.gst_state}}{{corporat.gst_state}}";
+		var mySelect = document.getElementById('mystate');
+
+		for (var i, j = 0; i = mySelect.options[j]; j++) {
+			if (i.value == temp) {
+				mySelect.selectedIndex = j;
+				break;
+			}
+		}
+		{% comment %} let data = document.querySelector("#mySelect")
+		document.querySelector("#btn").addEventListener("click", function () {
+			data.value = "West Bengal"
+		}) {% endcomment %}
+		{% comment %} { { customer.gst_state } } { { agent.gst_state } } { { corporat.gst_state } } {% endcomment %}
+
+		$('[name="radio"]').change(function () {
+			let mr = "";
+			let ms = "";
+			let mrs = 'hidden'
+			if (this.value == 1) {
+				$('.dob').hide();
+				mr = 'Mr';
+				ms = 'Ms';
+				mrs = "";
+			}
+			else {
+				$('.dob').show();
+				mr = 'Master';
+				ms = 'Miss';
+				mrs = 'hidden'
+			}
+			$('.pax-title').html('')
+			$('.pax-title').append(`
+		<select name="title" id="" class="form-control" required="">
+			<option value="" selected disabled hidden>Title</option>
+			<option value="${mr}">${mr}.</option>
+			<option value="Mrs" ${mrs}>MRS.</option>
+			<option value="${ms}">${ms}.</option>
+		</select>
+		`)
+		})
+		var f2 = flatpickr(document.getElementById('basicFlatpickr'));
+
+		$(document).ready(function () {
+			$('.flatpickr-calendar').css({ 'z-index': 99999999 })
+		})
+	</script>
+
+	</body>
+
+	</html>

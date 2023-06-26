@@ -1,0 +1,833 @@
+{% load static %}
+{% include "online_savaari/header.html" %}
+{% load flight_tags %}
+<style>
+	.table th, .table td{
+		padding: 0.5em;
+	}
+	/* body {
+		background:#000;
+	} */
+
+#load {
+  position:absolute;
+  width:600px;
+  height:36px;
+  left:50%;
+  top:40%;
+  margin-left:-300px;
+  overflow:visible;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  cursor:default;
+}
+
+#load div {
+  position:absolute;
+  width:20px;
+  height:36px;
+  opacity:0;
+  font-family:Helvetica, Arial, sans-serif;
+  animation:move 2s linear infinite;
+  -o-animation:move 2s linear infinite;
+  -moz-animation:move 2s linear infinite;
+  -webkit-animation:move 2s linear infinite;
+  transform:rotate(180deg);
+  -o-transform:rotate(180deg);
+  -moz-transform:rotate(180deg);
+  -webkit-transform:rotate(180deg);
+  color:#35C4F0;
+}
+
+#load div:nth-child(2) {
+  animation-delay:0.2s;
+  -o-animation-delay:0.2s;
+  -moz-animation-delay:0.2s;
+  -webkit-animation-delay:0.2s;
+}
+#load div:nth-child(3) {
+  animation-delay:0.4s;
+  -o-animation-delay:0.4s;
+  -webkit-animation-delay:0.4s;
+  -webkit-animation-delay:0.4s;
+}
+#load div:nth-child(4) {
+  animation-delay:0.6s;
+  -o-animation-delay:0.6s;
+  -moz-animation-delay:0.6s;
+  -webkit-animation-delay:0.6s;
+}
+#load div:nth-child(5) {
+  animation-delay:0.8s;
+  -o-animation-delay:0.8s;
+  -moz-animation-delay:0.8s;
+  -webkit-animation-delay:0.8s;
+}
+#load div:nth-child(6) {
+  animation-delay:1s;
+  -o-animation-delay:1s;
+  -moz-animation-delay:1s;
+  -webkit-animation-delay:1s;
+}
+#load div:nth-child(7) {
+  animation-delay:1.2s;
+  -o-animation-delay:1.2s;
+  -moz-animation-delay:1.2s;
+  -webkit-animation-delay:1.2s;
+}
+
+@keyframes move {
+  0% {
+    left:0;
+    opacity:0;
+  }
+  35% {
+    left: 41%; 
+    -moz-transform:rotate(0deg);
+    -webkit-transform:rotate(0deg);
+    -o-transform:rotate(0deg);
+    transform:rotate(0deg);
+    opacity:1;
+  }
+  65% {
+    left:59%; 
+    -moz-transform:rotate(0deg); 
+    -webkit-transform:rotate(0deg); 
+    -o-transform:rotate(0deg);
+    transform:rotate(0deg); 
+    opacity:1;
+  }
+  100% {
+    left:100%; 
+    -moz-transform:rotate(-180deg); 
+    -webkit-transform:rotate(-180deg); 
+    -o-transform:rotate(-180deg); 
+    transform:rotate(-180deg);
+    opacity:0;
+  }
+}
+
+@-moz-keyframes move {
+  0% {
+    left:0; 
+    opacity:0;
+  }
+  35% {
+    left:41%; 
+    -moz-transform:rotate(0deg); 
+    transform:rotate(0deg);
+    opacity:1;
+  }
+  65% {
+    left:59%; 
+    -moz-transform:rotate(0deg); 
+    transform:rotate(0deg);
+    opacity:1;
+  }
+  100% {
+    left:100%; 
+    -moz-transform:rotate(-180deg); 
+    transform:rotate(-180deg);
+    opacity:0;
+  }
+}
+
+@-webkit-keyframes move {
+  0% {
+    left:0; 
+    opacity:0;
+  }
+  35% {
+    left:41%; 
+    -webkit-transform:rotate(0deg); 
+    transform:rotate(0deg); 
+    opacity:1;
+  }
+  65% {
+    left:59%; 
+    -webkit-transform:rotate(0deg); 
+    transform:rotate(0deg); 
+    opacity:1;
+  }
+  100% {
+    left:100%;
+    -webkit-transform:rotate(-180deg); 
+    transform:rotate(-180deg); 
+    opacity:0;
+  }
+}
+
+@-o-keyframes move {
+  0% {
+    left:0; 
+    opacity:0;
+  }
+  35% {
+    left:41%; 
+    -o-transform:rotate(0deg); 
+    transform:rotate(0deg); 
+    opacity:1;
+  }
+  65% {
+    left:59%; 
+    -o-transform:rotate(0deg); 
+    transform:rotate(0deg); 
+    opacity:1;
+  }
+  100% {
+    left:100%; 
+    -o-transform:rotate(-180deg); 
+    transform:rotate(-180deg); 
+    opacity:0;
+  }
+}
+</style>
+	<!-- Main -->
+	<main class="main-body">
+		<section class="user-pg">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-3 col-md-4 col-12 left-sec">
+						<ul class="breadcumb">
+							<li><a href="{% url 'dashboard'%}">Dashboard</a></li>
+							<li><span>Hold History</span></li>
+						</ul>
+						<ul class="sidemenu">
+							<li>
+								<a href="{% url 'dashboard'%}">Dashboard</a>
+							</li>
+							<li class="dropdown">
+								<a class="dropdown-toggle" href="#" id="bookingDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Booking</a>
+								<div class="dropdown-menu" aria-labelledby="bookingDropdown" style="display: none;">
+									<a class="dropdown-item" href="{% url 'cancel'%}">Cancel</a>
+									<a class="dropdown-item" href="{% url 'rescheduleclaim'%}">Reschedule</a>
+									<a class="dropdown-item" href="{% url 'booking_history'%}">All Bookings</a>
+									<a class="dropdown-item" href="{% url 'hold_ticket'%}">Hold Bookings</a>
+								</div>
+							</li>
+							{% comment %} <li class="dropdown">
+								<a class="dropdown-toggle" href="#" id="ticketDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ticket</a>
+								<div class="dropdown-menu" aria-labelledby="ticketDropdown">
+									<a class="dropdown-item" href="ticket.html">SMS/Email Ticket</a>
+									<a class="dropdown-item" href="print-ticket.html">Print Ticket</a>
+									<a class="dropdown-item" href="print-invoice.html">Print Invoice/Receipt</a>
+								</div>
+							</li>
+							<li class="dropdown">
+								<a class="dropdown-toggle" href="#" id="fareDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Fare</a>
+								<div class="dropdown-menu" aria-labelledby="fareDropdown">
+									<a class="dropdown-item" href="fare-details.html">Fare Details</a>
+									<a class="dropdown-item" href="make-payment.html">Make Payment</a>
+								</div>
+							</li>
+							<li class="dropdown">
+								<a class="dropdown-toggle" href="#" id="refundDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Refund</a>
+								<div class="dropdown-menu" aria-labelledby="refundDropdown" style="display: none;">
+									<a class="dropdown-item" href="refund-status.html">Track Flight Refund Status</a>
+									<a class="dropdown-item" href="check-refund.html">Check your Refund</a>
+								</div>
+							</li> {% endcomment %}
+							<li>
+								<a href="{% url 'refundclaim'%}">Refund</a>
+							</li>
+							<li>
+								<a href="{% url 'profile'%}">Profile</a>
+							</li>
+							<li>
+								<a href="{% url 'savaari_cash'%}">Savaari Cash</a>
+							</li>
+							<!-- <li class="dropdown">
+								<a class="dropdown-toggle" href="{% url 'savaari_cash' %}" id="ecashDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Savaari Cash</a>
+								<div class="dropdown-menu" aria-labelledby="ecashDropdown" style="display: none;">
+									<a class="dropdown-item" href="check-balance.html">Check balance</a>
+									<a class="dropdown-item" href="all-transaction.html">All Transactions</a>
+								</div>
+							</li> -->
+						</ul>
+					</div>
+					<div class="col-lg-9 col-md-8 col-12 right-sec">
+						<div class="box-one profile-box">
+							<div class="title-sec">
+								<h4>All Bookings</h4>
+								<div class="filter-select">
+									<span>Filter/ Sort By</span>
+									<select name="" id="" class="form-control">
+										<option value="">Relevance</option>
+										<option value="">Upcoming</option>
+										<option value="">Completed</option>
+										<option value="">Cancelled</option>
+										<option value="">By Date</option>
+									</select>
+								</div>
+							</div>
+							<div class="profile-table">
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead>
+											<tr>
+												<th>#ID</th>
+												<th>Booking ID</th>
+												<th>Amount</th>
+												<th>Status</th>
+												<th>Name</th>
+												<th>Action</th>
+											</tr>
+										</thead>
+										
+										<tbody>
+
+											{% for pas in holdings %}
+											{% ifchanged pas.bookingId %}
+											<tr>
+												<td>{{ forloop.counter }}</td>
+												<td>
+													<b style="white-space: nowrap;">{{pas.os_bookingId}}</b>
+												</td>
+												<td>
+													{{pas.amount}}
+
+												</td>
+												<td>
+													<b class="text-success"> {{pas.booking_status|fix_split}}</b>
+												</td>
+												<td>{{pas.first_name}}/{{pas.last_name}}</td>
+												
+												
+							
+												<td>
+													<div class="action-btn">
+														{% comment %} <a href="#" class="btn btn-blue-light btn-sm" title="Print Ticket">
+															<i class="fa fa-print"></i>
+														</a> {% endcomment %}
+														<form id="hold_form{{forloop.counter0}}" action="{% url 'get_payment' %}" method="POST">
+														{% csrf_token %}
+															<input type="hidden" name="bookingId" value="{{pas.bookingId}}">
+															<input type="hidden" name="rtype" value="hold_normal">
+															<button data-count="{{forloop.counter0}}" type="button" class="btn btn-primary jx_confirm" data-toggle="modal" data-target="#confirmhold">Confirm</button>
+														</form>
+			
+															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path style="fill: white;" d="M160 256C160 185.3 217.3 128 288 128C358.7 128 416 185.3 416 256C416 326.7 358.7 384 288 384C217.3 384 160 326.7 160 256zM288 336C332.2 336 368 300.2 368 256C368 211.8 332.2 176 288 176C287.3 176 286.7 176 285.1 176C287.3 181.1 288 186.5 288 192C288 227.3 259.3 256 224 256C218.5 256 213.1 255.3 208 253.1C208 254.7 208 255.3 208 255.1C208 300.2 243.8 336 288 336L288 336zM95.42 112.6C142.5 68.84 207.2 32 288 32C368.8 32 433.5 68.84 480.6 112.6C527.4 156 558.7 207.1 573.5 243.7C576.8 251.6 576.8 260.4 573.5 268.3C558.7 304 527.4 355.1 480.6 399.4C433.5 443.2 368.8 480 288 480C207.2 480 142.5 443.2 95.42 399.4C48.62 355.1 17.34 304 2.461 268.3C-.8205 260.4-.8205 251.6 2.461 243.7C17.34 207.1 48.62 156 95.42 112.6V112.6zM288 80C222.8 80 169.2 109.6 128.1 147.7C89.6 183.5 63.02 225.1 49.44 256C63.02 286 89.6 328.5 128.1 364.3C169.2 402.4 222.8 432 288 432C353.2 432 406.8 402.4 447.9 364.3C486.4 328.5 512.1 286 526.6 256C512.1 225.1 486.4 183.5 447.9 147.7C406.8 109.6 353.2 80 288 80V80z"/></svg>
+														</a>
+														<form id="unhold_form{{forloop.counter0}}" action="{% url 'unhold' %}" method="POST">
+															{% csrf_token %}
+															<input type="hidden" name="bookingId" value="{{pas.bookingId}}">
+															<input type="hidden" name="rtype" value="hold_normal">
+															<button data-count="{{forloop.counter0}}" type="button" class="btn btn-red unhold_btn" data-toggle="modal" data-target="#unhold">Unhold</button>
+														</form>
+															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path style="fill:white;" d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM512 256c0 141.4-114.6 256-256 256S0 397.4 0 256S114.6 0 256 0S512 114.6 512 256z"/></svg>
+														</a>
+													</div>
+												</td>
+											</tr>
+											{% endifchanged %}
+											{% endfor %}
+											{{holdings}}
+											{% comment %} <tr>
+												<td>10/10/2022</td>
+												<td>
+													<b>{{passenger.scr}} - {{passenger.dest}}</b>
+												</td>
+												<td>
+													123456789
+												</td>
+												<td>
+													<b class="text-success">Pending</b>
+												</td>
+												<td>₹ 1000.00</td>
+												<td>
+													<div class="action-btn">
+														<a href="#" class="btn btn-blue-light btn-sm" title="Print Ticket">
+															<i class="fa fa-print"></i>
+														</a>
+														<a href="/flight/newinvoice/?bookingId={{pas.bookingId}}" class="btn btn-blue btn-sm" title="View Details">
+			
+															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path style="fill: white;" d="M160 256C160 185.3 217.3 128 288 128C358.7 128 416 185.3 416 256C416 326.7 358.7 384 288 384C217.3 384 160 326.7 160 256zM288 336C332.2 336 368 300.2 368 256C368 211.8 332.2 176 288 176C287.3 176 286.7 176 285.1 176C287.3 181.1 288 186.5 288 192C288 227.3 259.3 256 224 256C218.5 256 213.1 255.3 208 253.1C208 254.7 208 255.3 208 255.1C208 300.2 243.8 336 288 336L288 336zM95.42 112.6C142.5 68.84 207.2 32 288 32C368.8 32 433.5 68.84 480.6 112.6C527.4 156 558.7 207.1 573.5 243.7C576.8 251.6 576.8 260.4 573.5 268.3C558.7 304 527.4 355.1 480.6 399.4C433.5 443.2 368.8 480 288 480C207.2 480 142.5 443.2 95.42 399.4C48.62 355.1 17.34 304 2.461 268.3C-.8205 260.4-.8205 251.6 2.461 243.7C17.34 207.1 48.62 156 95.42 112.6V112.6zM288 80C222.8 80 169.2 109.6 128.1 147.7C89.6 183.5 63.02 225.1 49.44 256C63.02 286 89.6 328.5 128.1 364.3C169.2 402.4 222.8 432 288 432C353.2 432 406.8 402.4 447.9 364.3C486.4 328.5 512.1 286 526.6 256C512.1 225.1 486.4 183.5 447.9 147.7C406.8 109.6 353.2 80 288 80V80z"/></svg>
+														</a>
+														<a href="{% url 'cancel'%}" class="btn btn-red btn-sm" title="Cancel">
+															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path style="fill:white;" d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM512 256c0 141.4-114.6 256-256 256S0 397.4 0 256S114.6 0 256 0S512 114.6 512 256z"/></svg>
+														</a>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>10/10/2022</td>
+												<td>
+													<b>DEl - MUB</b>
+												</td>
+												<td>
+													123456789
+												</td>
+												<td>
+													<b class="text-success">Pending</b>
+												</td>
+												<td>₹ 1000.00</td>
+												<td>
+													<div class="action-btn">
+														<a href="#" class="btn btn-blue-light btn-sm" title="Print Ticket">
+															<i class="fa fa-print"></i>
+														</a>
+														<a href="{% url 'details'%}" class="btn btn-blue btn-sm" title="View Details">
+															<i class="fa fa-eye"></i>
+														</a>
+														<a href="{% url 'cancel'%}" class="btn btn-red btn-sm" title="Cancel">
+															<i class="fa fa-trash-o"></i>
+														</a>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>10/10/2022</td>
+												<td>
+													<b>DEl - MUB</b>
+												</td>
+												<td>
+													123456789
+												</td>
+												<td>
+													<b class="text-success">Pending</b>
+												</td>
+												<td>₹ 1000.00</td>
+												<td>
+													<div class="action-btn">
+														<a href="#" class="btn btn-blue-light btn-sm" title="Print Ticket">
+															<i class="fa fa-print"></i>
+														</a>
+														<a href="{% url 'details'%}" class="btn btn-blue btn-sm" title="View Details">
+															<i class="fa fa-eye"></i>
+														</a>
+														<a href="{% url 'cancel'%}" class="btn btn-red btn-sm" title="Cancel">
+															<i class="fa fa-trash-o"></i>
+														</a>
+													</div>
+												</td>
+											</tr> {% endcomment %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+
+	<!-- Profile Edit -->
+	<div class="modal fade edit-profile-modal" id="edit-profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="exampleModalLabel">Edit Profile</h4>
+					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+						<img src="images/icon/close.png" alt="">
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="row">
+							<div class="col-12">
+								<label>User Name:</label>
+							</div>
+							<div class="col-md-2 col-4 pr-0">
+								<div class="form-group">
+									<select name="" id="" class="form-control px-1">
+										<option value="" selected="">Title</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-5 col-8">
+								<div class="form-group">
+									<input type="text" class="form-control" placeholder="First Name">
+								</div>
+							</div>
+							<div class="col-md-5">
+								<div class="form-group">
+									<input type="text" class="form-control" placeholder="Last Name">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Email:</label>
+									<input type="text" class="form-control" placeholder="example@gmail.com">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Phone:</label>
+									<div class="input-phone"></div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Old Password:</label>
+									<input type="password" class="form-control" placeholder="*****">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>New Password:</label>
+									<input type="password" class="form-control" placeholder="*****">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Confirm Password:</label>
+									<input type="password" class="form-control" placeholder="*****">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Address:</label>
+									<input type="text" class="form-control" placeholder="address line">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>State:</label>
+									<select name="" id="" class="form-control">
+										<option value="" selected="">Select state</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>City:</label>
+									<input type="text" class="form-control" placeholder="Enter city">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Zip:</label>
+									<input type="text" class="form-control" placeholder="00000">
+								</div>
+							</div>
+							<div class="col-12">
+								<ul class="checkbox-list">
+									<li>
+										<label class="custom-checkbox">SMS Alerts
+											<input type="checkbox">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+									<li>
+										<label class="custom-checkbox">Low Fare Alerts
+											<input type="checkbox">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+									<li>
+										<label class="custom-checkbox">I would also like to receive my booking details on WhatsApp.
+											<input type="checkbox">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+									<li>
+										<label class="custom-checkbox">Subscribe to receive special promotions and offers by Yatra.
+											<input type="checkbox">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-red">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- GST Edit -->
+	<div class="modal fade edit-profile-modal" id="gst-profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="exampleModalLabel">Add GST Information</h4>
+					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+						<img src="images/icon/close.png" alt="">
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>GST Number</label>
+									<input type="text" class="form-control" placeholder="First Name">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Company Name</label>
+									<input type="text" class="form-control" placeholder="Last Name">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Phone:</label>
+									<div class="input-phone"></div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Email:</label>
+									<input type="text" class="form-control" placeholder="example@gmail.com">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Address:</label>
+									<input type="text" class="form-control" placeholder="address line">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>State:</label>
+									<select name="" id="" class="form-control">
+										<option value="" selected="">Select state</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>City:</label>
+									<input type="text" class="form-control" placeholder="Enter city">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Zip:</label>
+									<input type="text" class="form-control" placeholder="00000">
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-red">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Profile Edit -->
+	<div class="modal fade edit-profile-modal" id="travellers-profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="exampleModalLabel">Add Traveller</h4>
+					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+						<img src="images/icon/close.png" alt="">
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="row">
+							<div class="col-12">
+								<ul class="radio-list">
+									<li>
+										<label class="custom-radio">Adult
+											<input checked="checked" name="radio" type="radio">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+									<li>
+										<label class="custom-radio">Child
+											<input name="radio" type="radio">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+									<li>
+										<label class="custom-radio">Infant
+											<input name="radio" type="radio">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+								</ul>
+							</div>
+							<div class="col-12">
+								<div class="form-group">
+									<select name="" id="" class="form-control">
+										<option value="" selected="">Title</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-group">
+									<label>First Name<sup>*</sup></label>
+									<input type="text" class="form-control" placeholder="First Name">
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-group">
+									<label>Last Name</label>
+									<input type="text" class="form-control" placeholder="Last Name">
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-group">
+									<label>Last Name<sup>*</sup></label>
+									<input type="text" class="form-control" placeholder="Last Name">
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-group">
+									<label>Date of Birth<sup>*</sup></label>
+									<input type="text" class="datepicker" value="">
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-red">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade login-modal" id="confirmhold" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="loginModalLabel">Vertically Aligned</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+					</button>
+				</div>
+				<div class="modal-body" id="confirm_msg">
+						<div id="load">
+							<div>G</div>
+							<div>N</div>
+							<div>I</div>
+							<div>D</div>
+							<div>A</div>
+							<div>O</div>
+							<div>L</div>
+						</div>
+						<!-- <p class="modal-text">In hac habitasse platea dictumst. Proin sollicitudin et lacus in tincidunt. Integer nisl ex, sollicitudin eget nulla nec, pharetra lacinia nisl. Aenean nec nunc ex. Integer varius neque at dolor scelerisque porttitor.</p> -->
+				</div>
+				<div class="modal-footer">
+					<button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+					<button type="button" class="btn btn-primary" id="confirm_btn" disabled>Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade login-modal" id="unhold" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="loginModalLabel">Vertically Aligned</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+					</button>
+				</div>
+				<div class="modal-body" id="confirm_msg">
+					<h1>Sure you want to Unhold the ticket!</h1>
+				</div>
+				<div class="modal-footer">
+					<button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i>Discard</button>
+					<button type="button" class="btn btn-primary" id="unhold_btn">Confirm</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer -->
+	{% include "online_savaari/footer.html" %}
+
+	<!-- Jquery min -->
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+	<!-- Custom -->
+	<script src="{% static 'main/js/default.js' %}"></script>
+	<script>
+		$('.jx_confirm').click(function(){
+			console.log('test')
+			let count = $(this).attr('data-count')
+			let data = {}
+			$(`#hold_form${count}`).find('input').map(function(){
+				data[$(this).attr('name')] = $(this).val()
+			})
+			$('#confirm_btn').click(function(){
+				document.getElementById(`hold_form${count}`).submit()
+			})
+			$.ajax({
+				type: "GET",
+				url: "{% url 'confirm_booking' %}",
+				data : data,
+				success: function(data){
+					console.log(data)
+					$('#confirm_msg').html("")
+					if (data['status']['success']){
+						$('#confirm_msg').html(`<p>Click Confirm to Make Payment.</p>`)
+					}else{
+						$('#confirm_msg').html(`<p>error</p>`)
+						$('#confirm_btn').attr('disabled', true)
+					}
+					$('#confirm_btn').prop('disabled', false)
+				},
+				error: function(data){
+					console.log(data)
+					$('#confirm_btn').prop('disabled', true)
+				},
+				complete: function(){
+					$('confirm_msg').html("")
+					$('confirm_msg').html(`<p>${data}</p>`)
+					$('#confirm_btn').prop('disabled', false)
+				}
+			});
+		})
+		$('.unhold_btn').click(function(){
+			console.log('test')
+			let count = $(this).attr('data-count')
+			let data = {}
+			$(`#unhold_form${count}`).find('input').map(function(){
+				data[$(this).attr('name')] = $(this).val()
+			})
+			$('#unhold_btn').click(function(){
+				document.getElementById(`unhold_form${count}`).submit()
+			})
+		})
+
+	</script>
+
+</body>
+
+</html>

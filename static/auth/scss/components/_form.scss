@@ -1,0 +1,195 @@
+// Form
+input,
+textarea,
+select {
+    outline: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    &:focus {
+        outline: none !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+}
+
+label {
+    font-size: 1em;
+    line-height: 1;
+    margin-bottom: 5px;
+    color: $clr-999999;
+}
+.form-control {
+    font-size: 1em;
+    line-height: 1.4;
+    padding: 8px 15px;
+    color: $clr-333333;
+    background-color: $clr-f9f9f9;
+    border: 1px solid $clr-e4e4e4;
+    border-radius: 4px;
+    height: auto !important;
+    &:focus {
+        background-color: $clr-f9f9f9;
+        border-color: $blue-clr;
+    }
+    &::placeholder {
+        color: $clr-c5c5c5;
+    }
+}
+
+// Custom Select
+.cs-select {
+    position: relative;
+}
+
+// Checkboox
+.custom-checkbox {
+    color: $clr-333333;
+    font-size: 1em;
+    line-height: 1.5;
+    display: inline-block;
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 18px;
+        width: 18px;
+        border: 1px solid $clr-e4e4e4;
+        border-radius: 4px;
+        &:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 5px;
+            top: 1px;
+            width: 6px;
+            height: 10px;
+            border: solid $white-clr;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+    }
+    input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+        &:checked ~ .checkmark {
+            background-color: $red-clr;
+            border-color: $red-clr;
+            &:after {
+                display: block;
+                border-color: $white-clr;
+            }
+        }
+    }
+}
+
+// Radio
+.custom-radio {
+    color: $clr-333333;
+    font-size: 1em;
+    line-height: 1.5;
+    display: inline-block;
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 18px;
+        width: 18px;
+        border: 1px solid $clr-e4e4e4;
+        border-radius: 50%;
+        &:after {
+            content: "";
+            position: absolute;
+            display: none;
+            top: 3px;
+            left: 3px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: $red-clr;
+        }
+    }
+    input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        &:checked ~ .checkmark {
+            background-color: $white-clr;
+            border-color: $red-clr;
+            &:after {
+                display: block;
+            }
+        }
+    }
+}
+
+// Text Radio
+.text-radio {
+    display: inline-block;
+    font-size: 1em;
+    line-height: 1;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 8px 10px;
+    margin-bottom: 0;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        border: none;
+        &:after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background-color: $no-clr;
+            border: 1px solid $clr-999999;
+            border-radius: 4px;
+            z-index: -1;
+        }
+    }
+    .trip-label {
+        display: block;
+    }
+    input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+        &:checked ~ .checkmark {
+            &:after {
+                border-color: $red-clr;
+                display: block;
+            }
+        }
+        &:checked ~ .trip-label {
+            color: $red-clr;
+        }
+    }
+}

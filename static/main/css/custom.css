@@ -1,0 +1,53 @@
+/* ================ Listing Page ============== */
+.listing-fi .flight-group input {
+    display: none;
+}
+
+.listing-fi .flight-group select.form-control {
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    color: #fff;
+}
+
+.listing-fi .flight-group select.form-control option {
+    color: #333;
+}
+
+#dynamic_field tr {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 10px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+#dynamic_field tr td:nth-child(4) {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-11%);
+    right: -12px;
+}
+
+.multi1-date {
+    order: 1;
+    border-right: 1px solid white;
+}
+
+.multi2-date {
+    order: 2;
+    border-right: 1px solid white;
+}
+.multi3-date {
+    order: 3;
+    border-right: 1px solid white;
+}
+.multi4-date {
+    order: 4;
+    border-right: 1px solid white;
+}
+.multi5-date {
+    order: 5;
+}
+

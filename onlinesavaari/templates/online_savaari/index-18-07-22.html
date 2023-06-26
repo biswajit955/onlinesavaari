@@ -1,0 +1,1145 @@
+{% load static%}
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	
+	<link rel="icon" href="{% static 'main/images/favicon.png' %}">
+
+	<title>Online Savaari</title>
+
+	<!-- Custom -->
+	<link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'main/css/custom.css' %}">
+</head>
+	<!-- Main -->
+<body>
+	{% include "online_savaari/header.html" %}
+	<main class="main-body">
+		<div class="container">
+			
+			<form method="get" action="flight/get_flight/">
+				{% csrf_token %}
+			<div class="row">
+				<div class="col-lg-5 left-sec">
+					<div class="booking-box box-one">
+						<h4>Book Flights and Hotels</h4>
+
+						<ul class="trip-type-radio">
+							<li>
+								<label class="text-radio">
+									<input id="one-way" type="radio" name="radio1" checked="checked">
+									<span class="checkmark"></span>
+									<span class="trip-label">one way</span>
+								</label>
+							</li>
+							<li>
+								<label class="text-radio">
+									<input id="one-way" type="radio" name="radio1">
+									<span class="checkmark"></span>
+									<span class="trip-label">round trip</span>
+								</label>
+							</li>
+							<li>
+								<label class="text-radio">
+									<input id="one-way" type="radio" name="radio1">
+									<span class="checkmark"></span>
+									<span class="trip-label">multi-city</span>
+								</label>
+							</li>
+						</ul>
+						<div class="flight-input">
+							<div class="flight-group">
+								<label for="">Depart From</label>
+								<!-- <input id=airport-depart type="text" placeholder="depart From"> -->
+								<input name="departFrom" id="departFrom" type="text" list="airport" placeholder="New Delhi">
+								<div class="auto_text">
+									<p>del</p>
+								</div>
+								<!-- <input type="text" value="New Delhi"> -->
+								
+																		
+								<!-- <select name="departFrom" id="" class="form-control">
+									<option value="PHW">Phalaborwa, South Africa</option>
+									<option value="JNB">Johanessberg, South Africa</option>
+									<option value="CPT">Cape Town, South Africa</option>
+									<option value="KIM">Kimbereley, Soth Africa</option>
+									<option value="BFN">Bloemfantin, South Africa</option>
+								</select> -->
+							</div>
+							<form action="{% url 'index' %}">
+							<button type="button" onclick="switchText()">
+								<img src="{% static '/main/images/icon/swip.png' %}" alt="">
+							</button>
+							</form>
+							
+							<div class="flight-group">
+								<label for="">Going To</label>
+								<input name="departTo" id="departTo" list="airport" type="text" placeholder="Mumbai">
+								<div class="auto_text">
+									<p>bom</p>
+								</div>
+								<!-- <select name="departTo" id="" class="form-control">
+									<option value="PHW">Phalaborwa, South Africa</option>
+									<option value="JNB">Johanessberg, South Africa</option>
+									<option value="CPT">Cape Town, South Africa</option>
+									<option value="KIM">Kimbereley, Soth Africa</option>
+									<option value="BFN">Bloemfantin, South Africa</option>
+								</select> -->
+							</div>
+						</div>
+						<div class="flight-input">
+							<div class="flight-group">
+								<label for="">Departure Date</label>
+								<input type="text" class="datepicker" value="">
+							</div>
+							<div class="flight-group">
+								<label for="">Return Date</label>
+								<input id="returnDate" type="text" class="datepicker" value="">
+							</div>
+						</div>
+						<div class="person-select">
+							<label for="">Traveller(s), Class</label>
+
+ <div class="accordion" id="accordionExample">
+               <div class="card">
+                    <div class="card-head" id="heading1">
+                         <h2 class="mb-0" data-toggle="collapse" data-target="#collapse1" aria-expanded="true"
+                              aria-controls="collapse1">
+                              1 Traveller, Economy <i class="fa-solid fa-angle-down"></i>
+                         </h2>
+                    </div>
+
+                    <div id="collapse1" class="collapse" aria-labelledby="heading1"
+                         data-parent="#accordionExample">
+                         <div class="card-body">
+                         <!--  <div class="add-person">
+								<div class="person-box">
+									<span>Adult</span>
+									<div class="number">
+	<span class="minus">-</span>
+	<input type="text" min="0" maxlength="9" value="1"/>
+	<span class="plus">+</span>
+</div>
+								</div>
+								<div class="person-box">
+									<span>Child
+										<small> [2-12 YRS] </small></span>
+									<div class="number">
+	                                    <span class="minus">-</span>
+	                                    <input type="text" value="0"/>
+	                                    <span class="plus">+</span>
+                                         </div>
+								</div>
+								<div class="person-box">
+									<span>Infant
+										<small>[Below 2 YRS]</small></span>
+									<div class="number">
+	                                  <span class="minus">-</span>
+	                                  <input type="text" value="0"/>
+	                                  <span class="plus">+</span>
+                                  </div>
+								</div>
+							</div> -->
+
+							<div class="add-person">
+								<div class="person-box">
+									<span>Adult</span>
+									<div class="quantity-box">
+										<button type="button" class="sub">-</button>
+										<input type="number" id="three-max" value="1" min="0" max="9" name="adult" />
+										<button type="button" class="add">+</button>
+									</div>
+								</div>
+								<div class="person-box">
+									<span>Child
+										<small> [2-12 YRS] </small></span>
+									<div class="quantity-box">
+										<button type="button" class="sub">-</button>
+										<input type="number" id="nine-max" value="0" min="0" max="9" name="child" />
+										<button type="button" class="add">+</button>
+									</div>
+								</div>
+								<div class="person-box">
+									<span>Infant
+										<small>[Below 2 YRS]</small></span>
+									<div class="quantity-box">
+										<button type="button" class="sub">-</button>
+										<input type="number" id="six-max" value="0" min="0" max="9" name="infant" />
+										<button type="button" class="add">+</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<ul class="filter-list">
+							<li>
+								<label class="custom-radio">Economy
+									<input checked="checked" name="radio" type="radio">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-radio">Premium Economy
+									<input name="radio" type="radio">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-radio">Business
+									<input name="radio" type="radio">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+						</ul>
+						
+                         </div>
+                    </div>
+               </div>
+<ul class="filter-list bt_filter">
+							<li>
+								<label class="custom-checkbox">Non Stop Flights
+									<!-- <input checked="checked" type="checkbox"> -->
+									<input type="checkbox">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-checkbox">Student Fare
+									<input type="checkbox">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-checkbox">Armed Forces
+									<input type="checkbox">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-checkbox">Senior Citizen
+									<input type="checkbox">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+						</ul>
+          </div>
+
+
+
+
+
+							
+							<!-- <div class="row col-md-4">
+								<div class="text-left mt-4">
+									<button class="btn btn-red">
+										Web checkin
+										<i class="la la-long-arrow-right la-lg"></i>
+									</button>
+								</div>
+								<div class="text-middle mt-4"></div>
+								<div class="text-right mt-4">
+									<button class="btn btn-red">
+										Search Flights
+										<i class="la la-long-arrow-right la-lg"></i>
+									</button>
+								</div>
+							</div> -->
+							<div class="custom_btn">
+								<div class="">
+								<!-- <button class="btn bg_blue">
+									Check Your Refund
+									<span><i class="la la-long-arrow-right la-lg"></i></span>
+								</button> -->
+							</div>
+							<div class="">
+								<button class="btn btn-red">
+									Search Flights
+									<span><i class="la la-long-arrow-right la-lg"></i></span>
+								</button>
+							</div>
+							</div>
+							
+					</div>
+				</div>
+			</form>
+				<div class="col-lg-7 right-sec">
+						<!-- Ad Banner -->
+						<section class="add-banner">
+							<div class="row">
+								<div class="col-12">
+									<a href="#" class="add-box">
+										<img src="{% static 'main/images/ad/1.jpg' %}" alt="">
+									</a>
+								</div>
+								<div class="col-6">
+									<a href="#" class="add-box">
+										<img src="{% static 'main/images/ad/2.jpg' %}" alt="">
+									</a>
+								</div>
+								<div class="col-6">
+									<a href="#" class="add-box">
+										<img src="{% static 'main/images/ad/3.jpg' %}" alt="">
+									</a>
+								</div>
+							</div>
+						</section>
+
+						<!-- Offer -->
+						<section class="offer-sec pt-5">
+							<div class="row">
+								<div class="col-12">
+									<div class="heading-one">
+										<h3>
+											Our Specials
+											<a href="#">view all <i class="fa fa-angle-double-right"></i></a>
+										</h3>
+									</div>
+									<div class="owl-carousel owl-theme owl-top-nav" id="offer-slider">
+										<div class="item">
+											<a href="#" class="offer-box box-one">
+												<div class="left-sec">
+													<img src="{% static 'main/images/offers/1.jpg' %}" alt="">
+													<span>00d:09h:01m</span>
+												</div>
+												<div class="right-sec">
+													<p class="small m-0">Dom Hotels</p>
+													<h4>Grab FLAT 8% OFF* on 10-Degree Stays</h4>
+													<p>& get ready to Unsummer with a chilled-out break.</p>
+												</div>
+												<div class="bottom-sec">
+													<span class="small">* T&C's Apply</span>
+													<span>
+														Code: <b>MMTSBI</b>
+													</span>
+													<span><b>Book Now</b></span>
+												</div>
+											</a>
+										</div>
+										<div class="item">
+											<a href="#" class="offer-box box-one">
+												<div class="left-sec">
+													<img src="{% static 'main/images/offers/1.jpg' %}" alt="">
+													<span>00d:09h:01m</span>
+												</div>
+												<div class="right-sec">
+													<p class="small m-0">Dom Hotels</p>
+													<h4>Grab FLAT 8% OFF* on 10-Degree Stays</h4>
+													<p>& get ready to Unsummer with a chilled-out break.</p>
+												</div>
+												<div class="bottom-sec">
+													<span class="small">* T&C's Apply</span>
+													<span>
+														Code: <b>MMTSBI</b>
+													</span>
+													<span><b>Book Now</b></span>
+												</div>
+											</a>
+										</div>
+										<div class="item">
+											<a href="#" class="offer-box box-one">
+												<div class="left-sec">
+													<img src="{% static 'main/images/offers/1.jpg' %}" alt="">
+													<span>00d:09h:01m</span>
+												</div>
+												<div class="right-sec">
+													<p class="small m-0">Dom Hotels</p>
+													<h4>Grab FLAT 8% OFF* on 10-Degree Stays</h4>
+													<p>& get ready to Unsummer with a chilled-out break.</p>
+												</div>
+												<div class="bottom-sec">
+													<span class="small">* T&C's Apply</span>
+													<span>
+														Code: <b>MMTSBI</b>
+													</span>
+													<span><b>Book Now</b></span>
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Flights -->
+						<section class="flight-sec pt-5">
+							<div class="row">
+								<div class="col-12">
+									<div class="heading-one">
+										<h3>Popular Domestic Flight Routes</h3>
+									</div>
+									<div class="tab-one">
+										<ul class="nav nav-pills" role="tablist">
+											<span>From -</span>
+											<li class="nav-item">
+												<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab" role="tab" aria-controls="one-tab"
+													aria-selected="true">NEW
+													DELHI</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab" role="tab" aria-controls="two-tab"
+													aria-selected="false">MUMBAI</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab" role="tab" aria-controls="three-tab"
+													aria-selected="false">OTHERS</a>
+											</li>
+										</ul>
+										<div class="tab-content">
+											<div class="tab-pane fade show active" id="one-tab" role="tabpanel" aria-labelledby="tab-one">
+												<div class="owl-carousel owl-theme flights-slider owl-top-nav">
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/1.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/2.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/3.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/4.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+
+											<div class="tab-pane fade" id="two-tab" role="tabpanel" aria-labelledby="tab-two">
+												<div class="owl-carousel owl-theme flights-slider owl-top-nav">
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/5.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/6.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/7.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/8.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+
+											<div class="tab-pane fade" id="three-tab" role="tabpanel" aria-labelledby="tab-three">
+												<div class="owl-carousel owl-theme flights-slider owl-top-nav">
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/9.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/10.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/11.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box box-one" href="#">
+															<div class="top-sec">
+																<img src="{% static 'main/images/airline/12.png' %}" alt="">
+																<h4>Beijing<i class="la la-exchange mx-2"></i>Beijing</h4>
+															</div>
+															<p class="meta small">Tue, Jul 14-Fri, Jul 24</p>
+															<div class="bottom-sec">
+																<span>
+																	From
+																	<b><i class="la la-rupee"></i>140</b>
+																</span>
+																<span>See details<i class="la la-angle-right"></i></span>
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Collection -->
+						<section class="collection-sec pt-5">
+							<div class="row">
+								<div class="col-12">
+									<div class="heading-one">
+										<h3>Handpicked Collections for You</h3>
+									</div>
+									<div class="owl-carousel owl-theme collection-slider owl-top-nav">
+										<div class="item">
+											<a class="collection-box" href="#">
+												<div class="img-sec">
+													<img src="{% static 'main/images/collection/1.jpg' %}" alt="">
+												</div>
+												<div class="meta">
+													<span>Top 11</span>
+													<p>Romantic Destinations</p>
+												</div>
+											</a>
+										</div>
+										<div class="item">
+											<a class="collection-box" href="#">
+												<div class="img-sec">
+													<img src="{% static 'main/images/collection/2.jpg' %}" alt="">
+												</div>
+												<div class="meta">
+													<span>Top 11</span>
+													<p>Romantic Destinations</p>
+												</div>
+											</a>
+										</div>
+										<div class="item">
+											<a class="collection-box" href="#">
+												<div class="img-sec">
+													<img src="{% static 'main/images/collection/3.jpg' %}" alt="">
+												</div>
+												<div class="meta">
+													<span>Top 11</span>
+													<p>Romantic Destinations</p>
+												</div>
+											</a>
+										</div>
+										<div class="item">
+											<a class="collection-box" href="#">
+												<div class="img-sec">
+													<img src="{% static 'main/images/collection/1.jpg' %}" alt="">
+												</div>
+												<div class="meta">
+													<span>Top 11</span>
+													<p>Romantic Destinations</p>
+												</div>
+											</a>
+										</div>
+										<div class="item">
+											<a class="collection-box" href="#">
+												<div class="img-sec">
+													<img src="{% static 'main/images/collection/2.jpg' %}" alt="">
+												</div>
+												<div class="meta">
+													<span>Top 11</span>
+													<p>Romantic Destinations</p>
+												</div>
+											</a>
+										</div>
+										<div class="item">
+											<a class="collection-box" href="#">
+												<div class="img-sec">
+													<img src="{% static 'main/images/collection/3.jpg' %}" alt="">
+												</div>
+												<div class="meta">
+													<span>Top 11</span>
+													<p>Romantic Destinations</p>
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Flights -->
+						<section class="flight-sec pt-5">
+							<div class="row">
+								<div class="col-12">
+									<div class="heading-one">
+										<h3>Popular International Flight Routes</h3>
+									</div>
+									<div class="tab-one">
+										<ul class="nav nav-pills" role="tablist">
+											<span>From- </span>
+											<li class="nav-item">
+												<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab" role="tab" aria-controls="one-tab"
+													aria-selected="true">NEW
+													DELHI</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab" role="tab" aria-controls="two-tab"
+													aria-selected="false">MUMBAI</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab" role="tab" aria-controls="three-tab"
+													aria-selected="false">OTHERS</a>
+											</li>
+										</ul>
+										<div class="tab-content">
+											<div class="tab-pane fade show active" id="one-tab" role="tabpanel" aria-labelledby="tab-one">
+												<div class="owl-carousel owl-theme flights2-slider owl-top-nav">
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+
+											<div class="tab-pane fade" id="two-tab" role="tabpanel" aria-labelledby="tab-two">
+												<div class="owl-carousel owl-theme flights2-slider owl-top-nav">
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+
+											<div class="tab-pane fade" id="three-tab" role="tabpanel" aria-labelledby="tab-three">
+												<div class="owl-carousel owl-theme flights2-slider owl-top-nav">
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+													<div class="item">
+														<a class="journey-box2 box-one" href="#">
+															<div class="top-sec">
+																<div class="place-name top">Delhi</div>
+																<div class="time">Fri, 15 Jul</div>
+																<div class="place-name bottom">Chennai</div>
+															</div>
+															<div class="bottom-sec">
+																<small>Starting From</small>
+																<span>
+																	<i class="la la-rupee"></i>5,672
+																</span>
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Information -->
+						<section class="information-sec pt-5">
+							<div class="row">
+								<div class="col-12">
+									<div class="heading-one">
+										<h3>Why book with onlinesavaari?</h3>
+									</div>
+									<ul>
+										<li>
+											<h5>Look for flights and hotels</h5>
+											<p>
+												Search for exclusive deals on flights and hotels. Find cheap air tickets to any destination you like. Choose from its vast
+												repository of hotels -
+												from budget, mid-range, five-star to niche boutique properties. Widen your choices with options like flexi stay, pay directly at
+												hotel, and
+												guaranteed standard amenities. Extremely efficient and easy.
+											</p>
+										</li>
+										<li>
+											<h5>Get a secure flight booking</h5>
+											<p>
+												Enjoy cancellation protection on domestic flights. Benefit from fare drop protection, same day cancellation protection, hold now -
+												pay later, on
+												international flight bookings. Great filters, fantastic navigation.
+											</p>
+										</li>
+										<li>
+											<h5>A holiday to suit every pocket</h5>
+											<p>
+												Plan a honeymoon, a weekend getaway, or an adventure activity. Select from an array of domestic and international destinations
+												well-suited to every
+												spectrum of traveller. Be it flights, hotels, pre-planned itinerary, transport upon arrival/departure or sightseeing - you are
+												covered. Attractive
+												pricing, well-researched itineraries.
+											</p>
+										</li>
+										<li>
+											<h5>Find the best combination, tailor your trip</h5>
+											<p>
+												Your one-stop-shop to get the best combination of flights, hotels, activities, package holidays along with train and bus tickets.
+												Travelz's powerful
+												search engine lets you zero in on with precision.
+											</p>
+										</li>
+										<li>
+											<h5>No need to queue up at the ticketing window of a monument</h5>
+											<p>
+												Buy tickets to all ASI-protected monuments online. Its hassle-free and saves you from waiting in a queue under a scorching sun.
+												Imagine gaining a
+												breezy entry into the Taj Mahal!
+											</p>
+										</li>
+										<li>
+											<h5>New deal every season</h5>
+											<p>The onset of the festive season, an upcoming long weekend or a gazetted holiday, expect an attractive deal on flights, hotels and
+												holidays coming
+												your way. From cashback offers to promo code discounts, you are in for a hot deal.</p>
+										</li>
+										<li>
+											<h5>Travelz's burgeoning customer base</h5>
+											<p>
+												Our expert customer service team supports you before, during and after the booking. The several million customers since 2006 are
+												proof.
+											</p>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+
+{% include "online_savaari/footer.html" %}
+	<datalist id="airport">
+		{% for i in airport %}
+		<option value="{{i.code}}">{{i.name}}- {{i.code}}</option>
+		<!-- <option value="BOM">Chhatrapati Shivaji International Airport- BOM</option>
+		<option value="BLR">Kempegowda International Airport - BLR</option>
+		<option value="MAA">Chennai International Airport - MAA</option>
+		<option value="CCU">Netaji Subhas Chandra Bose International Airport - CCU</option>
+		<option value="LKO">Chaudhary Charan Singh International Airport - LKO</option>
+		<option value="ATQ">Sri Guru Ram Dass Jee International Airport - ATQ</option>
+		<option value="VTZ">Visakhapatnam International Airport - VTZ</option>
+		<option value="CNN">Kannur International Airport - CNN</option>
+		<option value="STV">Surat International Airport - STV</option>
+		<option value="IDR">Devi Ahilya Bai Holkar Airport - IDR</option>
+		<option value="COK">Cochin International Airport - COK</option>
+		<option value="AMD">Sardar Vallabhbhai Patel International Airport - AMD</option>
+		<option value="DEL">Indira Gandhi International Airport - DEL</option>
+		<option value="GOI" >Dabolim Airport - GOI</option>
+		<option value="PNQ" >Pune Airport - PNQ</option>
+		<option value="TRV">Thiruvananthapuram International Airport - TRV</option>
+		<option value="PHW">Phalaborwa, South Africa</option>
+		<option value="JNB">Johanessberg, South Africa</option>
+		<option value="CPT">Cape Town, South Africa</option>
+		<option value="KIM">Kimbereley, Soth Africa</option>
+		<option value="BFN">Bloemfantin, South Africa</option> -->
+		{% endfor%}
+	</datalist>
+
+	<!-- <option value="PHW">Phalaborwa, South Africa</option>
+									<option value="JNB">Johanessberg, South Africa</option>
+									<option value="CPT">Cape Town, South Africa</option>
+									<option value="KIM">Kimbereley, Soth Africa</option>
+									<option value="BFN">Bloemfantin, South Africa</option> -->
+
+	<!-- Jquery min -->
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+	<script src="{% static 'main/plugins/my-quantity.js' %}"></script>
+
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+<!-- Select -->
+
+	 <script src="https://kit.fontawesome.com/3135e7d8c5.js" crossorigin="anonymous"></script>
+
+	<!-- Custom -->
+	<script src="{% static 'main/js/default.js' %}"></script>
+	<script type="text/javascript">
+		function switchText(){
+			let obj1 = document.getElementById("departFrom");
+			let obj2 = document.getElementById("departTo");
+		
+			let temp = obj1.value;
+			obj1.value = obj2.value;
+			obj2.value = temp;
+		}
+		function waySelect(val){
+			if(val==true){
+				$('#returnDate').prop('disabled', false);
+			}else{
+				$('#returnDate').prop('disabled', true);
+			}
+		}
+
+
+// 		$(document).ready(function() {
+//     $('.minus').click(function() {
+//         var $input = $(this).parent().find('input');
+//         var count = parseInt($input.val()) - 1;
+//         count = count < 1 ? 0 : count;
+//         $input.val(count);
+//         $input.change();
+//         return false;
+//     });
+//     $('.plus').click(function() {
+//         var $input = $(this).parent().find('input');
+
+
+//         if ($input.val() < 9) {
+//             $input.val(parseInt($input.val()) + 1);
+//             $input.change();
+//             return false;
+//         }
+
+//     });
+// });
+	</script>
+</body>
+
+</html>

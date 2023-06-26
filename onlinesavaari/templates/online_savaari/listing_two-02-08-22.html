@@ -1,0 +1,2627 @@
+{% load flight_tags %}
+{{% load static %}
+{% load static%}
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="icon" href="{% static 'main/images/favicon.png' %}">
+
+	<title>Online Savaari</title>
+
+	<!-- Custom -->
+	<link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'main/css/custom.css' %}">
+</head>
+ 
+<body onload="adjoin();">
+	<!-- Main Header -->
+	<div class="main-header">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col-md-4 col-3 pr-0 order-lg-1 order-1">
+					<div class="left-sec">
+						<div class="logo-widget">
+							<a href="{% url 'index'%}">
+								<img class="img-fluid" src="{% static 'main/images/logo.png' %}" alt="">
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 order-lg-2 order-3">
+					<div class="center-sec">
+						<ul class="menu-items">
+							<li>
+								<a href="#" class="active">
+									<i class="flight-icon"></i>
+									<span>Flights</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<i class="hotel-icon"></i>
+									<span>Hotels</span>
+								</a>
+							</li>
+							<!-- <li>
+								<a href="#">
+									<i class="more-icon"></i>
+									<span>More</span>
+								</a>
+							</li> -->
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-4 col-9 order-lg-3 order-2 pl-0">
+					<div class="right-sec">
+						<div class="region-select">
+							<select id="country-select">
+								<option data-icon="{% static 'main/images/flags/in.svg' %}">India</option>
+								<!-- <option data-icon="{% static 'main/images/flags/af.svg' %}">Afghanistan</option>
+								<option data-icon="{% static 'main/images/flags/au.svg' %}">Australia</option>
+								<option data-icon="{% static 'main/images/flags/ca.svg' %}">Canada</option>
+								<option data-icon="{% static 'main/images/flags/ru.svg' %}">Russia</option>
+								<option data-icon="{% static 'main/images/flags/us.svg' %}">USA</option> -->
+							</select>
+						</div>
+						<div class="links">
+							<a href="#">offers</a>	
+						</div>
+						{% if user.is_authenticated %}
+						<div class="dropdown">
+							<button class="dropdown-toggle" type="button" data-toggle="dropdown">
+								<span>Account</span>
+							</button>
+							<div class="dropdown-menu">
+								<a href="{% url 'custlogin'%}" class="dropdown-item">Login</a>
+								<a href="{% url 'register_customer'%}" class="dropdown-item">Sign Up</a>
+								<div class="dropdown-divider	"></div>
+								<a href="{% url 'register_corporatecust'%}" class="dropdown-item">For Business</a>
+								<a href="{% url 'register_corporatecust'%}" class="dropdown-item">For Agents</a>
+							</div>
+						</div>
+						{% else %}
+						
+						<div class="dropdown ">
+							<button class="dropdown-toggle" type="button" data-toggle="dropdown">
+								<img src="{% static 'main/images/avatar/1.jpg' %}" alt="">
+								<span>{{ user.username }}</span>
+							</button>
+							<div class="dropdown-menu">
+								<a href="#" class="dropdown-item">Account Settings</a>
+								<a href="{% url 'profile'%}" class="dropdown-item">Profile</a>	
+								<a href="{% url 'dashboard'%}" class="dropdown-item">Dashboard</a>
+								<a href="{% url 'booking_history' %}" class="dropdown-item">Booking History</a>
+								<a href="{% url 'ecash' %}" class="dropdown-item">Ecash</a>
+								<a href="#" class="dropdown-item">My Bookings</a>
+								<div class="dropdown-divider"></div>
+								<a href="{% url 'custlogout' %}" class="dropdown-item">Logout</a>
+							</div>
+						</div>
+						{% endif %}
+						<div class="dropdown">
+							<button class="dropdown-toggle" type="button" data-toggle="dropdown">
+								<span>Support</span>
+							</button>
+							<div class="dropdown-menu">
+								<a href="" class="dropdown-item">Call Us</a>
+								<a href="mailto:support@onlinesavaari.com" class="dropdown-item">Mail Us</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Main -->
+	<main class="main-body">
+		<!-- Listing Banner -->
+		<section class="listing-banner">
+			<div class="container">
+				<form method="GET" action="">
+						{% csrf_token %}
+				<div class="row">
+					<div class="col-md-4">
+						<div class="flight-input">
+							<div class="flight-group">
+								<label for="">Depart From</label>
+								<input name="fromCityOrAirport" id="departFrom" type="text" list="airport" placeholder="New Delhi">
+							</div>
+							<form action="{% url 'search_flight' %}">
+							<button type="button" onclick="switchText()" >
+								<img src="{% static 'main/images/icon/swip-w.png' %}" alt="">
+							</button>
+							<div class="flight-group">
+								<label for="">Going To</label>
+								<input name="toCityOrAirport" id="departTo" list="airport" type="text" placeholder="Mumbai">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="flight-input">
+							<div class="flight-group">
+								<label for="">Departure Date</label>
+								<input type="text" class="datepicker" value="{{travelDate}}" name="travelDate">
+							</div>
+							<button>
+								<img src="{% static 'main/images/icon/calendar-w.png' %}" alt="">
+							</button>
+							<div class="flight-group">
+								<label for="">Return Date</label>
+								<input type="text" class="datepicker" value="{{travelDate1}}" name="travelDate1">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="person-select">
+							<label for="">Traveller(s), Class</label>
+							<div class="add-person">
+								<div class="person-box">
+									<div class="quantity-box">
+										<button type="button" class="sub">-</button>
+										<input type="number" value="{{adult}}" min="0" max="10" name="ADULT" />
+										<button type="button" class="add">+</button>
+									</div>
+									<span>Adult (s)</span>
+								</div>
+								<div class="person-box">
+									<div class="quantity-box">
+										<button type="button" class="sub">-</button>
+										<input type="number" value="{{child}}" min="0" max="10" name="CHILD"/>
+										<button type="button" class="add">+</button>
+									</div>
+									<span>Child (s)</span>
+								</div>
+								<div class="person-box">
+									<div class="quantity-box">
+										<button type="button" class="sub">-</button>
+										<input type="number" value="{{infant}}" min="0" max="10" name="INFANT" />
+										<button type="button" class="add">+</button>
+									</div>
+									<span>Infant (s)</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<ul class="filter-list">
+							<li>
+								<label class="custom-radio">Economy
+									<input name="cabinClass"  name="cabinClass" type="radio" value="ECONOMY">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-radio">Premium Economy
+									<input name="cabinClass" type="radio" value="PREMIUM_ECONOMY">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-radio">Business
+									<input name="cabinClass" type="radio" value="BUSINESS">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+						</ul>
+					</div>
+					<div class="col-md-4">
+						<ul class="filter-list">
+							<li>
+								<label class="custom-checkbox">Non Stop Flights
+									<input type="checkbox" name="isDirectFlight">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-checkbox">Student Fare
+									<input type="checkbox" name="Special" value="STUDENT">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-checkbox">Armed Forces
+									<input type="checkbox">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-checkbox">Senior Citizen
+									<input type="checkbox">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+						</ul>
+					</div>
+					<div class="col-md-4 mt-3">
+						<button class="btn btn-block btn-red">
+							Search Flights
+							<i class="la la-long-arrow-right la-lg"></i>
+						</button>
+					</div>
+				</div>
+				</form>				
+			</div>
+		</section>
+
+		<!-- Listing Filter Bar -->
+		<section class="listing-filter-bar">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 text-right">
+						<button class="listing-filter-open">
+							<img src="{% static 'main/images/icon/filter.png' %}" alt=""> More Filters
+						</button>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Listing Filter -->
+		<div class="listing-filter">
+			<button class="listing-filter-close">
+				<img src="{% static 'main/images/icon/close-w.png' %}" alt="">
+			</button>
+			<form method="get">
+			<div class="filter-body">
+				<div class="filter-group">
+					<p class="groupl">Stops:</p>
+					<ul class="filter-list">
+						<li>
+							<label class="text-radio">
+								<input type="radio" name="radio2" checked="checked">
+								<span class="checkmark"></span>
+								<span class="trip-label">0</span>
+							</label>
+						</li>
+						<li>
+							<label class="text-radio">
+								<input type="radio" name="radio2">
+								<span class="checkmark"></span>
+								<span class="trip-label">1</span>
+							</label>
+						</li>
+						<li>
+							<label class="text-radio">
+								<input type="radio" name="radio2">
+								<span class="checkmark"></span>
+								<span class="trip-label">2</span>
+							</label>
+						</li>
+					</ul>
+				</div>
+				<div class="filter-group">
+					<p class="groupl">Price:</p>
+					<div class="price-slider">
+						<div class="upto">
+							<span>Upto:</span>
+							<input type="text" id="amount" name="price" readonly>
+						</div>
+						<div id="price-range"></div>
+					</div>
+				</div>
+				<div class="filter-group">
+					<p class="groupl">Depart Time:</p>
+					<ul class="filter-list">
+						<li>
+							<label class="text-radio">
+								<input type="radio" name="radio2" id="timing1" value="00:00 - 06:00">
+								<span class="checkmark"></span>
+								<span class="trip-label">
+									<div>
+										<i class="la la-cloud-sun"></i>
+									</div>
+									00 - 06
+								</span>
+							</label>
+						</li>
+						<li>
+							<label class="text-radio">
+								<input type="radio" name="radio2" id="timing2" value="06:00 - 12:00">
+								<span class="checkmark"></span>
+								<span class="trip-label">
+									<div>
+										<i class="la la-sun"></i>
+									</div>
+									06 - 12
+								</span>
+							</label>
+						</li>
+						<li>
+							<label class="text-radio">
+								<input type="radio" name="radio2" id="timing3" value="12:00 - 18:00">
+								<span class="checkmark"></span>
+								<span class="trip-label">
+									<div>
+										<i class="la la-moon-o"></i>
+									</div>
+									12 - 18
+								</span>
+							</label>
+						</li>
+						<li>
+							<label class="text-radio">
+								<input type="radio" name="radio2" id="timing4" value="18:00 - 00:00">
+								<span class="checkmark"></span>
+								<span class="trip-label">
+									<div>
+										<i class="la la-moon"></i>
+									</div>
+									18 - 00
+								</span>
+							</label>
+						</li>
+						<li>
+							<label class="hidden">
+								<input type="radio" name="radio2" checked="checked" id="timing1" value="00:00 - 23:59">
+								<span class="checkmark"></span>
+								<span class="trip-label">
+									<div>
+										<i class="la la-cloud-sun"></i>
+									</div>
+									00 - 06
+								</span>
+							</label>
+						</li>
+					</ul>
+				</div>
+				<div class="filter-group">
+					<p class="groupl">Airlines:</p>
+					<ul class="filter-list2">
+						<li>
+							<label class="custom-checkbox">Air Asia
+								<input type="checkbox" value="Air Asia" name="airline">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">Air India
+								<input type="checkbox" value="Air India" name="airline">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">Go First
+								<input type="checkbox" value="Go First" name="airline">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">IndiGo
+								<input type="checkbox" value="IndiGo" name="airline">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">Vistara
+								<input type="checkbox" value="Vistara" name="airline">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+					</ul>
+				</div>
+				<div class="filter-group">
+					<p class="groupl">Aircraft:</p>
+					<ul class="filter-list2">
+						<li>
+							<label class="custom-checkbox">Airbus A320
+								<input checked="checked" type="checkbox">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">Airbus A320 Neo
+								<input type="checkbox">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">Airbus A320-100
+								<input type="checkbox">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">Airbus A320-212
+								<input type="checkbox">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">Airbus A321
+								<input type="checkbox">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="filter-footer">
+				<button class="btn btn-white">Cancel</button>
+				<button type="button" class="btn btn-red" value="refresh" onclick="Copy();">Apply Filter</button>
+			</div>
+			</form>
+		</div>
+
+		<!-- Listing Item Sec -->
+		<section class="listing-item-sec">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-10 col-md-9">
+						<div class="listing-one-way" id="one-way">
+							{% for i in data.searchResult.tripInfos.ONWARD %}
+							<form action="{% url 'review_flight' %}" method="get">
+							<div class="listing-box box-one">
+								<div class="basic-info">
+									<div class="row align-items-center">
+										<div class="col-lg-4 col-md-3 col-6 order-1 sec1 pr-0">
+											<div class="flight-name">
+												<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+												<div><b>{{i.sI.0.fD.aI.name}}</b></div>
+												<div class="small">{{i.sI.0.fD.aI.code}}-{{i.sI.0.fD.fN}}</div>
+											</div>
+										</div>
+										<div class="col-lg-4 col-md-5 col-12 order-3 order-md-2 sec2 px-2">
+											<div class="flight-time">
+												<div class="time">
+													<div><b>{{i.sI.0.dt|fix_datetime}}</b></div>
+													<div class="small">{{ i.sI.0.da.name }}</div>
+												</div>
+												<div class="stops">
+													<span></span>
+													<span></span>
+												</div>
+												<div class="time">
+													<div><b>{{i.sI.0.at|fix_datetime}}</b></div>
+													<div class="small">{% if i.sI.1.aa.name %}
+																		    {{ i.sI.1.aa.name }}
+																		{% else %}
+																		    {{ i.sI.0.aa.name }}
+																		{% endif %}</div>
+												</div>
+											</div>
+											<div class="total-time">
+												<div><b>{{i.sI.0.duration|fix_duration }}</b></div>
+												<div class="small">{{i.sI.0.stops}} Stop</div>
+											</div>
+										</div>
+										<div class="col-lg-4 col-md-4 col-6 order-2 order-md-2 sec3 pl-0">
+											<div class="total-price">
+												<div><b><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b></div>
+												<a href="javascript:void(0)" onClick="toggleFunction({{ forloop.counter0 }});" class="btn btn-red">View Fares</a>
+											</div>
+										</div>
+									</div>
+									<div class="divider-sec">
+										<a href="javascript:void(0)" onClick="toggleFlightDetails({{ forloop.counter0 }});">Flights details</a>
+									</div>
+								</div>
+								{% csrf_token %}
+								<div id="flights-details{{ forloop.counter0 }}" class="flights-details">
+									<div class="head-sec">
+										<h4 class="m-0">Flight Details</h4>
+									</div>
+									<div class="body-sec">
+										<div class="row">
+											<div class="col-lg-8 col-md-7 left-sec">
+												<div class="flight-info">
+													{% for a in i.sI %}
+													<div class="sec1">
+														<div class="name">
+															<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+															<div>{{a.fD.aI.name}}, {{a.fD.aI.code}}-{{a.fD.fN}} <span>{{i.totalPriceList.0.fd.ADULT.cc}}</span></div>
+															<div class="small">{{i.Equipment}}</div>
+														</div>
+														<div class="services">
+															<div class="active">
+																<i class="la la-cutlery"></i>
+															</div>
+															<div>
+																<i class="la la-wifi"></i>
+															</div>
+															<div>
+																<i class="la la-toilet"></i>
+															</div>
+															<div>
+																<i class="la la-plug"></i>
+															</div>
+															<div>
+																<i class="la la-play"></i>
+															</div>
+														</div>
+													</div>
+													<div class="sec2">
+														<div class="all-info">
+															<div>{{ a.da.name }}</div>
+															<div><b>{{ a.dt|fix_datetime }}</b></div>
+															<div class="small"><b></b></div>
+															<div class="small">{{a.da.name}},{{a.da.terminal}}</div>
+														</div>
+														<div class="total-time small">
+															<div>
+																<i class="la la-clock"></i> {{a.duration|fix_duration}}
+															</div>
+															<div>
+																<span></span>
+																<i class="la la-plane-departure"></i>
+															</div>
+															<div>Non Stop</div>
+														</div>
+														<div class="all-info">
+															<div>{{a.aa.name}}</div>
+															<div><b>{{a.at|fix_datetime}}</b></div>
+															<div class="small"><b></b></div>
+															<div class="small">{{a.aa.name}},{{a.aa.terminal}}</div>
+														</div>
+													</div>
+													<div class="sec3">
+														<div class="packadge">
+															<div>
+																Checkin Baggage:
+																<b>
+																	<i class="la la-suitcase"></i> {{i.totalPriceList.0.fd.ADULT.bI.iB}}
+																</b>
+															</div>
+															<div>
+																<b>
+																	<i class="la la-cutlery"></i> {% if i.totalPriceList.0.fd.ADULT.mI %}
+																	    Free Meal
+																	{% else %}
+																	    Paid Meal
+																	{% endif %}
+																</b>
+															</div>
+														</div>
+													</div>
+													{% endfor %}
+													</div>
+												</div>
+											<div class="col-lg-4 col-md-5 right-sec">
+												<div class="tab-box-two">
+													<ul class="nav nav-pills" role="tablist">
+														<li class="nav-item">
+															<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab" role="tab" aria-controls="one-tab"
+																aria-selected="true">Fare Summary</a>
+														</li>
+														<li class="nav-item">
+															<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab" role="tab" aria-controls="two-tab"
+																aria-selected="false">Fare
+																Rules</a>
+														</li>
+													</ul>
+													<div class="tab-content">
+														<div class="tab-pane fade show active" id="one-tab" role="tabpanel" aria-labelledby="tab-one">
+															<table>
+																<thead>
+																	<tr>
+																		<th>Fare Summary</th>
+																		<th>Base Fare</th>
+																		<th>Fees & Taxes</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>Adult x {{Person}}</td>
+																		<td><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.BF 1 Person %}</td>
+																		<td><i class="la la-rupee"></i> {% widthratio i.totalPriceList.0.fd.ADULT.fC.TAF 1 Person %}</td>
+																	</tr>
+																</tbody>
+															</table>
+															<hr>
+															<div class="total">
+																<div>You Pay:</div>
+																<div><b><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b></div>
+															</div>
+															<hr>
+															<p class="small m-0">Note: Total fare displayed above has been rounded off and may show a slight difference from actual
+																fare.</p>
+														</div>
+
+														<div class="tab-pane fade" id="two-tab" role="tabpanel" aria-labelledby="tab-two">
+															<div class="scrolls">
+																<h4>DEL-GOI-BLR</h4>
+																<hr>
+																<p><b>Airline Cancellation Fee</b></p>
+																<table>
+																	<thead>
+																		<tr>
+																			<th>Duration *</th>
+																			<th>Per Passenger</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td>0 hour to 2 hours</td>
+																			<td>Non-Refundable</td>
+																		</tr>
+																		<tr>
+																			<td>4 hours to 4 days</td>
+																			<td><i class="la la-rupee"></i> 3,500</td>
+																		</tr>
+																		<tr>
+																			<td>>4 days</td>
+																			<td><i class="la la-rupee"></i> 3,000</td>
+																		</tr>
+																	</tbody>
+																</table>
+																<hr>
+																<p><b>Airline Date Change Fee</b></p>
+																<table>
+																	<thead>
+																		<tr>
+																			<th>Duration *</th>
+																			<th>Per Passenger</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td>4 hours to 4 days</td>
+																			<td>Non-Refundable</td>
+																		</tr>
+																		<tr>
+																			<td>4 hours to 4 days</td>
+																			<td><i class="la la-rupee"></i> 3,500</td>
+																		</tr>
+																		<tr>
+																			<td>>4 days</td>
+																			<td><i class="la la-rupee"></i> 3,000</td>
+																		</tr>
+																	</tbody>
+																</table>
+																<div class="bg-text">
+																	<p class="mb-0 small">We would recommend that you reschedule/cancel your tickets atleast 72 hours prior to the
+																		flight
+																		departure
+																	</p>
+																</div>
+																<hr>
+																<p><b>Savari Service Fee (YSF)**</b></p>
+																<p class="small">(charged per passenger in addition to airline fee as applicable)</p>
+																<table>
+																	<tbody>
+																		<tr>
+																			<td>Online Cancellation Service Fee</td>
+																			<td><i class="la la-rupee"></i> 400</td>
+																		</tr>
+																		<tr>
+																			<td>Offline Cancellation Service Fee</td>
+																			<td><i class="la la-rupee"></i> 400</td>
+																		</tr>
+																		<tr>
+																			<td>Online Rescheduling Service Fee</td>
+																			<td><i class="la la-rupee"></i> 400</td>
+																		</tr>
+																		<tr>
+																			<td>Offline Rescheduling Service Fee</td>
+																			<td><i class="la la-rupee"></i> 1,250</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+															<hr>
+															<p class="small">* Prior to the date/time of departure.</p>
+															<p class="small">**Please note: Savari service fee is over and above the airline cancellation fee due to which refund
+																type
+																may vary.
+															</p>
+														</div>
+
+														<div class="mt-4">
+															<button type="button" onclick="bookNow('{{i.totalPriceList.0.id}}','{{Person}}')"class="btn btn-block btn-white">Book Now</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="fare-details{{ forloop.counter0 }}" class="fare-details">
+									<div class="table-responsive">
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>Services</th>
+													<th>Checked Bag</th>
+													<th>Hand Bag</th>
+													<th>Seat Selection</th>
+													<th>Date Change</th>
+													<th>Cancellation</th>
+													<th>Meal</th>
+													<th>Price</th>
+													<th>Book</th>
+												</tr>
+											</thead>
+											{% for a in i.totalPriceList%}
+											<tbody>
+												<tr>
+													<th scope="row">{{a.fareIdentifier}}</th>
+													<td>{{a.fd.ADULT.bI.iB}}</td>
+													<td>{{a.fd.ADULT.bI.cB}}</td>
+													<td>Extra Charge</td>
+													<td>Extra Charge</td>
+													<td>Extra Charge</td>
+													<td>{% if i.totalPriceList.0.fd.ADULT.mI %}
+														    Free Meal
+														{% else %}
+														    Paid Meal
+														{% endif %}</td>
+													<td><i class="la la-rupee"></i>{% widthratio a.fd.ADULT.fC.TF 1 Person %}</td>
+													<td>
+														<button type="button" onclick="bookNow('{{a.id}}','{{Person}}')" class="btn btn-red">Book Now</button>
+													</td>
+												</tr>
+												{% endfor%}
+											</tbody>
+										</table>
+									</div>
+									<p class="small">
+										Available on additional charge. - Included in Fare - Not Included - Middle seat will be vacant.
+									</p>
+									<p class="small mb-0">
+										Disclaimer: Benefits shown are as per details shared by the Airline. <br>
+										* Full refund of Airline cancellation charges up to <i class="la la-rupee"></i>5,000 (per passanger per sector) on cancellation
+									</p>
+								</div>
+							</div>
+							</form>	
+							{% endfor %}
+						</div>
+						<div class="listing-round-way overflowx" id="two-way">
+							<div class="row flex-nowrap">
+								<div class="col-lg-6">	
+								{% for i in data.searchResult.tripInfos.ONWARD %}
+								<form action="{% url 'review_flight' %}" method="get">
+									<div class="listing-box-two box-one">
+										<div class="basic-info">
+											<div class="sec1">
+												<span class="bdge">DEAL</span>
+												<div>
+													Book return flight and get Flat Rs. 600 OFF (upto Rs 2,400). Use code: FLYSUMMER
+												</div>
+											</div>
+											<div class="sec2">
+												<div class="row align-items-center">
+													<div class="col-lg-6 col-12 left-sec">
+														<div class="flight-name">
+															<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+															<div class="flight-time">
+																<div class="time">
+																	<b>{{i.sI.0.dt|fix_time}}</b>
+																	<div class="small">{{i.sI.0.fD.aI.name}}</div>
+																</div>
+																<div class="stops">
+																	<span></span>
+																	<span></span>
+																</div>
+																<div class="time">
+																	<b>{{i.sI.0.at|fix_time}}</b>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6 col-12 right-sec">
+														<div class="total-price">
+															<div class="time">
+																<b>{{i.sI.0.duration|fix_duration }}</b>
+																<div class="small">{{i.sI.0.stops}}stop</div>
+															</div>
+															<div class="price">
+																<b>₹ {% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b>
+																<label class="custom-radio">
+																	<input name="flight1" type="radio">
+																	<span class="checkmark"></span>
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="divider-sec">
+												<a href="javascript:void(0)" onClick="toggleReturnFlightDetails1({{ forloop.counter0 }});">Flights details</a>
+											</div>
+										</div>
+										<div id="return-flights-details1{{ forloop.counter0 }}" class="flights-details">
+											<div class="tab-box-four">
+												<ul class="nav nav-pills" role="tablist">
+													<li class="nav-item">
+														<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab" role="tab" aria-controls="one-tab"
+															aria-selected="true">Fare Summary</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab" role="tab" aria-controls="two-tab"
+															aria-selected="false">Fare
+															Rules</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab" role="tab" aria-controls="three-tab"
+															aria-selected="false">Fare Summary</a>
+													</li>
+												</ul>
+												<div class="tab-content">
+													<div class="tab-pane fade show active bg-white" id="one-tab" role="tabpanel" aria-labelledby="tab-one">
+														<div class="flight-info">
+															{% for a in i.sI %}
+															<div class="sec1">
+																<div class="name">
+																	<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+																	<div>{{a.fD.aI.name}}, {{a.fD.aI.code}}-{{a.fD.fN}} <span>{{i.totalPriceList.0.fd.ADULT.cc}}</span></div>
+																	<div class="small">{{i.Equipment}}</div>
+																</div>
+																<div class="services">
+																	<div class="active">
+																		<i class="la la-cutlery"></i>
+																	</div>
+																	<div>
+																		<i class="la la-wifi"></i>
+																	</div>
+																	<div>
+																		<i class="la la-toilet"></i>
+																	</div>
+																	<div>
+																		<i class="la la-plug"></i>
+																	</div>
+																	<div>
+																		<i class="la la-play"></i>
+																	</div>
+																</div>
+															</div>
+															<div class="sec2">
+																<div class="all-info">
+																	<div>{{ a.da.name }}</div>
+																	<div><b>{{ a.dt|fix_time }}</b></div>
+																	<div class="small"><b>{{ a.dt|fix_datetime }}</b></div>
+																	<div class="small">{{a.da.name}},{{a.da.terminal}}</div>
+																</div>
+																<div class="total-time small">
+																	<div>
+																		<i class="la la-clock"></i> {{a.duration|fix_duration}}
+																	</div>
+																	<div>
+																		<span></span>
+																		<i class="fa fa-plane"></i>
+																	</div>
+																	<div>Non Stop</div>
+																</div>
+																<div class="all-info">
+																	<div>{{a.aa.name}}</div>
+																	<div><b>{{a.at|fix_time}}</b></div>
+																	<div class="small"><b>{{a.at|fix_datetime}}</b></div>
+																	<div class="small">{{a.aa.name}},{{a.aa.terminal}}</div>
+																</div>
+															</div>
+															<div class="sec3">
+																<div class="packadge">
+																	<div>
+																		Checkin Baggage:
+																		<b>
+																			<i class="la la-suitcase"></i> {{i.totalPriceList.0.fd.ADULT.bI.iB}}
+																		</b>
+																	</div>
+																	<div>
+																		<b>
+																			<i class="la la-cutlery"></i> {{i.totalPriceList.0.fd.ADULT.mI}}
+																		</b>
+																	</div>
+																</div>
+															</div>
+															{% endfor %}
+														</div>
+													</div>
+
+													<div class="tab-pane fade" id="two-tab" role="tabpanel" aria-labelledby="tab-two">
+														<table>
+															<thead>
+																<tr>
+																	<th>Fare Summary</th>
+																	<th>Base Fare</th>
+																	<th>Fees & Taxes</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td>Adult x {{Person}}</td>
+																	<td><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.BF 1 Person %}</td>
+																	<td><i class="la la-rupee"></i> {% widthratio i.totalPriceList.0.fd.ADULT.fC.TAF 1 Person %}</td>
+																</tr>
+															</tbody>
+														</table>
+														<hr>
+														<div class="total">
+															<div>You Pay:</div>
+															<div><b><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b></div>
+														</div>
+														<hr>
+														<p class="small m-0">Note: Total fare displayed above has been rounded off and may show a slight difference from
+															actual
+															fare.</p>
+													</div>
+
+													<div class="tab-pane fade" id="three-tab" role="tabpanel" aria-labelledby="tab-three">
+														<div class="scrolls">
+															<h4>DEL-GOI-BLR</h4>
+															<hr>
+															<p><b>Airline Cancellation Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>0 hour to 2 hours</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<hr>
+															<p><b>Airline Date Change Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<div class="bg-text">
+																<p class="mb-0 small">We would recommend that you reschedule/cancel your tickets atleast 72 hours prior to the
+																	flight
+																	departure
+																</p>
+															</div>
+															<hr>
+															<p><b>Savari Service Fee (YSF)**</b></p>
+															<p class="small">(charged per passenger in addition to airline fee as applicable)</p>
+															<table>
+																<tbody>
+																	<tr>
+																		<td>Online Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Online Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 1,250</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<hr>
+														<p class="small">* Prior to the date/time of departure.</p>
+														<p class="small">**Please note: Savari service fee is over and above the airline cancellation fee due to which
+															refund type
+															may vary.
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+								{% endfor %}
+								</div>
+								<div class="col-lg-6">
+								{% for i in data.searchResult.tripInfos.RETURN %}
+								<form action="{% url 'review_flight' %}" method="get">	
+									<div class="listing-box-two box-one">
+										<div class="basic-info">
+											<div class="sec1">
+												<span class="bdge">DEAL</span>
+												<div>
+													Book return flight and get Flat Rs. 600 OFF (upto Rs 2,400). Use code: FLYSUMMER
+												</div>
+											</div>
+											<div class="sec2">
+												<div class="row align-items-center">
+													<div class="col-lg-6 col-12 left-sec">
+														<div class="flight-name">
+															<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+															<div class="flight-time">
+																<div class="time">
+																	<b>{{i.sI.0.dt|fix_time}}</b>
+																	<div class="small">{{i.sI.0.fD.aI.name}}</div>
+																</div>
+																<div class="stops">
+																	<span></span>
+																	<span></span>
+																</div>
+																<div class="time">
+																	<b>{{i.sI.0.at|time}}</b>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6 col-12 right-sec">
+														<div class="total-price">
+															<div class="time">
+																<b>{{i.sI.0.duration|fix_duration }}</b>
+																<div class="small">{{i.sI.0.stops}}stop</div>
+															</div>
+															<div class="price">
+																<b>₹ {% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b>
+																<label class="custom-radio">
+																	<input name="flight1" type="radio">
+																	<span class="checkmark"></span>
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="divider-sec">
+												<a href="javascript:void(0)" onClick="toggleReturnFlightDetails2({{ forloop.counter0 }});">Flights details</a>
+											</div>
+										</div>
+										<div id="return-flights-details2{{ forloop.counter0 }}" class="flights-details">
+											<div class="tab-box-four">
+												<ul class="nav nav-pills" role="tablist">
+													<li class="nav-item">
+														<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab" role="tab" aria-controls="one-tab"
+															aria-selected="true">Fare Summary</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab" role="tab" aria-controls="two-tab"
+															aria-selected="false">Fare
+															Rules</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab" role="tab" aria-controls="three-tab"
+															aria-selected="false">Fare Summary</a>
+													</li>
+												</ul>
+												<div class="tab-content">
+													<div class="tab-pane fade show active bg-white" id="one-tab" role="tabpanel" aria-labelledby="tab-one">
+														<div class="flight-info">
+															{% for a in i.sI %}
+															<div class="sec1">
+																<div class="name">
+																	<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+																	<div>{{a.fD.aI.name}}, {{a.fD.aI.code}}-{{a.fD.fN}} <span>{{i.totalPriceList.0.fd.ADULT.cc}}</span></div>
+																	<div class="small">{{i.Equipment}}</div>
+																</div>
+																<div class="services">
+																	<div class="active">
+																		<i class="la la-cutlery"></i>
+																	</div>
+																	<div>
+																		<i class="la la-wifi"></i>
+																	</div>
+																	<div>
+																		<i class="la la-toilet"></i>
+																	</div>
+																	<div>
+																		<i class="la la-plug"></i>
+																	</div>
+																	<div>
+																		<i class="la la-play"></i>
+																	</div>
+																</div>
+															</div>
+															<div class="sec2">
+																<div class="all-info">
+																	<div>{{ a.da.name }}</div>
+																	<div><b>{{ a.dt|fix_time }}</b></div>
+																	<div class="small"><b>{{ a.dt|fix_datetime }}</b></div>
+																	<div class="small">{{a.da.name}},{{a.da.terminal}}</div>
+																</div>
+																<div class="total-time small">
+																	<div>
+																		<i class="la la-clock"></i> {{a.duration|fix_duration}}
+																	</div>
+																	<div>
+																		<span></span>
+																		<i class="fa fa-plane"></i>
+																	</div>
+																	<div>Non Stop</div>
+																</div>
+																<div class="all-info">
+																	<div>{{a.aa.name}}</div>
+																	<div><b>{{a.at|fix_time}}</b></div>
+																	<div class="small"><b>{{a.at|fix_datetime}}</b></div>
+																	<div class="small">{{a.aa.name}},{{a.aa.terminal}}</div>
+																</div>
+															</div>
+															<div class="sec3">
+																<div class="packadge">
+																	<div>
+																		Checkin Baggage:
+																		<b>
+																			<i class="la la-suitcase"></i> {{i.totalPriceList.0.fd.ADULT.bI.iB}}
+																		</b>
+																	</div>
+																	<div>
+																		<b>
+																			<i class="la la-cutlery"></i> {{i.totalPriceList.0.fd.ADULT.mI}}
+																		</b>
+																	</div>
+																</div>
+															</div>
+															{% endfor %}
+														</div>
+													</div>
+
+													<div class="tab-pane fade" id="two-tab" role="tabpanel" aria-labelledby="tab-two">
+														<table>
+															<thead>
+																<tr>
+																	<th>Fare Summary</th>
+																	<th>Base Fare</th>
+																	<th>Fees & Taxes</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td>Adult x {{Person}}</td>
+																	<td><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.BF 1 Person %}</td>
+																	<td><i class="la la-rupee"></i> {% widthratio i.totalPriceList.0.fd.ADULT.fC.TAF 1 Person %}</td>
+																</tr>
+															</tbody>
+														</table>
+														<hr>
+														<div class="total">
+															<div>You Pay:</div>
+															<div><b><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b></div>
+														</div>
+														<hr>
+														<p class="small m-0">Note: Total fare displayed above has been rounded off and may show a slight difference from
+															actual
+															fare.</p>
+													</div>
+
+													<div class="tab-pane fade" id="three-tab" role="tabpanel" aria-labelledby="tab-three">
+														<div class="scrolls">
+															<h4>DEL-GOI-BLR</h4>
+															<hr>
+															<p><b>Airline Cancellation Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>0 hour to 2 hours</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<hr>
+															<p><b>Airline Date Change Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<div class="bg-text">
+																<p class="mb-0 small">We would recommend that you reschedule/cancel your tickets atleast 72 hours prior to the
+																	flight
+																	departure
+																</p>
+															</div>
+															<hr>
+															<p><b>Savari Service Fee (YSF)**</b></p>
+															<p class="small">(charged per passenger in addition to airline fee as applicable)</p>
+															<table>
+																<tbody>
+																	<tr>
+																		<td>Online Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Online Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 1,250</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<hr>
+														<p class="small">* Prior to the date/time of departure.</p>
+														<p class="small">**Please note: Savari service fee is over and above the airline cancellation fee due to which
+															refund type
+															may vary.
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+								{% endfor %}
+								</div>
+							</div>
+						</div>
+						<div class="listing-multi-way overflowx" id="multi-way">
+							<div class="row flex-nowrap">
+								<div class="col-lg-6">	
+								{% for i in data.searchResult.tripInfos.0 %}
+								<form action="{% url 'review_flight' %}" method="get">
+									<div class="listing-box-two box-one">
+										<div class="basic-info">
+											<div class="sec1">
+												<span class="bdge">DEAL</span>
+												<div>
+													Book return flight and get Flat Rs. 600 OFF (upto Rs 2,400). Use code: FLYSUMMER
+												</div>
+											</div>
+											<div class="sec2">
+												<div class="row align-items-center">
+													<div class="col-lg-6 col-12 left-sec">
+														<div class="flight-name">
+															<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+															<div class="flight-time">
+																<div class="time">
+																	<b>{{i.sI.0.dt|fix_time}}</b>
+																	<div class="small">{{i.sI.0.fD.aI.name}}</div>
+																</div>
+																<div class="stops">
+																	<span></span>
+																	<span></span>
+																</div>
+																<div class="time">
+																	<b>{{i.sI.0.at|fix_time}}</b>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6 col-12 right-sec">
+														<div class="total-price">
+															<div class="time">
+																<b>{{i.sI.0.duration|fix_duration }}</b>
+																<div class="small">{{i.sI.0.stops}}stop</div>
+															</div>
+															<div class="price">
+																<b>₹ {% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b>
+																<label class="custom-radio">
+																	<input name="flight1" type="radio">
+																	<span class="checkmark"></span>
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="divider-sec">
+												<a href="javascript:void(0)" class="flight-details-toggle">Flights details</a>
+											</div>
+										</div>
+										<div class="flights-details">
+											<div class="tab-box-four">
+												<ul class="nav nav-pills" role="tablist">
+													<li class="nav-item">
+														<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab" role="tab" aria-controls="one-tab"
+															aria-selected="true">Fare Summary</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab" role="tab" aria-controls="two-tab"
+															aria-selected="false">Fare
+															Rules</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab" role="tab" aria-controls="three-tab"
+															aria-selected="false">Fare Summary</a>
+													</li>
+												</ul>
+												<div class="tab-content">
+													<div class="tab-pane fade show active bg-white" id="one-tab" role="tabpanel" aria-labelledby="tab-one">
+														<div class="flight-info">
+															{% for a in i.sI %}
+															<div class="sec1">
+																<div class="name">
+																	<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+																	<div>{{a.fD.aI.name}}, {{a.fD.aI.code}}-{{a.fD.fN}} <span>{{i.totalPriceList.0.fd.ADULT.cc}}</span></div>
+																	<div class="small">{{i.Equipment}}</div>
+																</div>
+																<div class="services">
+																	<div class="active">
+																		<i class="la la-cutlery"></i>
+																	</div>
+																	<div>
+																		<i class="la la-wifi"></i>
+																	</div>
+																	<div>
+																		<i class="la la-toilet"></i>
+																	</div>
+																	<div>
+																		<i class="la la-plug"></i>
+																	</div>
+																	<div>
+																		<i class="la la-play"></i>
+																	</div>
+																</div>
+															</div>
+															<div class="sec2">
+																<div class="all-info">
+																	<div>{{ a.da.name }}</div>
+																	<div><b>{{ a.dt|fix_time }}</b></div>
+																	<div class="small"><b>{{ a.dt|fix_datetime }}</b></div>
+																	<div class="small">{{a.da.name}},{{a.da.terminal}}</div>
+																</div>
+																<div class="total-time small">
+																	<div>
+																		<i class="la la-clock"></i> {{a.duration|fix_duration}}
+																	</div>
+																	<div>
+																		<span></span>
+																		<i class="fa fa-plane"></i>
+																	</div>
+																	<div>Non Stop</div>
+																</div>
+																<div class="all-info">
+																	<div>{{a.aa.name}}</div>
+																	<div><b>{{a.at|fix_time}}</b></div>
+																	<div class="small"><b>{{a.at|fix_datetime}}</b></div>
+																	<div class="small">{{a.aa.name}},{{a.aa.terminal}}</div>
+																</div>
+															</div>
+															<div class="sec3">
+																<div class="packadge">
+																	<div>
+																		Checkin Baggage:
+																		<b>
+																			<i class="la la-suitcase"></i> {{i.totalPriceList.0.fd.ADULT.bI.iB}}
+																		</b>
+																	</div>
+																	<div>
+																		<b>
+																			<i class="la la-cutlery"></i> {{i.totalPriceList.0.fd.ADULT.mI}}
+																		</b>
+																	</div>
+																</div>
+															</div>
+															{% endfor %}
+														</div>
+													</div>
+
+													<div class="tab-pane fade" id="two-tab" role="tabpanel" aria-labelledby="tab-two">
+														<table>
+															<thead>
+																<tr>
+																	<th>Fare Summary</th>
+																	<th>Base Fare</th>
+																	<th>Fees & Taxes</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td>Adult x {{Person}}</td>
+																	<td><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.BF 1 Person %}</td>
+																	<td><i class="la la-rupee"></i> {% widthratio i.totalPriceList.0.fd.ADULT.fC.TAF 1 Person %}</td>
+																</tr>
+															</tbody>
+														</table>
+														<hr>
+														<div class="total">
+															<div>You Pay:</div>
+															<div><b><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b></div>
+														</div>
+														<hr>
+														<p class="small m-0">Note: Total fare displayed above has been rounded off and may show a slight difference from
+															actual
+															fare.</p>
+													</div>
+
+													<div class="tab-pane fade" id="three-tab" role="tabpanel" aria-labelledby="tab-three">
+														<div class="scrolls">
+															<h4>DEL-GOI-BLR</h4>
+															<hr>
+															<p><b>Airline Cancellation Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>0 hour to 2 hours</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<hr>
+															<p><b>Airline Date Change Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<div class="bg-text">
+																<p class="mb-0 small">We would recommend that you reschedule/cancel your tickets atleast 72 hours prior to the
+																	flight
+																	departure
+																</p>
+															</div>
+															<hr>
+															<p><b>Savari Service Fee (YSF)**</b></p>
+															<p class="small">(charged per passenger in addition to airline fee as applicable)</p>
+															<table>
+																<tbody>
+																	<tr>
+																		<td>Online Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Online Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 1,250</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<hr>
+														<p class="small">* Prior to the date/time of departure.</p>
+														<p class="small">**Please note: Savari service fee is over and above the airline cancellation fee due to which
+															refund type
+															may vary.
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+								{% endfor %}
+								</div>
+								<div class="col-lg-6">	
+								{% for i in data.searchResult.tripInfos.1 %}
+								<form action="{% url 'review_flight' %}" method="get">
+									<div class="listing-box-two box-one">
+										<div class="basic-info">
+											<div class="sec1">
+												<span class="bdge">DEAL</span>
+												<div>
+													Book return flight and get Flat Rs. 600 OFF (upto Rs 2,400). Use code: FLYSUMMER
+												</div>
+											</div>
+											<div class="sec2">
+												<div class="row align-items-center">
+													<div class="col-lg-6 col-12 left-sec">
+														<div class="flight-name">
+															<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+															<div class="flight-time">
+																<div class="time">
+																	<b>{{i.sI.0.dt|fix_time}}</b>
+																	<div class="small">{{i.sI.0.fD.aI.name}}</div>
+																</div>
+																<div class="stops">
+																	<span></span>
+																	<span></span>
+																</div>
+																<div class="time">
+																	<b>{{i.sI.0.at|fix_time}}</b>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6 col-12 right-sec">
+														<div class="total-price">
+															<div class="time">
+																<b>{{i.sI.0.duration|fix_duration }}</b>
+																<div class="small">{{i.sI.0.stops}}stop</div>
+															</div>
+															<div class="price">
+																<b>₹ {% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b>
+																<label class="custom-radio">
+																	<input name="flight1" type="radio">
+																	<span class="checkmark"></span>
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="divider-sec">
+												<a href="javascript:void(0)" class="flight-details-toggle">Flights details</a>
+											</div>
+										</div>
+										<div class="flights-details">
+											<div class="tab-box-four">
+												<ul class="nav nav-pills" role="tablist">
+													<li class="nav-item">
+														<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab" role="tab" aria-controls="one-tab"
+															aria-selected="true">Fare Summary</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab" role="tab" aria-controls="two-tab"
+															aria-selected="false">Fare
+															Rules</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab" role="tab" aria-controls="three-tab"
+															aria-selected="false">Fare Summary</a>
+													</li>
+												</ul>
+												<div class="tab-content">
+													<div class="tab-pane fade show active bg-white" id="one-tab" role="tabpanel" aria-labelledby="tab-one">
+														<div class="flight-info">
+															{% for a in i.sI %}
+															<div class="sec1">
+																<div class="name">
+																	<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+																	<div>{{a.fD.aI.name}}, {{a.fD.aI.code}}-{{a.fD.fN}} <span>{{i.totalPriceList.0.fd.ADULT.cc}}</span></div>
+																	<div class="small">{{i.Equipment}}</div>
+																</div>
+																<div class="services">
+																	<div class="active">
+																		<i class="la la-cutlery"></i>
+																	</div>
+																	<div>
+																		<i class="la la-wifi"></i>
+																	</div>
+																	<div>
+																		<i class="la la-toilet"></i>
+																	</div>
+																	<div>
+																		<i class="la la-plug"></i>
+																	</div>
+																	<div>
+																		<i class="la la-play"></i>
+																	</div>
+																</div>
+															</div>
+															<div class="sec2">
+																<div class="all-info">
+																	<div>{{ a.da.name }}</div>
+																	<div><b>{{ a.dt|fix_time }}</b></div>
+																	<div class="small"><b>{{ a.dt|fix_datetime }}</b></div>
+																	<div class="small">{{a.da.name}},{{a.da.terminal}}</div>
+																</div>
+																<div class="total-time small">
+																	<div>
+																		<i class="la la-clock"></i> {{a.duration|fix_duration}}
+																	</div>
+																	<div>
+																		<span></span>
+																		<i class="fa fa-plane"></i>
+																	</div>
+																	<div>Non Stop</div>
+																</div>
+																<div class="all-info">
+																	<div>{{a.aa.name}}</div>
+																	<div><b>{{a.at|fix_time}}</b></div>
+																	<div class="small"><b>{{a.at|fix_datetime}}</b></div>
+																	<div class="small">{{a.aa.name}},{{a.aa.terminal}}</div>
+																</div>
+															</div>
+															<div class="sec3">
+																<div class="packadge">
+																	<div>
+																		Checkin Baggage:
+																		<b>
+																			<i class="la la-suitcase"></i> {{i.totalPriceList.0.fd.ADULT.bI.iB}}
+																		</b>
+																	</div>
+																	<div>
+																		<b>
+																			<i class="la la-cutlery"></i> {{i.totalPriceList.0.fd.ADULT.mI}}
+																		</b>
+																	</div>
+																</div>
+															</div>
+															{% endfor %}
+														</div>
+													</div>
+
+													<div class="tab-pane fade" id="two-tab" role="tabpanel" aria-labelledby="tab-two">
+														<table>
+															<thead>
+																<tr>
+																	<th>Fare Summary</th>
+																	<th>Base Fare</th>
+																	<th>Fees & Taxes</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td>Adult x {{Person}}</td>
+																	<td><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.BF 1 Person %}</td>
+																	<td><i class="la la-rupee"></i> {% widthratio i.totalPriceList.0.fd.ADULT.fC.TAF 1 Person %}</td>
+																</tr>
+															</tbody>
+														</table>
+														<hr>
+														<div class="total">
+															<div>You Pay:</div>
+															<div><b><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b></div>
+														</div>
+														<hr>
+														<p class="small m-0">Note: Total fare displayed above has been rounded off and may show a slight difference from
+															actual
+															fare.</p>
+													</div>
+
+													<div class="tab-pane fade" id="three-tab" role="tabpanel" aria-labelledby="tab-three">
+														<div class="scrolls">
+															<h4>DEL-GOI-BLR</h4>
+															<hr>
+															<p><b>Airline Cancellation Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>0 hour to 2 hours</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<hr>
+															<p><b>Airline Date Change Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<div class="bg-text">
+																<p class="mb-0 small">We would recommend that you reschedule/cancel your tickets atleast 72 hours prior to the
+																	flight
+																	departure
+																</p>
+															</div>
+															<hr>
+															<p><b>Savari Service Fee (YSF)**</b></p>
+															<p class="small">(charged per passenger in addition to airline fee as applicable)</p>
+															<table>
+																<tbody>
+																	<tr>
+																		<td>Online Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Online Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 1,250</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<hr>
+														<p class="small">* Prior to the date/time of departure.</p>
+														<p class="small">**Please note: Savari service fee is over and above the airline cancellation fee due to which
+															refund type
+															may vary.
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+								{% endfor %}
+								</div>
+								<div class="col-lg-6">	
+								{% for i in data.searchResult.tripInfos.2 %}
+								<form action="{% url 'review_flight' %}" method="get">
+									<div class="listing-box-two box-one">
+										<div class="basic-info">
+											<div class="sec1">
+												<span class="bdge">DEAL</span>
+												<div>
+													Book return flight and get Flat Rs. 600 OFF (upto Rs 2,400). Use code: FLYSUMMER
+												</div>
+											</div>
+											<div class="sec2">
+												<div class="row align-items-center">
+													<div class="col-lg-6 col-12 left-sec">
+														<div class="flight-name">
+															<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+															<div class="flight-time">
+																<div class="time">
+																	<b>{{i.sI.0.dt|fix_time}}</b>
+																	<div class="small">{{i.sI.0.fD.aI.name}}</div>
+																</div>
+																<div class="stops">
+																	<span></span>
+																	<span></span>
+																</div>
+																<div class="time">
+																	<b>{{i.sI.0.at|fix_time}}</b>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6 col-12 right-sec">
+														<div class="total-price">
+															<div class="time">
+																<b>{{i.sI.0.duration|fix_duration }}</b>
+																<div class="small">{{i.sI.0.stops}}stop</div>
+															</div>
+															<div class="price">
+																<b>₹ {% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b>
+																<label class="custom-radio">
+																	<input name="flight1" type="radio">
+																	<span class="checkmark"></span>
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="divider-sec">
+												<a href="javascript:void(0)" class="flight-details-toggle">Flights details</a>
+											</div>
+										</div>
+										<div class="flights-details">
+											<div class="tab-box-four">
+												<ul class="nav nav-pills" role="tablist">
+													<li class="nav-item">
+														<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab" role="tab" aria-controls="one-tab"
+															aria-selected="true">Fare Summary</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab" role="tab" aria-controls="two-tab"
+															aria-selected="false">Fare
+															Rules</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab" role="tab" aria-controls="three-tab"
+															aria-selected="false">Fare Summary</a>
+													</li>
+												</ul>
+												<div class="tab-content">
+													<div class="tab-pane fade show active bg-white" id="one-tab" role="tabpanel" aria-labelledby="tab-one">
+														<div class="flight-info">
+															{% for a in i.sI %}
+															<div class="sec1">
+																<div class="name">
+																	<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+																	<div>{{a.fD.aI.name}}, {{a.fD.aI.code}}-{{a.fD.fN}} <span>{{i.totalPriceList.0.fd.ADULT.cc}}</span></div>
+																	<div class="small">{{i.Equipment}}</div>
+																</div>
+																<div class="services">
+																	<div class="active">
+																		<i class="la la-cutlery"></i>
+																	</div>
+																	<div>
+																		<i class="la la-wifi"></i>
+																	</div>
+																	<div>
+																		<i class="la la-toilet"></i>
+																	</div>
+																	<div>
+																		<i class="la la-plug"></i>
+																	</div>
+																	<div>
+																		<i class="la la-play"></i>
+																	</div>
+																</div>
+															</div>
+															<div class="sec2">
+																<div class="all-info">
+																	<div>{{ a.da.name }}</div>
+																	<div><b>{{ a.dt|fix_time }}</b></div>
+																	<div class="small"><b>{{ a.dt|fix_datetime }}</b></div>
+																	<div class="small">{{a.da.name}},{{a.da.terminal}}</div>
+																</div>
+																<div class="total-time small">
+																	<div>
+																		<i class="la la-clock"></i> {{a.duration|fix_duration}}
+																	</div>
+																	<div>
+																		<span></span>
+																		<i class="fa fa-plane"></i>
+																	</div>
+																	<div>Non Stop</div>
+																</div>
+																<div class="all-info">
+																	<div>{{a.aa.name}}</div>
+																	<div><b>{{a.at|fix_time}}</b></div>
+																	<div class="small"><b>{{a.at|fix_datetime}}</b></div>
+																	<div class="small">{{a.aa.name}},{{a.aa.terminal}}</div>
+																</div>
+															</div>
+															<div class="sec3">
+																<div class="packadge">
+																	<div>
+																		Checkin Baggage:
+																		<b>
+																			<i class="la la-suitcase"></i> {{i.totalPriceList.0.fd.ADULT.bI.iB}}
+																		</b>
+																	</div>
+																	<div>
+																		<b>
+																			<i class="la la-cutlery"></i> {{i.totalPriceList.0.fd.ADULT.mI}}
+																		</b>
+																	</div>
+																</div>
+															</div>
+															{% endfor %}
+														</div>
+													</div>
+
+													<div class="tab-pane fade" id="two-tab" role="tabpanel" aria-labelledby="tab-two">
+														<table>
+															<thead>
+																<tr>
+																	<th>Fare Summary</th>
+																	<th>Base Fare</th>
+																	<th>Fees & Taxes</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td>Adult x {{Person}}</td>
+																	<td><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.BF 1 Person %}</td>
+																	<td><i class="la la-rupee"></i> {% widthratio i.totalPriceList.0.fd.ADULT.fC.TAF 1 Person %}</td>
+																</tr>
+															</tbody>
+														</table>
+														<hr>
+														<div class="total">
+															<div>You Pay:</div>
+															<div><b><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b></div>
+														</div>
+														<hr>
+														<p class="small m-0">Note: Total fare displayed above has been rounded off and may show a slight difference from
+															actual
+															fare.</p>
+													</div>
+
+													<div class="tab-pane fade" id="three-tab" role="tabpanel" aria-labelledby="tab-three">
+														<div class="scrolls">
+															<h4>DEL-GOI-BLR</h4>
+															<hr>
+															<p><b>Airline Cancellation Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>0 hour to 2 hours</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<hr>
+															<p><b>Airline Date Change Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<div class="bg-text">
+																<p class="mb-0 small">We would recommend that you reschedule/cancel your tickets atleast 72 hours prior to the
+																	flight
+																	departure
+																</p>
+															</div>
+															<hr>
+															<p><b>Savari Service Fee (YSF)**</b></p>
+															<p class="small">(charged per passenger in addition to airline fee as applicable)</p>
+															<table>
+																<tbody>
+																	<tr>
+																		<td>Online Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Online Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 1,250</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<hr>
+														<p class="small">* Prior to the date/time of departure.</p>
+														<p class="small">**Please note: Savari service fee is over and above the airline cancellation fee due to which
+															refund type
+															may vary.
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+								{% endfor %}
+								</div>
+								<div class="col-lg-6">	
+								{% for i in data.searchResult.tripInfos.3 %}
+								<form action="{% url 'review_flight' %}" method="get">
+									<div class="listing-box-two box-one">
+										<div class="basic-info">
+											<div class="sec1">
+												<span class="bdge">DEAL</span>
+												<div>
+													Book return flight and get Flat Rs. 600 OFF (upto Rs 2,400). Use code: FLYSUMMER
+												</div>
+											</div>
+											<div class="sec2">
+												<div class="row align-items-center">
+													<div class="col-lg-6 col-12 left-sec">
+														<div class="flight-name">
+															<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+															<div class="flight-time">
+																<div class="time">
+																	<b>{{i.sI.0.dt|fix_time}}</b>
+																	<div class="small">{{i.sI.0.fD.aI.name}}</div>
+																</div>
+																<div class="stops">
+																	<span></span>
+																	<span></span>
+																</div>
+																<div class="time">
+																	<b>{{i.sI.0.at|fix_time}}</b>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6 col-12 right-sec">
+														<div class="total-price">
+															<div class="time">
+																<b>{{i.sI.0.duration|fix_duration }}</b>
+																<div class="small">{{i.sI.0.stops}}stop</div>
+															</div>
+															<div class="price">
+																<b>₹ {% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b>
+																<label class="custom-radio">
+																	<input name="flight1" type="radio">
+																	<span class="checkmark"></span>
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="divider-sec">
+												<a href="javascript:void(0)" class="flight-details-toggle">Flights details</a>
+											</div>
+										</div>
+										<div class="flights-details">
+											<div class="tab-box-four">
+												<ul class="nav nav-pills" role="tablist">
+													<li class="nav-item">
+														<a class="nav-link active" id="tab-one" data-toggle="pill" href="#one-tab" role="tab" aria-controls="one-tab"
+															aria-selected="true">Fare Summary</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-two" data-toggle="pill" href="#two-tab" role="tab" aria-controls="two-tab"
+															aria-selected="false">Fare
+															Rules</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="tab-three" data-toggle="pill" href="#three-tab" role="tab" aria-controls="three-tab"
+															aria-selected="false">Fare Summary</a>
+													</li>
+												</ul>
+												<div class="tab-content">
+													<div class="tab-pane fade show active bg-white" id="one-tab" role="tabpanel" aria-labelledby="tab-one">
+														<div class="flight-info">
+															{% for a in i.sI %}
+															<div class="sec1">
+																<div class="name">
+																	<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+																	<div>{{a.fD.aI.name}}, {{a.fD.aI.code}}-{{a.fD.fN}} <span>{{i.totalPriceList.0.fd.ADULT.cc}}</span></div>
+																	<div class="small">{{i.Equipment}}</div>
+																</div>
+																<div class="services">
+																	<div class="active">
+																		<i class="la la-cutlery"></i>
+																	</div>
+																	<div>
+																		<i class="la la-wifi"></i>
+																	</div>
+																	<div>
+																		<i class="la la-toilet"></i>
+																	</div>
+																	<div>
+																		<i class="la la-plug"></i>
+																	</div>
+																	<div>
+																		<i class="la la-play"></i>
+																	</div>
+																</div>
+															</div>
+															<div class="sec2">
+																<div class="all-info">
+																	<div>{{ a.da.name }}</div>
+																	<div><b>{{ a.dt|fix_time }}</b></div>
+																	<div class="small"><b>{{ a.dt|fix_datetime }}</b></div>
+																	<div class="small">{{a.da.name}},{{a.da.terminal}}</div>
+																</div>
+																<div class="total-time small">
+																	<div>
+																		<i class="la la-clock"></i> {{a.duration|fix_duration}}
+																	</div>
+																	<div>
+																		<span></span>
+																		<i class="fa fa-plane"></i>
+																	</div>
+																	<div>Non Stop</div>
+																</div>
+																<div class="all-info">
+																	<div>{{a.aa.name}}</div>
+																	<div><b>{{a.at|fix_time}}</b></div>
+																	<div class="small"><b>{{a.at|fix_datetime}}</b></div>
+																	<div class="small">{{a.aa.name}},{{a.aa.terminal}}</div>
+																</div>
+															</div>
+															<div class="sec3">
+																<div class="packadge">
+																	<div>
+																		Checkin Baggage:
+																		<b>
+																			<i class="la la-suitcase"></i> {{i.totalPriceList.0.fd.ADULT.bI.iB}}
+																		</b>
+																	</div>
+																	<div>
+																		<b>
+																			<i class="la la-cutlery"></i> {{i.totalPriceList.0.fd.ADULT.mI}}
+																		</b>
+																	</div>
+																</div>
+															</div>
+															{% endfor %}
+														</div>
+													</div>
+
+													<div class="tab-pane fade" id="two-tab" role="tabpanel" aria-labelledby="tab-two">
+														<table>
+															<thead>
+																<tr>
+																	<th>Fare Summary</th>
+																	<th>Base Fare</th>
+																	<th>Fees & Taxes</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td>Adult x {{Person}}</td>
+																	<td><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.BF 1 Person %}</td>
+																	<td><i class="la la-rupee"></i> {% widthratio i.totalPriceList.0.fd.ADULT.fC.TAF 1 Person %}</td>
+																</tr>
+															</tbody>
+														</table>
+														<hr>
+														<div class="total">
+															<div>You Pay:</div>
+															<div><b><i class="la la-rupee"></i>{% widthratio i.totalPriceList.0.fd.ADULT.fC.TF 1 Person %}</b></div>
+														</div>
+														<hr>
+														<p class="small m-0">Note: Total fare displayed above has been rounded off and may show a slight difference from
+															actual
+															fare.</p>
+													</div>
+
+													<div class="tab-pane fade" id="three-tab" role="tabpanel" aria-labelledby="tab-three">
+														<div class="scrolls">
+															<h4>DEL-GOI-BLR</h4>
+															<hr>
+															<p><b>Airline Cancellation Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>0 hour to 2 hours</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<hr>
+															<p><b>Airline Date Change Fee</b></p>
+															<table>
+																<thead>
+																	<tr>
+																		<th>Duration *</th>
+																		<th>Per Passenger</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td>Non-Refundable</td>
+																	</tr>
+																	<tr>
+																		<td>4 hours to 4 days</td>
+																		<td><i class="la la-rupee"></i> 3,500</td>
+																	</tr>
+																	<tr>
+																		<td>>4 days</td>
+																		<td><i class="la la-rupee"></i> 3,000</td>
+																	</tr>
+																</tbody>
+															</table>
+															<div class="bg-text">
+																<p class="mb-0 small">We would recommend that you reschedule/cancel your tickets atleast 72 hours prior to the
+																	flight
+																	departure
+																</p>
+															</div>
+															<hr>
+															<p><b>Savari Service Fee (YSF)**</b></p>
+															<p class="small">(charged per passenger in addition to airline fee as applicable)</p>
+															<table>
+																<tbody>
+																	<tr>
+																		<td>Online Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Cancellation Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Online Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 400</td>
+																	</tr>
+																	<tr>
+																		<td>Offline Rescheduling Service Fee</td>
+																		<td><i class="la la-rupee"></i> 1,250</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<hr>
+														<p class="small">* Prior to the date/time of departure.</p>
+														<p class="small">**Please note: Savari service fee is over and above the airline cancellation fee due to which
+															refund type
+															may vary.
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+								{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-3">
+						<div class="box-one listing-promo">
+							<div class="title-sec">
+								<h4>Today's Offer</h4>
+							</div>
+							<div class="promocode-one">
+								<div class="promocode">
+									<span>YTRRBL</span>
+								</div>
+								<p class="small">Flat 12% OFF (up to Rs 1,500)</p>
+								<div class="green-text">Copied !</div>
+								<a href="#">COPY CODE</a>
+							</div>
+							<div class="promocode-one">
+								<div class="promocode">
+									<span>YTRRBL</span>
+								</div>
+								<p class="small">Flat 12% OFF (up to Rs 1,500)</p>
+								<div class="green-text">Copied !</div>
+								<a href="#">COPY CODE</a>
+							</div>
+							<div class="promocode-one">
+								<div class="promocode">
+									<span>YTRRBL</span>
+								</div>
+								<p class="small">Flat 12% OFF (up to Rs 1,500)</p>
+								<div class="green-text">Copied !</div>
+								<a href="#">COPY CODE</a>
+							</div>
+							<div class="promocode-one">
+								<div class="promocode">
+									<span>YTRRBL</span>
+								</div>
+								<p class="small">Flat 12% OFF (up to Rs 1,500)</p>
+								<div class="green-text">Copied !</div>
+								<a href="#">COPY CODE</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<!-- Listing Summary -->
+	<section id="footer-booking" class="listing-summary">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col-lg-9 col-md-8 left-sec">
+					<div class="content">
+						<div class="flight-name">
+							<img src="{% static 'main/images/airline/4.png' %}" alt="">
+							<div class="flight-time">
+								<div class="time">
+									<b>15:30</b>
+									<div class="small">Go First</div>
+								</div>
+								<div class="stops">
+									<span></span>
+								</div>
+								<div class="time">
+									<b>20:45</b>
+								</div>
+							</div>
+							<div class="total-time">
+								<b>5h 15m</b>
+								<div class="small">1 Stop</div>
+							</div>
+						</div>
+						<div class="divide-dash"></div>
+						<div class="flight-name">
+							<img src="{% static 'main/images/airline/4.png' %}" alt="">
+							<div class="flight-time">
+								<div class="time">
+									<b>15:30</b>
+									<div class="small">Go First</div>
+								</div>
+								<div class="stops">
+									<span></span>
+								</div>
+								<div class="time">
+									<b>20:45</b>
+								</div>
+							</div>
+							<div class="total-time">
+								<b>5h 15m</b>
+								<div class="small">1 Stop</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-4 right-sec">
+					<div class="content">
+						<div class="total-price">
+							<span class="small">Total Fare:</span>
+							<h4 class="mb-2">5h 15m</h4>
+							<div class="small">Earn eCash: <span>₹ 500</span></div>
+						</div>
+						<button type="button" onclick="bookNow('{{i.totalPriceList.0.id}}','{{Person}}')"class="btn btn-block btn-white">Book Now</button>
+					</div>
+				</div>
+			</div>
+	</section>
+{% include "online_savaari/footer.html" %}
+
+	<!-- Jquery min -->
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+	<!-- Custom -->
+	<script src="{% static 'main/js/default.js' %}"></script>
+
+<script type="text/javascript">
+	$(function(){
+		if (document.location.href.indexOf('radio1=one-way') > 0){
+			$("#footer-booking").hide();
+			$("#one-way").show();
+		}else {
+			$("#one-way").hide();
+		}
+    });
+	$(function(){
+		if (document.location.href.indexOf('radio1=two-way') > 0){
+			$("#two-way").show();
+			$("#footer-booking").show();
+		}else{
+			$("#two-way").hide();
+		}
+    });
+	$(function(){
+		if (document.location.href.indexOf('radio1=multi-way') > 0){
+			$("#footer-booking").show();
+			$("#multi-way").show();
+		}else{
+			$("#multi-way").hide();
+		}
+    });
+
+
+	$(document).ready(function() {
+
+		var deptName=getValue('fromCityOrAirport');
+		var arrivName=getValue('toCityOrAirport');
+		var travelDate=getValue('travelDate');
+		var travelDate1=getValue('travelDate1');
+		var cabinClass=getValue('cabinClass');
+		var adult=getValue('ADULT');
+		var child=getValue('CHILD');
+		var infant=getValue('INFANT');
+
+		$("#ADULT").val(adult);
+		$("#CHILD").val(child);
+		$("#INFANT").val(infant);
+
+		document.getElementById('departFrom').value=deptName;
+		document.getElementById('departTo').value=arrivName;
+
+		
+		$("input[name=cabinClass][value="+cabinClass+"]").prop('checked', true);
+		
+
+		$('#travelDate').data({date: travelDate});
+		$('#travelDate').datepicker('update');
+		if(travelDate==travelDate1){
+			
+		}else{
+			document.getElementsByName('travelDate1').value=arrivDate1;
+		}
+	});
+
+	function getValue(name){
+    	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(document.location.href);
+    	if (results==null) {
+       		return null;
+    	}
+    	return decodeURI(results[1]) || 0;
+	}
+	
+</script>
+
+<script type="text/javascript">
+	function bookNow(key, Person){
+		console.clear();
+		console.log(key);
+		window.location.href = "/flight/review_flight/?key="+key+"&Person="+Person;
+	}
+
+	function toggleFunction(val){
+		var x='#fare-details'+val;
+		$(x).toggle();
+	}
+
+	function toggleFlightDetails(val){
+		var x='#flights-details'+val;
+		$(x).toggle();
+	}
+
+	function toggleReturnFlightDetails1(val){
+		var x='#return-flights-details1'+val;
+		$(x).toggle();
+	}
+
+	function toggleReturnFlightDetails2(val){
+		var x='#return-flights-details2'+val;
+		$(x).toggle();
+	}
+
+	function switchText(){
+		let obj1 = document.getElementById("departFrom");
+		let obj2 = document.getElementById("departTo");
+
+		let temp = obj1.value;
+		obj1.value = obj2.value;
+		obj2.value = temp;
+	}
+
+	function Copy() {
+
+		var selected = new Array();
+		r = $("#amount").val().replace('₹','').replace('₹','').split(" - ");
+		r1 = $("input[name='radio2']:checked").val().split(" - ");
+		r2= $("input:checkbox[name='airline']:checked").each(function() {
+      	selected.push($(this).val());
+ 		});
+
+    	start_price = r[0];
+    	end_price = r[1];
+    	start_time = r1[0];
+    	end_time = r1[1];
+    	alert(selected);
+
+    	current_path = $(location).attr('href');
+    	new_path = current_path+'&start_price='+start_price+'&end_price='+end_price+'&start_time='+start_time+'&end_time='+end_time+'&airline='+selected;
+
+    	window.location.href = new_path;
+    }		
+	    
+</script>
+</body>
+
+</html>

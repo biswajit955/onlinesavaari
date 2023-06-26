@@ -1,0 +1,796 @@
+{% load static %} {% include "savaari_hotel/hotel_header.html" %}
+<!-- Main -->
+<main class="main-body">
+  <!-- Hotel Details -->
+
+  <section class="hotel-details">
+    <div class="container">
+      <div class="row gap-1-2">
+        <div class="col-12">
+          <div class="sec-one">
+            <a href="#" class="backPage">
+              <i class="la la-angle-left"></i> Back to Search Results
+            </a>
+            <a class="btn btn-red" href="javascript:void(0)" data-toggle="modal" data-target="#modifyModal">
+              <i class="la la-search"></i> Modify Search
+            </a>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="sec-two">
+            <div class="title">
+              <h4>
+                {{data.hotel.name}}
+                {{hotel.hotel_name}}
+                {% if data.hotel.rt %}
+                <input id="star-rating-demo" value="{{data.hotel.rt}}" type="number" class="rating" min="0" max="5"
+                  step="1" data-size="xs" />
+                {% else %}
+                <input id="star-rating-demo" value="{{hotel.hotel_rating}}" type="number" class="rating" min="0" max="5"
+                  step="1" data-size="xs" />
+                {% endif %}
+              </h4>
+              {% if data %}
+              <small>
+                {{data.hotel.ad.adr}},{{data.hotel.ad.city.name}},{{data.hotel.ad.state.name}},{{data.hotel.ad.country.name}},{{data.hotel.ad.postalCode}}
+              </small>
+              {% else %}
+              <small>
+                {{hotel.Address}}
+              </small>
+              {% endif %}
+
+            </div>
+            <div class="price">
+              {% comment %}
+              <p>
+                <span>Save ₹23,000</span>
+                <del>₹1,00,000</del>
+              </p>
+              {% endcomment %}
+              <h3>
+
+                {% if data %}
+                ₹{{data.hotel.ops.0.ris.0.tp|floatformat:2}}
+                {% else %}
+                ₹ {{Price|floatformat:2}}
+                {% endif %}
+
+                <small>Price for {{no_of_day}} nights</small>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="sec-three">
+            <ul>
+              <li><a href="#d_photos" class="scroll">photos</a></li>
+              <li><a href="#d_rooms" class="scroll">rooms</a></li>
+              <li><a href="#d_rebiews" class="scroll">reviews</a></li>
+              <li><a href="#d_maps" class="scroll">map</a></li>
+              <li><a href="#d_landmarks" class="scroll">landmarks</a></li>
+              <li><a href="#d_restaurants" class="scroll">restaurants</a></li>
+              <li><a href="#d_policies" class="scroll">policies</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="sec-box sec-four">
+            <div class="row gap-1">
+              <div class="col-md-8" id="d_photos">
+                <div class="left-details">
+                  {% if tripjack_Standard_imgs %}
+                  <div id="big-slider" class="owl-carousel owl-theme">
+                    {% for imgs in tripjack_Standard_imgs %}
+                    <div class="item">
+                      <img src="{{imgs}}" alt="" />
+                    </div>
+                    {% endfor %}
+                  </div>
+                  <div id="thumbs-slider" class="owl-carousel owl-theme">
+                    {% for imgs in tripjack_Standard_imgs %}
+                    <div class="item">
+                      <img src="{{imgs}}" alt="" />
+                    </div>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  <div id="big-slider" class="owl-carousel owl-theme">
+                    {% for imgs in database_img %}
+                    <div class="item">
+                      <img src="{{imgs}}" alt="" />
+                    </div>
+                    {% endfor %}
+                  </div>
+                  <div id="thumbs-slider" class="owl-carousel owl-theme">
+                    {% for imgs in database_img %}
+                    <div class="item">
+                      <img src="{{imgs}}" alt="" />
+                    </div>
+                    {% endfor %}
+                  </div>
+                  {% endif %}
+
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="right-details">
+
+                  {% if data %}
+                  {% if data.hotel.rt >= 4.5 %}
+                  <h3>Excellent</h3>
+                  {% elif data.hotel.rt >= 3.5 %}
+                  <h3 style="color: rgb(2, 113, 50)">Very Good</h3>
+                  {% elif data.hotel.rt >= 2.5 %}
+                  <h3 style="color: rgb(128, 137, 1)">Good</h3>
+                  {% elif data.hotel.rt >= 1.5 %}
+                  <h3 style="color: rgb(4, 129, 232)">Average</h3>
+                  {% else %}
+                  <h3 style="color: red">Poor</h3>
+                  {% endif %}
+                  {% else %}
+                  {% if hotel.hotel_rating >= 4.5 %}
+                  <h3>Excellent</h3>
+                  {% elif hotel.hotel_rating >= 3.5 %}
+                  <h3 style="color: rgb(2, 113, 50)">Very Good</h3>
+                  {% elif hotel.hotel_rating >= 2.5 %}
+                  <h3 style="color: rgb(128, 137, 1)">Good</h3>
+                  {% elif hotel.hotel_rating >= 1.5 %}
+                  <h3 style="color: rgb(4, 129, 232)">Average</h3>
+                  {% else %}
+                  <h3 style="color: red">Poor</h3>
+                  {% endif %}
+                  {% endif %}
+
+                  <h5>
+                    <span>{{data.hotel.rt}}{{hotel.hotel_rating}}/5</span>
+                    <a href="#">615 reviews</a>
+                  </h5>
+                  <hr />
+                  <p><b>Checkin :</b> 2:00 PM</p>
+                  <p><b>checkout :</b> 11:00 AM</p>
+                  <ul>
+                    <li>
+                      <img src="{% static 'hotel/images/icon/cleanPass.png' %}" alt="" />
+                    </li>
+                    <li>
+                      <img src="{% static 'hotel/images/icon/couple-friendly.png' %}" alt="" />
+                    </li>
+                    <li>
+                      <img src="{% static 'hotel/images/icon/women-friendly.png' %}" alt="" />
+                    </li>
+                    <li>
+                      <img src="{% static 'hotel/images/icon/ecoplus.png' %}" alt="" />
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="bottom-details">
+                  <h5>Advantages</h5>
+                  <ul class="icon-features">
+                    {% for fl in data.hotel.fl %}
+
+                    <li>
+                      {% comment %} <img src="{% static 'hotel/images/icon/check-circle.png' %}" alt="" /> {% endcomment
+                      %}
+                      <p>{{ fl }}</p>
+                    </li>
+                    {% comment %} <li>
+                      <img src="{% static 'hotel/images/icon/wifi.png' %}" alt="" />
+                      <p>Free Wifi</p>
+                    </li>
+                    <li>
+                      <img src="{% static 'hotel/images/icon/security.png' %}" alt="" />
+                      <p>24x7 Security</p>
+                    </li>
+                    <li>
+                      <img src="{% static 'hotel/images/icon/room-service.png' %}" alt="" />
+                      <p>24x7 Room service</p>
+                    </li>
+                    <li>
+                      <img src="{% static 'hotel/images/icon/water-bottle.png' %}" alt="" />
+                      <p>2 Water Bottles</p>
+                    </li>
+                    <li>
+                      <img src="{% static 'hotel/images/icon/ac.png' %}" alt="" />
+                      <p>A/C Rooms, Power back up</p>
+                    </li>
+                    <li>
+                      <img src="{% static 'hotel/images/icon/water-heater.png' %}" alt="" />
+                      <p>24x7 H/C water</p>
+                    </li>
+                    <li>
+                      <img src="{% static 'hotel/images/icon/dishtv.png' %}" alt="" />
+                      <p>DTH services</p>
+                    </li> {% endcomment %}
+
+                    {% endfor %}
+                  </ul>
+
+                  <h5>
+                    Providing you the best of comforts and a unique experience
+                  </h5>
+                  <p>
+                    If you are looking for the ideal place to stay in
+                    {{data.searchQuery.searchCriteria.cityName}}, your search
+                    ends with {{data.hotel.name}} located on
+                    {{data.hotel.ad.adr}}. It is a {{data.hotel.pt}}-type, .
+                  </p>
+                  <p>
+                    The Onlinesavaari choice property comes with a promise of 8
+                    assured amenities, money-back guarantee and priority
+                    helpline support. You also get free cancellation and
+                    standardized prices through the year.
+                  </p>
+                  <h5>Hotel Facilities</h5>
+                  <ul class="check-list">
+                    {% for des_keys, des_values in des_list %}
+                    <li>{{des_keys}} :- {{des_values}}</li>
+                    {% endfor %}
+                  </ul>
+                  <br />
+                  <h5>Room Facilities</h5>
+                  <p>
+                    {% for Facilities in data.hotel.fl %}
+                    {{Facilities}},
+                    {% endfor %}
+                  </p>
+                  {% if hotel_des.dining %}
+
+                  <h5>Dining</h5>
+                  <p>{{hotel_des.dining}}</p>
+                  {% endif %}
+                  <h5>Important Landmarks</h5>
+                  <p>{{hotel_des.attractions}}</p>
+                  {% comment %} <h5>
+                    What people love the most about this property are its
+                    beautiful setting and unique experience.
+                  </h5>
+                  <h5>
+                    Book now and enjoy the warm hospitality of being at Riva
+                    Beach Resort. Note: Hotel is hosting 31st December party
+                    with two grand stages, which will be played till late night
+                    and are expecting around 3000 people in total to celebrate
+                    New Year Party.
+                  </h5>
+                  <ul class="check-list">
+                    <li>
+                      Hotel Staff and Guest's body temperature monitored at
+                      hotel entry points. Refused entry if the temperature is
+                      above 99.1 ( F ) degree Fahrenheit.
+                    </li>
+                    <li>
+                      Hotels are advised to keep sanitizer in room and face mask
+                      in every room for guest use.
+                    </li>
+                    <li>
+                      Every hotel staff to have Aarogya Setu App as advised by
+                      Govt.
+                    </li>
+                    <li>
+                      Every staff member wears face masks and gloves at all
+                      service times.
+                    </li>
+                    <li>
+                      Hotel rooms/floors and public areas are cleaned with
+                      hospital-grade disinfectants.
+                    </li>
+                    <li>
+                      The hotel has In-Room Dining options available with
+                      minimal contact service and disposable/sanitized crockery
+                      & cutlery.
+                    </li>
+                    <li>
+                      Hotel staff ensures to maintain social distancing at all
+                      times.
+                    </li>
+                    <li>
+                      Every guest's travel records are maintained as per local
+                      and central Government of India guidelines.
+                    </li>
+                    <li>
+                      While working with supplier and contractors hotel complies
+                      with health advisories and Government guidelines.
+                    </li>
+                  </ul> {% endcomment %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12" id="d_rooms">
+          <div class="sec-box sec-five">
+            <div class="row align-items-end gap-1 d-none">
+              <div class="col-lg-3 col-md-3">
+                <div class="form-group m-0">
+                  <label for="">check-in</label>
+                  <div class="icon-group">
+                    <input type="text" class="datepicker" value="" />
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-3">
+                <div class="form-group m-0">
+                  <label for="">check-out</label>
+                  <div class="icon-group">
+                    <input type="text" class="datepicker" value="" />
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-4">
+                <div class="add-person">
+                  <div class="person-quantity">
+                    <span class="small">Adult (s)</span>
+                    <div class="quantity-box">
+                      <button type="button" class="sub">-</button>
+                      <input type="number" value="0" min="0" max="10" />
+                      <button type="button" class="add">+</button>
+                    </div>
+                  </div>
+                  <div class="person-quantity">
+                    <span class="small">Child (s)</span>
+                    <div class="quantity-box">
+                      <button type="button" class="sub">-</button>
+                      <input type="number" value="0" min="0" max="10" />
+                      <button type="button" class="add">+</button>
+                    </div>
+                  </div>
+                  <div class="add-room">
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#addroomModal">Add Room</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-2">
+                <button class="btn btn-block btn-red">
+                  Check Availability
+                </button>
+              </div>
+            </div>
+            {% if data %}
+            {% for rooms in data.hotel.ops %}
+            <div class="select-room">
+              <h4>{{rooms.ris.0.rc}}</h4>
+              <div class="hotel-list-item-two">
+                <div class="left-sec">
+                  <div class="img-sec">
+                    <a href="#" class="thumbs">
+                      <img src="{{tripjack_Standard_imgs.0}}" alt="" />
+                    </a>
+                    <a href="{% static 'hotel/images/hotel/thumbnail/1.jpg' %}" data-ybox-group="group1" class="yBox">
+                      <i class="la la-search"></i>
+                    </a>
+                  </div>
+                  <h6>Amenities</h6>
+                  <ul class="check-list">
+                    {% for fcs in rooms.ris.0.fcs %}
+                    <li>{{fcs}}</li>
+                    {% endfor %}
+                  </ul>
+                  <ul class="icon-list">
+                    <li>
+                      <i class="fa fa-bed"></i>&nbsp; &nbsp;
+                      {% if rooms.ris.0.radi.bds.0.bd %}
+                      {{rooms.ris.0.radi.bds.0.bd}}
+                      {% else %}
+                      1 Bad
+                      {% endif %}
+                    </li>
+                  </ul>
+                </div>
+                <div class="right-sec">
+                  <div class="room-details">
+                    <h5>{{rooms.ris.0.rt}}</h5>
+                    <div class="row gap-1">
+                      <div class="col">
+                        <h6>Max Guests</h6>
+                        <div class="guest-number">
+                          <img src="{% static 'hotel/images/icon/person.png' %}" alt="" />
+                          <img src="{% static 'hotel/images/icon/person.png' %}" alt="" />
+                          {% comment %}
+                          <img src="{% static 'hotel/images/icon/person.png' %}" alt="" />
+                          {% endcomment %}
+                          <img src="{% static 'hotel/images/icon/child.png' %}" alt="" />
+                        </div>
+                      </div>
+                      <div class="col">
+                        <h6>Inclusions</h6>
+                        <ul class="check-list">
+                          {% for fcs in rooms.ris.0.fcs %}
+                          <li>{{fcs}}</li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                      <div class="col">
+                        <h6>Highlights</h6>
+                        <ul class="icon-list">
+                          <li><i class="la la-rupee"></i> Non Refundable</li>
+                        </ul>
+                      </div>
+                      <div class="col">
+                        <h6>Price for {{no_of_day}} nights</h6>
+                        <h3 class="m-0">
+                          <small>
+                            <del>₹1,00,00</del>
+                          </small>
+                          ₹{{rooms.ris.0.tp}}
+                        </h3>
+                      </div>
+                      <div class="col text-right">
+                        {% comment %} <h6>ROOM LEFT</h6> {% endcomment %}
+                        {% comment %}
+                        <p>1 Room Left</p>
+                        {% endcomment %}
+                        <a href="{% url 'hotel_details' ids=data.id ops_ids=rooms.id %}"
+                          class="btn btn-red btn-block">Book Now</a>
+                      </div>
+                      <div class="col-12">
+                        {% if user.is_authenticated %}
+
+                        <div class="savings">
+                          <div>You Save Rs. 2,000</div>
+                          <div>
+                            <a href="#">Login</a> & get additional Rs.250 off
+                            using <span class="yellow">eCash</span>
+                          </div>
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            {% for room in rooms %}
+            <div class="select-room">
+              <h4>{{room.room_category}}</h4>
+              <div class="hotel-list-item-two">
+                <div class="left-sec">
+                  <div class="img-sec">
+                    <a href="#" class="thumbs">
+                      <img src="{{database_img.0}}" alt="" />
+                    </a>
+                    <a href="{% static 'hotel/images/hotel/thumbnail/1.jpg' %}" data-ybox-group="group1" class="yBox">
+                      <i class="la la-search"></i>
+                    </a>
+                  </div>
+                  <h6>Amenities</h6>
+                  <ul class="check-list">
+                    {% for fcs in rooms.ris.0.fcs %}
+                    <li>{{fcs}}</li>
+                    {% endfor %}
+                  </ul>
+                  <ul class="icon-list">
+                    <li>
+                      <i class="fa fa-bed"></i>&nbsp; &nbsp;
+                      {% if rooms.ris.0.radi.bds.0.bd %}
+                      {{rooms.ris.0.radi.bds.0.bd}}
+                      {% else %}
+                      1 Bad
+                      {% endif %}
+                    </li>
+                  </ul>
+                </div>
+                <div class="right-sec">
+                  <div class="room-details">
+                    <h5>{{rooms.ris.0.rt}}</h5>
+                    <div class="row gap-1">
+                      <div class="col">
+                        <h6>Max Guests</h6>
+                        <div class="guest-number">
+                          <img src="{% static 'hotel/images/icon/person.png' %}" alt="" />
+                          <img src="{% static 'hotel/images/icon/person.png' %}" alt="" />
+                          {% comment %}
+                          <img src="{% static 'hotel/images/icon/person.png' %}" alt="" />
+                          {% endcomment %}
+                          <img src="{% static 'hotel/images/icon/child.png' %}" alt="" />
+                        </div>
+                      </div>
+                      <div class="col">
+                        <h6>Inclusions</h6>
+                        <ul class="check-list">
+                          {% for fcs in rooms.ris.0.fcs %}
+                          <li>{{fcs}}</li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                      <div class="col">
+                        <h6>Highlights</h6>
+                        <ul class="icon-list">
+                          <li><i class="la la-rupee"></i> Non Refundable</li>
+                        </ul>
+                      </div>
+                      <div class="col">
+                        <h6>Price for {{no_of_day}} nights</h6>
+                        <h3 class="m-0">
+                          <small>
+                            <del>{{room.current_price|floatformat:2}}</del>
+                          </small>
+                          ₹{{room.current_price|floatformat:2}}
+                        </h3>
+                      </div>
+                      <div class="col text-right">
+                        {% comment %} <h6>ROOM LEFT</h6> {% endcomment %}
+                        {% comment %}
+                        <p>1 Room Left</p>
+                        {% endcomment %}
+                        <a href="#" class="btn btn-red btn-block">Book Now</a>
+                      </div>
+                      <div class="col-12">
+                        {% if user.is_authenticated %}
+
+                        <div class="savings">
+                          <div>You Save Rs. 2,000</div>
+                          <div>
+                            <a href="#">Login</a> & get additional Rs.250 off
+                            using <span class="yellow">eCash</span>
+                          </div>
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+          </div>
+        </div>
+        {% comment %} <div class="col-12" id="d_rebiews">
+          <div class="sec-box sec-six">
+            <h5>REVIEWS</h5>
+            <ul class="review-list">
+              <li>
+                <h5><span>4/5</span> Vijay Patel</h5>
+                <small>Sat August 27 19:22:55 IST 2022</small>
+                <p>
+                  Recently stayed at Riva beach resort for 3 nights. Overall it
+                  was a good experience. Its a large property with direct beach
+                  access which is not so crowded. Also one can enjoy the
+                  riverside view. It has quite a lot number of rooms with 3
+                  swimming pools, a bar and a restaurant. Buffet spread in
+                  breakfast, lunch and dinner is good. Few things they need to
+                  improve. 1. They do not have any starters in veg/non veg
+                  during lunch and dinner 2. They will refuse to give plates if
+                  you order something from outside and the staff behaviour was
+                  not so polite for it 3. They definitely need to hire a good
+                  chef to improve the taste of tea and coffee. The one offered
+                  in morning is total waste. Had only one sip and threw it.
+                </p>
+              </li>
+              <li>
+                <h5><span>4/5</span> Vijay Patel</h5>
+                <small>Sat August 27 19:22:55 IST 2022</small>
+                <p>
+                  Recently stayed at Riva beach resort for 3 nights. Overall it
+                  was a good experience. Its a large property with direct beach
+                  access which is not so crowded. Also one can enjoy the
+                  riverside view. It has quite a lot number of rooms with 3
+                  swimming pools, a bar and a restaurant. Buffet spread in
+                  breakfast, lunch and dinner is good. Few things they need to
+                  improve. 1. They do not have any starters in veg/non veg
+                  during lunch and dinner 2. They will refuse to give plates if
+                  you order something from outside and the staff behaviour was
+                  not so polite for it 3. They definitely need to hire a good
+                  chef to improve the taste of tea and coffee. The one offered
+                  in morning is total waste. Had only one sip and threw it.
+                </p>
+              </li>
+              <li>
+                <h5><span>4/5</span> Vijay Patel</h5>
+                <small>Sat August 27 19:22:55 IST 2022</small>
+                <p>
+                  Recently stayed at Riva beach resort for 3 nights. Overall it
+                  was a good experience. Its a large property with direct beach
+                  access which is not so crowded. Also one can enjoy the
+                  riverside view. It has quite a lot number of rooms with 3
+                  swimming pools, a bar and a restaurant. Buffet spread in
+                  breakfast, lunch and dinner is good. Few things they need to
+                  improve. 1. They do not have any starters in veg/non veg
+                  during lunch and dinner 2. They will refuse to give plates if
+                  you order something from outside and the staff behaviour was
+                  not so polite for it 3. They definitely need to hire a good
+                  chef to improve the taste of tea and coffee. The one offered
+                  in morning is total waste. Had only one sip and threw it.
+                </p>
+              </li>
+              <li>
+                <h5><span>4/5</span> Vijay Patel</h5>
+                <small>Sat August 27 19:22:55 IST 2022</small>
+                <p>
+                  Recently stayed at Riva beach resort for 3 nights. Overall it
+                  was a good experience. Its a large property with direct beach
+                  access which is not so crowded. Also one can enjoy the
+                  riverside view. It has quite a lot number of rooms with 3
+                  swimming pools, a bar and a restaurant. Buffet spread in
+                  breakfast, lunch and dinner is good. Few things they need to
+                  improve. 1. They do not have any starters in veg/non veg
+                  during lunch and dinner 2. They will refuse to give plates if
+                  you order something from outside and the staff behaviour was
+                  not so polite for it 3. They definitely need to hire a good
+                  chef to improve the taste of tea and coffee. The one offered
+                  in morning is total waste. Had only one sip and threw it.
+                </p>
+              </li>
+              <li>
+                <h5><span>4/5</span> Vijay Patel</h5>
+                <small>Sat August 27 19:22:55 IST 2022</small>
+                <p>
+                  Recently stayed at Riva beach resort for 3 nights. Overall it
+                  was a good experience. Its a large property with direct beach
+                  access which is not so crowded. Also one can enjoy the
+                  riverside view. It has quite a lot number of rooms with 3
+                  swimming pools, a bar and a restaurant. Buffet spread in
+                  breakfast, lunch and dinner is good. Few things they need to
+                  improve. 1. They do not have any starters in veg/non veg
+                  during lunch and dinner 2. They will refuse to give plates if
+                  you order something from outside and the staff behaviour was
+                  not so polite for it 3. They definitely need to hire a good
+                  chef to improve the taste of tea and coffee. The one offered
+                  in morning is total waste. Had only one sip and threw it.
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div> {% endcomment %}
+        <div class="col-12" id="d_maps">
+          <div class="sec-box sec-seven">
+            <h5>MAPS</h5>
+            {% if data %}
+            <iframe
+              src="https://maps.google.com/maps?q={{ data.hotel.gl.lt }},{{ data.hotel.gl.ln }}&hl=es;z=14&amp;output=embed">
+            </iframe>
+            {% else %}
+            <iframe
+              src="https://maps.google.com/maps?q={{ hotel.latitude }},{{ hotel.longitude }}&hl=es;z=14&amp;output=embed">
+            </iframe>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-12" id="d_landmarks">
+          <div class="sec-box sec-eight">
+            <h5>NEARBY LANDMARKS</h5>
+            <div class="landmarks">
+              <div class="most-imp">
+                <i class="la la-plane"></i>
+                <p>
+                  <b>Nearest Airport</b>
+                </p>
+                <small>{{Nearest_Airport}}</small>
+              </div>
+              <div class="row gap-2">
+                <div class="col-12">
+                  <ul class="flex-list">
+                    {% for location in locations_list %}
+                    <li>
+                      {% if forloop.last %}
+                      {% else %}
+                      <span>{{ location }}</span>
+                      {% endif %}
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12" id="d_restaurants">
+          <div class="sec-box sec-nine">
+            <h5>BAR &amp; RESTAURANT</h5>
+            <div class="row gap-1">
+              <div class="col-md-4">
+                <h6>
+                  <img src="{% static 'hotel/images/icon/room-service.png' %}" alt="">
+                  Restaurant
+                </h6>
+                <ul class="check-list">
+                  <li>
+                    <b>Waterfront</b>
+                    <small>
+                      <b>Cuisine :</b>
+                      British, Indian, Pizza, Seafood, Thai, German, Asian Brunch, Lunch, Dinner
+                    </small>
+                  </li>
+                  <li>
+                    <b>Water Front</b>
+                    <small>06.00 AM to 11.00 PM</small>
+                    <small><b>Cuisine :</b> Indian</small>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-md-4">
+                <h6>
+                  <img src="{% static 'hotel/images/icon/water-bottle.png' %}" alt="">
+                  Bar
+                </h6>
+                <ul class="check-list">
+                  <li>
+                    <b>Wisteria</b>
+                    <small>00.00 AM to 11.59 PM</small>
+                    <small>
+                      <b>Type :</b>
+                      Indoor Bar
+                    </small>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12" id="d_policies">
+          {% for policy in inst_list %}
+          <div class="sec-box sec-nine">
+            <h5>{{ policy.type }}</h5>
+            <div class="row gap-1">
+              <div class="col-md-12">
+                {% comment %}
+                <h6>
+                  <img src="{% static 'hotel/images/icon/room-service.png' %}" alt="" />
+                  Restaurant
+                </h6>
+                {% endcomment %}
+                <ul class="check-list">
+                  {% for key, value in policy.items %} {% if key != "type" %}
+                  <li>{{ key }}:- {{ value }}</li>
+                  {% endif %} {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <br />
+          {% endfor %}
+          <button onclick="scrollToTop()" id="scrollToTopBtn" title="Scroll to Top">
+            <i class="fa fa-arrow-up"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<style>
+  #scrollToTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    background-color: #dc3545;
+    color: white;
+    cursor: pointer;
+    padding: 5px 15px;
+    border-radius: 30%;
+  }
+
+  #scrollToTopBtn:hover {
+    background-color: #333;
+  }
+</style>
+<script>
+  var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+  window.addEventListener("scroll", function () {
+    if (window.pageYOffset > 20) {
+      scrollToTopBtn.style.display = "block";
+    } else {
+      scrollToTopBtn.style.display = "none";
+    }
+  });
+
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+</script>
+{% include "savaari_hotel/hotel_footer.html" %}

@@ -1,0 +1,395 @@
+{% load static%}
+{% include "savaari-admin/header.html" %}
+
+        <!--  BEGIN CONTENT AREA  -->
+        <div id="content" class="main-content">
+            <div class="layout-px-spacing">
+
+                <div class="row layout-spacing">
+
+                    <!-- Content -->
+                    <div class="col-xl-4 col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
+ 
+                        <div class="user-profile layout-spacing">
+                            <div class="widget-content widget-content-area">
+                                <div class="d-flex justify-content-between">
+                                    <h3 class="">Info</h3>
+                                    <a href="user_account_setting.html" class="mt-2 edit-profile"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a>
+                                </div>
+                                <div class="text-center user-info">
+                                    <img src= "{% static 'admin/assets/img/profile.png' %}" alt="avatar" height="90" width="90">
+                                    <p class="">{{agents.first_name}} {{agents.last_name}}</p>
+                                    <p class="m-0">Active</p>
+                                </div>
+                                <div class="user-info-list">
+
+                                    <div class="">
+                                        <ul class="contacts-block list-unstyled" style="display: grid;gap: 0.5em;margin: 0;max-width: 100%;">
+                                            <li class="contacts-block__item">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-coffee"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> Agent
+                                            </li>
+                                            <li class="contacts-block__item">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>{{agents.agency_address}}
+                                            </li>
+                                            <li class="contacts-block__item">
+                                                <a href="mailto:example@mail.com"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>{{agents.email}}</a>
+                                            </li>
+                                            <li class="contacts-block__item">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> {{agents.mobile}}
+                                            </li>
+                                            <li>
+                                                <form action="{% url 'update_agent' agents.id %}" method="post">
+                                                     {% csrf_token %}
+                                                    <div class="input-group mb-4">
+                                                        <div class="input-group-prepend">
+                                                        <span class="input-group-text">Status</span>
+                                                        </div>
+                                                        <div class="input-group-append" style="flex:1 1;">
+                                                            <select name="agent_status" id="" class="form-control m-0">
+                                                            
+                                                                {% if agents.user.is_active  %}
+                                                                <option selected="selected" value="True">Active</option>
+                                                                <option  value="False">InActive</option>
+
+                                                                {% else %}
+                                                                <option  value="True">Active</option>
+                                                                <option selected="selected" value="False">InActive</option>
+
+                                                                {% endif %}                                                            
+                                                            </select>
+                                                            <button class="btn btn-secondary ">Submit </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </li>
+                                            
+                                        </ul>
+                                    </div>                                    
+                                </div>
+                            </div>
+
+                            
+                        </div>
+
+                        <div class="education layout-spacing ">
+                            <div class="widget-content widget-content-area">
+                                <h3 class="">Transaction History</h3>
+
+                                <table class="multi-table table table-striped table-bordered table-hover non-hover" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Trans_ID</th>
+                                            <th>Amount</th>
+                                            <th>Trans_Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in transactions %}
+                                        {% if i.amount != 0 %}
+                                            <tr>
+                                                <td>{{i.transaction_id}}</td>
+                                                <td>{{i.amount}}</td>
+                                                <td>{{i.transaction_date|date:'Y-m-d'}}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="work-experience layout-spacing ">
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-xl-8 col-lg-6 col-md-7 col-sm-12 layout-top-spacing">
+
+                        <div id="withoutSpacing" class="no-outer-spacing" style="margin-bottom: 1em;">
+                            <div class="card no-outer-spacing">
+                                <div class="card-header" id="headingOne2">
+                                    <section class="mb-0 mt-0">
+                                        <div role="menu" class="" data-toggle="collapse" data-target="#withoutSpacingAccordionOne" aria-expanded="false" aria-controls="withoutSpacingAccordionOne">
+                                            Document  <div class="icons"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                                        </div>
+                                    </section>
+                                </div>
+
+                                <div id="withoutSpacingAccordionOne" class="collapse" aria-labelledby="headingOne2" data-parent="#withoutSpacing">
+                                    <div class="">
+                                        <div class="" id="cancel-row">
+                                            <div class="col-lg-12 layout-spacing layout-top-spacing">
+                                                <div class="">
+                                                    <div class="">
+                                                        <div id="demo-test-gallery" class="demo-gallery" data-pswp-uid="1">
+                                                            {% if doc_detail %}
+                                                            
+                                                            
+                                                            <a class="img-2" href="{{doc_detail.url}}" data-size="1600x1068" data-med="edia/{{doc_detail}}" data-med-size="1024x683" data-author="Samuel Rohl">
+                                                                <img src="{{doc_detail.url}}" alt="Rohl">
+                                                                {% comment %} <embed src="{{doc_detail.url}}" alt="Rohl" width= "500" height= "375"> {% endcomment %}
+                                                            {% endif %}
+                                                        <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="">
+
+                                                                <img src="" alt="image-gallery">
+                                                                <figure>This is dummy caption. It has been placed here solely to demonstrate the look and feel of finished, typeset text.</figure>
+                                                            </a>
+                                                            
+                                                        </div>
+                                                    
+                                                        <!-- Root element of PhotoSwipe. Must have class pswp. -->
+                                                        <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="">
+                        
+                                                            <!-- Background of PhotoSwipe. It's a separate element, as animating opacity is faster than rgba(). -->
+                                                            <div class="pswp__bg"></div>
+                        
+                                                            <!-- Slides wrapper with overflow:hidden. -->
+                                                            <div class="pswp__scroll-wrap">
+                                                                <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+                                                                <!-- don't modify these 3 pswp__item elements, data is added later on. -->
+                                                                <div class="pswp__container" style="transform: translate3d(0px, 0px, 0px);">
+                                                                    <div class="pswp__item" style="display: block; transform: translate3d(-1594px, 0px, 0px);"><div class="pswp__zoom-wrap" style="transform: translate3d(244px, 44px, 0px) scale(1);"><img class="pswp__img" src="{% static 'admin/assets/img/1280x857.jpg' %}" style="opacity: 1; width: 936px; height: 624px;"></div></div>
+                                                                    <div class="pswp__item" style="transform: translate3d(0px, 0px, 0px);"><div class="pswp__zoom-wrap" style="transform: translate3d(53px, 220.391px, 0px) scale(0.469603);"><img class="pswp__img pswp__img--placeholder" src="{% static 'admin/assets/img/1280x857.jpg' %}" style="width: 935px; height: 624px; display: none;"><img class="pswp__img" src="{% static 'admin/assets/img/1280x857.jpg" style="display: block; width: 935px; height: 624px;"></div></div>
+                                                                    <div class="pswp__item" style="display: block; transform: translate3d(1594px, 0px, 0px);"><div class="pswp__zoom-wrap" style="transform: translate3d(244px, 44px, 0px) scale(1);"><img class="pswp__img" src="{% static 'admin/assets/img/1280x857.jpg' %}" style="opacity: 1; width: 935px; height: 624px;"></div></div>
+                                                                </div>
+                        
+                                                                <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+                                                                <div class="pswp__ui pswp__ui--fit pswp__ui--hidden">
+                        
+                                                                    <div class="pswp__top-bar">
+                        
+                                                                        <!--  Controls are self-explanatory. Order can be changed. -->
+                                                                        <div class="pswp__counter">1 / 6</div>
+                                                                        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                                                                        <button class="pswp__button pswp__button--share" title="Share"></button>
+                                                                        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                                                                        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                        
+                                                                        <!-- element will get class pswp__preloader--active when preloader is running -->
+                                                                        <div class="pswp__preloader">
+                                                                            <div class="pswp__preloader__icn">
+                                                                              <div class="pswp__preloader__cut">
+                                                                                <div class="pswp__preloader__donut"></div>
+                                                                              </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                                                                        <div class="pswp__share-tooltip"></div> 
+                                                                    </div>
+                                                                    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                                                                    </button>
+                                                                    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                                                                    </button>
+                                                                    <div class="pswp__caption">
+                                                                        <div class="pswp__caption__center">This is dummy caption. It has been placed here solely to demonstrate the look and feel of finished, typeset text.<br><small>Photo: Samuel Rohl</small></div>
+                                                                    </div>
+                        
+                                                                  </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="skills layout-spacing">
+                            <div class="widget-content widget-content-area mb-4">
+
+                                <h3 class="">Total Spend Money</h3>
+                                <h2>{{spent}}</h2>  
+                                <!-- <div class="progress br-30"> -->
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="10000000"><div class="progress-title"><span>Wallet Balance</span> <span>25%</span> </div></div>
+                                </div>
+                               
+
+                            </div>
+                            <form action="{% url 'updatedoc' agents.id %}" method="POST" class="box-one" enctype="multipart/form-data">
+                                 {% csrf_token %}
+                            <div class="widget-content widget-content-area mb-4">
+
+                                <h3 class="">Upload Document</h3>
+                                <input id="pan__img" type="file" name="doc">
+                                <button class="btn btn-primary">Upload</button>
+
+                            </div>
+                            </form>
+
+                            <div class="widget-content widget-content-area">
+                                <h3 class="">Wallet Balance</h3>
+                                <h2 style="text-align: start;width: max-content;padding-right:1em;">₹ {{wallet.wallet_balance}}</h2>
+                                <div>
+                                    <div class="row">
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-primary mb-2 ml-4" data-toggle="modal" data-target="#exampleModal">
+                                              Recharge
+                                            </button>
+                                        </div>
+        
+                                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content" style="padding: 1em 2em;">
+                                                    <form action="{% url 'agent_recharge_wallet' agents.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <div class="row mb-4">
+                                                            <div class="form-group col">
+                                                                <label for="exampleFormControlInput1">Agent Name</label>
+                                                                <input class="form-control form-control-sm" type="text" value="{{agents.user.username}}" name="email" readonly>
+                                                            </div> 
+                                                            <div class="form-group col">
+                                                                <label for="exampleFormControlInput1">Amount</label>
+                                                                <input name="amount" class="form-control form-control-sm" type="number"  required>
+                                                            </div> 
+                                                        </div>
+                                                        <input name="agent_id" class="form-control form-control-sm" type="hidden" value="agents.id" required>
+                                                        <input type="submit" name="time" class="btn btn-primary">
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-content widget-content-area">
+                                <h3 class="">Credit Wallet</h3>
+                                <h2 style="text-align: start;width: max-content;padding-right:1em;">₹ {{credit_amount}}</h2>
+                                <!-- <div>
+                                    <div class="row">
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-primary mb-2 ml-4" data-toggle="modal" data-target="#exampleModal">
+                                              Credit
+                                            </button>
+                                        </div>
+        
+                                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content" style="padding: 1em 2em;">
+                                                    <form action="{% url 'agent_recharge_wallet' agents.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <div class="row mb-4">
+                                                            <div class="form-group col">
+                                                                <label for="exampleFormControlInput1">Agent Name</label>
+                                                                <input class="form-control form-control-sm" type="text" value="{{agents.user.username}}" name="email" readonly>
+                                                            </div> 
+                                                            <div class="form-group col">
+                                                                <label for="exampleFormControlInput1">Amount</label>
+                                                                <input name="amount" class="form-control form-control-sm" type="number"  required>
+                                                            </div> 
+                                                        </div>
+                                                        <input name="agent_id" class="form-control form-control-sm" type="hidden" value="agents.id" required>
+                                                        <input type="submit" name="time" class="btn btn-primary">
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing" style="padding: 0;">
+                            <div class="widget-content widget-content-area br-6">
+                                <div class="table-responsive mb-4 mt-4">
+                                    <table class="multi-table table table-striped table-bordered table-hover non-hover" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Booking ID</th>
+                                                <th>Amount</th>
+                                                <th>PNR</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        {% for i in passanger %}
+                                        <tr>
+                                            <form id="form{{forloop.counter0}}" action="{% url 'updateseriesrecord' i.id %}" method="POST">
+                                                {% csrf_token %}
+                                                <td><p><strong>{{i.bookingId}}</strong></p></td>
+                                                <td><p><strong>{{i.paid_amount}}</strong></p></td>
+                                                <td><p><strong>{{i.pnr}}</strong></p></td>
+                                                <td><p><strong>{{i.flight_status}}</strong></p></td>
+                                            </form> 
+                                            </tr>
+                                            {% endfor %}
+                                        <tfoot>
+                                            <tr>
+                                                <th>Booking ID</th>
+                                                <th>Amount</th>
+                                                <th>PNR</th>
+                                                <th>Status</th> 
+                                               
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                </div>
+        <div class="footer-wrapper">
+                <div class="footer-section f-section-1">
+                    <p class="">Copyright © 2020 <a target="_blank" href="https://designreset.com">DesignReset</a>, All rights reserved.</p>
+                </div>
+                <div class="footer-section f-section-2">
+                    <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></p>
+                </div>
+            </div>
+        </div>
+        <!--  END CONTENT AREA  -->
+
+    </div>
+    <!-- END MAIN CONTAINER -->
+    
+    <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+    <script src="{% static 'admin/assets/js/libs/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'admin/bootstrap/js/popper.min.js' %}"></script>
+    <script src="{% static 'admin/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'admin/assets/js/app.js' %} "></script>
+    
+    <script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
+    <script src="{% static 'admin/assets/js/custom.js' %}"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+    <script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
+    <script src="{% static 'admin/plugins/highlight/highlight.pack.js' %}"></script>
+    <script src="{% static 'admin/assets/js/custom.js' %}"></script>
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="{% static 'admin/assets/js/scrollspyNav.js' %}"></script>
+    <script src="{% static 'admin/assets/js/components/ui-accordions.js' %}"></script>
+
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="{% static 'plugins/lightbox/photoswipe.min.js' %}"></script>
+    <script src="{% static 'plugins/lightbox/photoswipe-ui-default.min.js' %}"></script>
+    <script src="{% static 'plugins/lightbox/custom-photswipe.js' %}"></script>
+
+    <script type="application/javascript">
+        $(document).ready(function () {
+            $('#exampleModals').modal({ show: true });
+        });
+    </script>
+</body>
+</html>

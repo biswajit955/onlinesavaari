@@ -1,0 +1,65 @@
+// About Info
+.about-info {
+    .content {
+        color: $clr-999999;
+        line-height: 2.5;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            line-height: 2;
+        }
+        p {
+            margin-bottom: 0;
+            + p,
+            + ul {
+                margin-top: 30px;
+            }
+        }
+        ul {
+            li {
+                a {
+                    display: inline-block;
+                    color: $clr-333333;
+                    position: relative;
+                    padding: 0 10px;
+                    margin-left: 20px;
+                    &:before {
+                        content: "{";
+                        position: absolute;
+                        left: 0;
+                    }
+                    &:after {
+                        content: "}";
+                        position: absolute;
+                        right: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Why Us
+.why-savari {
+    .heading-one {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        h1 {
+            + p {
+                margin-top: 15px;
+            }
+        }
+    }
+}
+
+// Faq Info
+.faq-info {
+    .heading-one {
+        margin-bottom: 30px;
+    }
+    .card-body {
+        color: $clr-999999;
+        line-height: 2;
+    }
+}

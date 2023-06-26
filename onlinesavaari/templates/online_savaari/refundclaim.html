@@ -1,0 +1,164 @@
+{% load static %}
+{% load flight_tags %}
+{% include "online_savaari/header.html" %}
+<link href="{% static 'admin/plugins/flatpickr/flatpickr.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'admin/plugins/flatpickr/custom-flatpickr.css' %}" rel="stylesheet" type="text/css">
+
+
+
+<main class="main-body">
+    <section class="agent-form pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 offset-lg-2">
+                    <div class="box-one">
+                        <div class="heading-one mb-4">
+                            <h3>Refund Query</h3>
+                        </div>
+                        {% if data|length == 0 %}
+                        <div style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        min-height: 350px;
+                        background-color: rgba(0, 0, 0, 0.209);
+                        ">
+                            <h1 style="opacity: 0.5;">there is no query</h1>
+                            <div class="text-center">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-red mb-2 mr-2" data-toggle="modal" data-target="#loginModal">
+                                    Create Query
+                                </button>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="table-responsive">
+                            <table class="table mb-4">
+                                <caption>
+                                    <button type="button" class="btn btn-red mb-2 mr-2" data-toggle="modal" data-target="#loginModal">
+                                      Create New Query
+                                    </button>
+                                </caption>
+                              <thead>
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th>Booking Id</th>
+                                        <th>Refund Query</th>
+                                        <th class="">Status</th>
+                                        <th>Refund Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in data %}
+                                    <tr>
+                                        <td class="text-center">{{ forloop.counter }}</td>
+                                        <td class="text-primary">{{ i.Refund_bookingid }}</td>
+                                        <td>
+                                            {% if i.Refund_query|length > 40 %}
+                                                {{i.Refund_query|slice:40}}...
+                                            {% else  %}
+                                                {{ i.Refund_query }}
+                                            {% endif %}
+                                        </td>
+                                        <td class=""><span class=" shadow-none badge outline-badge-primary">{{i.Refund_status}}</span></td>
+                                        <td>320</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% endif %}
+                    </div>
+       
+                      <!-- Modal -->
+                    <div class="modal fade login-modal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header" id="loginModalLabel">
+                              <h4 class="modal-title">Refund Query</h4>
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                            </div>
+                            <div class="modal-body">
+                               <form action="{% url 'refundclaim' %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="heading-one mb-4">
+                                        <h3>Refund Query</h3>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="">Booking Id</label>
+                                                <input type="text" name="bookingId" class="form-control" placeholder="Booking Id" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="">Your query</label>
+                                                <textarea name="refundquery" id="" rows="6" class="form-control" placeholder="Your query" required></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <button class="btn btn-red">Send Query</button>
+                                    </div>
+                                </form>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+	{% include "online_savaari/footer.html" %}
+
+		<!-- Jquery min -->
+		<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+		<!-- Popper Min -->
+		<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+	
+		<!-- Bootstrap -->
+		<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+	
+		<!-- Jquery UI -->
+		<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+	
+		<!-- Owl Carousel -->
+		<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+	
+		<!-- Star Rating -->
+		<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+	
+		<!-- Quantity -->
+		<script src="{% static 'main/plugins/quantity.js' %}"></script>
+	
+		<!-- Phone -->
+		<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+	
+		<!-- Select -->
+		<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+	
+		<!-- Select -->
+		<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+	
+		<!-- Custom -->
+		<script src="{% static 'main/js/default.js' %}"></script>
+
+        <script src="{% static 'admin/plugins/flatpickr/flatpickr.js' %}"></script>
+
+
+        <script>
+            var f1 = flatpickr(document.getElementById('basicFlatpickr'), {minDate: new Date()});
+
+            $(document).ready(function(){
+                $('.flatpickr-calendar').css({'z-index': 99999999})
+            })
+        </script>
+        
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+// Google Font
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
+
+// Bootstrap
+@import "../plugins/bootstrap/scss/bootstrap.scss";
+
+// Jquery UI
+@import "../plugins/Jquery-ui/jquery-ui.css";
+
+// Font Awesome
+@import "../plugins/font-awesome/scss/font-awesome.scss";
+
+// LaLa Icon
+@import "../plugins/lala-icon/line-awesome.css";
+
+// Owl Carousel
+@import "../plugins/owl-carousel/scss/owl.carousel.scss";
+@import "../plugins/owl-carousel/scss/owl.theme.default.scss";
+
+// Star Rating
+@import "../plugins/star_rating/star_rating.scss";
+
+// Phone
+@import "../plugins/phone/phone.css";
+
+// Phone
+@import "../plugins/seat-booking/seat.scss";
+
+// Components
+@import "components/variables";
+@import "components/reset";
+@import "components/buttons";
+@import "components/form";
+@import "components/components";
+@import "components/boxes";
+@import "components/heading";
+@import "components/header";
+@import "components/footer";
+@import "components/common";
+
+// Pages
+@import "pages/login";
+@import "pages/home";
+@import "pages/listing";
+@import "pages/details";
+@import "pages/payment";
+@import "pages/user";
+@import "pages/inner-pg";

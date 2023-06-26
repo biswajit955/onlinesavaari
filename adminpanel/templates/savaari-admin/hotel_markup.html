@@ -1,0 +1,202 @@
+{% load static%}
+{% include "savaari-admin/header.html" %}
+
+
+<!--  BEGIN CONTENT AREA  -->
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+
+        <div class="row layout-top-spacing" id="cancel-row">
+
+            <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                <div class="widget-content widget-content-area br-6">
+                    <div class="row">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary mb-2 mr-2" data-toggle="modal"
+                                data-target="#markupModal">
+                                Add Hotel Markup
+                            </button>
+                        </div>
+                        
+
+                        <div class="modal fade" id="markupModal" tabindex="-1" role="dialog"
+                            aria-labelledby="markupModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content" style="padding: 1em 2em;">
+                                    <form action="{% url 'hotel_markup' %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="row mb-4">
+                                            <div class="form-group col">
+                                                <label for="user_type">Markup Type</label>
+                                                <select class="form-control form-control-sm" name="user_type"
+                                                    id="user_type" required>
+                                                    <option value="">--Select--</option>
+                                                    <option value="Agent">Agent</option>
+                                                    <option value="Corporate">Corporate</option>
+                                                    <option value="Customer">Customer</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col">
+                                                <label for="amount_type">Amount Type</label>
+                                                <select class="form-control form-control-sm" name="amount_type"
+                                                    id="amount_type" required>
+                                                    <option value="">--Select--</option>
+                                                    <option value="fixed">Fixed</option>
+                                                    <option value="percent">Percent</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-4">
+                                            <div class="form-group col">
+                                                <label for="amount">Amount</label>
+                                                <input type="text" class="form-control form-control-sm" name="amount"
+                                                    placeholder="Amount" id="amount" required>
+                                            </div>
+                                            <div class="form-group col">
+                                                <label for="hotel_rating">Hotel Rating</label>
+                                                <select class="form-control form-control-sm" name="hotel_rating" id="hotel_rating" required>
+                                                    <option value="">--Select--</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <input type="submit" name="time" class="btn btn-primary">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive mb-4 mt-4">
+                        <table class="multi-table table table-striped table-bordered table-hover non-hover"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>User Type</th>
+                                    <th>Amount Type</th>
+                                    <th>Value</th>
+                                    <th>Hotel Rating</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for markup in hotel_markup%}
+                                <tr>
+                                    <form id="form{{forloop.counter0}}" action="{% url 'update_hotel_markup' markup.id %}"
+                                        method="POST">
+                                        {% csrf_token %}
+                                        <td><input class="form-control form-control-sm" type="text"
+                                                value="{{markup.user_type}}" name="user_type" readonly></td>
+                                        <td><input class="form-control form-control-sm" type="text"
+                                                value="{{markup.amount_type}}" name="amount_type" readonly></td>
+                                        <td><input class="form-control form-control-sm" type="text" value="{{markup.amount}}"
+                                                name="amount"></td>
+                                        <td><input class="form-control form-control-sm" type="text"
+                                                value="{{markup.hotel_rating}}" name="hotel" readonly></td>
+                                        <td><button
+                                                onclick="document.getElementById('myform{{forloop.counter0}}').submit()"
+                                                class="btn btn-primary submit_btn" type="submit"
+                                                name="submit">submit</button></td>
+                                    </form>
+                                    <form id="form{{forloop.counter0}}" action="{% url 'delete_hotel_markup' markup.id %}"
+                                        method="POST">
+                                        {% csrf_token %}
+                                        <td><button
+                                                onclick="document.getElementById('myform{{forloop.counter0}}').submit()"
+                                                class="btn btn-danger submit_btn" type="submit"
+                                                name="submit">Delete</button></td>
+                                    </form>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="footer-wrapper">
+        <div class="footer-section f-section-1">
+            <p class="">Copyright © 2020 <a target="_blank" href="https://designreset.com">DesignReset</a>, All rights
+                reserved.</p>
+        </div>
+        <div class="footer-section f-section-2">
+            <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-heart">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                    </path>
+                </svg></p>
+        </div>
+    </div>
+</div>
+<!--  END CONTENT AREA  -->
+
+</div>
+<!-- END MAIN CONTAINER -->
+
+
+
+<!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+<script src="{% static 'admin/assets/js/libs/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'admin/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'admin/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'admin/plugins/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+<script src="{% static 'admin/assets/js/app.js' %} "></script>
+
+<script>
+    $(document).ready(function () {
+        App.init();
+    });
+</script>
+<script src="{% static 'admin/plugins/highlight/highlight.pack.js' %}"></script>
+<script src="{% static 'admin/assets/js/custom.js' %}"></script>
+<script src="{% static 'admin/assets/js/scrollspyNav.js' %}"></script>
+<!-- END GLOBAL MANDATORY SCRIPTS -->
+
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="{% static 'admin/plugins/table/datatable/datatables.js' %}"></script>
+<script type="application/javascript">
+    $(document).ready(function () {
+        $('#exampleModal').modal({ show: true });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('table.multi-table').DataTable({
+            "oLanguage": {
+                "oPaginate": { "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>', "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' },
+                "sInfo": "Showing page _PAGE_ of _PAGES_",
+                "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                "sSearchPlaceholder": "Search...",
+                "sLengthMenu": "Results :  _MENU_",
+            },
+            "stripeClasses": [],
+            "lengthMenu": [7, 10, 20, 50],
+            "pageLength": 7,
+            drawCallback: function () {
+                $('.t-dot').tooltip({ template: '<div class="tooltip status" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' })
+                $('.dataTables_wrapper table').removeClass('table-striped');
+            }
+        });
+    });
+
+    $('.submit_btn').on('click', ".btn .btn-primary .submit_btn", function () {
+        console.log($(this))
+    })
+
+</script>
+<!-- END PAGE LEVEL SCRIPTS -->
+
+</body>
+
+</html>

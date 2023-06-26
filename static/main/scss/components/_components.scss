@@ -1,0 +1,494 @@
+// Logo Widget
+.logo-widget {
+    a {
+        display: inline-block;
+    }
+}
+
+// Owl Carousel Nav
+.owl-top-nav {
+    .owl-nav {
+        position: absolute;
+        top: -40px;
+        right: 0;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            position: relative;
+            top: auto;
+            bottom: 0;
+            margin-top: 10px;
+            text-align: center;
+        }
+        [class*="owl-"] {
+            &.owl-prev,
+            &.owl-next {
+                font-size: 20px;
+                line-height: 1;
+                margin: 0 10px;
+                &:hover {
+                    color: $red-clr;
+                    background-color: $no-clr;
+                }
+            }
+        }
+    }
+}
+
+// Owl Carousel Full Nav
+.slider-full-arrow {
+    padding: 0 30px;
+    .owl-nav {
+        margin-top: 0;
+        button {
+            &.owl-prev,
+            &.owl-next {
+                position: absolute;
+                top: 0;
+                width: 20px;
+                height: 100%;
+                background-color: $clr-e4e4e4;
+                font-size: 20px;
+                border-radius: 0;
+                margin: 0;
+                &:hover {
+                    color: $white-clr;
+                    background-color: $red-clr;
+                }
+            }
+            &.owl-prev {
+                left: 0;
+            }
+            &.owl-next {
+                right: 0;
+            }
+        }
+    }
+}
+
+// Breadcumb
+.breadcumb {
+    display: flex;
+    align-items: center;
+    li {
+        position: relative;
+        &:after {
+            content: "/";
+            display: inline-block;
+            padding: 0 5px;
+            color: $clr-999999;
+        }
+        a {
+            font-weight: 600;
+            color: $clr-333333;
+            &:hover {
+                color: $red-clr;
+            }
+        }
+        span {
+            color: $clr-999999;
+        }
+        &:last-child {
+            &:after {
+                display: none;
+            }
+        }
+    }
+}
+
+// Dropdown
+.dropdown {
+    .dropdown-toggle {
+        color: $clr-333333;
+        background-color: $no-clr;
+        border: none;
+        border-radius: 0;
+        cursor: pointer;
+        padding: 0;
+        img {
+            width: 20px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+    }
+    .dropdown-menu {
+        font-size: 1em;
+        padding: 0;
+        border: 1px solid rgba($black-clr, 0.05);
+        border-radius: 4px;
+        box-shadow: 0px 2px 4px 1px rgba($black-clr, 0.05);
+        min-width: 120px;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            position: fixed !important;
+            left: 0 !important;
+            bottom: 0;
+            top: auto !important;
+            transform: none !important;
+            width: 100%;
+            max-width: unset;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            box-shadow: 1px -4px 4px 1px rgba($black-clr, 0.05);
+        }
+        .dropdown-item {
+            padding: 6px;
+            &:hover {
+                color: $blue-clr;
+                background-color: $clr-e4e4e4;
+            }
+        }
+    }
+}
+
+// Tab Box One
+.tab-box-one {
+    ul {
+        align-items: center;
+        margin-bottom: 15px;
+        padding-right: 56px;
+        flex-wrap: nowrap;
+        font-size: 12px;
+        overflow-x: auto;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            padding-right: 0;
+        }
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        span {
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .nav-item {
+            .nav-link {
+                padding: 0 10px;
+                color: $clr-999999;
+                background-color: $no-clr;
+                text-transform: uppercase;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+
+                // Max 767px
+                @media (max-width: $break-767) {
+                    padding: 0 8px;
+                }
+                &.active {
+                    color: $red-clr;
+                }
+            }
+        }
+    }
+}
+
+// Tab Box Two
+.tab-box-two {
+    .nav {
+        margin-bottom: 30px;
+        .nav-item {
+            width: 50%;
+            .nav-link {
+                padding: 6px 10px;
+                border-bottom: 2px solid #c74040;
+                border-radius: 0;
+                background-color: $no-clr;
+                color: $white-clr;
+                text-align: center;
+                font-weight: 600;
+                position: relative;
+                &:after {
+                    content: "";
+                    left: 50%;
+                    border: 5px solid $white-clr;
+                    position: absolute;
+                    border-left-color: $no-clr;
+                    border-right-color: $no-clr;
+                    border-bottom-color: $no-clr;
+                    top: 100%;
+                    transform: translate(-50%, 2px);
+                    opacity: 0;
+                }
+                &.active {
+                    border-bottom-color: $white-clr;
+                    &:after {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+    .tab-content {
+        color: $white-clr;
+        .tab-pane {
+            max-height: 350px;
+            overflow-y: auto;
+            &::-webkit-scrollbar-track {
+                background-color: #c74040;
+            }
+            &::-webkit-scrollbar-thumb {
+                background-color: $white-clr;
+            }
+        }
+    }
+}
+
+// Datepicker
+.ui-datepicker {
+    width: 100%;
+    max-width: 300px;
+    background: $white-clr;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid $clr-e4e4e4 !important;
+    box-shadow: 0 0 10px rgba($black-clr, 0.1);
+    border-radius: 4px;
+    padding: 24px;
+    font-size: 1em;
+
+    @media (max-width: $break_767) {
+        max-width: 100%;
+        padding: 15px;
+        top: auto !important;
+        bottom: 0;
+        left: 0 !important;
+    }
+    .ui-datepicker-header {
+        padding: 0;
+        background: none;
+        border: none;
+        .ui-datepicker-title {
+            margin: 0;
+            line-height: 18px;
+            font-size: 1em;
+        }
+        .ui-datepicker-prev,
+        .ui-datepicker-next {
+            display: inline;
+            cursor: pointer;
+            top: -4px;
+            border: none;
+            border-radius: 0;
+            background-color: $no-clr;
+            span {
+                background-position: center;
+                position: relative;
+                left: 0;
+                margin-left: 0;
+                top: 0;
+                margin-top: 0;
+                display: inline-block;
+            }
+        }
+        .ui-datepicker-prev {
+            left: 20px;
+            span {
+                background-image: url(../images/icon/arrow-left.png);
+            }
+        }
+        .ui-datepicker-next {
+            right: 20px;
+            span {
+                background-image: url(../images/icon/arrow-right.png);
+            }
+        }
+    }
+    .ui-datepicker-calendar {
+        tbody {
+            tr {
+                td {
+                    .ui-state-default {
+                        color: $clr-333333;
+                        background: none;
+                        border: 1px solid $clr-e4e4e4;
+                        text-align: center;
+                    }
+                    .ui-state-highlight,
+                    .ui-state-hover {
+                        color: $white-clr;
+                        background-color: $red-clr;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Departed - Going
+.flight-input {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    .flight-group {
+        width: 40%;
+        border-bottom: 1px solid $clr-e4e4e4;
+        input {
+            padding: 0;
+            padding-bottom: 5px;
+            border: none;
+            font-size: 18px;
+            font-weight: 500;
+            width: 100%;
+
+            // Max 767px
+            @media (max-width: $break-767) {
+                font-size: 15px;
+            }
+        }
+    }
+    button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+    &.flight-input-two {
+        .flight-group {
+            width: 33.33333333%;
+        }
+    }
+}
+
+// Social List
+.social-list {
+    li {
+        display: inline-block;
+        a {
+            color: $white-clr;
+            background-color: $red-clr;
+            border-radius: 3px;
+            display: inline-block;
+            margin: 0 3px;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            &:hover {
+                background-color: $light-red-clr;
+            }
+        }
+    }
+}
+
+// Social List Two
+.social-list2 {
+    display: flex;
+    a {
+        width: 32px;
+        height: 32px;
+        line-height: 30px;
+        margin: 0 5px 5px 0;
+        color: $clr-333333;
+        border: 1px solid $clr-333333;
+        border-radius: 3px;
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+        &:hover {
+            color: $red-clr;
+            border-color: $red-clr;
+        }
+    }
+}
+
+// Information Section
+.information-sec {
+    ul {
+        li {
+            h5 {
+                margin-bottom: 10px;
+            }
+            p {
+                margin-bottom: 0;
+                text-align: justify;
+                + p {
+                    margin-top: 10px;
+                }
+            }
+            + li {
+                margin-top: 24px;
+            }
+        }
+    }
+}
+
+// Accordian One
+.accordion-one {
+    .card {
+        border: none;
+        border-radius: 0;
+        .card-header {
+            border-radius: 0;
+            padding: 0;
+            border-bottom: none;
+            background-color: $no-clr;
+            button {
+                font-size: 16px;
+                font-weight: 600;
+                line-height: 26px;
+                color: $red-clr;
+                background-color: $no-clr;
+                padding: 0;
+                padding-left: 40px;
+                border: none;
+                border-radius: 0;
+                cursor: pointer;
+                text-align: left;
+                position: relative;
+                &:focus,
+                &:active {
+                    outline: none;
+                    box-shadow: none;
+                }
+                &:before {
+                    content: "-";
+                    font-size: 20px;
+                    font-weight: 100;
+                    line-height: 24px;
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    transform: translateY(-50%);
+                    width: 26px;
+                    height: 26px;
+                    color: $white-clr;
+                    background-color: $red-clr;
+                    border-radius: 50%;
+                    text-align: center;
+                }
+                &.collapsed {
+                    &:before {
+                        content: "+";
+                    }
+                }
+
+                // 767px
+                @media (max-width: $break-767) {
+                    font-size: 16px;
+                }
+            }
+        }
+        .card-body {
+            padding: 10px;
+            padding-left: 40px;
+            padding-right: 0;
+            p {
+                margin-bottom: 0;
+                + p {
+                    margin-top: 10px;
+                }
+                + h5 {
+                    margin-top: 20px;
+                }
+            }
+        }
+        + .card {
+            margin-top: 30px;
+        }
+    }
+}

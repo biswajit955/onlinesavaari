@@ -1,0 +1,39 @@
+// Base
+$base-fz: 14px;
+$primary-ff: "Rubik", sans-serif;
+
+// Colors
+$no-clr: transparent;
+$white-clr: #ffffff;
+$black-clr: #000000;
+$red-clr: #ea2330;
+$light-red-clr: #f34f4f;
+$blue-clr: #228ee9;
+$light-blue-clr: #4bb9f0;
+$clr-333333: #333333;
+$clr-999999: #999999;
+$clr-c5c5c5: #c5c5c5;
+$clr-e4e4e4: #e4e4e4;
+$clr-f1f1f1: #f1f1f1;
+$clr-fdfdfd: #fdfdfd;
+$clr-f7f7f7: #f7f7f7;
+$clr-db9a00: #db9a00;
+$clr-feeab8: #feeab8;
+$clr-fef2d8: #fef2d8;
+$clr-fffdd5: #fffdd5;
+$clr-43264E: #43264e;
+$clr-301b41: #301b41;
+$clr-48305a: #48305a;
+$clr-02CB66: #02cb66;
+$clr-787878: #787878;
+$clr-96bfe0: #96bfe0;
+
+// Media Sizes
+$break-1280: 1280px;
+$break-1080: 1080px;
+$break-991: 991px;
+$break-767: 767px;
+
+/*
+@media (max-width: $break-767) {}
+*/

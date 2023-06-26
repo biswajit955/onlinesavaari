@@ -1,0 +1,372 @@
+{% load static %}
+{% include "online_savaari/header.html" %}
+<link href="{% static 'admin/plugins/animate/animate.css' %}" rel="stylesheet" type="text/css" />
+<script src="{% static 'admin/plugins/sweetalerts/promise-polyfill.js' %}"></script>
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/assets/css/components/custom-sweetalert.css' %}" rel="stylesheet" type="text/css" />
+
+<link href="{% static 'admin/plugins/animate/animate.css' %}" rel="stylesheet" type="text/css" />
+<script src="{% static 'admin/plugins/sweetalerts/promise-polyfill.js' %}"></script>
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/assets/css/components/custom-sweetalert.css' %}" rel="stylesheet" type="text/css" />
+
+	<!-- Main Two -->
+	<style>
+		.pan__upl {
+			margin: auto;
+		}
+	</style>
+	<main class="main-body2">
+		<!-- Agent Banner -->
+		<section class="agent-banner" style="background-image:url({% static 'main/images/bg/3.png' %});">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="heading-one">
+							<h1>Welcome to Online Savari for Business</h1>
+							<h4>The LARGEST platform to book & manage all your Business Travels!</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Agent Package Info -->
+		<section class="agent-package py-5">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="heading-one text-center m-0">
+							<h1>What we offer</h1>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-5 col-md-6 offset-lg-1 mt-4">
+						<div class="info-box2">
+							<div class="head-sec">
+								<h3>For Partner (Agent)</h3>
+							</div>
+							<div class="body-sec">
+								<p>
+									Welcome to Savaari Partner, a platform built exclusively for travel agents
+								</p>
+								<ul>
+									<li>
+										<img src="{% static 'main/images/icon/login4.png' %}" alt="">
+										Do it Yourself (DIY) booking tool on Web
+									</li>
+									<li>
+										<img src="{% static 'main/images/icon/login10.png' %}" alt="">
+										Dedicated, On-Site Travel Desk with 24x7 Support
+									</li>
+									<li>
+										<img src="{% static 'main/images/icon/login6.png' %}" alt="">
+										Access to Special series Fares with Rescheduling & more
+									</li>
+									<li>
+										<img src="{% static 'main/images/icon/login11.png' %}" alt="">
+										Real-time HRMS sync, automated data feeds (SAP)
+									</li>
+									<li>
+										<img src="{% static 'main/images/icon/login12.png' %}" alt="">
+										Multi-level Policies, Approvals & Configurations with ability of building customised solutions
+									</li>
+								</ul>
+								<a href="{% url 'register_corporatecust' %}" class="btn btn-block btn-red">Sign Up Online Savari for Partner</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-5 col-md-6 mt-4">
+						<div class="info-box2">
+							<div class="head-sec">
+								<h3>For Businesses(Corporate)</h3>
+							</div>
+							<div class="body-sec">
+								<p>
+									Welcome to Savaari Business, a platform built exclusively for Corporate users
+								</p>
+								<ul>
+									<li>
+										<img src="{% static 'main/images/icon/login9.png' %}" alt="">
+										Book Flights/Hotels on your negotiated rates
+									</li>
+									<li>
+										<img src="{% static 'main/images/icon/login5.png' %}" alt="">
+										100% GST compliant
+									</li>
+									<li>
+										<img src="{% static 'main/images/icon/login7.png' %}" alt="">
+										Option to configure 1 Level Supervisor Approval
+									</li>
+									<li>
+										<img src="{% static 'main/images/icon/login8.png' %}" alt="">
+										Detailed, Real-time booking & cancellation Reports
+									</li>
+									<li>
+										<img src="{% static 'main/images/icon/login4.png' %}" alt="">
+										All products available to book / request - Flight, Hotel, Train, Bus, Cars, Insurance & VISA
+									</li>
+								</ul>
+								<a href="{% url 'register_corporatecust' %}" class="btn btn-block btn-red">Sign Up Online Savari for Business</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Agent Banner -->
+		<section class="agent-banner" style="background-image:url({% static 'main/images/bg/4.png' %});">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="heading-one">
+							<h1>Sign up for an Partner or Business Account</h1>
+							<h4>The LARGEST platform to book & manage all your Business</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Agent Form -->
+		<section class="agent-form py-5">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-10 col-12 offset-lg-1">
+						<form action="" method="POST" class="box-one" enctype="multipart/form-data">
+							{% csrf_token %}
+							<div class="heading-one mb-4">
+								<h3>Sign Up for Savari for Partner / Business</h3>
+							</div>
+							<div class="row">
+								<div class="col-12">
+									<label for="">Your Full Name</label>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<input type="text" name="First_Name" class="form-control" placeholder="First Name">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<input type="text" class="form-control" name="Middle_Name" placeholder="Middle Name">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<input type="text" class="form-control" name="Last_Name" placeholder="Last Name">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										<select name="Type" id="" class="form-control" required>
+											<option selected disabled hidden>Select Type</option>
+											<option value="Partner">Partner</option>
+											<option value="Business">Business</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12">
+									<label for="">Company Details</label>
+								</div>
+								<div class="col-12">
+									<div class="form-group">
+										<input type="text" class="form-control" name="Company" placeholder="Company Name">
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-group">
+										<input type="text" class="form-control" name="Address" placeholder="Registered Address">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<select name="State" id="" class="form-control">
+											<option value="" hidden selected>Select State</option>
+											<option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+											<option value="Andhra Pradesh">Andhra Pradesh</option>
+											<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+											<option value="Assam">Assam</option>
+											<option value="Bihar">Bihar</option>
+											<option value="Chandigarh">Chandigarh</option>
+											<option value="Chhattisgarh">Chhattisgarh</option>
+											<option value="Dadra & Nagar Haveli and Daman & Diu">Dadra & Nagar Haveli and Daman & Diu</option>
+											<option value="Delhi">Delhi</option>
+											<option value="Goa">Goa</option>
+											<option value="Gujarat">Gujarat</option>
+											<option value="Haryana">Haryana</option>
+											<option value="Himachal Pradesh">Himachal Pradesh</option>
+											<option value="Jammu and Kashmir">Jammu and Kashmir</option>
+											<option value="Jharkhand">Jharkhand</option>
+											<option value="Karnataka">Karnataka</option>
+											<option value="Kerala">Kerala</option>
+											<option value="Ladakh">Ladakh</option>
+											<option value="Lakshadweep">Lakshadweep</option>
+											<option value="Madhya Pradesh">Madhya Pradesh</option>
+											<option value="Maharashtra">Maharashtra</option>
+											<option value="Manipur">Manipur</option>
+											<option value="Meghalaya">Meghalaya</option>
+											<option value="Mizoram">Mizoram</option>
+											<option value="Nagaland">Nagaland</option>
+											<option value="Odisha">Odisha</option>
+											<option value="Puducherry">Puducherry</option>
+											<option value="Punjab">Punjab</option>
+											<option value="Rajasthan">Rajasthan</option>
+											<option value="Sikkim">Sikkim</option>
+											<option value="Tamil Nadu">Tamil Nadu</option>
+											<option value="Telangana">Telangana</option>
+											<option value="Tripura">Tripura</option>
+											<option value="Uttar Pradesh">Uttar Pradesh</option>
+											<option value="Uttarakhand">Uttarakhand</option>
+											<option value="West Bengal">West Bengal</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<input type="text" class="form-control" name="City" placeholder="City">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<input type="text" class="form-control" name="Pin" placeholder="Pin Code">
+									</div>
+								</div>
+								<div class="col-md-8">
+									<div class="form-group">
+										<input type="text" class="form-control" name="gstin" placeholder="GST Number" required>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<select name="annual_spent" id="" class="form-control">
+											<option value="0" selected>Annual Travel Spend</option>
+											<option value="Less than 1 Lakh" >Less Than 1 Lakh</option>
+											<option value="1 Lakh - 2 Lakh">1 Lakh - 2 Lakh</option>
+											<option value="2 Lakh - 5 Lakh" >2 Lakh - 5 Lakh</option>
+											<option value=" More Than 5 Lakh" >More Than 5 Lakh</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-12 mb-3">
+									<small>In case you have multiple GSTs, enter details of any one here & you can add the others later on</small>
+								</div>
+								<div class="col-md-8">
+									<div class="form-group">
+										<input type="text" maxlength="10" class="form-control" name="GST" placeholder="PAN Number">
+									</div>
+								</div>
+								<div class="col-md-4 pan__upl">
+									<div class="form-group">
+										<input id="pan__img" type="file" name="doc">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12">
+									<label for="">Contact details for Savari for business account</label>
+								</div>
+								{% comment %} <div class="col-md-6">
+									<div class="form-group">
+										<div class="input-phone"></div>
+									</div>
+								</div> {% endcomment %}
+								<div class="form-group" style="padding-left: 15px;">
+									<input type="tel" class="form-control" name="phone" onkeyup="numberonly(this)" maxlength=10 placeholder="Phone Number" ></input>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<input style="text-transform:lowercase" type="email" class="form-control" name="Email" placeholder="Official Email ID (Will be your Login ID)">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<input type="password" class="form-control" name="Password" placeholder="Create your Password">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<input type="password" class="form-control" name="Password1" placeholder="Re-enter Password">
+									</div>
+								</div>
+								<div class="col-12 text-center">
+									<p>
+										By proceeding, you agree with our <a href=""{% url 'term'%}"" target="_blank">Terms of Service</a>, <a href="#" target="_blank">Privacy Policy</a> &amp; <a
+											href="#" target="_blank">User Agreement</a>.
+									</p>
+									<button class="btn btn-red">Sign Up For Free!</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+{% include "online_savaari/footer.html" %}
+	<!-- Jquery min -->
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+	
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+	
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+	
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+	
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+	
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+	
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+	
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+	
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+	
+	<!-- Custom -->
+	<script src="{% static 'main/js/default.js' %}"></script>
+	<script src="{% static 'admin/plugins/sweetalerts/sweetalert2.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/sweetalerts/custom-sweetalert.js' %}"></script>
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+	{% if error_mgs %}
+	<script>
+		swal({
+			type: 'error',
+			title: 'Oops...',
+			text: '{{error_mgs}}',
+			footer: 'Something went wrong!',
+			padding: '2em'
+		})
+	</script>
+		
+	{% endif %}
+<script type="text/javascript">
+	function numberonly(input)
+	{
+		var num = /[^0-9]/gi;
+		input.value = input.value.replace(num,"");
+	}
+</script>
+</body>
+
+</html>

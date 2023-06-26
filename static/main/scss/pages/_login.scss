@@ -1,0 +1,169 @@
+// Login Page
+.login-pg {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        height: 100%;
+    }
+    .login-box {
+        width: 100%;
+        max-width: 700px;
+        padding: 35px 15px;
+        margin: 0 15px;
+        .left-sec {
+            .info-box {
+                margin: 15px 0;
+            }
+            .social-list {
+                margin-bottom: 15px;
+            }
+        }
+        .right-sec {
+            margin-top: 30px;
+
+            // Max 767px
+            @media (max-width: $break-767) {
+                margin-top: 24px;
+            }
+            p {
+                a {
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Agent Banner
+.agent-banner {
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 100% 100%;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        background-size: cover;
+    }
+    .heading-one {
+        margin-bottom: 0;
+        padding: 150px 0;
+        color: $white-clr;
+        max-width: 600px;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            padding: 50px 0;
+        }
+        h1 {
+            margin-bottom: 0;
+            + h4 {
+                margin-top: 15px;
+            }
+        }
+    }
+}
+
+// Agent Form
+.agent-form {
+    form {
+        padding: 30px 80px;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            padding: 30px 15px;
+        }
+        .btn-red {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+}
+
+// Cancel Page
+.cancel-pg {
+    padding-top: 50px;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        padding-top: 30px;
+    }
+    .box-one {
+        max-width: 900px;
+        margin: auto;
+        padding: 30px;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            padding: 20px 15px;
+        }
+        .title-sec {
+            margin-bottom: 40px;
+
+            // Max 767px
+            @media (max-width: $break-767) {
+                margin-bottom: 24px;
+            }
+            h3 {
+                margin-bottom: 10px;
+            }
+            p {
+                margin-bottom: 0;
+                color: $clr-999999;
+                + p {
+                    margin-top: 5px;
+                }
+            }
+        }
+        form {
+            p {
+                font-size: 1.1em;
+                margin-bottom: 0;
+                padding-top: 10px;
+
+                // Max 767px
+                @media (max-width: $break-767) {
+                    font-size: 12px;
+                    margin-bottom: 5px;
+                }
+                span {
+                    color: $red-clr;
+                }
+            }
+            .form-control {
+                padding: 15px;
+                background-color: $white-clr;
+
+                // Max 767px
+                @media (max-width: $break-767) {
+                    padding: 10px 15px;
+                }
+            }
+            .captcha {
+                display: flex;
+                align-items: center;
+
+                // Max 767px
+                @media (max-width: $break-767) {
+                    margin-bottom: 10px;
+                }
+            }
+            .btn {
+                padding: 15px;
+                width: 100%;
+                max-width: 150px;
+
+                // Max 767px
+                @media (max-width: $break-767) {
+                    padding: 10px 15px;
+                }
+            }
+        }
+    }
+}

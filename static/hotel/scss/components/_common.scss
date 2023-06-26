@@ -1,0 +1,23 @@
+// Main Body
+.main-body {
+    padding-top: 74px;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        padding-top: 95px;
+    }
+}
+
+.overflowx {
+    overflow-x: auto;
+}
+
+.gap-1 {
+    gap: 1em 0;
+}
+.gap-1-2 {
+    gap: 1.5em 0;
+}
+.gap-2 {
+    gap: 2em 0;
+}

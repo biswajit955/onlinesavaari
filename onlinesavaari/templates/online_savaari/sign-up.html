@@ -1,0 +1,135 @@
+{% load static %}
+{% load rest_framework %}
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="icon" href="{% static 'main/images/favicon.png' %}">
+
+	<title>Online Savaari</title>
+
+	<!-- Custom -->
+	<link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'main/css/custom.css' %}">
+</head>
+
+<body>
+	<!-- Login -->
+	<section class="login-pg">
+		<div class="login-box box-one">
+			<div class="row">
+				<div class="col-md-6 left-sec">
+					<div class="logo-widget">
+						<a href="{% url 'index' %}">
+							<img src="{% static 'main/images/logo.png' %}" alt="">
+						</a>
+					</div>
+					<div class="info-box">
+						<h5>For more log In</h5>
+						<ul>
+							<li>
+								<img src="{% static 'main/images/icon/login1.png' %}" alt=""> <b>View</b> / <b>Cancel</b> / <b>Reschedule</b> bookings
+							</li>
+							<li>
+								<img src="{% static 'main/images/icon/login2.png' %}" alt=""> Check booking <b>history</b>, manage <b>cancellations</b> & print <b>e-Tickets</b>
+							</li>
+							<li>
+								<img src="{% static 'main/images/icon/login3.png' %}" alt=""> Book faster with <b>Pre-Filled Forms</b>, saved <b>Travellers</b> & <b>Saved Cards</b>
+							</li>
+						</ul>
+					</div>
+					<h5>Sign Up with</h5>
+					<ul class="social-list">
+						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+						<!-- <li><a href="#"><i class="fa fa-twitter"></i></a></li> -->
+						<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+						<!-- <li><a href="#"><i class="fa fa-linkedin"></i></a></li> -->
+					</ul>
+					<a href="{% url 'custlogin' %}" class="btn btn-red login-btn" style="color: white;">Login</a>
+				</div>
+				<div
+				<div class="col-md-6 right-sec">
+					<div class="heading-one">
+						<h3>Create an account!</h3>
+						<p>Fill the form to create an account</p>
+					</div>
+					<form id="login-id" action="" method="POST">
+						 {% csrf_token %}
+						<div class="form-group">
+							<label for="">First Name<span style="color: red;">*</span></label>
+							<input type="text" name="Firstname" class="form-control" placeholder="First Name" required/>
+						</div>
+						<div class="form-group">
+							<label for="">Last Name<span style="color: red;">*</span></label>
+							<input type="text" name="Lastname" class="form-control" placeholder="Last Name" required/>
+						</div>
+						<div class="form-group">
+							<label for="">Email ID<span style="color: red;">*</span></label>
+							<input type="email" name="Email" class="form-control" placeholder="Email ID" required>
+						</div>
+					 	{% comment %} <div class="form-group">
+							<label for="">Phone Number<span style="color: red;">*</span></label>
+							<div class="input-phone"></div>
+						</div> {% endcomment %}
+						<div class="form-group">
+							<label for="">Phone Number<span style="color: red;">*</span></label>
+							<input type="tel" maxlength="10" class="form-control" placeholder="Phone Number" name="phone">
+						</div>
+						<div class="form-group">
+							<label for="">Password</label>
+							<input type="password" name="Password" class="form-control" placeholder="Password******" required>
+						</div>
+						<div class="form-group">
+							<label for="">Confirm Password</label>
+							<input type="password" name="Password1" class="form-control" placeholder="******" required>
+						</div> 
+						 <div class="form-group">
+							<input class="btn btn-block btn-blue" type="submit" value="Create An Account ">
+						</div>
+						</form>
+				</div>
+			</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Jquery min -->
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+	<!-- Custom -->
+	<script src="{% static 'main/js/default.js' %}"></script>
+
+</body>
+
+</html>

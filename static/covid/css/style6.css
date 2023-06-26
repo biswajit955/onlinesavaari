@@ -1,0 +1,556 @@
+*{scroll-behavior: smooth;}
+body{background: #F6F6F6;}
+.visaSection p{
+  margin-bottom: 15px;
+}
+.visaSection ul{
+  margin-bottom: 5px;
+}
+.container{width: 1200px; margin: 0 auto;}
+.headerTop{background: #fff;    text-align: center; padding-top: 30px; padding-bottom: 50px;}
+.mysafetyLogo{width: 418px; height: 124px;}
+.tags{display: table; margin: 0 auto;}
+.tags li{display: inline-block; padding: 6px 16px;box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2); background-color: #fff; font-size: 20px; color: #038cff;border-radius: 4px; margin-right: 30px;cursor: pointer;}
+.tags li.active{ box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+  background-color: #e7e7e7;}
+.tags li.newTag{
+  position: relative;
+}
+.tags li.newTag:after{
+  content: 'New';
+  font-size: 16px;
+  font-weight: bold;
+  font-stretch: normal;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: #c43737;
+  color: #fff;
+  position: absolute;
+  left: -20px;
+  top: -24px;
+}
+.switch-field {
+  display: table;
+  margin-bottom: 36px;
+  background: #fff;
+  padding: 14px 6px;
+  border-radius: 30px;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.2);
+  margin: 0px auto 35px;
+}
+
+.switch-field input {
+  position: absolute !important;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  width: 1px;
+  border: 0;
+  overflow: hidden;
+}
+
+.switch-field label {
+
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+  line-height: 1;
+  text-align: center;
+  padding: 8px 16px;
+  margin-right: -1px;
+  font-weight: 900;
+  transition: all 0.1s ease-in-out;
+  text-transform: uppercase;
+}
+
+.switch-field label:hover {
+  cursor: pointer;
+}
+
+.switch-field input:checked + label {
+  background-color: #008cff;
+  box-shadow: none;
+  color: #fff;
+  border-radius: 30px;
+  position: relative;
+  padding: 11px 11px 10px 46px;
+}
+.switch-field input:checked + label .tick{display: block;}
+.switch-field label:first-of-type {
+  border-radius: 4px 0 0 4px;
+}
+
+.switch-field label:last-of-type {
+  border-radius: 0 4px 4px 0;
+}
+.headerBottom{    margin-top: -22px;    margin-bottom: 30px;}
+.tick{width: 32px;
+  height: 32px;
+  position: absolute;
+  left: 5px;
+  top: 3px; display: none;}
+
+
+.listedCountries{ padding: 22px 42px 22px 15px;
+  border-radius: 4px;
+  box-shadow: 0 1px 7px 0 rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  color: #000;
+  font-size: 20px;
+  font-weight: 700;}
+.contsinerSection{background-color: #fff; padding: 30px 50px; box-shadow: 0 3px 30px 0 rgba(0, 0, 0, 0.1); border-radius: 10px;}
+.paraSection{ padding: 0 50px;}
+.countryStatusTrigger{
+  cursor: pointer;
+}
+.mapIcon{width: 64px; height: 43px; margin-right: 20px;}
+.arrowIcon{width: 21px; height: 12px;}
+.rotate{transform: rotate(180deg);}
+.infoIcon{width: 60px; height: 60px; margin-right: 30px;}
+.countryStatusExpend{padding-left: 70px; margin-top: 30px; display: none;}
+.countryStatus{border-bottom: 1px dashed #b3b3b3;
+  padding: 0 0 20px 0;
+  margin-bottom: 20px;}
+.primaryBtn{  padding: 10px 45px;
+  border-radius: 22px;
+  cursor: pointer;
+  background-color: #008cff; color: #fff; font-size: 16px; font-weight: 700;}
+.commonHead{font-size: 36px; font-weight: 700; color: #000;}
+.airlineIcon{width: 64px; height: 64px; margin-right: 20px;}
+.owl-carousel .owl-item .placeImg{width: 150px;
+  height: 138px;
+  margin-right: 20px;
+  position: relative;
+  top: -15px;}
+.corousalItems{ display: flex;
+  border-radius: 6px;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.2);
+  margin: 15px 5px 5px 5px;
+  padding: 0px 15px;}
+.owl-carousel .owl-nav{
+  display: inline-block;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  border-radius: 25px;
+  position: absolute;
+  right: 0;
+  top: -70px;
+  display: flex;
+}
+.owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev{
+  width: 34px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  outline: none;
+}
+.owl-carousel .owl-nav button.owl-next span, .owl-carousel .owl-nav button.owl-prev span{
+  color: #0084ff;
+  font-size: 30px;
+  font-family: system-ui;
+  position: absolute;
+  top: -5px;
+}
+.dividor{
+  padding: 30px 50px;
+}
+.dividor hr{
+  border-width:0;
+  border-bottom: 1px dashed #b3b3b3;
+}
+.tourCatogryList{
+  display: flex;
+  margin-left: 30px;
+  border-bottom: 1px solid #c6c6c6;
+}
+.tourCatogryList li{
+  display: flex;
+  margin-right: 30px;
+  border-bottom: 4px solid transparent;
+}
+.tourCatogryList li:last-child{
+  margin-right: 0;
+}
+.tourCatogryList li:hover,.tourCatogryList li.active{
+  border-bottom: 4px solid #008cff;
+}
+.tourCatogryList li:hover a,.tourCatogryList li.active a{
+  color:#008cff;
+}
+.tourCatogryList li a{
+  color:#4a4a4a;
+  font-size: 16px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.ScrollTopIcon{
+  width: 9px;
+  height: 24px;
+  margin-left: 10px;
+}
+/*custom dropdown button*/
+.sortbySection {
+  display: flex;
+  align-items: center;
+}
+.dropdown{position: relative;}
+.c-dropdown .btn {
+  border-radius: 2px;
+  border-radius: 10px;
+  border: solid 1px #008cff;
+  background-color: #ffffff;
+  text-align: left;
+  padding: 15px 60px 15px 15px;
+  font-size: 20px;
+  position:relative;
+  outline: 0;
+  cursor: pointer;
+}
+.c-dropdown .btn.width300{width: 300px;}
+
+.c-dropdown .btn:hover {
+  color: #3f3f3f !important;
+}
+
+.c-dropdown .o-i-arrow-small-down {
+  margin: 2px;
+  letter-spacing: 0;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+.c-dropdown .o-i-arrow-small-down{
+  background: url(//jsak.mmtcdn.com/seo/hotels-new/seo/assets/img/travelGuidelines/blueArrow.png) no-repeat;
+  background-size: 100%;
+  width: 18px;
+  height: 10px;
+}
+
+.c-dropdown-value {
+  display: inline-block;
+  margin-left: 2px;
+}
+
+.dropdown-menu {
+  width: 100%;
+  padding:16px 32px;
+  border-radius: 4px;
+  box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.24), 0 0 8px 0 rgba(0, 0, 0, 0.12);
+  background-color: #ffffff;
+  color: #4a4a4a;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+}
+
+.dropdown-menu li {
+  padding:16px 0;
+}
+.dropdown-menu .divider {
+  height: 1px;
+  margin: 9px 0;
+  overflow: hidden;
+  background-color: #e5e5e5;
+}
+.dropdown-menu > li > a {
+  display: block;
+  clear: both;
+  font-weight: normal;
+  line-height: 14px;
+  color: #333333;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+  text-decoration: none; color: #262626;
+}
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+  text-decoration: none; outline: 0;
+}
+
+.open > .dropdown-menu { display: block; }
+.open > a { outline: 0; }
+.searchSection{
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 1px 7px 0 rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  margin-top:-60px ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mapSearch{
+  margin-top:70px;
+}
+.searchIcon{
+  width: 31px;
+  height: 31px;
+  margin-right: 15px;
+}
+.searchSection input{
+  color:#4a4a4a;
+  border:none;
+  font-size: 28px;
+  width: 600px;
+  outline: none;
+  cursor: pointer;
+}
+ul.listSection{
+  margin:0 0 0 25px;
+  padding:0;
+  list-style: disc;
+}
+ol.listSection{
+  margin:0 0 0 25px;
+  padding:0;
+  list-style: decimal;
+}
+.withBorder{
+  padding: 30px 50px;
+  border: dashed 1px #b3b3b3;
+}
+.listSection li{
+  font-size: 18px;
+}
+/*overriding the the autocomplete plugin STARTS*/
+.holi-query.ui-menu .ui-state-focus{ background:#FFF ; border-top:none; border-bottom:none;}
+.holi-query.ui-menu .ui-menu-item a{color:rgba(0, 0, 0, 0.87);}
+.holi-query.ui-menu .ui-menu-item.append-bottom{ margin-bottom:34px;}
+.holi-query.ui-widget {   overflow-x:hidden; border:1px solid #dcdcdc;}
+.holi-query.ui-autocomplete{width: 650px!important; z-index: 9999!important; border-radius: 4px; background:#fff; margin-top:36px; border:none;box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.24), 0 0 8px 0 rgba(0, 0, 0, 0.12); height:300px; }
+
+.scrollbar{ position:absolute}
+li .favourite-star { background:none;width: 15px;height: 15px; display:inline-block; margin-left:13.2px; margin-right:32px }
+li:first-child .favourite-star{  width: 15px;height: 15px; display:inline-block; margin-left:13.2px; margin-right:32px}
+.letters{ font-size:18px; font-family:'DIN Medium';color:#2f2f2f; margin-left:13.2px; margin-right:32px;}/* class to be used in letters used for heading purpose*/
+
+
+.ui-menu ui-menu-item.last{ margin-bottom:34px;}
+/*overrinding the autocompleter pluging ends*/
+.desk_hide{display: none;}
+
+#owl-carousel .hide {
+  display: none;
+}
+
+@media (max-width:767px){
+  .mob_hide{
+    display: none;
+  }
+  .headerTop p{
+    padding-left:20px ;
+    padding-right:20px ;
+  }
+  .container{
+    width: 100%;
+  }
+  .contsinerSection,.paraSection{
+    padding: 20px 12px;
+  }
+  .mysafetyLogo {
+    width: 190px;
+    height: 57px;
+  }
+  .mFont10{
+    font-size: 10px;
+  }
+  .mFont11{
+    font-size: 11px;
+  }
+  .mFont12{
+    font-size: 12px;
+  }
+  .mFont16{
+    font-size: 16px;
+  }
+  .mFontBold{
+    font-size: 11px;
+  }
+  .tick{
+    width: 16px;
+    height: 16px;
+    top:4.5px
+  }
+  .headerBottom{
+    margin-bottom: 15px;
+  }
+  .switch-field{padding: 9px 6px; margin-bottom: 0;}
+  .switch-field label{font-size: 12px;padding: 5px 8px;}
+  .switch-field input:checked + label{padding: 5px 8px 5px 23px;}
+  .tagSection{
+    overflow: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    min-height: 55px;
+    margin-bottom:10px;
+  }
+  .tags {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+  }
+  .tags li{
+    display: flex;
+    white-space: nowrap;
+    font-size: 12px;
+    margin-right: 10px;
+  }
+  .tags li.newTag:after{
+    font-size: 8px;
+    left: -10px;
+    top: -14px;
+  }
+  .mapContainer{
+    width: 100%;
+    min-width: initial;
+    max-width: initial;
+  }
+  .mapSearch {
+    margin-top: 30px;
+  }
+  .searchSection{margin-top:-45px}
+  .searchSection input{width: 250px; font-size: 16px;}
+  .searchIcon {
+    width: 19px;
+    height: 19px;
+    margin-right: 15px;
+  }
+  .c-dropdown{
+    margin-bottom: 12px;
+  }
+  .c-dropdown .btn{
+    font-size: 12px;
+    padding:8px 30px 8px 8px;
+    width: 240px;
+  }
+  .c-dropdown .o-i-arrow-small-down{
+    width: 9px;
+    height: 5px;
+    right: 10px;
+    top: 10px;
+  }
+  .listedCountries {
+    padding: 10px 15px;
+    background-color: #ffffff;
+    color: #000;
+    font-size: 12px;
+    font-weight: 700;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: initial;
+  }
+  .mapIcon{
+    width: 24px;
+    height: 16px;
+  }
+  .arrowIcon {
+    width: 11px;
+    height: 6px;
+  }
+  .airlineIcon{
+    width: 32px;
+    height: 32px;
+  }
+  .commonHead{
+    font-size: 22px;
+  }
+  .owl-carousel .owl-item .placeImg{
+    width: 87px;
+    height: 80px;
+  }
+  .owl-item p{
+    font-size: 18px;
+    margin: 5px 0;
+  }
+  .owl-item p:last-child{
+    font-size: 12px;
+  }
+  .owl-carousel .owl-nav{display: none;}
+  .listSection li{
+    font-size: 12px;
+  }
+  .withBorder{
+    padding:20px 8px;
+  }
+  .sortbySection{
+    width: 100%;
+    justify-content: center;
+  }
+  .sortbySection > .c-dropdown{
+    margin-bottom: 0;
+  }
+  .holi-query.ui-autocomplete{
+    width: 95%!important;
+    left:12px!important;
+  }
+  .countryStatusExpend{padding-left: 0px; }
+  .infoIcon{
+    margin-right: 15px;
+  }
+  .mFlexDirColumn{
+    flex-direction: column;
+  }
+  .mobMarBottom15{
+    margin-bottom: 15px;
+  }
+  .dividor{
+    padding:10px;
+  }
+  .dividor hr{
+    border:0;
+  }
+  .contsinerSection.appendBottom30{
+    margin-bottom: 20px;
+  }
+  .paraSection{
+    display: none;
+  }
+
+}
+.countryStatusExpend ul li{
+  line-height: 18px;
+  color: #2f2f2f;
+  list-style-type: disc;
+  margin-bottom: 12px;
+}
+
+.countryStatusExpend ul{
+  margin-left: 20px;
+}
+.countryStatusExpend ol {
+  margin-left: 5%;
+}
+
+@media (max-width: 720px) {
+  .holi-query.ui-menu .ui-menu-item{ margin-bottom:12px; font-size:18px; padding:0 25px}
+  .holi-query.ui-menu .ui-menu-item li a{
+    font-size: 18px;
+  }
+  .holi-query.ui-autocomplete{
+    height: 220px;
+    padding-top: 6px;
+  }
+  .holi-query.ui-menu .ui-menu-item{
+    border-bottom: 1px dashed grey;
+  }
+  .holi-query.ui-menu .ui-menu-item a{
+    font-size: 18px;
+  }
+  .visaSection{
+    overflow: auto;
+  }
+
+}
+@media (min-width: 720px) {
+  .holi-query.ui-autocomplete{
+    padding-top: 23px;
+    height: 300px;
+  }
+  .holi-query.ui-menu .ui-menu-item a{
+    font-size:20px;
+  }
+  .holi-query.ui-menu .ui-menu-item{ margin-bottom:30px; font-size:20px; padding:0 25px}
+}
+

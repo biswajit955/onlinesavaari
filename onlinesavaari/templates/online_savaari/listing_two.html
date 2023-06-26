@@ -1,0 +1,1658 @@
+{% load flight_tags %}
+{% load static %}
+{% include "online_savaari/header.html" %}
+<link href="{% static 'admin/plugins/animate/animate.css' %}" rel="stylesheet" type="text/css" />
+<script src="{% static 'admin/plugins/sweetalerts/promise-polyfill.js' %}"></script>
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/assets/css/components/custom-sweetalert.css' %}" rel="stylesheet" type="text/css" />
+
+<link href="{% static 'admin/plugins/animate/animate.css' %}" rel="stylesheet" type="text/css" />
+<script src="{% static 'admin/plugins/sweetalerts/promise-polyfill.js' %}"></script>
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/assets/css/components/custom-sweetalert.css' %}" rel="stylesheet" type="text/css" />
+
+<!-- Main -->
+    <style type="text/css">
+			.pos_rel {
+		position: relative;
+	}
+	#result {
+		position: absolute;
+		top: -2em;
+		bottom: -15em;
+		left: 0;
+		right: 0;
+		background: #fff;
+		z-index: 111;
+		align-items: flex-start;
+		margin: 0;
+		padding: 0.5em 1.5em;
+		flex-direction: column;
+		align-items: stretch;
+		overflow: hidden;
+		box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.201);
+	}
+	.divider-sec {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.divider-sec .cashback {
+		font-style: italic;
+		color: red;
+		font-size: clamp(0.8rem, 5vw, 0.5rem);
+	}
+	#result label {
+		color: #999999;
+	}
+	#result input {
+		color: #999999;
+	}
+	#result .adj {
+		flex: 0 0 10%;
+		margin: 0;
+		background: white;
+	}
+	.exit_slt {
+		cursor: pointer;
+	}
+	.exit_slt h2 {
+		color: black;
+	}
+	/* #result .adj .flight-group {
+		max-width: 50%;
+	} */
+	#list {
+		flex: 1 1 80%;
+		overflow: scroll;
+	}
+	.user-info > * {
+		margin: 0;
+		margin-bottom: 0.3em;
+	}
+	#list ul{
+		margin-top: 0;
+		padding: 0;
+	}
+	#list li {
+		cursor: pointer;
+		padding: 0.4em 0;
+		display: flex;
+		align-items: center;
+		margin: 0.5em 0;
+		border-radius: 10px;
+	}
+	#list li input {
+		display: none;
+	}
+	#dfrom,
+	#dto {
+		border-bottom: 1px solid red;
+	}
+	.close_btn {
+		display: flex;
+		align-items: center;
+		margin-bottom: 0.2em;
+	}
+	.close_btn .title {
+		margin: 0 auto;
+	}
+	.close_btn .title h4 {
+		margin: 0;
+	}
+	.exit_slt {
+		padding: 0;
+		background: transparent;
+		border: 0;
+		margin: 0;
+	el
+	}
+	.exit_slt h2 {
+		margin: 0;
+	}
+	.exit_slt:focus {
+		outline: 0;
+	}
+
+		.filter-box {
+			margin-bottom: 2em;
+			box-shadow: none;
+			background-color: #E5E7EB;
+			min-width: 2em;
+			display: flex;
+			font-size: clamp(0.4rem, 1vw, 0.8rem);
+		}
+		.sort-label {
+			flex: 1 1 30%;
+			font-size: inherit;
+		}
+		.sort-label-two-way {
+			flex: 1 1 11%;
+			font-size: inherit;
+		}
+		.sort-nav{
+			display: flex;
+			justify-content: space-around;
+			font-size: 0.8rem;
+			flex: 1 1 46%;
+			font-size: inherit;
+		}
+		.s-li p {
+			margin: 0;
+		}
+		.price-filter {
+			flex: 1 1 26%;
+		}
+		.price-filter .s-li {
+			display: flex;
+			justify-content: center;
+			margin: 0;
+			padding: 0;
+			font-size: inherit;
+		}
+		.box-one {
+			margin-bottom: 2em;
+		}
+		.des-box {
+			flex-direction: column;
+			padding: 0.5em;
+		}
+		.des-label {
+			display: flex;
+			align-items: center;
+			gap: 0.5em;
+		}
+		.des-box p,h3,h4 {
+			margin: 0;
+		}
+		#flight-list.active {	
+			display: grid;	
+			place-content: center;	
+		}	
+		#flight-list.active img {	
+			object-fit: cover;	
+			width: 100%;	
+			height: 100%;	
+		}
+		#loader{
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background: rgba(0, 0, 0, 0.231);
+		z-index: 11111;
+	}
+
+	:root {
+	/* 	Size is a variable for both - height and width dimensions of the circle  */
+		--size: 300px;
+	/* 	First Color Value */
+		--clrFirstSpin: lightpink;
+	/* 	Second Color Value */
+		--clrSecondSpin: aqua;
+	/* 	Third Color Value */
+		--clrThirdSpin: purple;
+	/* 	Duration for text blinking animation  */
+		--displayingTextTime: 2500ms;
+		--spinnerFont: calc(var(--size)/10);
+	}
+
+	body.active #loader {
+		display: flex;
+		align-items:center;
+		justify-content:center;
+		min-height:100vh;
+		margin:0;
+		font-family:'Verdana', sans-serif;
+	}
+
+	.spinner {
+		display: flex;
+		align-items:center;
+		justify-content:center;
+		width:var(--size);
+		height:var(--size);
+		position:relative;
+
+	}
+
+	.spinner-area {
+		border: 15px solid transparent;
+		position: absolute;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+		animation: rotate var(--duration) var(--timing) infinite;
+	mix-blend-mode: overlay;
+	}
+
+	@keyframes rotate {
+	0% {
+		transform: rotate(0);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+	}
+
+	.spinner-third {
+		border-top-color:var(--clrThirdSpin);
+		--duration: 1.5s;
+		--timing: ease-in;	
+	}
+
+	.spinner-second {
+		border-left-color:var(--clrSecondSpin);
+		--duration: 2s;
+		--timing: ease-in
+	}
+
+	.spinner-first {
+		border-bottom-color: var(--clrFirstSpin);
+		--duration: 3s;
+		--timing: ease-in-out
+	}
+
+	.spinner p {
+		font-size: var(--spinnerFont);
+		text-transform:none;
+		animation: displaying-text var(--displayingTextTime) ease-in-out infinite;
+		color: #fff;
+	}
+
+	@keyframes displaying-text {
+	0% {
+		opacity:1;
+	}
+		50% {
+		opacity: 0.2;
+	}
+		100% {
+		opacity:1;
+		}
+	}
+
+
+
+	.spinner:after {
+		content:'Nothing will be loaded!';
+	width:100px;
+	padding:15px;
+	height:50px;
+	display:block;
+	position:absolute;
+	top:-85px;
+	right:-40px;
+		background:white;
+	clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 42% 75%, 22% 100%, 22% 75%, 0% 75%);
+			animation-name:displayMessage;
+			animation-duration:3s;
+			animation-timing-function:ease-in-out;
+			animation-delay: 5s;
+			animation-iteration-count: 1;
+		animation-fill-mode: forwards;
+			animation-play-state:pause;
+			opacity:0;
+	}
+	body.active {margin: 0; height: 100%; overflow: hidden}
+	.sh{display: block;}
+	.hi{display: none;}
+	.text-radio{
+		border: 1px solid black;
+		margin-top: 1em;
+	}
+	.fttag{
+		background-color: red;
+	}
+	.text-radio input:checked ~ .trip-label {
+		color: white;
+	}
+   </style>
+	<div id="loader">
+		<div class="spinner">
+			<p>loading...</p>
+			<div class="spinner-area spinner-first"></div>
+			<div class="spinner-area spinner-second"></div>
+			<div class="spinner-area spinner-third"></div>
+		</div>
+	</div>
+	<main class="main-body">
+		<form action="{% url 'loader' %}" id="getAir">
+			<input type="hidden" name="Person" value="{{Person}}">
+			<!-- <input type="hidden" name="akasa_token" value="{{akasa_token}}"> -->
+			<input type="hidden" name="token" value="{{token}}">
+			<input type="hidden" name="spice_token" value="{{spice_token}}">
+			<input type="hidden" name="adult" value="{{adult}}">
+			<input type="hidden" name="child" value="{{child}}">
+			<input type="hidden" name="infant" value="{{infant}}">
+			{% for key, value in data.items %}
+			<input type="hidden" name="{{key}}" value="{{value}}">
+			{% endfor %}
+		</form>
+		<section class="listing-banner" style="padding: 20px 0;">
+			<div class="container">
+				<form method="GET" action="">
+						<input type="hidden" name="radio1" value="one-way" checked>
+				<div class="row">
+					<div class="col-md-4 pos_rel">
+						<div class="flight-input">
+							<div class="flight-group">
+								<label for="">Depart From</label>
+								<input name="fromCityOrAirport" id="departFrom" type="text" list="airport" placeholder="New Delhi" value="{{data.fromCityOrAirport}}">
+							</div>
+							<form action="{% url 'search_flight' %}">
+							<button type="button" onclick="switchText()" >
+								<img src="{% static 'main/images/icon/swip-w.png' %}" alt="">
+							</button>
+							<div class="flight-group">
+								<label for="">Going To</label>
+								<input name="toCityOrAirport" id="departTo" list="airport" type="text" placeholder="Mumbai" value="{{data.toCityOrAirport}}">
+							</div>
+						</div>
+						<div id="result" style="display: none;">
+							<div class="close_btn">
+								<a class="exit_slt"><h2><</h2></a>
+								<div class="title">
+									<h4>Select City</h4>
+								</div>
+							</div>
+							<div class="flight-input adj">
+								<div class="flight-group" id="search_from">
+									<label for="">Depart From</label>
+									<input name="fromCityOrAirport1" id="dfrom" list="airport" type="text" placeholder="New Delhi" autocomplete="false">
+								</div>
+								<div class="flight-group" id="search_to">
+									<label for="">Depart To</label>
+									<input name="fromCityOrAirport1" id="dto" list="airport" type="text" placeholder="New Delhi" autocomplete="false">
+								</div>
+							</div>
+							<div id="list">
+								<ul>
+									<li class="radio_btn">
+										<label for="airports">DEL</label>
+										<input type="radio" name="airpots" value="del">
+									</li>
+									<li class="radio_btn">
+										<label for="airports">BOM</label>
+										<input type="radio" name="airpots" value="kol">
+									</li>
+									<li class="radio_btn">
+										<label for="airports">DEL</label>
+										<input type="radio" name="airpots" value="raj">
+									</li>
+									<li class="radio_btn">
+										<label for="airports">DEL</label>
+										<input type="radio" name="airpots" value="ccu">
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="flight-input">
+							<div class="flight-group">
+								<label for="">Departure Date</label>
+								<input type="text" class="datepicker" value="{{data.travelDate}}" name="travelDate">
+							</div>
+							<button>
+								<img id="calenderImage" src="{% static 'main/images/icon/calendar-w.png' %}" alt="">
+							</button>
+							<div id="returnDateDiv" class="flight-group">
+								<label for="">Return Date</label>
+								<input type="text" class="datepicker" value="{{data.travelDate1}}" name="travelDate1">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="person-select">
+							<label for="">Traveller(s), Class</label>
+							<div class="add-person">
+								<div class="person-box">
+									<div class="quantity-box">
+										<button type="button" class="sub adult-sub">-</button>
+										<input type="number" id="three-max" value="{{adult}}" min="1" max="9" name="ADULT" />
+										<button type="button" class="add">+</button>
+									</div>
+									<span>Adult (s)</span>
+								</div>
+								<div class="person-box">
+									<div class="quantity-box">
+										<button type="button" class="sub">-</button>
+										<input type="number" id="nine-max" value="{{child}}" min="0" max="9" name="CHILD" />
+										<button type="button" class="add">+</button>
+									</div>
+									<span>Child (s)</span>
+								</div>
+								<div class="person-box">
+									<div class="quantity-box">
+										<button type="button" class="sub">-</button>
+										<input type="number" id="six-max" value="{{infant}}" min="0" max="9" name="INFANT" />
+										<button type="button" class="add">+</button>
+									</div>
+									<span>Infant (s)</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<ul class="filter-list">
+							<li>
+								<label class="custom-radio">Economy 
+									<input id="ECONOMY" name="cabinClass"  name="cabinClass" type="radio" value="ECONOMY">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-radio">Premium Economy
+									<input id="PREMIUM_ECONOMY" name="cabinClass" type="radio" value="PREMIUM_ECONOMY">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-radio">Business
+									<input id="BUSINESS" name="cabinClass" type="radio" value="BUSINESS">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+						</ul>
+					</div>
+					<div class="col-md-4">
+						<ul class="filter-list">
+							<li>
+								<label class="custom-checkbox">Non Stop Flights
+									<input type="checkbox" name="isDirectFlight" value='True' {% if data.isDirectFlight == 'True' %} checked {% endif %}>
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-checkbox">Student Fare
+									<input id="STU" type="radio" name="Special" value="STU">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-checkbox">Armed Forces
+									<input type="radio" name="Special" value="MIL" id="MIL">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="custom-checkbox">Senior Citizen
+									<input type="radio" name="Special" value="YCD" id="YCD">
+									<span class="checkmark"></span>
+								</label>
+							</li>
+						</ul>
+					</div>
+					<div class="col-md-4 mt-3">
+						<button class="btn btn-block btn-red">
+							Search Flights
+							<i class="la la-long-arrow-right la-lg"></i>
+						</button>
+					</div>
+				</div>
+				
+				</form>				
+			</div>
+		</section>
+
+		<!-- Listing Filter Bar -->
+		<section class="listing-filter-bar" style="padding: 5px 0;">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 text-right">
+						<button class="listing-filter-open">
+							<img src="{% static 'main/images/icon/filter.png' %}" alt=""> More Filters
+						</button>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Listing Filter -->
+		<div class="listing-filter">
+			<button class="listing-filter-close">
+				<img src="{% static 'main/images/icon/close-w.png' %}" alt="">
+			</button>
+			<form id="filter-form" method="get">
+			<div class="filter-body">
+				<div class="filter-group">
+					<p class="groupl">Stops:</p>
+					<ul class="filter-list">
+						<li>
+							<label class="text-radio">
+								<input type="checkbox" name="fl_stop" value=0>
+								<span class="checkmark"></span>
+								<span class="trip-label">0</span>
+							</label>
+						</li>
+						<li>
+							<label class="text-radio">
+								<input type="checkbox" name="fl_stop" value=1>
+								<span class="checkmark"></span>
+								<span class="trip-label">1</span>
+							</label>
+						</li>
+						<li>
+							<label class="text-radio">
+								<input type="checkbox" name="fl_stop" value=2>
+								<span class="checkmark"></span>
+								<span class="trip-label">2</span>
+							</label>
+						</li>
+					</ul>
+				</div>
+				<div class="filter-group">
+					<p class="groupl">Price:</p>
+					<div class="price-slider">
+						<div class="upto">
+							<span>Upto:</span>
+							<input type="text" id="amount" name="price" readonly>
+						</div>
+						<div id="price-range"></div>
+					</div>
+				</div>
+				<div class="filter-group">
+					<p class="groupl">Depart Time:</p>
+					<ul class="filter-list">
+						<li>
+							<label class="text-radio">
+								<input type="checkbox" name="fl_time" id="timing1" value="00:00 - 06:00">
+								<span class="checkmark"></span>
+								<span class="trip-label">
+									<div>
+										<i class="la la-cloud-sun"></i>
+									</div>
+									00 - 06
+								</span>
+							</label>
+						</li>
+						<li>
+							<label class="text-radio">
+								<input type="checkbox" name="fl_time" id="timing2" value="06:00 - 12:00">
+								<span class="checkmark"></span>
+								<span class="trip-label">
+									<div>
+										<i class="la la-sun"></i>
+									</div>
+									06 - 12
+								</span>
+							</label>
+						</li>
+						<li>
+							<label class="text-radio">
+								<input type="checkbox" name="fl_time" id="timing3" value="12:00 - 18:00">
+								<span class="checkmark"></span>
+								<span class="trip-label">
+									<div>
+										<i class="la la-moon-o"></i>
+									</div>
+									12 - 18
+								</span>
+							</label>
+						</li>
+						<li>
+							<label class="text-radio">
+								<input type="checkbox" name="fl_time" id="timing4" value="18:00 - 00:00">
+								<span class="checkmark"></span>
+								<span class="trip-label">
+									<div>
+										<i class="la la-moon"></i>
+									</div>
+									18 - 00
+								</span>
+							</label>
+						</li>
+					</ul>
+				</div>
+				<div class="filter-group">
+					<p class="groupl">Airlines:</p>
+					<ul class="filter-list2">
+						<li>
+							<label class="custom-checkbox">Air Asia
+								<input type="checkbox" value="Air Asia" name="airline">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">Air India
+								<input type="checkbox" value="Air India" name="airline">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">Go First
+								<input type="checkbox" value="Go First" name="airline">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">IndiGo
+								<input type="checkbox" value="IndiGo" name="airline">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+						<li>
+							<label class="custom-checkbox">Vistara
+								<input type="checkbox" value="Vistara" name="airline">
+								<span class="checkmark"></span>
+							</label>
+						</li>
+					</ul>
+				</div>
+				<div class="filter-group">
+				</div>
+			</div>
+			<div class="filter-footer">
+				<button class="btn btn-white">Cancel</button>
+				<button type="submit" class="btn btn-red" value="refresh">Apply Filter</button>
+			</div>
+			</form>
+		</div>
+		<section class="listing-item-sec">
+			<style>
+				.card {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  width: 350px;
+}
+
+.card-header {
+  height: 200px;
+}
+
+.card-header img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.card-content {
+  background-color: #fff;
+  padding: 30px;
+}
+
+.card-title {
+  height: 20px;
+  margin: 0;
+}
+
+.card-excerpt {
+  color: #777;
+  margin: 10px 0 20px;
+}
+
+.author {
+  display: flex;
+}
+
+.profile-img {
+  border-radius: 50%;
+  overflow: hidden;
+  height: 40px;
+  width: 40px;
+}
+
+.author-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-left: 10px;
+  width: 100px;
+}
+
+.author-info small {
+  color: #aaa;
+  margin-top: 5px;
+}
+
+.animated-bg {
+  background-image: linear-gradient(
+    to right,
+    #f6f7f8 0%,
+    #edeef1 10%,
+    #f6f7f8 20%,
+    #f6f7f8 100%
+  );
+  background-size: 200% 100%;
+  animation: bgPos 1s linear infinite;
+}
+
+.animated-bg-text {
+  border-radius: 50px;
+  display: inline-block;
+  margin: 0;
+  height: 10px;
+  width: 100%;
+}
+
+@keyframes bgPos {
+  0% {
+    background-position: 50% 0;
+  }
+
+  100% {
+    background-position: -150% 0;
+  }
+}
+.filter-box {
+	border-radius: 7px;
+}
+.sort-label{
+	padding: 0.5em 1em;
+}
+.s-li, .price-filter  {
+	padding: 0.5em;
+	cursor: pointer;
+}
+
+			</style>
+			<div class="container">
+				<div class="row">
+					<div id="flight-list" class="col-lg-10 col-md-9">
+						<div class="filter-box">
+							<div class="sort-label">Sort By:</div>
+							<div class="sort-nav">
+									<div class="s-li">
+										<p>DEPART</p>
+									</div>
+									<div class="s-li">
+										<p>ARRIVE</p>
+									</div>
+									<div class="s-li">
+										<p>DURATION</p>
+									</div>
+							</div>
+							<div class="price-filter">
+								<div class="s-li">
+									PRICE PER ADULT
+								</div>
+							</div>
+						</div>
+						<div class="listing-box box-one">
+							<div class="basic-info">
+								<div class="row align-items-center">
+									<div class="col-lg-4 col-md-3 col-6 order-1 sec1 pr-0">
+										<div class="author">
+											<div class="profile-img animated-bg" id="profile_img">&nbsp;</div>
+											<div class="author-info">
+											  <strong class="animated-bg animated-bg-text" id="name"
+												>&nbsp;</strong
+											  >
+											  <small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+										  </div>
+									</div>
+									<div class="col-lg-5 col-md-5 col-12 order-3 order-md-2 sec2 px-2">
+										<div class="flight-time">
+											<div class="author-info">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+											<div class="stops">
+												<span></span>
+												<span></span>
+											</div>
+											<div class="author-info">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+										</div>
+										<div class="total-time">
+											<div class="author-info" style="width: 50px;">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											  </div>
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-4 col-6 order-2 order-md-2 sec3 pl-0">
+										<div class="total-price">
+											<div class="author-info" style="width: 62px;">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+											</div>
+											<a href="javascript:void(0)" class="btn btn-red disabled">View Fares</a>
+										</div>
+									</div>
+								</div>
+								<div class="divider-sec">
+									<a href="javascript:void(0)">Flights details</a>
+								</div>
+							</div>
+						</div>  
+						<div class="listing-box box-one">
+							<div class="basic-info">
+								<div class="row align-items-center">
+									<div class="col-lg-4 col-md-3 col-6 order-1 sec1 pr-0">
+										<div class="author">
+											<div class="profile-img animated-bg" id="profile_img">&nbsp;</div>
+											<div class="author-info">
+											  <strong class="animated-bg animated-bg-text" id="name"
+												>&nbsp;</strong
+											  >
+											  <small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+										  </div>
+									</div>
+									<div class="col-lg-5 col-md-5 col-12 order-3 order-md-2 sec2 px-2">
+										<div class="flight-time">
+											<div class="author-info">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+											<div class="stops">
+												<span></span>
+												<span></span>
+											</div>
+											<div class="author-info">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+										</div>
+										<div class="total-time">
+											<div class="author-info" style="width: 50px;">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											  </div>
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-4 col-6 order-2 order-md-2 sec3 pl-0">
+										<div class="total-price">
+											<div class="author-info" style="width: 62px;">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+											</div>
+											<a href="javascript:void(0)" class="btn btn-red disabled">View Fares</a>
+										</div>
+									</div>
+								</div>
+								<div class="divider-sec">
+									<a href="javascript:void(0)">Flights details</a>
+								</div>
+							</div>
+						</div>  
+						<div class="listing-box box-one">
+							<div class="basic-info">
+								<div class="row align-items-center">
+									<div class="col-lg-4 col-md-3 col-6 order-1 sec1 pr-0">
+										<div class="author">
+											<div class="profile-img animated-bg" id="profile_img">&nbsp;</div>
+											<div class="author-info">
+											  <strong class="animated-bg animated-bg-text" id="name"
+												>&nbsp;</strong
+											  >
+											  <small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+										  </div>
+									</div>
+									<div class="col-lg-5 col-md-5 col-12 order-3 order-md-2 sec2 px-2">
+										<div class="flight-time">
+											<div class="author-info">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+											<div class="stops">
+												<span></span>
+												<span></span>
+											</div>
+											<div class="author-info">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+										</div>
+										<div class="total-time">
+											<div class="author-info" style="width: 50px;">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											  </div>
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-4 col-6 order-2 order-md-2 sec3 pl-0">
+										<div class="total-price">
+											<div class="author-info" style="width: 62px;">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+											</div>
+											<a href="javascript:void(0)" class="btn btn-red disabled">View Fares</a>
+										</div>
+									</div>
+								</div>
+								<div class="divider-sec">
+									<a href="javascript:void(0)">Flights details</a>
+								</div>
+							</div>
+						</div>  
+						<div class="listing-box box-one">
+							<div class="basic-info">
+								<div class="row align-items-center">
+									<div class="col-lg-4 col-md-3 col-6 order-1 sec1 pr-0">
+										<div class="author">
+											<div class="profile-img animated-bg" id="profile_img">&nbsp;</div>
+											<div class="author-info">
+											  <strong class="animated-bg animated-bg-text" id="name"
+												>&nbsp;</strong
+											  >
+											  <small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+										  </div>
+									</div>
+									<div class="col-lg-5 col-md-5 col-12 order-3 order-md-2 sec2 px-2">
+										<div class="flight-time">
+											<div class="author-info">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+											<div class="stops">
+												<span></span>
+												<span></span>
+											</div>
+											<div class="author-info">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											</div>
+										</div>
+										<div class="total-time">
+											<div class="author-info" style="width: 50px;">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+												<small class="animated-bg animated-bg-text" id="date">&nbsp;</small>
+											  </div>
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-4 col-6 order-2 order-md-2 sec3 pl-0">
+										<div class="total-price">
+											<div class="author-info" style="width: 62px;">
+												<strong class="animated-bg animated-bg-text" id="name"
+												  >&nbsp;</strong
+												>
+											</div>
+											<a href="javascript:void(0)" class="btn btn-red disabled">View Fares</a>
+										</div>
+									</div>
+								</div>
+								<div class="divider-sec">
+									<a href="javascript:void(0)">Flights details</a>
+								</div>
+							</div>
+						</div>  
+					</div>
+					<div class="col-lg-2 col-md-3">
+						<div class="box-one listing-promo">
+							
+							<div class="title-sec">
+								<h4>Today's Offer</h4>
+							</div>
+							{% for x in promo %}
+							<div class="promocode-one">
+								<div class="promocode">
+									<span>{{x.promo_code}}</span>
+								</div>
+								<p class="small">{{x.description}}</p>
+								<div class="green-text">{{x.amount}}</div>
+								<a href="#">COPY CODE</a>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+	<div class="modal fade login-modal" id="loginModal" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header" id="loginModalLabel" style="display: flex;flex-direction: column;justify-content: center;align-items: center;gap:2em;">
+					<h3 class="modal-title" style="color: red;">Session Expired</h3>
+					<img src="{% static 'main/images/icons8-alarm-clock.gif' %}" alt="" style="width: 150px;height: 150px;object-fit: contain;">
+					<div style="text-align: center;">
+						<h4>Timed Out</h4>
+						<p>We noticed you have been inactive for a while. Please refresh your search results to review the latest air fares.</p>
+					</div>
+			    </div>
+				<div class="modal-body d-flex" style="justify-content: center;gap:1em;">
+					<button id="search-again" class="btn btn-blue">New Search</button>
+					<button id="refresh" class="btn btn-red px-4">Refresh</button>
+				</div>
+			</div>
+		  </div>
+	</div>
+
+{% include "online_savaari/footer.html" %}
+
+	<!-- Jquery min -->
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+	<!-- Custom -->
+	<script src="{% static 'main/js/default.js' %}"></script>
+	<script src="{% static 'admin/plugins/sweetalerts/sweetalert2.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/sweetalerts/custom-sweetalert.js' %}"></script>
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script type="text/javascript">
+	window.sessionStorage.clear()
+	function bookNow(key, count){
+		$('#key_'+count).attr("value", key);
+		$('#form_'+count).submit();
+	}
+	function bookflight(key, radio1, count, type){
+		let addon= '';
+		// $('#form_'+count).submit();
+		$('#form_'+count).find('input').each(function(){
+			if($(this).attr('name') != 'rtype' && $(this).attr('name') != 'reviewId'){
+				let name = $(this).attr('name');
+				let value = $(this).val()
+				addon += `&${name}=${value}`
+			}
+		})
+		console.log(addon)
+		window.location.href = "/flight/review_flight/?key="+key+"&radio1="+radio1+addon+"&rtype="+type;
+
+	}
+
+</script>
+<script type="text/javascript">
+	$(function(){
+		if (document.location.href.indexOf('radio1=one-way') > 0){
+			$('input[name="radio1"]').val("one-way");
+			$("#footer-booking").hide();
+			$("#one-way").show();
+			$("#calenderImage").hide();
+			$("#returnDateDiv").hide();
+		}else {
+			$("#one-way").hide();
+			$("#calenderImage").show();
+			$("#returnDateDiv").show();
+		}
+    });
+	$(function(){
+		if (document.location.href.indexOf('radio1=two-way') > 0){
+			$('input[name="radio1"]').val("two-way");
+			$("#two-way").show();
+			$("#footer-booking").show();
+			$("#calenderImage").show();
+			$("#returnDateDiv").show();
+		}else{
+			$("#two-way").hide();
+		}
+    });
+	$(function(){
+		if (document.location.href.indexOf('radio1=multi-way') > 0){
+			$('input[name="radio1"]').val("two-way");
+			$("#footer-booking").show();
+			$("#multi-way").show();
+			$("#calenderImage").show();
+			$("#returnDateDiv").show();
+		}else{
+			$("#multi-way").hide();
+		}
+    });
+
+
+	$(document).ready(function() {
+
+		var deptName=getValue('fromCityOrAirport');
+		var arrivName=getValue('toCityOrAirport');
+		var travelDate=getValue('travelDate');
+		var travelDate1=getValue('travelDate1');
+		var cabinClass=getValue('cabinClass');
+		var adult=getValue('ADULT');
+		var child=getValue('CHILD');
+		var infant=getValue('INFANT');
+		var special=getValue('Special');
+		var stops = getValue('isDirectFlight');
+		var radio1 = getValue('radio1');
+		console.log(radio1)
+		// radio1=multi-way&fromCityOrAirport=DEL&toCityOrAirport=BOM&fromCityOrAirport1=DEL&toCityOrAirport1=BOM&travel1Date=16-08-2022&fromCityOrAirport2=BOM&toCityOrAirport2=DEL&travel2Date=17-08-2022&fromCityOrAirport3=DEL&toCityOrAirport3=CCU&travel3Date=17-08-2022&travelDate=15-08-2022&travelDate1=15-08-2022&ADULT=1&CHILD=0&INFANT=0&cabinClass=ECONOMY
+		if(radio1 == "multi-way"){
+			let deptName1=getValue('fromCityOrAirport1');
+			let deptName2=getValue('fromCityOrAirport2');
+			let arrivName1=getValue('toCityOrAirport1');
+			let arrivName2=getValue('toCityOrAirport2');
+			let travel1Date=getValue('travel1Date');
+			let travel2Date=getValue('travel2Date');
+			$("#multi-way-from1").text(deptName1)
+			$("#multi-way-to1").text(arrivName1)
+			$("#multi-way-date1").text(travel1Date)
+
+			$("#multi-way-from2").text(deptName2)
+			$("#multi-way-to2").text(arrivName2)
+			$("#multi-way-date2").text(travel2Date)
+
+
+			if(getValue('fromCityOrAirport3')){
+				let deptName3=getValue('fromCityOrAirport3');
+				let arrivName3=getValue('toCityOrAirport3');
+				let travel3Date=getValue('travel3Date');
+				$("#multi-way-to3").text(arrivName3)
+				$("#multi-way-from3").text(deptName3)
+				$("#multi-way-date3").text(travel3Date)
+			}
+			if(getValue('fromCityOrAirport4')){
+				let deptName4=getValue('fromCityOrAirport4');
+				let arrivName4=getValue('toCityOrAirport4');
+				let travel4Date=getValue('travel4Date');
+				$("#multi-way-to4").text(arrivName4)
+				$("#multi-way-from4").text(deptName4)
+				$("#multi-way-date4").text(travel4Date)
+
+			}
+			if(getValue('fromCityOrAirport5')){
+				let deptName5=getValue('fromCityOrAirport5');
+				let arrivName5=getValue('toCityOrAirport5');
+				let travel5Date=getValue('travel5Date');
+				$("#multi-way-to5").text(arrivName5)
+				$("#multi-way-from5").text(deptName5)
+				$("#multi-way-date5").text(travel5Date)
+			}
+		}
+
+
+		$("#two-way-from").text(deptName)
+		$("#two-way-to").text(arrivName)
+		$("#two-way-date").text(travelDate)
+
+		$("#two-way-return-from").text(arrivName)
+		$("#two-way-return-to").text(deptName)
+		$("#two-way-return-date").text(travelDate1)
+
+
+		$("#ADULT").val(adult);
+		$("#CHILD").val(child);
+		$("#INFANT").val(infant);
+
+		document.getElementById('departFrom').value=deptName;
+		document.getElementById('departTo').value=arrivName;
+
+		$("input[name=cabinClass][value="+cabinClass+"]").prop('checked', true);
+		$("input[name=Special][value="+special+"]").prop('checked', true);
+		$("input[name=isDirectFlight]").prop('checked', stops);
+		
+		$('input[name=travelDate]').datepicker({
+        	dateFormat: 'dd-mm-yy',
+        })
+		$('input[name=travelDate]').datepicker('setDate', travelDate);
+		$('input[name=travelDate]').datepicker('option', 'minDate', 0)
+
+		$('input[name=travelDate1]').datepicker({
+			dateFormat: 'dd-mm-yy',
+		})
+		if(travelDate1!=null){
+			// document.getElementsByName('travelDate1').value=travelDate1;
+
+			$('input[name=travelDate1]').datepicker('setDate', travelDate1);
+			$('input[name=travelDate1]').datepicker('option', 'minDate', travelDate)
+		}
+	});
+
+	function getValue(name){
+    	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(document.location.href);
+    	if (results==null) {
+       		return null;
+    	}
+    	return decodeURI(results[1]) || 0;
+	}
+	
+</script>
+
+<script type="text/javascript">
+	let dPrice = 0;
+	let rPrice = 0;
+
+
+	function toggleFunction(val){
+		var x='#fare-details'+val;
+		$(x).toggle();
+		
+	}
+
+	function toggleFlightDetails(val){
+		var x='#flights-details'+val;
+		$(x).toggle();
+	}
+
+	function toggleReturnFlightDetails1(val){
+		var x='#return-flights-details1'+val;
+		$(x).toggle();
+	}
+
+	function toggleReturnFlightDetails2(val){
+		var x='#return-flights-details2'+val;
+		$(x).toggle();
+	}
+	function toggleReturnFlightDetails3(val){
+		var x='#return-flights-details3'+val;
+		$(x).toggle();
+	}
+	function toggleReturnFlightDetails4(val){
+		var x='#return-flights-details4'+val;
+		$(x).toggle();
+	}
+	function toggleReturnFlightDetails5(val){
+		var x='#return-flights-details5'+val;
+		$(x).toggle();
+	}
+
+	function switchText(){
+		let obj1 = document.getElementById("departFrom");
+		let obj2 = document.getElementById("departTo");
+
+		let temp = obj1.value;
+		obj1.value = obj2.value;
+		obj2.value = temp;
+	}
+
+	function Copy() {
+
+		var selected = new Array();
+		r = $("#amount").val().replace('₹','').replace('₹','').split(" - ");
+		r1 = $("input[name='radio2']:checked").val().split(" - ");
+		r2= $("input:checkbox[name='airline']:checked").each(function() {
+      	selected.push($(this).val());
+ 		});
+
+    	start_price = r[0];
+    	end_price = r[1];
+    	start_time = r1[0];
+    	end_time = r1[1];
+
+    	current_path = $(location).attr('href');
+    	new_path = current_path+'&start_price='+start_price+'&end_price='+end_price+'&start_time='+start_time+'&end_time='+end_time+'&airline='+selected;
+
+    	window.location.href = new_path;
+    }		
+
+	function totalPrice() {
+		tPrice = dPrice + rPrice;
+		$('.total-price h4').text(tPrice)
+	}
+
+	let Price1 = 0;
+	let Price2 = 0;
+	let Price3 = 0;
+	let Price4 = 0;
+	let Price5 = 0;
+	function multitotal() {
+		tPrice = Price1 + Price2 + Price3 + Price4 + Price5;
+		$('.total-price h4').text(tPrice)
+	}
+
+	function handleChange(id, name, img, stime, dtime, stop, dur, price, radio1, key, Person) {
+		dPrice = parseInt(price);
+		$('#footer-booking .start-date').remove();
+		$('#footer-booking .main-content').prepend(`<div class="flight-name start-date"><img src="{% static 'flight/airline_logo/' %}${img}.png" alt=""><div class="flight-time"><div class="time"><b>${stime}</b><div class="small">${name}</div></div><div class="stops"><span></span></div><div class="time"><b>${dtime}</b></div></div><div class="total-time"><b>${dur}</b><div class="small">${stop} Stop</div></div></div>`);
+		totalPrice();
+		$("[name=radio1]").val(radio1);
+		$("[name=key]").val(key);
+		$("[name=Person]").val(Person);
+	}
+	
+	function handleChange2(id, name, img, stime, dtime, stop, dur, price, key1) {
+		rPrice = parseInt(price);
+		$('#footer-booking .return-date').remove();
+		$('#footer-booking .main-content').append(`<div class="flight-name return-date"><img src="{% static 'flight/airline_logo/' %}${img}.png" alt=""><div class="flight-time"><div class="time"><b>${stime}</b><div class="small">${name}</div></div><div class="stops"><span></span></div><div class="time"><b>${dtime}</b></div></div><div class="total-time"><b>${dur}</b><div class="small">${stop} Stop</div></div></div>`);
+		totalPrice();
+		$("[name=key1]").val(key1);
+	}
+	
+	function handlemulti1(id, name, img, stime, dtime, stop, dur, price, radio1, key, Person) {
+		Price1 = parseInt(price);
+		$("[name=radio1]").val(radio1);
+		$("[name=key]").val(key);
+		$("[name=Person]").val(Person);
+		$('#footer-booking .multi1-date').remove();
+		$('#footer-booking .main-content').append(`<div class="flight-name multi1-date col-lg-4"><img src="{% static 'flight/airline_logo/' %}${img}.png" alt=""><div class="flight-time"><div class="time"><b>${stime}</b><div class="small">${name}</div></div><div class="stops"><span></span></div><div class="time"><b>${dtime}</b></div></div><div class="total-time"><b>${dur}</b><div class="small">${stop} Stop</div></div></div>`);
+		multitotal()
+	}
+	function handlemulti2(id, name, img, stime, dtime, stop, dur, price, key1) {
+		Price2 = parseInt(price);
+		$("[name=key1]").val(key1);
+		$('#footer-booking .multi2-date').remove();
+		$('#footer-booking .main-content').append(`<div class="flight-name multi2-date col-lg-4"><img src="{% static 'flight/airline_logo/' %}${img}.png" alt=""><div class="flight-time"><div class="time"><b>${stime}</b><div class="small">${name}</div></div><div class="stops"><span></span></div><div class="time"><b>${dtime}</b></div></div><div class="total-time"><b>${dur}</b><div class="small">${stop} Stop</div></div></div>`);
+		multitotal()
+	}
+	function handlemulti3(id, name, img, stime, dtime, stop, dur, price, key2) {
+		Price3 = parseInt(price);
+		$("[name=key2]").val(key2);
+		$('#footer-booking .multi3-date').remove();
+		$('#footer-booking .main-content').append(`<div class="flight-name multi3-date col-lg-4"><img src="{% static 'flight/airline_logo/' %}${img}.png" alt=""><div class="flight-time"><div class="time"><b>${stime}</b><div class="small">${name}</div></div><div class="stops"><span></span></div><div class="time"><b>${dtime}</b></div></div><div class="total-time"><b>${dur}</b><div class="small">${stop} Stop</div></div></div>`);
+		multitotal()
+	}
+	function handlemulti4(id, name, img, stime, dtime, stop, dur, price, key3) {
+		Price4 = parseInt(price);
+		$("[name=key3]").val(key3);
+		$('#footer-booking .multi4-date').remove();
+		$('#footer-booking .main-content').append(`<div class="flight-name multi4-date col-lg-4"><img src="{% static 'flight/airline_logo/' %}${img}.png" alt=""><div class="flight-time"><div class="time"><b>${stime}</b><div class="small">${name}</div></div><div class="stops"><span></span></div><div class="time"><b>${dtime}</b></div></div><div class="total-time"><b>${dur}</b><div class="small">${stop} Stop</div></div></div>`);
+		multitotal()
+	}
+	function handlemulti5(id, name, img, stime, dtime, stop, dur, price, key4) {
+		Price5 = parseInt(price);
+		$("[name=key4]").val(key4);
+		$('#footer-booking .multi5-date').remove();
+		$('#footer-booking .main-content').append(`<div class="flight-name multi5-date col-lg-4"><img src="{% static 'flight/airline_logo/' %}${img}.png" alt=""><div class="flight-time"><div class="time"><b>${stime}</b><div class="small">${name}</div></div><div class="stops"><span></span></div><div class="time"><b>${dtime}</b></div></div><div class="total-time"><b>${dur}</b><div class="small">${stop} Stop</div></div></div>`);
+		multitotal()
+	}
+
+	
+	$(document).ready(function(){
+		let totalair = $('.totalair:last').val();
+		for(let i = 0; i < totalair; i++){
+			let sum = 0;
+			document.querySelectorAll(`.ad${i}`).forEach(item => {
+				sum = sum + parseInt(item.innerText);
+			})
+			document.querySelectorAll(`.ad_total${i}`).forEach(item => {
+				item.innerText = sum;
+			})
+		}
+    });
+
+	const listItems = [];
+	const india = [];
+	const australia = [];
+	const brazil = [];
+	const united_states = [];
+	const united_kingdom = [];
+	const otherport = [];
+	getData();
+
+	async function getData() {
+		const res = await fetch("{% static 'flight/airport_list.json' %}")
+		const data = await res.json();
+		data.forEach(user => {
+			if (user.country === "India") {
+				india.push(user);
+			} else if (user.country === "Australia") {
+				australia.push(user);
+			} else if (user.country === "Brazil") {
+				brazil.push(user);
+			} else if (user.country === "United States") {
+				united_states.push(user);
+			} else if (user.country === "United Kingdom") {
+				united_kingdom.push(user);
+			} else {
+				otherport.push(user);
+			}
+		});
+		listItems.push(india);
+		listItems.push(united_kingdom);
+		listItems.push(australia);
+		listItems.push(brazil);
+		listItems.push(united_states);
+		listItems.push(otherport);
+	}
+
+	function filterData(searchTerm, num, name) {
+		let filterList = [];
+		// filterList.splice(0,filterList.length)
+		if (searchTerm === "") {
+			india.forEach(it => {
+				filterList.push(it);
+			})
+		} else {
+			listItems.forEach(item => {
+				if (filterList.length <= 20) {     
+					item.forEach(it => {
+						if ((it.city.toLowerCase().includes(searchTerm.toLowerCase())) || (it.code.toLowerCase().includes(searchTerm.toLowerCase()))) {
+							if (!(filterList.includes(it))) {
+								filterList.push(it)
+							}
+						}
+					})
+				}
+			})
+		}
+
+		const list = document.querySelector('#list ul');
+		document.querySelector('#list ul').innerHTML = '';
+		filterList.forEach(e => {
+			const li = document.createElement('li');
+			
+			li.innerHTML = `
+				<label class="user-info">
+					<h4>${e.city} (${e.code})</h4>
+					<p>${e.name}</p>
+				</label>
+				<input type="radio" value=${e.code} name="airpots">
+			`
+			li.classList.add(`radio_btn${name}${num}`)
+			list.appendChild(li)
+			document.querySelectorAll('#list li').forEach(item => {
+				item.addEventListener('mouseover', function () {
+					this.style.background = '#FAFBFD';
+				})
+				item.addEventListener('mouseleave', function () {
+					this.style.background = 'white';
+				})
+			})
+		})
+	}
+
+	function getradiodata(search = "", name, num){
+		document.querySelector('#list ul').innerHTML = '';
+		filterData(search, num, name)
+		$(`.radio_btn${name}${num}`).click(function() {
+			$(`.radio_btn${name}${num}`).find('input').prop('checked', false)
+			$(this).find('input').prop('checked', true)
+			if(name === "dfrom"){
+				$(`#${name}`).val(($(this).find('input').val()));
+				$('#departFrom').val($(this).find('input').val());
+				$('#dto').focus();
+			}else if(name === "dto") {
+				$(`#${name}`).val(($(this).find('input').val()));
+				$('#departTo').val($(this).find('input').val());
+				$('#result').hide();
+			} else {
+				$(`.${name}`).val(($(this).find('input').val()));
+				$('#result').hide();
+			}
+		});
+	}
+
+	$('#dfrom').on('focus', function() {
+			this.value = "";
+				console.log($('#one-way').prop('checked') || $('#round-trip').prop('checked'))
+				getradiodata(this.value, "dfrom", 1)
+		});
+
+		$('#dto').on('focus', function() {
+			this.value = ""
+			getradiodata(this.value, "dto", 1)
+		});
+		
+		$('#dfrom').on('input', (e) => {
+			getradiodata(e.target.value, "dfrom", 1)
+		})
+
+		$('#dto').on('input', (e) => {
+			    getradiodata(e.target.value, "dto", 1)
+		})
+
+	$('#departFrom').focus(function(){
+		$('#search_to').show();
+		$('#search_from').show()
+		$('#result').css("display", "flex");
+		$('#dfrom').focus();
+	})
+	$('#departTo').focus(function(){
+		$('#search_from').show();
+		$('#search_to').show()
+		$('#result').css("display", "flex");
+		$('#dto').focus()
+	})
+
+	$('.exit_slt').click(function(){
+		$('#result').css("display", "none");
+	})
+
+	let data = {}
+	let msg = 'ss';
+	$('#getAir').find('input').each(function() {
+		if($(this).attr('name') && $(this) !== ""){
+			let keyy = $(this).attr('name');
+			let value = $(this).val()
+			value = value.toString().replace(/^\s\t+/gm, '')
+			data[keyy] = value;
+		}
+	})
+
+	function errChecker(){
+		$('#flight-list').find('.flight1').submit(function(e){
+			e.preventDefault()
+			let data = {}
+			$(this).find("input").each(function(){
+				if(this.name != 'flight1'){
+					data[this.name] = this.value;
+				}
+			})
+			data['ajax'] = true;
+			$.ajax({
+				type: "POST",
+				url: "/flight/review_flight/",
+				data: data,
+				beforeSend: function(){
+					$('body').addClass('active')
+				},
+				success: function(res){
+					// console.log(res)
+					if(res.errs){
+						msg = res.data.status.success ? "Ticket booked" : res.data.errors[0].message;
+						status = res.data.status.success ? "success":"error";
+						$('body').removeClass('active')
+						swal({
+							title: 'We are Sorry!',
+							text: `We could not confirm your flight(s). ${msg}`,
+							type: status,
+							padding: '2em'
+						})
+					}
+					else {
+						$('body').removeClass('active')
+						document.getElementById('flight1').submit();
+					}
+				},
+			});
+		})
+	}
+
+	let timer = 12*60;
+	window.sessionStorage.removeItem('stimer')
+
+	$('#refresh').click(function(){
+		location.reload();
+	})
+
+	$('#search-again').click(function(){
+		location.href = '/';
+	})
+
+	const session_time = setInterval(() => {
+		let ses_time = window.sessionStorage.getItem('stimer')
+		if(ses_time){
+			dtime = ses_time - 1
+			window.sessionStorage.setItem('stimer', dtime)
+			if(dtime <= 0){
+				window.sessionStorage.removeItem('stimer')
+				$('#loginModal').addClass('show') 
+				$('#loginModal').css({"display": "block", "padding-right": "8px"}) 
+				$('body').addClass('modal-open')
+				$('body').append(`<div class="modal-backdrop fade show"></div>`)
+				clearInterval(session_time);
+			}
+		}
+	}, 1000);
+
+</script>
+
+<script>
+	var json = JSON.parse('{{jsondata | escapejs }}');
+	let token = '{{token}}';
+	console.log(token)
+	let cab = '{{data.cabinClass}}';
+	let sep = '{{data.Special}}';
+	let url = "{% static 'flight/airline_logo/' %}";
+	let userdata = '{{ request.user.groups.all.0 }}';
+	document.getElementById(cab).checked = true;
+	!sep || (document.getElementById(sep).checked = true);
+	$(".listing-filter-open").click(function () {
+		$('body').addClass('overflown');
+		$(".listing-filter").addClass("active");
+	});
+	$(".listing-filter-close").click(function () {
+		$('body').removeClass('overflown');
+		$(".listing-filter").removeClass("active");
+	});
+	$(".fare-sidebar-open").click(function () {
+		$('body').addClass('overflown');
+		$(".fare-rules-sidebar").addClass("active");
+	});
+	$(".fare-sidebar-close").click(function () {
+		$('body').removeClass('overflown');
+		$(".fare-rules-sidebar").removeClass("active");
+	});
+
+
+</script>
+
+<script type="module" src="{% static 'main/js/index.js' %}"></script>
+</body>
+
+</html>

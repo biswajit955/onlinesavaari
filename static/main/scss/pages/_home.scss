@@ -1,0 +1,24 @@
+// Home Page
+.home-pg {
+    .left-sec {
+        .booking-box {
+            height: calc(100vh - 130px);
+            margin-top: 30px;
+            position: sticky;
+            top: 117px;
+
+            // Max 767px
+            @media (max-width: $break-767) {
+                padding: 15px;
+            }
+            .filter-list {
+                display: flex;
+                flex-wrap: wrap;
+                li {
+                    width: 50%;
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}

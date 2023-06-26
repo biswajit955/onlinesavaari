@@ -1,0 +1,92 @@
+// Reset
+* {
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: rgba(128, 137, 150, 0.1);
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(128, 137, 150, 0.2);
+        border-radius: 10px;
+        &:hover {
+            background-color: rgba(128, 137, 150, 0.6);
+        }
+    }
+}
+body {
+    font-size: $base-fz;
+    font-family: $primary-ff;
+    line-height: 1.5;
+    font-weight: 400;
+    color: $clr-333333;
+    background-color: $white-clr;
+    overflow-x: hidden;
+}
+ul,
+ol {
+    list-style-type: none;
+    padding-left: 0px;
+    margin-bottom: 0px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-bottom: 15px;
+}
+h1 {
+    font-size: 28px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 20px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 12px;
+}
+a {
+    text-decoration: none;
+    transition: 0.3s;
+    color: $blue-clr;
+    &:hover {
+        text-decoration: none;
+    }
+}
+a,
+button,
+input,
+textarea,
+select {
+    &:focus,
+    &:hover,
+    &:active {
+        outline: none;
+        box-shadow: none;
+    }
+}
+section {
+    position: relative;
+}
+
+.container {
+    @media (min-width: $break-1280) {
+        max-width: 1240px;
+    }
+}
+small,
+.small {
+    display: block;
+    font-size: 12px;
+}

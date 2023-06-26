@@ -1,0 +1,311 @@
+{% load flight_tags %}
+{% load static%}
+{% include "./insurance_header.html" %}
+
+<style>
+	.hidebx{
+		display: none;
+		/* align-items: center;
+		cursor: pointer;
+		margin-right: 10px; */
+	}
+	.lbl-radio{
+		/* border: 2px solid; */
+		padding: 30px;
+		box-shadow: 0px 5px 12px -6px rgba(0 ,0 , 0 ,0.4);
+		/* border-radius: 5px; */
+        border: 1px solid #fff;
+        /* cursor: pointer;
+        transition: all 0.3s ease-in ; */
+	}
+	label:before{
+		content: '';
+
+		margin-left: 50px;
+	}
+	.app-pepar form{
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 20px;
+	}
+	
+
+	
+	.display-box .size{
+		font-weight: 600;
+		margin-bottom: 5px;
+		letter-spacing: 0.5px;
+
+	}
+	.display-box .price{
+		font-size: 14px;
+		color: rgba(0, 0, 0, 0.5);
+	}
+	.display-box .info{
+		font-size: 15px;
+		
+	}
+    input[type=radio]:checked + .lbl-radio{
+        border-color: #286ab0;
+    }
+</style>
+<!-- Main -->
+<main class="main-body">
+    <section class="user-pg">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                </div>
+            </div>
+            <!-- <div class="row"> -->
+                <!-- <div class="col-lg-3 col-md-4 col-12 left-sec">
+
+                    </div> -->
+                <div class="col-lg-9 col-md-8 col-12 right-sec">
+                    <div class="box-one profile-box" style="margin-bottom: 1em;">
+                        <div class="title-sec">
+                            <h4>Travel Insurance Policy</h4>
+                        </div>
+                        <form method="POST" action="{% url 'insurance_payment' %}">
+							{% csrf_token %}
+							<section class="agent-package py-5">
+								<div class="container">
+									<div class="row">
+										<div class="col-12">
+											<div class="heading-one text-center m-0">
+												<h1>Select Sum Insured</h1>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+                                        {% for plan in plan_list %}
+                                            <div class="col-lg-5 col-md-6 offset-lg-1 mt-4">
+                                                <div class="info-box2">
+                                                    <input type="radio" name="plan_detail" id="{{ forloop.counter }}" class="hidebx plan_radio_box"
+                                                    value="{{plan}}">
+                                                        <label for="{{ forloop.counter }}" class="lbl-radio">
+                                                            <div class="display-box">
+                                                                <div class="size">Sum Insured</div>
+                                                                <div class="price">₹ {{plan.premium}}</div><br>
+                                                                <div class="info"> Plan-{{plan.plan_name}}</div><br>
+                                                                <div class="info"> Benefit-{{plan.plan_description}}</div>
+                                                            </div>
+                                                        </label>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+									</div>
+								</div>
+							</section>
+							<div class="text-center mt-4">
+                                <input type= "hidden" value="{{insurance_detail}}" name="insurance_detail">
+                                {%if not request.user.is_authenticated %}
+                                <button type="button" id="btn__submit" class="btn btn-red" data-toggle="modal" data-target="#loginModal">
+                                    Make Payment
+                                </button>
+                                {% else %}
+                                <input type="submit" value="Make Payment" class="btn btn-red" id="payBtn" disabled>
+                                {% endif %}
+							</div>
+						</form>
+                    <!-- </div> -->
+
+                    {%if not request.user.is_authenticated %}
+                    <div class="modal fade login-modal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content " id="login-div">
+                            </div>
+                        </div>
+                    </div>
+                    {%endif%}
+                    
+  
+</main>
+
+{% include "online_savaari/footer.html" %}
+
+<!-- Jquery min -->
+<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+<!-- Popper Min -->
+<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+<!-- Jquery UI -->
+<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+<!-- Owl Carousel -->
+<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+<!-- Star Rating -->
+<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+<!-- Quantity -->
+<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+<!-- Phone -->
+<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+<!-- Custom -->
+<script src="{% static 'main/js/default.js' %}"></script>
+
+<script>
+    
+   function addamount(am){
+    $('#t-text').val(am)
+    $('#addamt').remove();
+    $('#edit-pax').append(`<input id='addamt' type='hidden' value='${am}' name='amt'>`);
+   }
+</script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://ebz-static.s3.ap-south-1.amazonaws.com/easecheckout/easebuzz-checkout.js"></script> 
+
+<script>
+let pay_id= $('[name="pay_id"]').val()
+let txt= parseFloat($('[name="txt"]').val())
+
+    function saveid(id){
+
+        $.ajax({
+            type: "POST",
+            url: "/savaari_cash",
+            data : {
+                csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val(),
+                payment_id: id,
+                amount: $('[name="txt"]').val(),
+                ajax: 'ajax-payment-done',
+            },
+            success: function(data){
+                location.reload();
+                console.log(data)
+            },
+        });
+    }
+    var options = {
+        "key": "rzp_test_cbUIs2vrl3R0RD", // Enter the Key ID generated from the Dashboard
+        "amount": txt, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Online Savaari",
+        "description": "Travel Company",
+        "image": "https://onlinesavaari.com/static/main/images/logo.png",
+        "order_id": pay_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+            // alert(response.razorpay_payment_id);
+            // alert(response.razorpay_order_id);
+            // alert(response.razorpay_signature)
+            saveid(response.razorpay_payment_id)
+        },
+        "prefill": {
+            "name": "Gaurav Kumar",
+            "email": "gaurav.kumar@example.com",
+            "contact": "9999999999"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#ea2330"
+        }
+    };
+    $('input[name="plan_detail"]').change(function () {
+        $('#payBtn').attr('disabled', false);
+    })
+
+
+
+
+    function logindata() {
+        $('#login-div').find('#login-id').submit(function (e) {
+            e.preventDefault()
+            console.log('done')
+            let user = $("input[name='username']").val();
+            let password = $("input[name='password']").val();
+            $.ajax({
+                type: "POST",
+                url: "/custlogin",
+                data: {
+                    csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+                    username: user,
+                    password: password,
+                },
+                success: function (data) {
+                    location.reload();
+                },
+            });
+        })
+
+        $('.signup-btn').removeAttr('href')
+        $('.signup-btn').click(function () {
+            $.ajax({
+                type: "GET",
+                url: "/api/register_customer/",
+                success: function (data) {
+                    success = $($.parseHTML(data))
+                    $('#login-div').html($(success[19]).find('.login-box'))
+                },
+                complete: function () {
+                    data = {}
+                    $('#login-div').find('#login-id').submit(function (e) {
+                        e.preventDefault()
+                        $(this).find('input').each(function () {
+                            let keyy = $(this).attr('name');
+                            let value = $(this).val()
+                            value = value.toString().replace(/^\s\t+/gm, '')
+                            data[keyy] = value;
+                        })
+                        $.ajax({
+                            type: "POST",
+                            url: "/custlogin",
+                            data: data,
+                            success: function (response) {
+                                location.reload();
+                            },
+                        });
+                    })
+                    $('.login-btn').removeAttr('href')
+                    $('.login-btn').click(function () {
+                        signupdata()
+                    })
+                }
+            });
+        })
+
+
+    }
+
+    function signupdata() {
+        $.ajax({
+            type: "GET",
+            url: "/custlogin",
+            success: function (data) {
+                
+                success = $($.parseHTML(data))
+                $('#login-div').html($(success[19]).find('.login-box'))
+            },
+            complete: function () {
+                logindata()
+            }
+        });
+    }
+
+    signupdata()
+
+
+
+
+
+</script>
+
+
+</body>
+
+</html>

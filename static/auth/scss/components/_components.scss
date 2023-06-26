@@ -1,0 +1,592 @@
+// Logo Widget
+.logo-widget {
+    a {
+        display: inline-block;
+    }
+}
+
+// Heading One
+.heading-one {
+    margin-bottom: 15px;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin-bottom: 0;
+        a {
+            color: $red-clr;
+            display: inline-block;
+            font-size: 13px;
+            text-transform: capitalize;
+            margin-left: 10px;
+        }
+    }
+    p {
+        margin-bottom: 0;
+        color: $clr-999999;
+    }
+}
+
+// Owl Carousel Nav
+.owl-theme {
+    .owl-nav {
+        position: absolute;
+        top: -40px;
+        right: 0;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            position: relative;
+            top: auto;
+            bottom: 0;
+            margin-top: 10px;
+            text-align: center;
+        }
+        [class*="owl-"] {
+            font-size: 20px !important;
+            line-height: 1 !important;
+            margin: 0 10px;
+            &:hover {
+                color: $red-clr !important;
+                background-color: $no-clr !important;
+            }
+        }
+    }
+}
+
+// Dropdown
+.dropdown {
+    .dropdown-toggle {
+        color: $clr-333333;
+        background-color: $no-clr;
+        border: none;
+        border-radius: 0;
+        cursor: pointer;
+        padding: 0;
+        img {
+            width: 20px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+    }
+    .dropdown-menu {
+        font-size: 1em;
+        padding: 0;
+        border: 1px solid rgba($black-clr, 0.05);
+        border-radius: 4px;
+        box-shadow: 0px 2px 4px 1px rgba($black-clr, 0.05);
+        min-width: 120px;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            position: fixed !important;
+            left: 0 !important;
+            bottom: 0;
+            top: auto !important;
+            transform: none !important;
+            width: 100%;
+            max-width: unset;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            box-shadow: 1px -4px 4px 1px rgba($black-clr, 0.05);
+        }
+        .dropdown-item {
+            padding: 6px;
+            &:hover {
+                color: $blue-clr;
+                background-color: $clr-e4e4e4;
+            }
+        }
+    }
+}
+
+// Tab One
+.tab-one {
+    ul {
+        align-items: center;
+        margin-bottom: 15px;
+        padding-right: 56px;
+        flex-wrap: nowrap;
+        font-size: 12px;
+        overflow-x: auto;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            padding-right: 0;
+        }
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        span {
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .nav-item {
+            .nav-link {
+                padding: 0 10px;
+                color: $clr-999999;
+                background-color: $no-clr;
+                text-transform: uppercase;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+
+                // Max 767px
+                @media (max-width: $break-767) {
+                    padding: 0 8px;
+                }
+                &.active {
+                    color: $red-clr;
+                }
+            }
+        }
+    }
+}
+
+// Datepicker
+.ui-datepicker {
+    width: 100%;
+    max-width: 300px;
+    background: $white-clr;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid $clr-e4e4e4 !important;
+    box-shadow: 0 0 10px rgba($black-clr, 0.1);
+    border-radius: 4px;
+    padding: 24px;
+    font-size: 1em;
+
+    @media (max-width: $break_767) {
+        max-width: 100%;
+        padding: 15px;
+        top: auto !important;
+        bottom: 0;
+        left: 0 !important;
+    }
+    .ui-datepicker-header {
+        padding: 0;
+        background: none;
+        border: none;
+        .ui-datepicker-title {
+            margin: 0;
+            line-height: 18px;
+            font-size: 1em;
+        }
+        .ui-datepicker-prev,
+        .ui-datepicker-next {
+            display: inline;
+            cursor: pointer;
+            top: -4px;
+            border: none;
+            border-radius: 0;
+            background-color: $no-clr;
+            span {
+                background-position: center;
+                position: relative;
+                left: 0;
+                margin-left: 0;
+                top: 0;
+                margin-top: 0;
+                display: inline-block;
+            }
+        }
+        .ui-datepicker-prev {
+            left: 20px;
+            span {
+                background-image: url(../images/icon/arrow-left.png);
+            }
+        }
+        .ui-datepicker-next {
+            right: 20px;
+            span {
+                background-image: url(../images/icon/arrow-right.png);
+            }
+        }
+    }
+    .ui-datepicker-calendar {
+        tbody {
+            tr {
+                td {
+                    .ui-state-default {
+                        color: $clr-333333;
+                        background: none;
+                        border: 1px solid $clr-e4e4e4;
+                        text-align: center;
+                    }
+                    .ui-state-highlight,
+                    .ui-state-hover {
+                        color: $white-clr;
+                        background-color: $red-clr;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Journey Box
+.journey-box {
+    display: block;
+    color: $clr-333333;
+    background-color: $white-clr;
+    border: 1px solid $clr-e4e4e4;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba($black-clr, 0.1);
+    padding: 20px;
+    &:hover {
+        color: inherit;
+    }
+    .top-sec {
+        display: flex;
+        align-items: center;
+        img {
+            width: auto;
+            max-width: 100%;
+            height: 18px;
+            margin-right: 12px;
+        }
+        h4 {
+            margin-bottom: 0;
+        }
+    }
+    .journey-meta {
+        padding-left: 30px;
+        color: $clr-999999;
+    }
+    .bottom-sec {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .price-box {
+            b {
+                color: $red-clr;
+                margin-left: 5px;
+            }
+        }
+    }
+}
+
+// Journey Box Two
+.journey-box2 {
+    display: block;
+    color: $clr-333333;
+    background-color: $white-clr;
+    border: 1px solid $clr-e4e4e4;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba($black-clr, 0.1);
+    padding: 20px;
+    &:hover {
+        color: inherit;
+    }
+    .top-sec {
+        padding-left: 10px;
+        margin-bottom: 24px;
+        position: relative;
+        border-left: 2px solid $clr-e4e4e4;
+        &:before,
+        &:after {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background-color: $clr-e4e4e4;
+            border-radius: 50%;
+            position: absolute;
+            left: -4px;
+        }
+        &:before {
+            top: -3px;
+        }
+        &:after {
+            bottom: -3px;
+        }
+        .place-name {
+            font-weight: 600;
+            line-height: 1.2;
+            position: relative;
+            &.top {
+                top: -6px;
+            }
+            &.bottom {
+                bottom: -8px;
+            }
+        }
+        .time {
+            color: $clr-999999;
+        }
+    }
+    .bottom-sec {
+        padding-left: 12px;
+        p {
+            margin-bottom: 0;
+            i {
+                display: block;
+                font-size: 12px;
+                line-height: 1;
+            }
+            span {
+                font-size: 20px;
+                font-weight: bold;
+                color: $red-clr;
+                i {
+                    display: inline-block;
+                    font-size: 1em;
+                }
+            }
+        }
+    }
+}
+
+// Collection Box
+.collection-box {
+    display: block;
+    color: $clr-333333;
+    padding-top: 12px;
+    position: relative;
+    &:hover {
+        color: inherit;
+    }
+    &:before,
+    &:after {
+        content: "";
+        height: 6px;
+        border-radius: 8px 8px 0 0;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    &:before {
+        width: calc(100% - 50px);
+        top: 0;
+        background-color: lighten($black-clr, 94%);
+    }
+    &:after {
+        width: calc(100% - 30px);
+        top: 6px;
+        background-color: lighten($black-clr, 85%);
+    }
+    .img-sec {
+        border-radius: 8px;
+        overflow: hidden;
+        img {
+            width: 100%;
+        }
+    }
+    .meta-sec {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px;
+        background-image: linear-gradient(180deg, rgba($black-clr, 0), rgba($black-clr, 0.8));
+        border-radius: 0 0 8px 8px;
+        span {
+            padding: 4px 10px;
+            background-color: $white-clr;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 4px;
+        }
+        p {
+            color: $white-clr;
+            margin-bottom: 0;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+    }
+}
+
+// Offer Box
+.offer-box {
+    display: flex;
+    flex-wrap: wrap;
+    color: $clr-333333;
+    background-color: $white-clr;
+    border: 1px solid $clr-e4e4e4;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba($black-clr, 0.1);
+    padding: 15px;
+    &:hover {
+        color: inherit;
+    }
+    .left-sec {
+        max-width: 40%;
+        flex: 0 0 40%;
+        text-align: center;
+        position: relative;
+        padding: 0 10px;
+        img {
+            width: 100%;
+            border-radius: 8px;
+        }
+        span {
+            font-size: 10px;
+            display: block;
+            color: $white-clr;
+            background-color: $clr-333333;
+            padding: 5px 10px;
+            border-radius: 20px;
+            position: absolute;
+            width: 100%;
+            bottom: -7px;
+            left: 0;
+        }
+    }
+    .right-sec {
+        max-width: 60%;
+        flex: 0 0 60%;
+        padding-left: 10px;
+        .small {
+            color: $clr-999999;
+            text-transform: uppercase;
+        }
+        h4 {
+            position: relative;
+            padding-bottom: 5px;
+            margin-bottom: 8px;
+            &:after {
+                content: "";
+                width: 40px;
+                height: 1px;
+                background-color: $red-clr;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+            }
+        }
+        p {
+            margin-bottom: 0;
+        }
+    }
+    .bottom-sec {
+        max-width: 100%;
+        flex: 0 0 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 15px;
+        p {
+            margin-bottom: 0;
+            &:nth-child(1) {
+                font-size: 12px;
+            }
+            &:nth-child(3) {
+                font-size: 16px;
+                font-weight: 600;
+                color: $red-clr;
+            }
+            span {
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+// Ad Box
+.add-box {
+    display: block;
+    margin-top: 30px;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        margin-top: 10px;
+    }
+    img {
+        width: 100%;
+    }
+}
+
+// Person Quantity Box
+.person-box {
+    width: 25%;
+    span {
+        display: block;
+    }
+    .quantity-box {
+        display: flex;
+        button {
+            display: inline-block;
+            width: 25%;
+            color: $clr-333333;
+            background-color: $clr-f9f9f9;
+            border: 1px solid $clr-e4e4e4;
+            text-align: center;
+            padding: 5px;
+            font-weight: bold;
+            line-height: 1;
+            cursor: pointer;
+        }
+        input[type="number"] {
+            display: inline-block;
+            width: 50%;
+            text-align: center;
+            border: 1px solid $clr-e4e4e4;
+            border-left: 0;
+            border-right: 0;
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+            }
+        }
+    }
+}
+
+// Social List
+.social-list {
+    li {
+        display: inline-block;
+        a {
+            color: $white-clr;
+            background-color: $red-clr;
+            border-radius: 3px;
+            display: inline-block;
+            margin: 0 3px;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            &:hover {
+                background-color: $light-red-clr;
+            }
+        }
+    }
+}
+
+// Info Sec
+.info-sec {
+    .info-head {
+        background-color: $clr-e4e4e4;
+        padding: 10px 15px;
+        text-align: center;
+        border-radius: 8px 8px 0 0;
+        h3 {
+            margin-bottom: 0;
+        }
+    }
+    .info-body {
+        background-color: $clr-f9f9f9;
+        padding: 30px 15px;
+        border-radius: 0 0 8px 8px;
+        min-height: 390px;
+        p {
+        }
+        ul {
+            li {
+                position: relative;
+                padding-left: 40px;
+                padding-top: 5px;
+                margin-bottom: 15px;
+                img {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                }
+            }
+        }
+        .btn {
+            display: block;
+        }
+    }
+}

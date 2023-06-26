@@ -1,0 +1,51 @@
+// Footer
+.main-footer {
+    background-color: $clr-f1f1f1;
+    a {
+        color: $clr-333333;
+        &:hover {
+            color: $red-clr;
+        }
+    }
+    .footer_widgets {
+        position: relative;
+        padding: 50px 0;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            padding: 30px 0;
+        }
+        .widget {
+            position: relative;
+            ul {
+                list-style: none;
+                margin: 0;
+                padding-left: 0;
+                li {
+                    position: relative;
+                    padding: 4px 0;
+                    a {
+                        display: inline-block;
+                        padding-right: 5px;
+                    }
+                }
+            }
+        }
+    }
+    .copyrights {
+        padding: 30px 0;
+        background-color: $clr-e4e4e4;
+        line-height: 1.8;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            padding: 20px 0;
+        }
+        p {
+            margin-bottom: 0;
+        }
+        a {
+            margin: 0 10px;
+        }
+    }
+}

@@ -1,0 +1,159 @@
+{% load static %}
+{% include "online_savaari/header.html" %}
+<style>
+	.table-responsive {
+		width: 860px;
+		height: 500px;
+	}
+
+	.fc-day-header {
+		font-size: 12px;
+		padding: 3px;
+		height: 20px;
+		width: 20px;
+		text-align: center;
+	}
+
+	.fc-day {
+		font-size: 12px;
+		padding: 3px;
+	}
+
+	.fc-day-today {
+		background-color: #ffeeba;
+	}
+
+	.fc-event {
+		background-color: #ea2330;
+		color: #fff;
+		cursor: pointer;
+	}
+</style>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js'></script>
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		var calendarEl = document.getElementById('calendar');
+
+		fetch('http://127.0.0.1:8000/flight/booking_history_api/')
+			.then(function (response) {
+				return response.json();
+			})
+			.then(function (data) {
+				var events = data.map(function (item) {
+					return {
+						date: item.departure_date,
+						id: item.id,
+						title: '     '+item.src + '-' + item.dest
+					};
+				});
+				console.log(events);
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					events: events,
+					eventClick: function (info) {
+						var eventId = info.event.id; // Get the ID of the clicked event
+						window.location.href = 'http://127.0.0.1:8000/flight/login_user_booking_history/' + eventId + '/';
+					}
+				});
+
+				calendar.render();
+			})
+			.catch(function (error) {
+				console.log('Error:', error);
+			});
+	});
+</script>
+
+
+<main class="main-body">
+	<section class="user-pg">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-3 col-md-4 col-12 left-sec">
+					<ul class="breadcumb">
+						<li><a href="{% url 'dashboard'%}">Dashboard</a></li>
+						<li><span>Booking History</span></li>
+					</ul>
+					<ul class="sidemenu">
+						<li>
+							<a href="{% url 'dashboard'%}">Dashboard</a>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" href="#" id="bookingDropdown" role="button"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Booking</a>
+							<div class="dropdown-menu" aria-labelledby="bookingDropdown" style="display: none;">
+								<a class="dropdown-item" href="{% url 'cancel'%}">Cancel</a>
+								<a class="dropdown-item" href="{% url 'rescheduleclaim'%}">Reschedule</a>
+								<a class="dropdown-item" href="{% url 'booking_history'%}">All Bookings</a>
+							</div>
+						</li>
+						<li>
+							<a href="{% url 'refundclaim'%}">Refund</a>
+						</li>
+						<li>
+							<a href="{% url 'profile'%}">Profile</a>
+						</li>
+						<li>
+							<a href="{% url 'savaari_cash'%}">Savaari Cash</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-lg-9 col-md-8 col-12 right-sec">
+					<div class="box-one profile-box">
+						<div class="profile-table">
+							<div class="table-responsive">
+								<div id="calendar"></div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+
+<!-- Footer -->
+{% include "online_savaari/footer.html" %}
+
+<!-- Jquery min -->
+<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+<!-- Popper Min -->
+<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+<!-- Jquery UI -->
+<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+<!-- Owl Carousel -->
+<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+<!-- Star Rating -->
+<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+<!-- Quantity -->
+<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+<!-- Phone -->
+<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+<!-- Custom -->
+<script src="{% static 'main/js/default.js' %}"></script>
+
+</body>
+
+</html>

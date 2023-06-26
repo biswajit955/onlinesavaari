@@ -1,0 +1,129 @@
+// Login
+.login-page {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        height: 100%;
+    }
+    .login-box {
+        color: $clr-333333;
+        background-color: $white-clr;
+        border: 1px solid $clr-e4e4e4;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba($black-clr, 0.1);
+        width: 100%;
+        max-width: 700px;
+        border-radius: 4px;
+        padding: 35px 15px;
+        margin: 0 15px;
+        .info-box {
+            .logo-widget {
+                margin-bottom: 15px;
+            }
+            .info-list {
+                background-color: $clr-fef2d8;
+                border-radius: 4px;
+                margin-bottom: 15px;
+                h5 {
+                    background-color: $clr-feeab8;
+                    margin: 0;
+                    font-weight: 600;
+                    padding: 8px 15px;
+                    border-radius: 4px 4px 0 0;
+                }
+                ul {
+                    padding: 15px;
+                    li {
+                        position: relative;
+                        padding-left: 30px;
+                        min-height: 30px;
+                        img {
+                            position: absolute;
+                            left: 0;
+                            top: -4px;
+                        }
+                        + li {
+                            margin-top: 10px;
+                        }
+                    }
+                }
+            }
+            .social-list {
+                margin-bottom: 15px;
+            }
+        }
+        .form-box {
+            margin-top: 40px;
+
+            // Max 767px
+            @media (max-width: $break-767) {
+                margin-top: 24px;
+            }
+            p {
+                a {
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Agent Banner
+.agent-banner {
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 100% 100%;
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        background-size: cover;
+    }
+    .heading-one {
+        margin-bottom: 0;
+        padding: 150px 0;
+        color: $white-clr;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            padding: 50px 0;
+        }
+        h1 {
+            margin-bottom: 15px;
+        }
+    }
+}
+
+// Agent Package Info
+.agent-package {
+    .heading-one {
+        text-align: center;
+        margin-bottom: 0;
+    }
+}
+
+// Agent Form
+.agent-form {
+    form {
+        background-color: $white-clr;
+        border: 1px solid $clr-e4e4e4;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba($black-clr, 0.1);
+        padding: 30px 80px;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            padding: 30px 15px;
+        }
+        .btn {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+}

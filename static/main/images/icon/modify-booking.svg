@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="61px" height="60px" viewBox="0 0 61 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Modify Booking</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="22" y="18" width="39" height="14"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="39" height="14" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Mobile-Portrait" transform="translate(-20.000000, -20.000000)">
+            <g id="Modify-Booking" transform="translate(20.000000, 20.000000)">
+                <use id="Rectangle" stroke="#F34F4F" mask="url(#mask-2)" stroke-width="3" transform="translate(41.500000, 25.000000) rotate(-45.000000) translate(-41.500000, -25.000000) " xlink:href="#path-1"></use>
+                <polygon id="Triangle" stroke="#F34F4F" stroke-width="1.5" transform="translate(22.000000, 44.000000) scale(1, -1) rotate(-45.000000) translate(-22.000000, -44.000000) " points="22 38 28 50 16 50"></polygon>
+                <path d="M60,51.9940084 C60,56.4155955 56.4264107,60 52.0014504,60 L7.99854961,60 C3.58107264,60 -2.84217094e-14,56.4264107 -2.84217094e-14,52.0014504 L-2.84217094e-14,7.99854961 C-2.84217094e-14,3.58107264 3.573269,0 8.00413119,0 L47.027027,0 C47.9221622,0 48,0.0172769997 48,0.770004272 C48,1.52273155 47.9221622,1.5 47.027027,1.5 L8.5013893,1.5 C4.63462876,1.5 1.5,4.62537376 1.5,8.50359393 L1.5,51.4964061 C1.5,55.3643842 4.62537376,58.5 8.50359393,58.5 L51.4964061,58.5 C55.3643842,58.5 58.5,55.3628335 58.5,51.4919905 L58.5,27.2727273 C58.5,26.52 58.3748691,26 59.2700043,26 C60.1651394,26 60,26.52 60,27.2727273 L60,51.9940084 Z" id="Shape" fill="#F34F4F" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>

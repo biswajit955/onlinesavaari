@@ -1,0 +1,866 @@
+<html><head>
+	<meta charset="UTF-8">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="icon" href="http://127.0.0.1:8000/static/main/images/favicon.png">
+
+	<title>Online Savaari</title>
+
+	<!-- Custom -->
+	<link rel="stylesheet" href="http://127.0.0.1:8000/static/main/css/style.css">
+	<link rel="stylesheet" href="http://127.0.0.1:8000/static/main/css/custom.css">
+<style> .country-select-a {padding-left: 0px;margin-bottom: 0px;}.country-select-a img, .country-select-select-box img{width: 20px;}.country-select-a li{list-style: none;padding: 6px;}.country-select-a li:hover{background-color: #F4F3F3;}.country-select-a li span, .country-select-select-box li span {margin-left: 4px;font-size: 14px;}.country-select-b {margin-top: 2px;background-color: #fff;position: absolute;display: none;width: 100%;border: 1px solid rgba(0, 0, 0, 0.05);border-radius: 4px;box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.05);overflow: hidden;z-index: 9999;}.country-select-select-box {display: flex;align-items: center;position: relative;width: 100%;background-color: #fff;border: 1px solid #fff;border-radius: 4px;padding: 6px;}.country-select-select-box i {top: 10%;position: relative;}.country-select-select-box li i {font-size: 14px;}.country-select-select-box li {display: flex;align-items: center;list-style: none;float: left;padding-bottom: 0px;width: 95%;text-align: left;}.country-select-select-box li {line-height: 20px;color: #132239;cursor: pointer;}.country-select-select-box:hover li {margin-left: 0px;}.country-select-select-box:hover {background-color: #e4e4e4;border: 1px solid transparent;}.country-select-select-box:focus {outline:none;} </style><style type="text/css">@font-face { font-family: Roboto; src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf"); }</style>
+	<style type="text/css">
+		td{
+			padding: 6px;
+		}
+	</style>
+</head>
+ 
+<body onload="adjoin();">
+	<!-- Main Header -->
+	<div class="main-header">
+		<div class="container">
+			<!-- 
+			<div class="alert alert-danger alert-dismissible shadow fade show" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				You are Logout
+			</div>
+			 -->
+			<div class="row align-items-center">
+				<div class="col-md-4 col-3 pr-0 order-lg-1 order-1">
+					<div class="left-sec">
+						<div class="logo-widget">
+							<a href="/">
+								<img class="img-fluid" src="http://127.0.0.1:8000/static/main/images/logo.png" alt="">
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 order-lg-2 order-3">
+					<div class="center-sec">
+						<ul class="menu-items">
+							<li>
+								<a href="#" class="active">
+									<i class="flight-icon"></i>
+									<span>Flights</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<i class="hotel-icon"></i>
+									<span>Hotels</span>
+								</a>
+							</li>
+							<!-- <li>
+								<a href="#">
+									<i class="more-icon"></i>
+									<span>More</span>
+								</a>
+							</li> -->
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-4 col-9 order-lg-3 order-2 pl-0">
+					<div class="right-sec">
+						<div class="region-select">
+							<select id="country-select" style="display: none;">
+								<option data-icon="http://127.0.0.1:8000/static/main/images/flags/in.svg">India</option>
+								<!-- <option data-icon="http://127.0.0.1:8000/static/main/images/flags/af.svg">Afghanistan</option>
+								<option data-icon="http://127.0.0.1:8000/static/main/images/flags/au.svg">Australia</option>
+								<option data-icon="http://127.0.0.1:8000/static/main/images/flags/ca.svg">Canada</option>
+								<option data-icon="http://127.0.0.1:8000/static/main/images/flags/ru.svg">Russia</option>
+								<option data-icon="http://127.0.0.1:8000/static/main/images/flags/us.svg">USA</option> -->
+							</select><button class="country-select-select-box"><li><img src="http://127.0.0.1:8000/static/main/images/flags/in.svg" alt="icon" data-value="India"> <span>India</span></li> <i data-arrow="true" class="fa fa-angle-down"></i></button><div class="country-select-b"><ul class="country-select-a"><li><img src="http://127.0.0.1:8000/static/main/images/flags/in.svg" alt="icon" data-value="India"> <span>India</span></li></ul></div>
+						</div>
+						<div class="links">
+							<a href="#">offers</a>	
+						</div>
+						
+						<div class="dropdown">
+							<button class="dropdown-toggle" type="button" data-toggle="dropdown">
+								<span>Account</span>
+							</button>
+							<div class="dropdown-menu">
+								<a href="/custlogin" class="dropdown-item">Login</a>
+								<a href="/api/register_customer/" class="dropdown-item">Sign Up</a>
+								<div class="dropdown-divider	"></div>
+								<a href="/api/register_corporatecust/" class="dropdown-item">For Business</a>
+								<a href="/api/register_corporatecust/" class="dropdown-item">For Agents</a>
+							</div>
+						</div>
+						
+						<div class="dropdown">
+							<button class="dropdown-toggle" type="button" data-toggle="dropdown">
+								<span>Support</span>
+							</button>
+							<div class="dropdown-menu">
+								<a href="" class="dropdown-item">Call Us</a>
+								<a href="mailto:support@onlinesavaari.com" class="dropdown-item">Mail Us</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Main -->
+<pre>{'seatNo': '1A', 'seatPosition': {'row': 1, 'column': 1}, 'isBooked': True, 'isLegroom': True, 'code': '1A', 'amount': 1200.0} 
+</pre>
+	<main class="main-body">
+		<section class="details-pg">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8 left-sec">
+						<div class="title-sec">
+							<h3>
+								<span>
+									<img src="http://127.0.0.1:8000/static/main/images/icon/plus-circle.png" alt=""> Service Requests <span>(Optional)</span>
+								</span>
+							</h3>
+						</div>
+
+						<div class="box-one service-box">
+							<div class="heading-one">
+								<h4>Select Seat</h4>
+								<p><b>Pro Tip :</b> Grab your favourite seat before it gets sold.</p>
+							</div>
+							
+							<div class="seat-booking">
+								<div id="holder">
+									<table>
+										<tr>
+										<td>F</td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/selected.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/selected.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										</tr>
+
+										<tr>
+										<td>E</td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/selected.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										</tr>
+
+										<tr>
+										<td>D</td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/booked.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										</tr>
+
+										<tr style="height:30px;"></tr>
+
+										<tr>
+										<td>C</td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										</tr>
+
+										<tr>
+										<td>B</td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										</tr>
+
+										<tr>
+										<td>A</td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										<td><img src="http://127.0.0.1:8000/static/main/images/icon/seat/available.png"></td>
+										</tr>
+
+										<tr style="height:30px;"></tr>
+
+										<tr>
+										<td></td>
+										<td>1</td>
+										<td>2</td>
+										<td>3</td>
+										<td>4</td>
+										<td>5</td>
+										<td>6</td>
+										<td>7</td>
+										<td>8</td>
+										<td>9</td>
+										<td>10</td>
+										<td>11</td>
+										<td>12</td>
+										<td>13</td>
+										<td>14</td>
+										<td>15</td>
+										<td>16</td>
+										<td>17</td>
+										<td>18</td>
+										<td>19</td>
+										<td>20</td>
+										<td>21</td>
+										<td>22</td>
+										<td>23</td>
+										<td>24</td>
+										<td>25</td>
+										<td>26</td>
+										<td>27</td>
+										<td>28</td>
+										<td>29</td>
+										<td>30</td>
+										</tr>
+									</table>
+								</div>
+								<ul class="seat-info">
+									<li style="background-image:url(http://127.0.0.1:8000/static/main/images/icon/seat/available.png);">Available Seat</li>
+									<li style="background-image:url(http://127.0.0.1:8000/static/main/images/icon/seat/booked.png);">Booked Seat</li>
+									<li style="background-image:url(http://127.0.0.1:8000/static/main/images/icon/seat/selected.png);">Selected Seat</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 right-sec">
+						<div class="title-sec">
+							<h4>Fare Details <a href="javascript:void(0)" class="fare-sidebar-open">View Fare Rules</a></h4>
+						</div>
+						<div class="box-one fare-box">
+							<p>
+								<span>Base Fare <span>(1 Traveller)</span></span>
+								<span>₹ 5,824</span>
+							</p>
+							<p>
+								<span>Fee &amp; Surcharges </span>
+								<span>₹ 738</span>
+							</p>
+							<div class="bg-grey">
+								<p class="small">
+									<span>User Development Fee</span>
+									<span>₹ 62</span>
+								</p>
+								<p class="small">
+									<span>Passenger Service Fee</span>
+									<span>₹ 91</span>
+								</p>
+								<p class="small">
+									<span>Airline Fuel Surcharges</span>
+									<span>₹ 585</span>
+								</p>
+							</div>
+							<hr>
+							<h4>
+								<span>Total Fare</span>
+								<span>₹ 6,562</span>
+							</h4>
+							<p>
+								<span>Add-Ons</span>
+								<span>₹ 10</span>
+							</p>
+							<div class="bg-grey">
+								<p class="small">
+									<span>
+										TAKE OFF Contribution
+										<a href="javascript:void(0)" class="close">
+											<i class="fa fa-close"></i>
+										</a>
+									</span>
+									<span>₹ 10</span>
+								</p>
+							</div>
+							<p>
+								<span>
+									Savari Promo Offer
+									<a href="javascript:void(0)" class="close">
+										<i class="fa fa-close"></i>
+									</a>
+								</span>
+								<span class="green">(-) ₹ 853</span>
+							</p>
+							<div class="promocode-add">
+								<h3>
+									<span>You Pay :</span>
+									<span>₹ 5,719</span>
+								</h3>
+								<h5 class="green">
+									<span>Total Savings</span>
+									<span>₹ 853</span>
+								</h5>
+							</div>
+						</div>
+						<div class="title-sec">
+							<h4>Promo Code</h4>
+						</div>
+						<div class="box-one promocode-box">
+							<h4>Select a Promo Code</h4>
+							<div class="input-sec">
+								<input type="text" value="YRCITI" placeholder="Your Promo Code">
+								<button class="active">
+									Applied
+									<i class="la la-check"></i>
+								</button>
+							</div>
+							<div class="promocode-applied">
+								<i class="fa fa-check-circle green"></i>
+								<small>Congrats! You have availed a discount of Rs.853 , TnC apply.</small>
+							</div>
+							<ul>
+								<li>
+									<label class="promo-radio2">
+										<input type="radio" name="promocode2" checked="checked">
+										<span class="checkmark"></span>
+										<div class="promo-info">
+											<span class="code">YRCITI</span>
+											<span class="price yellow">Save ₹ 853</span>
+											<p class="small m-0">FLat 13% off on using CITI Bank Credit &amp; Debit cards</p>
+										</div>
+									</label>
+									<div class="promo-terms">
+										<a href="#">Terms &amp; Conditions</a>
+									</div>
+								</li>
+								<li>
+									<label class="promo-radio2">
+										<input type="radio" name="promocode2">
+										<span class="checkmark"></span>
+										<div class="promo-info">
+											<span class="code">YRCITI</span>
+											<span class="price yellow">Save ₹ 853</span>
+											<p class="small m-0">FLat 13% off on using CITI Bank Credit &amp; Debit cards</p>
+										</div>
+									</label>
+									<div class="promo-terms">
+										<a href="#">Terms &amp; Conditions</a>
+									</div>
+								</li>
+								<li>
+									<label class="promo-radio2">
+										<input type="radio" name="promocode2">
+										<span class="checkmark"></span>
+										<div class="promo-info">
+											<span class="code">YRCITI</span>
+											<span class="price yellow">Save ₹ 853</span>
+											<p class="small m-0">FLat 13% off on using CITI Bank Credit &amp; Debit cards</p>
+										</div>
+									</label>
+									<div class="promo-terms">
+										<a href="#">Terms &amp; Conditions</a>
+									</div>
+								</li>
+								<li>
+									<label class="promo-radio2">
+										<input type="radio" name="promocode2">
+										<span class="checkmark"></span>
+										<div class="promo-info">
+											<span class="code">YRCITI</span>
+											<span class="price yellow">Save ₹ 853</span>
+											<p class="small m-0">FLat 13% off on using CITI Bank Credit &amp; Debit cards</p>
+										</div>
+									</label>
+									<div class="promo-terms">
+										<a href="#">Terms &amp; Conditions</a>
+									</div>
+								</li>
+								<li>
+									<label class="promo-radio2">
+										<input type="radio" name="promocode2">
+										<span class="checkmark"></span>
+										<div class="promo-info">
+											<span class="code">YRCITI</span>
+											<span class="price yellow">Save ₹ 853</span>
+											<p class="small m-0">FLat 13% off on using CITI Bank Credit &amp; Debit cards</p>
+										</div>
+									</label>
+									<div class="promo-terms">
+										<a href="#">Terms &amp; Conditions</a>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Fare Rules Sidebar -->
+		<div class="fare-rules-sidebar">
+			<button class="fare-sidebar-close">
+				<img src="http://127.0.0.1:8000/static/main/images/icon/close-w.png" alt="">
+			</button>
+			<div class="fare-body">
+				<h3>Fare Rules</h3>
+				<div class="flight-code">DEL-GOI-BLR</div>
+				<table class="table table-bordered mb-4">
+					<thead>
+						<tr>
+							<th>Time</th>
+							<th>Airline Cancellation Fee</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<span>DURATION (Prior to the date/time of departure)</span>
+							</td>
+							<td>
+								<span>Per Passenger</span>
+							</td>
+						</tr>
+						<tr>
+							<td>0 hour to 2 hours</td>
+							<td>Non Refundable</td>
+						</tr>
+						<tr>
+							<td>2 hours to 4 days</td>
+							<td><i class="la la-rupee"></i>3,500</td>
+						</tr>
+						<tr>
+							<td>&gt; 4 days</td>
+							<td><i class="la la-rupee"></i>3,000</td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="table table-bordered mb-4">
+					<thead>
+						<tr>
+							<th>Time</th>
+							<th>Airline Date Change Fee</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<span>DURATION (Prior to the date/time of departure)</span>
+							</td>
+							<td>
+								<span>Per Passenger</span>
+							</td>
+						</tr>
+						<tr>
+							<td>2 hours to 4 days</td>
+							<td><i class="la la-rupee"></i>3,250</td>
+						</tr>
+						<tr>
+							<td>&gt; 4 days</td>
+							<td><i class="la la-rupee"></i>2,750</td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="table table-bordered mb-4">
+					<thead>
+						<tr>
+							<th colspan="2">Savari Service Fee (YSF)*</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="2">
+								<span>(charged per passenger in addition to airline fee as applicable)</span>
+							</td>
+						</tr>
+						<tr>
+							<td>Online Cancellation Service Fee</td>
+							<td><i class="la la-rupee"></i>400</td>
+						</tr>
+						<tr>
+							<td>Offline Cancellation Service Fee</td>
+							<td><i class="la la-rupee"></i>400</td>
+						</tr>
+						<tr>
+							<td>Online Rescheduling Service Fee</td>
+							<td><i class="la la-rupee"></i>400</td>
+						</tr>
+						<tr>
+							<td>Offline Rescheduling Service Fee</td>
+							<td><i class="la la-rupee"></i>1,250</td>
+						</tr>
+					</tbody>
+				</table>
+				<p class="small">*Please note: Savari Service Fee is over and above the airline cancellation fee due to which refund type may vary.</p>
+				<p class="small">
+					In case of full/partial cancellation the offer stands void and the customer will not be eligible for the discount. Savari will refund the amount after adjusting
+					the discount and any other applicable charges/penalties.
+				</p>
+			</div>
+		</div>
+	</main>
+
+
+	<!-- Footer -->
+	<footer class="main-footer mt-5">
+		<div class="footer_widgets">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-2 col-6 mb-3 mb-md-0">
+						<div class="widget">
+							<h4 class="mb-3">Quick Links</h4>
+							<ul>
+								<li>
+									<a href="#.html">Home</a>
+								</li>
+								<li>
+									<a href="#.html">How it works</a>
+								</li>
+								<li>
+									<a href="#.html">Service</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-2 col-6 mb-3 mb-md-0">
+						<div class="widget">
+							<h4 class="mb-3">Be A Partner</h4>
+							<ul>
+								<li>
+									<a href="/api/register_corporatecust/">Travel agent signup</a>
+								</li>
+								<li>
+									<a href="#.html">Register your hotel</a>
+								</li>
+								<li>
+									<a href="#.html">Sell holyday pakage</a>
+								</li>
+								<li>
+									<a href="#.html">Advertise with us</a>
+								</li>
+								<li>
+									<a href="#.html">Become a Savaari franchise</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-2 col-6 mb-3 mb-md-0">
+						<div class="widget">
+							<h4 class="mb-3">Support</h4>
+							<ul>
+								<li>
+									<a href="/faq/">FAQ</a>
+								</li>
+								<li>
+									<a href="/term">Terms &amp; Conditions</a>
+								</li>
+								<li>
+									<a href="/privacy/">Privacy Policy</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-2 col-6 mb-3 mb-md-0">
+						<div class="widget">
+							<h4 class="mb-3">More</h4>
+							<ul>
+								<li>
+									<a href="/about/">About</a>
+								</li>
+								<li>
+									<a href="#.html">Request a quote</a>
+								</li>
+								<li>
+									<a href="/contact/">Contact us</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-4 text-md-right">
+						<div class="widget">
+							<address>
+								3rd Floor, Office no. A302, Range Heights,<br> 
+								Link Road, Behram Bug Road,<br> 
+								Oshiwara, Sarvodya Nagar,<br> 
+								Mumbai, Maharashtra, 400102<br>
+							</address>
+							<h3 class="mb-3">
+								<a href="">
+									<i class="icon-line2-earphones-alt mr-1"></i> 1800 4199 066
+								</a>
+							</h3>
+							<!-- tel:111223344 -->
+							<div class="social-list2 justify-content-md-end">
+								<a href="https://www.facebook.com/OnlineSavaari" title="Facebook">
+                                             <i class="fa fa-facebook-f"></i>
+                                        </a>
+                                        <a href="https://twitter.com/OnlineSavaari" title="instagram">
+                                             <i class="fa fa-twitter"></i>
+                                        </a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="more-info">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="content">
+							<div class="trust">
+								<span>
+									<img src="http://127.0.0.1:8000/static/main/images/Iata_official_logo1.png" alt="" "="">
+								</span>
+								<!-- <span>
+									<img src="http://127.0.0.1:8000/static/main/images/footer-icon/pci.png" alt="">
+								</span> -->
+							</div>
+							<!-- <div class="social">
+								<p>Connect with us :</p>
+								<div class="icons">
+									<a href="#">
+										<img src="http://127.0.0.1:8000/static/main/images/footer-icon/fb.png" alt="">
+									</a>
+									<a href="#">
+										<img src="http://127.0.0.1:8000/static/main/images/footer-icon/twitter.png" alt="">
+									</a>
+									<a href="#">
+										<img src="http://127.0.0.1:8000/static/main/images/footer-icon/instagram.png" alt="">
+									</a>
+									<a href="#">
+										<img src="http://127.0.0.1:8000/static/main/images/footer-icon/youtube.png" alt="">
+									</a>
+									<a href="#">
+										<img src="http://127.0.0.1:8000/static/main/images/footer-icon/google-plus.png" alt="">
+									</a>
+								</div>
+							</div> -->
+							<div class="payment-option">
+								<span>
+									<img src="http://127.0.0.1:8000/static/main/images/footer-icon/visa.png" alt="">
+								</span>
+								<span>
+									<img src="http://127.0.0.1:8000/static/main/images/footer-icon/american.png" alt="">
+								</span>
+								<span>
+									<img src="http://127.0.0.1:8000/static/main/images/footer-icon/master.png" alt="">
+								</span>
+								<span>
+									<img src="http://127.0.0.1:8000/static/main/images/footer-icon/diners.png" alt="">
+								</span>
+								<span>
+									<img src="http://127.0.0.1:8000/static/main/images/footer-icon/rupay.png" alt="">
+								</span>
+								<span>
+									<img src="http://127.0.0.1:8000/static/main/images/footer-icon/emi.png" alt="">
+								</span>
+								<span>
+									<img src="http://127.0.0.1:8000/static/main/images/footer-icon/net-banking.png" alt="">
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="copyrights">
+			<div class="container">
+				<div class="row justify-content-between align-items-center">
+					<div class="col-md-6">
+						<p>Copyrights © 2022 All Rights Reserved by <b>Online Savaari Private Limited</b></p>
+					</div>
+					<div class="col-md-6 d-md-flex flex-md-column align-items-md-end mt-4 mt-md-0">
+						<div class="copyrights_links">
+							<a href="/term">Terms &amp; Conditions</a>/<a href="/privacy/">Privacy Policy</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- Jquery min -->
+	<script src="http://127.0.0.1:8000/static/main/js/jquery.min.js"></script>
+
+	<!-- Popper Min -->
+	<script src="http://127.0.0.1:8000/static/main/plugins/bootstrap/js/popper.min.js"></script>
+
+	<!-- Bootstrap -->
+	<script src="http://127.0.0.1:8000/static/main/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- Jquery UI -->
+	<script src="http://127.0.0.1:8000/static/main/plugins/Jquery-ui/jquery-ui.min.js"></script>
+
+	<!-- Owl Carousel -->
+	<script src="http://127.0.0.1:8000/static/main/plugins/owl-carousel/js/owl.carousel.min.js"></script>
+
+	<!-- Star Rating -->
+	<script src="http://127.0.0.1:8000/static/main/plugins/star_rating/star-rating.js"></script>
+
+	<!-- Quantity -->
+	<script src="http://127.0.0.1:8000/static/main/plugins/quantity.js"></script>
+
+	<!-- Phone -->
+	<script src="http://127.0.0.1:8000/static/main/plugins/phone/phone.js"></script>
+
+	<!-- Select -->
+	<script src="http://127.0.0.1:8000/static/main/plugins/selectbox.js"></script>
+
+	<!-- Select -->
+	<script src="http://127.0.0.1:8000/static/main/plugins/seat-booking/seat.js"></script>
+
+	<!-- Custom -->
+	<script src="http://127.0.0.1:8000/static/main/js/default.js"></script>
+
+
+
+</body></html>

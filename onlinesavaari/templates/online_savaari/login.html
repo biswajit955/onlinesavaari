@@ -1,0 +1,208 @@
+{% load socialaccount %}
+{% load static %}
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="icon" href="{% static 'main/images/favicon.png' %}">
+
+	<title>Online Savaari</title>
+
+	<!-- Custom -->
+	<link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'main/css/custom.css' %}">
+</head>
+
+<body>
+	<!-- Login -->
+	<section class="login-pg">
+		<div class="login-box box-one">
+			<div class="row">
+				<div class="col-md-6 left-sec">
+					<div class="logo-widget">
+						<a href="{% url 'index' %}">
+							<img src="{% static 'main/images/logo.png' %}" alt="">
+						</a>
+					</div>
+					<div class="info-box">
+						<h5>For more log In</h5>
+						<ul>
+							<li>
+								<img src="{% static 'main/images/icon/login1.png' %}" alt=""> <b>View</b> / <b>Cancel</b> / <b>Reschedule</b> bookings
+							</li>
+							<li>
+								<img src="{% static 'main/images/icon/login2.png' %}" alt=""> Check booking <b>history</b>, manage <b>cancellations</b> & print <b>e-Tickets</b>
+							</li>
+							<li>
+								<img src="{% static 'main/images/icon/login3.png' %}" alt=""> Book faster with <b>Pre-Filled Forms</b>, saved <b>Travellers</b> & <b>Saved Cards</b>
+							</li>
+						</ul>
+					</div>
+					<h5>Login with</h5>
+					<ul class="social-list">
+						<li><a href="{% url 'social:begin' 'facebook' %}"><i class="fa fa-facebook"></i></a></li>
+						<!-- <li><a href="#"><i class="fa fa-twitter"></i></a></li> -->
+						<li><a href="{% provider_login_url 'google' %}"><i class="fa fa-google-plus"></i></a></li>
+						<!-- <li><a href="#"><i class="fa fa-linkedin"></i></a></li> -->
+					</ul>
+					<a href="{% url 'register_customer' %}" class="btn btn-red signup-btn" style="color: white;">Sign up</a>
+				</div>
+				<div class="col-md-6 right-sec">
+					<div class="heading-one">
+						<h3>Welcome to Online Savaari!</h3>
+						<p>Enter your login details to continue</p>
+					</div>
+					{% if error_mgs %}
+					<h4 class="text-danger"> {{error_mgs}} </h4>
+					{% endif %}
+					<form id="login-id" action="{% url 'custlogin' %}" method="POST">
+						{% csrf_token %}
+						<div class="form-content">
+							<div class="form-group">
+								<label for="">Username / Email / Mobile No.</label>
+								<input type="text" name ="username" class="form-control" placeholder="Username / Email / Mobile No.">
+							</div>
+							<div class="form-group">
+								<label for="">Password</label>
+								<input type="password" name ="password" class="form-control" placeholder="******">
+							</div>
+							<div class="form-group">
+								<label class="custom-checkbox">
+									Remember me
+									<input type="checkbox" checked="checked">
+									<span class="checkmark"></span>
+								</label>
+							</div>
+							<div class="form-group">
+								<button class="btn btn-block btn-blue" type="submit">Login</button>
+							</div>
+							<div class="form-group">
+						<a href="{% url 'password_reset' %}" style="text-align: left;">Forgot Password</a>
+					</div>
+						</div>
+						<p style="text-align: center;">OR</p>
+					</form>
+					<div class="form-group">
+						<button id="otp" class="btn btn-block btn-blue" type="button">Login with OTP</button>
+					</div>
+
+					<p class="small">
+						By proceeding, you agree with our <a href="{% url 'term'%}" target="_blank">Terms of Service</a>, <a href="{% url 'privacy'%}" target="_blank">Privacy Policy</a> & <a href="#"
+							target="_blank">User Agreement</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Jquery min -->
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+	<!-- Custom -->
+	<script src="{% static 'main/js/default.js' %}"></script>
+
+	<script>
+		$('#otp').click(function(){
+			if($(this).text() == "Login with OTP"){
+				$('#login-id').attr('action', "/Mobilelogin/")
+				$(this).text("Login with Password")
+				$('.form-content').html(`
+					<div class="form-group">
+						<label for="">Mobile No.</label>
+						<input type="tel" maxlength="10" name="phone" class="form-control" placeholder="Mobile No.">
+					</div>
+					<div class="form-group">
+						<label for="">OTP</label>
+						<div style="display: flex;gap:0.5em;">
+							<input type="password" name ="otp" class="form-control" placeholder="******">
+							<button style="max-width: 125px;padding:0;" id="generate_otp" class="btn btn-block btn-red" type="button">Generate OTP</button>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="custom-checkbox">
+							Remember me
+							<input type="checkbox" checked="checked">
+							<span class="checkmark"></span>
+						</label>
+					</div>
+					<div class="form-group">
+						<button class="btn btn-block btn-blue" type="submit">Login</button>
+					</div>`)
+					addevent()
+			} else {
+				console.log("Login with Password")
+				$(this).text("Login with OTP")
+				$('#login-id').attr('action', "/custlogin")
+				$('.form-content').html(`
+				<div class="form-group">
+					<label for="">Username / Email / Mobile No.</label>
+					<input type="text" name ="username" class="form-control" placeholder="Username / Email / Mobile No.">
+				</div>
+				<div class="form-group">
+					<label for="">Password</label>
+					<input type="password" name ="password" class="form-control" placeholder="******">
+				</div>
+				<div class="form-group">
+					<label class="custom-checkbox">
+						Remember me
+						<input type="checkbox" checked="checked">
+						<span class="checkmark"></span>
+					</label>
+				</div>
+				<div class="form-group">
+					<button class="btn btn-block btn-blue" type="submit">Login</button>
+				</div>`)
+			}
+		})
+
+		function addevent(){
+			$('#generate_otp').click(function(){
+				console.log("click")
+				$.ajax({
+					type: "GET",
+					url: "/Mobilelogin/",
+					data: {
+						phone: $('[name="phone"]').val(),
+					},
+					success: function(res){
+						console.log(res)
+					},
+				});
+			})
+		}
+	</script>
+
+</body>
+
+</html>

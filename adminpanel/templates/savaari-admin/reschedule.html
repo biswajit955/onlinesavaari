@@ -1,0 +1,213 @@
+{% load static%}
+{% include "savaari-admin/header.html" %}
+
+<!--  END TOPBAR  -->
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+
+        <div class="row layout-top-spacing" id="cancel-row">
+
+            <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                <div class="widget-content widget-content-area br-6">
+                    <div class="row">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary mb-2 ml-4 mr-2" data-toggle="modal" data-target="#downloadModal">
+                                Export Excel
+                            </button>
+                        </div>
+                        <div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="downloadModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content" style="padding: 1em 2em;">
+                                    <form action="{% url 'reschedule_excel' %}" method="POST" id="excel_form">
+                                        {% csrf_token %}
+                    
+                                        <div class="row m-8">
+                                            <div class="form-group col">
+                                                <label for="exampleFormControlInput1">Enter User ID</label>
+                                                <input type="text" class="form-control form-control-sm" name="user_id" placeholder="User ID"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <input type="submit" name="time" class="btn btn-primary">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive mb-4 mt-4">
+                        <table class="multi-table table table-striped table-bordered table-hover non-hover"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Booking Id</th>
+                                    <th>Query</th>
+                                    <th>Payment Request</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in reschedule %}
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content" style="padding: 1em 2em;">
+                                            <form action="{% url 'reschedule_pay_request' %}" method="POST">
+                                                {% csrf_token %}
+                                                <div class="row mb-4">
+                                                    <div class="form-group col">
+                                                        <label for="exampleFormControlInput1">BookingId</label>
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            name="BookingId" placeholder="{{i.Reschedule_bookingid}}"
+                                                            value="{{i.Reschedule_bookingid}}" readonly>
+                                                        <input type="hidden" class="form-control form-control-sm"
+                                                            name="username" value="{{i.first_name}}" readonly>
+                                                    </div>
+                                                    <div class="form-group col">
+                                                        <label for="exampleFormControlInput1">Amount</label>
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            name="amount" placeholder="Amount" required>
+                                                    </div>
+                                                </div>
+                                                <input type="submit" name="time" class="btn btn-primary">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <tr>
+                                    <form action="{% url 'update_reschedule' i.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <td><input class="form-control form-control-sm" type="text" value="{{i.user}}"
+                                                name="username" readonly></td>
+                                        <td><input class="form-control form-control-sm" type="text"
+                                                value="{{i.Reschedule_bookingid}}" name="BookingId" readonly></td>
+                                        <td><input class="form-control form-control-sm" type="text"
+                                                value="{{i.Reschedule_flight_date}}" name="Reschedule_flight_date"
+                                                readonly></td>
+                                        <td>
+                                            <button class="mr-2 btn btn-primary message">Query message</button>
+                                            <input class="form-control form-control-sm" type="hidden"
+                                                value="{{i.Reschedule_query}}" name="query" readonly>
+                                        </td>
+                                        <td>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-primary mb-2 mr-2"
+                                                    data-toggle="modal" data-target="#exampleModal">
+                                                    Request
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <select class="form-control form-control-sm" name="reschedule_status">
+                                                <option value="Pending" selected>Pending</option>
+                                                <option value="In Process">On Precess</option>
+                                                <option value="Payment Received">Payment Received</option>
+                                                <option value="Receipt and On Process">Receipt and On Process</option>
+                                                <option value="Completed">Completed</option>
+                                                <option value="Failed">Failed</option>
+                                            </select>
+                                        </td>
+                                        <td><input class="btn btn-primary" type="submit" name="submit"></td>
+                                </tr>
+                                </form>
+
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Booking Id</th>
+                                    <th>Query</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="footer-wrapper">
+        <div class="footer-section f-section-1">
+            <p class="">Copyright © 2020 <a target="_blank" href="https://designreset.com">DesignReset</a>, All rights
+                reserved.</p>
+        </div>
+        <div class="footer-section f-section-2">
+            <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-heart">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                    </path>
+                </svg></p>
+        </div>
+    </div>
+</div>
+<!--  END CONTENT AREA  -->
+
+</div>
+<!-- END MAIN CONTAINER -->
+
+
+
+<!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+<script src="{% static 'admin/assets/js/libs/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'admin/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'admin/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'admin/plugins/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+<script src="{% static 'admin/assets/js/app.js' %} "></script>
+
+<script>
+    $(document).ready(function () {
+        App.init();
+    });
+</script>
+<script src="{% static 'admin/plugins/highlight/highlight.pack.js' %}"></script>
+<script src="{% static 'admin/assets/js/custom.js' %}"></script>
+<script src="{% static 'admin/assets/js/scrollspyNav.js' %}"></script>
+<!-- END GLOBAL MANDATORY SCRIPTS -->
+
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="{% static 'admin/plugins/table/datatable/datatables.js' %}"></script>
+<script src="{% static 'admin/assets/js/scrollspyNav.js' %}"></script>
+<script src="{% static 'admin/plugins/sweetalerts/sweetalert2.min.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        $('table.multi-table').DataTable({
+            "oLanguage": {
+                "oPaginate": { "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>', "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' },
+                "sInfo": "Showing page _PAGE_ of _PAGES_",
+                "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                "sSearchPlaceholder": "Search...",
+                "sLengthMenu": "Results :  _MENU_",
+            },
+            "stripeClasses": [],
+            "lengthMenu": [7, 10, 20, 50],
+            "pageLength": 7,
+            drawCallback: function () {
+                $('.t-dot').tooltip({ template: '<div class="tooltip status" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' })
+                $('.dataTables_wrapper table').removeClass('table-striped');
+            }
+        });
+    });
+
+    $('.message').on('click', function () {
+        let msg = $(this).next().val()
+        swal({
+            title: msg,
+            padding: '2em'
+        })
+    })
+
+</script>
+<!-- END PAGE LEVEL SCRIPTS -->
+
+</body>
+
+</html>

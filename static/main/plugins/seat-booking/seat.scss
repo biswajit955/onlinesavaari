@@ -1,0 +1,46 @@
+.seat-booking {
+    #holder {
+        width: 100%;
+        overflow-x: auto;
+        #place {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 1050px;
+            li {
+                background-position: 6px 6px;
+                background-repeat: no-repeat;
+                cursor: pointer;
+                height: 34px;
+                width: 34px;
+                display: block;
+                position: relative;
+                &:hover {
+                    background-color: #f1f1f1;
+                }
+                &.seat {
+                    background-image: url("../images/icon/seat/available.png");
+                }
+                &.selectedSeat {
+                    background-image: url("../images/icon/seat/booked.png");
+                }
+                &.selectingSeat {
+                    background-image: url("../images/icon/seat/selected.png");
+                }
+            }
+        }
+    }
+    .seat-info {
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        li {
+            background-position: 2px 1px;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-left: 20px;
+        }
+    }
+}

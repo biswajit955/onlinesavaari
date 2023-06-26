@@ -1,0 +1,109 @@
+{% load static%}
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="icon" href="{% static 'main/images/favicon.png' %}">
+
+	<title>Online Savaari</title>
+
+	<!-- Custom -->
+	<link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/custom.css' %}">
+</head>
+
+<body>
+	<!-- Main Header -->
+	{% include "online_savaari/header.html" %}
+
+	<!-- Main Two -->
+	<main class="main-body">
+		<!-- Agent Banner -->
+		<section class="agent-banner" style="background-image:url({% static 'main/images/bg/5.png' %});">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="heading-one">
+							<h1>India's leading online travel brand committed to the mission of 'creating happy travellers'</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Agent Form -->
+		<section class="agent-form pt-5">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8 col-12 offset-lg-2">
+						<form action="" class="box-one">
+							<div class="heading-one mb-4">
+								<h3>Contact Online Savaari</h3>
+							</div>
+							<div class="row">
+								<div class="col-12">
+									<div class="form-group">
+										<label for="">Your email</label>
+										<input type="text" class="form-control" placeholder="Email">
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-group">
+										<label for="">Your query</label>
+										<textarea name="" id="" rows="6" class="form-control" placeholder="Your query"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="col-12 text-center">
+								<button class="btn btn-red">Send Query</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<!-- Footer -->
+	{% include "online_savaari/footer.html" %}
+
+	<!-- Jquery min -->
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+	<!-- Custom -->
+	<script src="{% static 'main/js/default.js' %}"></script>
+
+</body>
+
+</html>

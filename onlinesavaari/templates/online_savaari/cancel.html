@@ -1,0 +1,536 @@
+{% load static %}
+{% load flight_tags %}
+{% include "online_savaari/header.html" %}
+<style>
+	.popup-screen{
+z-index: 999999;
+position: fixed;
+background: rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(10px);
+width: 100%;
+height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+visibility: hidden;
+transition: 0.5s ease;
+transition-property: visibility;
+}
+
+.popup-screen.active{
+visibility: visible;
+}
+
+.popup-box{
+position: relative;
+background: rgba(255, 255, 255, 0.8);
+backdrop-filter: blur(10px);
+max-width: 350px;
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+margin: 20px;
+padding: 50px 40px;
+border-radius: 20px;
+box-shadow: 0 5px 25px rgb(0 0 0 / 20%);
+transform: scale(0);
+transition: 0.5s ease;
+transition-property: transform;
+}
+
+.popup-screen.active .popup-box{
+transform: scale(1);
+}
+
+.popup-box h2{
+font-size: 2.1em;
+font-weight: 800;
+margin-bottom: 20px;
+}
+
+.popup-box p{
+font-size: 1em;
+margin-bottom: 30px;
+}
+
+.popup-box .btn{
+color: #fff;
+background: red;
+font-size: 1.1em;
+font-weight: 500;
+text-decoration: none;
+text-transform: uppercase;
+padding: 7px 27px;
+border-radius: 3px;
+}
+
+.close-btn{
+position: absolute;
+font-size: 1em;
+top: 0;
+right: 0;
+margin: 15px;
+cursor: pointer;
+opacity: 0.5;
+transition: 0.3s ease;
+transition-property: opacity;
+}
+
+.close-btn:hover{
+opacity: 1;
+}
+
+section{
+padding: 50px 100px;
+}
+
+.home{
+position: relative;
+width: 100%;
+min-height: 100vh;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.image{
+position: relative;
+width: 45%;
+min-height: 450px;
+}
+
+.image img{
+position: absolute;
+width: 100%;
+height: 100%;
+object-fit: cover;
+border-radius: 10px;
+}
+
+.info{
+position: relative;
+width: 52%;
+}
+
+.info h2{
+font-size: 2em;
+font-weight: 800;
+}
+
+.info p{
+font-size: 1em;
+text-align: justify;
+margin-top: 10px;
+}
+.trip-type-radio {
+			display: flex;
+			gap: 1em;
+		}
+		.trip-type-radio li {
+			border-radius: 6px;
+			border: 1px solid black;
+		}
+
+
+.box-one .box-one {
+	padding-bottom: 0;
+	border: 0;
+	box-shadow: none;
+}
+
+@media (max-width: 990px){
+section{
+padding: 50px 30px;
+}
+
+.home{
+display: block;
+}
+
+.image{
+width: 100%;
+}
+
+.info{
+width: 100%;
+margin-top: 15px;
+}
+}
+</style>
+<main class="main-body">
+	<section class="cancel-pg">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="box-one">
+						<form id="form_submit" action="{% url 'get_data' %}" method="POST">
+							{% csrf_token %}
+						<h4>Cancellation request</h4>
+						<ul class="trip-type-radio">
+							<li>
+								<label class="text-radio">
+									<input id="one-way" type="radio" name="radio1" checked value="cancel_conplete_trip" onclick="waySelect('one-way')">
+									<span class="checkmark"></span>
+									<span class="trip-label">cancel Complete trip</span>
+								</label>
+							</li>
+							<li>
+								<label class="text-radio">
+									<input id="round-trip" type="radio" name="radio1" onclick="waySelect('round-trip')" value="cancel_traveller" >
+									<span class="checkmark"></span>
+									<span class="trip-label">Cancel Traveller</span>
+								</label>
+							</li>
+							<li>
+								<label class="text-radio">
+									<input id="multi-city" type="radio" name="radio1"  onclick="waySelect('multi-city')" value="cancel_route">
+									<span class="checkmark"></span>
+									<span class="trip-label">Cancel Route</span>
+								</label>
+							</li>
+						</ul>
+						<div class>
+							<div class="box-one">
+								{% if msg%}
+									<h3 style="color: red">{{msg}}</h3>
+								{% endif %}
+								<div class="title-sec">
+
+									<h3 class="full-cancel">
+										Please fill out the form for Complete cancellation
+									</h3>
+									<h3 class="cancel-traveller">
+										Please fill out the form for Traveller cancellation
+									</h3>
+									<h3 class="cancel-route">
+										Please fill out the form for Route cancellation
+									</h3>
+								</div>
+									<div class="row">
+										<div class="col-md-6 col-12">
+											<p>
+												Enter your Savari booking reference number <span>*</span>
+											</p>
+										</div>
+										<div class="col-md-6 col-12">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="Savari Booking Reference Number" name="bookingId1" value="{{bookingId}}" required>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6 col-12">
+											<p>
+												Remark
+											</p>
+										</div>
+										<div class="col-md-6 col-12">
+											<div class="form-group">
+												<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="remark"></textarea>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6 col-12">
+											<div class="captcha">
+												<img class="main-img" src="images/captchaImage.png" alt="">
+												<a href="#">
+													<img src="images/refreshCaptchaIcon.png" alt="">
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-12">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="Enter the captcha">
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-12 text-center">
+											<button id="submit" class="btn btn-red" type="submit">Submit</button>
+										</div>
+									</div>
+							</div>
+						</div>
+					    </form>
+						<div class="full-cancel">
+							<div class="box-one">
+									<h3>
+										ticket details
+									</h3>
+									<div class="table-responsive">
+										<form id="full-cancel-form" action="{% url 'cancel_booking' %}" method="POST">
+											{% csrf_token %}
+											<h1 id="bid-title"></h1>
+											<p id="des"></p>
+											<input type="hidden" class="form-control" name="bookingId">
+											<input type="hidden" name="radio1" value="complete">
+										<!-- <table class="table table-bordered table-hover table-striped table-checkable table-highlight-head mb-4">
+											<thead>
+												<tr>
+													<th class="checkbox-column">
+														<div class="custom-control custom-checkbox checkbox-primary">
+														  <input type="checkbox" class="custom-control-input todochkbox" id="todoAll">
+														  <label class="custom-control-label" for="todoAll"></label>
+														</div>
+													</th>
+													<th class="">Name</th>
+													<th class="">Date</th>
+													<th class="">Sales</th>
+												</tr>
+											</thead>
+											<tbody id="pax">
+											</tbody>
+										</table> -->
+										<button id="submit" class="btn btn-red" style="display: none;">Cancel</button>
+									   </form>
+									</div>
+								</div>
+							 </div>
+						<div class="cancel-traveller">
+						<div class="box-one">
+								<h3>
+									passanger details
+								</h3>
+								<div class="table-responsive">
+									<form action="{% url 'cancel_booking' %}" method="POST">
+
+										{% csrf_token %}
+									<table class="table table-bordered table-hover table-striped table-checkable table-highlight-head mb-4">
+										<input type="hidden" class="form-control" name="bookingId" value="krish">
+										<input type="hidden" name="radio1" value="traveller">
+										<thead>
+											<tr>
+												<th class="checkbox-column">
+													<div class="custom-control custom-checkbox checkbox-primary">
+													  <!-- <input type="checkbox" class="custom-control-input todochkbox" id="todoAll"> -->
+													  <!-- <label class="custom-control-label" for="todoAll"></label> -->
+													</div>
+												</th>
+												<th class="">Name</th>
+												<th class="">Date</th>
+												<th class="">Origin</th>
+												<th class="">Destination</th>
+											</tr>
+										</thead>
+										<tbody id="pax">
+										</tbody>
+									</table>
+									<button id="submit" class="btn btn-red" type="submit">Cancel</button>
+								   </form>
+								</div>
+							</div>
+					     </div>
+						<div class="cancel-route">
+						<div class="box-one">
+
+								<h3>
+									Route details
+								</h3>
+
+							<div class="table-responsive">
+								<form action="{% url 'cancel_booking' %}" method="POST">
+
+									{% csrf_token %}
+								<table class="table table-bordered table-hover table-striped table-checkable table-highlight-head mb-4">
+									<input type="hidden" class="form-control" name="bookingId" value="krish">
+									<input type="hidden" name="radio1" value="route">
+										<tr>
+											<th class="checkbox-column">
+												<div class="custom-control custom-checkbox checkbox-primary">
+												  <!-- <input type="checkbox" class="custom-control-input todochkbox" id="todoAll"> -->
+												  <!-- <label class="custom-control-label" for="todoAll"></label> -->
+												</div>
+											</th>
+											<th class="">Name</th>
+											<th class="">Date</th>
+											<th class="">Route</th>
+										</tr>
+									</thead>
+									<tbody id="route">
+									</tbody>
+								</table>
+								<button id="submit" class="btn btn-red" type="submit">Cancel</button>
+							    </form>
+							</div>
+					</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+	{% include "online_savaari/footer.html" %}
+
+		<!-- Jquery min -->
+		<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+		<!-- Popper Min -->
+		<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+	
+		<!-- Bootstrap -->
+		<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+	
+		<!-- Jquery UI -->
+		<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+	
+		<!-- Owl Carousel -->
+		<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+	
+		<!-- Star Rating -->
+		<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+	
+		<!-- Quantity -->
+		<script src="{% static 'main/plugins/quantity.js' %}"></script>
+	
+		<!-- Phone -->
+		<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+	
+		<!-- Select -->
+		<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+	
+		<!-- Select -->
+		<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+	
+		<!-- Custom -->
+		<script src="{% static 'main/js/default.js' %}"></script>
+	
+	<script type="text/javascript">
+
+		$(document).ready(function(){
+			if(document.getElementById("one-way").checked){
+				$('.full-cancel').show()
+				$('.cancel-traveller').hide()
+				$('.cancel-route').hide()
+				$('#one-way').prop('checked', true)
+				$('#round-trip').prop('checked', false)
+				$('#multi-city').prop('checked',false)
+			}else if(document.getElementById("round-trip").checked){
+				$('.full-cancel').hide()
+				$('.cancel-traveller').show()
+				$('.cancel-route').hide()
+				$('#one-way').prop('checked', false)
+				$('#round-trip').prop('checked', true)
+				$('#multi-city').prop('checked', false)
+			} else {
+				$('.full-cancel').hide()
+				$('.cancel-traveller').hide()
+				$('.cancel-route').show()
+				$('#one-way').prop('checked', false)
+				$('#round-trip').prop('checked', false)
+				$('#multi-city').prop('checked', true)
+			}
+		})
+	
+	
+		
+
+		function waySelect(val) {
+			if (val == 'round-trip') {
+				$('.full-cancel').hide()
+				$('.cancel-traveller').show()
+				$('.cancel-route').hide()
+				$('#one-way').prop('checked', false)
+				$('#round-trip').prop('checked', true)
+				$('#multi-city').prop('checked', false)
+			}else if(val =='one-way'){
+				$('.full-cancel').show()
+				$('.cancel-traveller').hide()
+				$('.cancel-route').hide()
+				$('#one-way').prop('checked', true)
+				$('#round-trip').prop('checked', false)
+				$('#multi-city').prop('checked',false)
+			} else {
+				$('.full-cancel').hide()
+				$('.cancel-traveller').hide()
+				$('.cancel-route').show()
+				$('#one-way').prop('checked', false)
+				$('#round-trip').prop('checked', false)
+				$('#multi-city').prop('checked', true)
+			}
+			console.log($('[name="radio1"]:checked').val())
+		}
+
+		let filterlist = [];
+
+		let bid = $('[name="bookingId1"]').val();
+		$('#form_submit').on('submit', function(e){
+			e.preventDefault()
+			console.log("done")
+			let mode = $('[name="radio1"]:checked').val();
+			$.ajax({
+				url : $('#form_submit').attr('action'),
+				type: "POST",
+				data : {
+					csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val(),
+					bookingId:$('[name="bookingId1"]').val(),
+				},
+				success: function(data)
+				{
+
+					if(mode == "cancel_conplete_trip"){
+						$('#bid-title').text($('[name="bookingId1"]').val())
+						$('#des').text('Are you sure!');
+						$('[name="bookingId"]').val($('[name="bookingId1"]').val());
+						$('#full-cancel-form #submit').show();
+						$('#full-cancel-form #submit').text("Yes");
+
+					}else if(mode == "cancel_traveller") {
+						console.log(data.passengers)
+						filterlist = data.passengers.filter(e => e.os_bookingId.toLowerCase() === $('[name="bookingId1"]').val().toLowerCase());
+						$('#pax').html("")
+						$('[name="bookingId"]').val($('[name="bookingId1"]').val());
+						filterlist.forEach(e => {
+							$('#pax').append(`
+							<tr>
+								<td class="checkbox-column">
+									<div class="custom-control custom-checkbox checkbox-primary">
+										<input name='person_name' type="checkbox" class="custom-control-input todochkbox" id="todo${e.id}-1" value=${e.first_name}>
+										<label class="custom-control-label" for="todo${e.id}-1"></label>
+									</div>
+								</td>
+								<td>
+									<p  class="mb-0 p-0">${e.first_name} ${e.last_name}</p>
+								</td>
+								<td>${e.departure_date}</td>
+								<td>${e.src}</td>
+								<td>${e.dest}</td>
+							</tr>
+							`)
+						})
+					}else if(mode == "cancel_route") {
+						console.log(data.passengers)
+						filterlist = data.passengers.filter(e => e.os_bookingId === $('[name="bookingId1"]').val());
+						console.log(filterlist)
+						filterlist.forEach(e => {
+							$('#route').html("")
+							$('#route').append(`
+							<tr>
+								<td class="checkbox-column">
+									<div class="custom-control custom-checkbox checkbox-primary">
+										<input type="checkbox" class="custom-control-input todochkbox" id="todo${e.id}-1">
+										<label class="custom-control-label" for="todo${e.id}-1"></label>
+									</div>
+								</td>
+								<td>
+									<p  class="mb-0 p-0">${e.airline_name}</p>
+								</td>
+								<td>${e.flight_number}</td>
+								<td>${e.pnr}</td>
+							</tr>
+							`)
+						})
+					}
+				}
+			});
+		})
+
+
+	</script>
+
+</body>
+
+</html>

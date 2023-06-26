@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>Online Savaari </title>
+    <link rel="icon" type="image/x-icon" href="{% static 'admin/assets/img/savaari_logo.png' %}"/>
+    <link href="{% static 'admin/assets/css/loader.css' %}" rel="stylesheet" type="text/css" />
+    <script src="{% static 'admin/assets/js/loader.js' %}"></script>
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
+    <link href="{% static 'admin/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'admin/assets/css/plugins.css' %}" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <link href="{% static 'admin/plugins/apex/apexcharts.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'admin/assets/css/dashboard/dash_1.css' %}" rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+
+</head>
+<body class="form">
+    
+
+    <div class="form-container">
+        <div class="form-form">
+            <div class="form-form-wrap">
+                <div class="form-container">
+                    <div class="form-content">
+
+                        <div class="d-flex user-meta">
+                            <img src="{% static 'admin/assets/img/90x90.jpg' %}" class="usr-profile" alt="avatar">
+                            <div class="">
+                                <p class="">Shaun Park</p>
+                            </div>
+                        </div>
+
+                        <form class="text-left">
+                            <div class="form">
+
+                                <div id="password-field" class="field-wrapper input mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                    <input id="password" name="password" type="password" class="form-control" placeholder="Password">
+                                </div>
+                                <div class="d-sm-flex justify-content-between">
+                                    <div class="field-wrapper toggle-pass">
+                                        <p class="d-inline-block">Show Password</p>
+                                        <label class="switch s-primary">
+                                            <input type="checkbox" id="toggle-password" class="d-none">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <button type="submit" class="btn btn-primary" value="">Unlock</button>
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+                        </form>                        
+                        <p class="terms-conditions">© 2022 All Rights Reserved. <a href="{% url 'base' %}">Online Savaari </a> {tag line.} </p>
+
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        <!-- <div class="form-image">
+            <div class="l-image">
+            </div>
+        </div> -->
+        <div class="form-image">
+            <img src="{% static 'admin/assets/img/savaari_logo.png' %}" alt="Smiley face" width="370" height="140" style="display: block; margin-left: auto;
+            margin-right: auto; margin-top: auto; margin-bottom: auto; ">
+            <!-- <div class="l-image">
+                
+            </div> -->
+        </div>
+    </div>
+
+    
+    <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+    <script src="{% static 'admin/assets/js/libs/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'admin/bootstrap/js/popper.min.js' %}"></script>
+    <script src="{% static 'admin/bootstrap/js/bootstrap.min.js' %}"></script>
+    
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+    <script src="{% static 'admin/assets/js/authentication/form-1.js' %}"></script>
+
+</body>
+</html>

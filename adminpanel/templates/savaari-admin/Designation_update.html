@@ -1,0 +1,183 @@
+{% load static%}
+{% include "savaari-admin/header.html" %}
+
+<!--  BEGIN CONTENT AREA  -->
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+
+        <div class="row layout-top-spacing" id="cancel-row">
+
+            <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                <div class="widget-content widget-content-area br-6">
+                    <div class="row">
+
+                        <div class="modal fade" id="exampleModals" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                <div class="modal-content" style="padding: 1em 2em;">
+                                    <form action="" method="POST">
+                                        {% csrf_token %}
+                                        <div class="row mb-4">
+                                            <div class="form-group col">
+                                                <label for="exampleFormControlInput1">Designation Name</label>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    value="{{ group.name }}" name="group_name"
+                                                    placeholder="Designation Name" required>
+                                            </div>
+
+                                        </div>
+                                        <div class="row mb-4">
+                                            <div class="form-group col">
+                                                <label for="exampleFormControlInput1">Access Area</label>
+
+                                                <div class="data">
+                                                    {% for permission in permission %}
+                                                      {% if permission.name in permission_names %}
+                                                        <label class="new-control new-checkbox checkbox-primary">
+                                                          <input type="checkbox" name="permission" class="new-control-input" value="{{permission.name}}" checked>
+                                                          <span class="new-control-indicator"></span>{{permission.name}}
+                                                        </label>
+                                                      {% else %}
+                                                        <label class="new-control new-checkbox checkbox-primary">
+                                                          <input type="checkbox" name="permission" class="new-control-input" value="{{permission.name}}">
+                                                          <span class="new-control-indicator"></span>{{permission.name}}
+                                                        </label>
+                                                      {% endif %}
+                                                    {% endfor %}
+                                                  </div>
+                                                  
+
+                                            </div>
+                                        </div>
+                                        <input type="submit" name="time" class="btn btn-primary">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div id="content" class="main-content">
+                        <div class="layout-px-spacing">
+
+                            <div class="row layout-top-spacing" id="cancel-row">
+
+                                <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                                    <div class="widget-content widget-content-area br-6">
+                                        <div class="table-responsive mb-4 mt-4">
+                                            <table id="html5-extension" class="table table-hover non-hover"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Designation</th>
+                                                        <th>All Active User</th>
+                                                        <th>All Active Permissions</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for groups, permission_names,group_users in groups %}
+                                                    <tr>
+                                                        <td><input class="form-control form-control-sm" type="text"
+                                                                value={{groups.name}} readonly></td>
+                                                        <td>
+                                                            <select class="form-control form-control-sm" name="status"
+                                                                required>
+                                                                {% for group_users in group_users %}
+                                                                <option value="SUCCESSFUL">{{group_users}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <select class="form-control form-control-sm" name="status"
+                                                                required>
+                                                                {% for permission_name in permission_names %}
+                                                                <option value="SUCCESSFUL">{{permission_name}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                        <td id="edit-submit" class="text-center">
+                                                            <div class="dropdown custom-dropdown">
+                                                                <a class="dropdown-toggle" href="#" role="button"
+                                                                    id="dropdownMenuLink2" data-toggle="dropdown"
+                                                                    aria-haspopup="true" aria-expanded="true">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                        height="24" EditBox="0 0 24 24" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        class="feather feather-more-horizontal">
+                                                                        <circle cx="12" cy="12" r="1"></circle>
+                                                                        <circle cx="19" cy="12" r="1"></circle>
+                                                                        <circle cx="5" cy="12" r="1"></circle>
+                                                                    </svg>
+                                                                </a>
+                                                                <div class="dropdown-menu"
+                                                                    aria-labelledby="dropdownMenuLink2">
+                                                                    <button type="button"
+                                                                        onclick="document.getElementById('form_{{group.id}}').submit()"
+                                                                        class="dropdown-item">Edit</button>
+                                                                    <a onclick="document.getElementById('form{{group.id}}').submit()"
+                                                                        class="dropdown-item"
+                                                                        href="javascript:void(0);">Submit</a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Designation</th>
+                                                        <th>No of Permissions</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="footer-wrapper">
+                            <div class="footer-section f-section-1">
+                                <p class="">Copyright © 2020 <a target="_blank"
+                                        href="https://designreset.com">DesignReset</a>, All rights reserved.</p>
+                            </div>
+                            <div class="footer-section f-section-2">
+                                <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        EditBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">
+                                        <path
+                                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                        </path>
+                                    </svg></p>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!--  END CONTENT AREA  -->
+
+                </div>
+                <!-- END MAIN CONTAINER -->
+
+
+
+                <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+                <script src="{% static 'admin/assets/js/libs/jquery-3.1.1.min.js' %}"></script>
+                <script src="{% static 'admin/bootstrap/js/popper.min.js' %}"></script>
+                <script src="{% static 'admin/bootstrap/js/bootstrap.min.js' %}"></script>
+                <script src="{% static 'admin/plugins/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+                <script src="{% static 'admin/assets/js/app.js' %} "></script>
+
+                <script type="application/javascript">
+                    $(document).ready(function () {
+                        $('#exampleModals').modal({ show: true });
+                    });
+                </script>
+                <!-- END PAGE LEVEL SCRIPTS -->
+
+                </body>
+
+                </html>

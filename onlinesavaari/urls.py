@@ -1,0 +1,57 @@
+from django.urls import path,include
+from . import views
+from .views import *
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LogoutView
+
+
+urlpatterns = [
+
+    path('', views.index, name="index"),
+    path('agencysignup', views.agencysignup, name="agencysignup"),
+    path('deposit_request_user', views.deposit_request_user, name="deposit_request_user"),
+    path('custlogin', views.custlogin, name="custlogin"),
+    path('details', views.details ,  name='details'),
+    path('listing', views.listing, name="listing"),
+    path('invoice', views.invoice, name="invoice"),
+    path('payments', views.payments, name="payments"),
+    path('term', views.term, name="term"),
+    path('privacy', views.privacy, name="privacy"),
+    path('faq', views.faq, name="faq"),
+    path('profile', views.profile, name="profile"),
+    path('savaari_cash', views.savaari_cash, name="savaari_cash"),
+    path('dashboard', views.dashboard, name="dashboard"),
+    path('logout/',views.custlogout,name="custlogout"),
+    path('seatmap/',views.seatmap,name="seatmap"),
+    path('cancel/',views.cancel,name="cancel"),
+    path('privacy/',views.privacy,name="privacy"),
+    path('Mobilelogin/',views.Mobilelogin,name="Mobilelogin"),
+    path('faq/',views.faq,name="faq"),
+    path('about/',views.about,name="about"),
+    path('Mobilelogin/',views.Mobilelogin,name="Mobilelogin"),
+    path('Pay_success/<str:id>/',views.Pay_success,name="Pay_success"),
+    path('Pay_failed/<str:id>/',views.Pay_failed,name="Pay_failed"),
+    # path('pay_encrypt/',views.pay_encrypt,name="pay_encrypt"),
+    path('response/',views.response,name="response"),
+    path('encrypt_pay/',views.encrypt_pay,name="encrypt_pay"),
+    path('contact/',views.contact,name="contact"),
+    path('', TemplateView.as_view(template_name="online_savaari/index.html")),
+    path('details', TemplateView.as_view(template_name="online_savaari/details.html")),
+    path('listing', TemplateView.as_view(template_name="online_savaari/listing.html")),
+    path('signup', TemplateView.as_view(template_name="online_savaari/signup.html")),
+    path('agencysignup', TemplateView.as_view(template_name="online_savaari/agency-signup.html")),
+    path('login', TemplateView.as_view(template_name="online_savaari/login.html")),
+    path('payments', TemplateView.as_view(template_name="online_savaari/payments.html")),
+    path('term', TemplateView.as_view(template_name="online_savaari/terms.html")),
+    path('profile', TemplateView.as_view(template_name="online_savaari/profile.html")),
+    path('dashboard', TemplateView.as_view(template_name="online_savaari/dashboard.html")),
+    path('privacy', TemplateView.as_view(template_name="online_savaari/privacy.html")),
+    path('faq', TemplateView.as_view(template_name="online_savaari/faq.html")),
+    path('about', TemplateView.as_view(template_name="online_savaari/about.html")),
+    path('contact', TemplateView.as_view(template_name="online_savaari/contact.html")),
+    path('refundclaim',views.refundclaim,name="refundclaim"),
+    path('rescheduleclaim',views.rescheduleclaim,name="rescheduleclaim"),
+    path('covid',views.covid,name="covid"),
+    path('wallet_success/<str:id>/',views.wallet_success,name="wallet_success"),
+    path('password_reset_request/',views.password_reset_request,name="password_reset"),
+]

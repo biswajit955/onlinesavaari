@@ -1,0 +1,25 @@
+﻿Document Code, Title, Age Limit,Authorization Required
+1,Medical Request Form,71,True
+2,ECG Report,71,True
+3,Fasting Blood Sugar Report,71,True
+4,Urine Strips,71,True
+5,Medical Request Form - CFT,61,True
+6,ECG Report - CFT,61,True
+7,Fasting Blood Report - CFT,61,True
+8,Urine Strips - CFT,61,True
+9,Student Proposal Form,16,False
+10,University Admission Letter,16,False
+11,Sponsor Letter,16,False
+12,Pre Existing Cover SDF,1,False
+13,Air Ticket,0,True
+14,Hotel Voucher,0,True
+15,Tour Package receipt,0,True
+16,Proposal Form,71,True
+17,CFT Proposal Form,61,False
+18,Passport Copy with Visa,16,True
+19,10 Self Declaration Form,1,True
+20,10 Medical Request Form,61,True
+21,10 Fasting Blood Sugar Report,61,True
+22,10 ECG Report,61,True
+23,10 Urine Strips,61,True
+24,Self Declaration Form,61,True

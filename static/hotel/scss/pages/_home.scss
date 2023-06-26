@@ -1,0 +1,23 @@
+// Home Page
+.home-pg {
+    .left-sec {
+        .booking-box {
+            height: calc(100vh - 120px);
+            margin-top: 30px;
+            position: sticky;
+            top: 100px;
+            overflow-y: auto;
+
+            // Max 767px
+            @media (max-width: $break-767) {
+                padding: 15px;
+                height: auto;
+            }
+        }
+    }
+    .right-sec {
+        .add-banner {
+            margin-top: 30px;
+        }
+    }
+}

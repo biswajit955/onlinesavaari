@@ -1,0 +1,423 @@
+{% load static %}
+{% include "savaari_hotel/hotel_header.html" %}
+<main class="main-body">
+	<!-- Hotel Listing -->
+	<section class="hotel-listing">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-4">
+					<div class="left-sec" style="position: sticky;top: 0;overflow-y: auto;">
+						<div class="filter-box" style="padding:0px 5px;">
+							<div class="head-sec">
+								<h6>hotel name</h6>
+							</div>
+							<div class="body-sec" style="padding:0px 5px 15px 0px;">
+								<div class="search-box" id="searchBox">
+									<input type="text" class="form-control" id="searchBox"
+										placeholder="search hotel name">
+								</div>
+							</div>
+						</div>
+						<div class="price-filter filter-box" style="padding:25px 5px;">
+							<div class="head-sec">
+								<h6>Price For 2 nights</h6>
+							</div>
+							<div class="body-sec">
+								<ul>
+									<li>
+										<label class="custom-checkbox">
+											Less than Rs. 1,000
+											<input type="checkbox" name="price-filter" value="0-1000">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+									<li>
+										<label class="custom-checkbox">
+											Rs. 1,001 to Rs. 2,000
+											<input type="checkbox" name="price-filter" value="1001-2000">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+									<li>
+										<label class="custom-checkbox">
+											Rs. 2,001 to Rs. 4,000
+											<input type="checkbox" name="price-filter" value="2001-4000">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+									<li>
+										<label class="custom-checkbox">
+											Rs. 4,001 to Rs. 7,000
+											<input type="checkbox" name="price-filter" value="4001-7000">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+									<li>
+										<label class="custom-checkbox">
+											Rs. 7,001 to Rs. 10,000
+											<input type="checkbox" name="price-filter" value="7001-10000">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+									<li>
+										<label class="custom-checkbox">
+											Greater than Rs. 10,001
+											<input type="checkbox" name="price-filter" value="10001-100000">
+											<span class="checkmark"></span>
+										</label>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="filter-box" style="padding:25px 5px;">
+							<div class="head-sec">
+								<h6>STAR RATING</h6>
+							</div>
+							<div class="body-sec">
+								<ul class="radio-list">
+									<li>
+										<label class="star-radio">
+											<input type="radio" name="star">
+											<span class="checkmark"></span>
+											<div class="star-div">
+												<h5>1</h5>
+												<i class="fa fa-star"></i>
+
+											</div>
+										</label>
+									</li>
+									<li>
+										<label class="star-radio">
+											<input type="radio" name="star">
+											<span class="checkmark"></span>
+											<div class="star-div">
+												<h5>2</h5>
+												<i class="fa fa-star"></i>
+											</div>
+										</label>
+									</li>
+									<li>
+										<label class="star-radio">
+											<input type="radio" name="star">
+											<span class="checkmark"></span>
+											<div class="star-div">
+												<h5>3</h5>
+												<i class="fa fa-star"></i>
+											</div>
+										</label>
+									</li>
+									<li>
+										<label class="star-radio">
+											<input type="radio" name="star">
+											<span class="checkmark"></span>
+											<div class="star-div">
+												<h5>4</h5>
+												<i class="fa fa-star"></i>
+											</div>
+										</label>
+									</li>
+									<li>
+										<label class="star-radio">
+											<input type="radio" name="star">
+											<span class="checkmark"></span>
+											<div class="star-div">
+												<h5>5</h5>
+												<i class="fa fa-star"></i>
+											</div>
+										</label>
+									</li>
+								</ul>
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-9 col-md-8">
+					<div class="right-sec">
+						<div class="location-name">
+							<h5>{{ data.all_data.0.city_name }}</h5>
+							<small>{{check_in_date}} To {{check_out_date}} ({{ no_of_day }} NIGHTS) | {{no_of_adultes}}
+								ADULTS | {{ no_of_child }} CHILD</small>
+						</div>
+						<div class="line"></div>
+						{% for hotel in data.all_data %}
+
+						<hr>
+
+						<div class="row gap-1">
+							<div class="col-12">
+								<div class="hotel-list-item">
+									<div class="img-sec">
+										<div class="owl-carousel owl-theme hotel-list-slider">
+											<div class="item">
+												{% if hotel.source == 'tripjack_data' %}
+
+												<div class="img-box" style="height:260px;">
+													<a href="#" class="thumbs">
+														<img src="{{ hotel.img }}" alt="">
+													</a>
+													<a href="{{ hotel.img }}" data-ybox-group="group1" class="yBox">
+														<i class="la la-search"></i>
+													</a>
+												</div>
+
+												{% elif hotel.source == 'savaari_data' %}
+												<div class="img-box">
+													<a href="#" class="thumbs">
+														<img src="{{ hotel.img.url }}" alt="">
+													</a>
+													<a href="{{ hotel.img.url }}" data-ybox-group="group1" class="yBox">
+														<i class="la la-search"></i>
+													</a>
+												</div>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+									<div class="details-sec">
+										<div class="title">
+											<h4>
+												<a href="#">{{ hotel.name }}</a>
+											</h4>
+											{% if hotel.rating >= 4.5 %}
+											<p style="color: rgb(3, 148, 3);">{{ hotel.rating }}/5 Excellent</p>
+											{% elif hotel.rating >= 3.5 %}
+											<p style="color: rgb(2, 113, 50);">{{ hotel.rating }}/5 Very Good</p>
+											{% elif hotel.rating >= 2.5 %}
+											<p style="color: rgb(128, 137, 1);">{{ hotel.rating }}/5 Good</p>
+											{% elif hotel.rating >= 1.5 %}
+											<p style="color: rgb(4, 129, 232);">{{ hotel.rating }}/5 Average</p>
+											{% else %}
+											<p style="color: red;">{{ hotel.rating }}/5 Poor</p>
+											{% endif %}
+										</div>
+										<div class="rating-location">
+											<div class="cs-rating">
+												<input id="star-rating-demo" value="{{ hotel.rating }}" type="number"
+													class="rating" min="0" max="5" step="1" data-size="xs">
+											</div>
+											<div class="location">
+												<i class="la la-map-marker"></i>
+												<a href="#">{{ hotel.city_name }},{{ hotel.country_name }}</a>
+											</div>
+										</div>
+										<div class="feature">
+											<div class="mobile-img-sec">
+												<div class="img-box">
+													<a href="#" class="thumbs">
+														<img src="{% static 'hotel/images/hotel/thumbnail/1.jpg' %}"
+															alt="">
+													</a>
+													<a href="{% static 'hotel/images/hotel/thumbnail/1.jpg' %}"
+														data-ybox-group="group1" class="yBox">
+														<i class="la la-search"></i>
+													</a>
+												</div>
+											</div>
+											<div class="more-sec">
+												<div class="extra">
+													{% if hotel.source == 'savaari_data' %}
+													<span>
+														<img style="height: 28px; width: 60px;"
+															src="{% static 'hotel/images/logo copy.png' %}" alt="">
+													</span>
+													{% endif %}
+													<span>
+														<img src="{% static 'hotel/images/icon/cleanPass.png' %}"
+															alt="">
+													</span>
+													<span>
+														<img src="{% static 'hotel/images/icon/couple-friendly.png' %}"
+															alt="">
+													</span>
+
+												</div>
+											</div>
+											<div class="price-sec">
+												<div class="price">
+													<span>
+														<i class="la la-rupee"></i>{{ hotel.price|floatformat:2 }}
+													</span>
+													<small>For {{ no_of_day }} nights</small>
+												</div>
+												<div class="btn-sec" style="margin-top:25px;">
+													<a href={% url 'hotel_listing' hotel.id %}><span
+															class="btn btn-red">Explore</span></a>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+						{% endfor %}
+						<button onclick="scrollToTop()" id="scrollToTopBtn" title="Scroll to Top">
+							<i class="fa fa-arrow-up"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+<style>
+	#scrollToTopBtn {
+		display: none;
+		position: fixed;
+		bottom: 20px;
+		right: 20px;
+		z-index: 99;
+		font-size: 18px;
+		border: none;
+		outline: none;
+		background-color: #dc3545;
+		color: white;
+		cursor: pointer;
+		padding: 5px 15px;
+		border-radius: 30%;
+	}
+
+	#scrollToTopBtn:hover {
+		background-color: #333;
+	}
+</style>
+<script>
+	var searchInput = document.querySelector('.search-box input');
+	var hrElements = document.querySelectorAll('hr');
+	searchInput.addEventListener('input', searchHotels);
+	function searchHotels() {
+		var searchTerm = searchInput.value.toLowerCase().trim();
+		var hotelElements = document.querySelectorAll('.hotel-list-item');
+		var matchingHotels = [];
+		hotelElements.forEach(function (hotelElement) {
+			var hotelName = hotelElement.querySelector('.title a').textContent.toLowerCase().trim();
+			if (hotelName.indexOf(searchTerm) == -1) {
+				matchingHotels.push(hotelElement.closest('.row.gap-1'));
+			}
+		});
+		hotelElements.forEach(function (hotelElement) {
+			var rowElement = hotelElement.closest('.row.gap-1');
+			if (matchingHotels.includes(rowElement)) {
+				rowElement.style.display = 'none';
+			} else {
+				rowElement.style.display = 'block';
+			}
+		});
+	}
+</script>
+<script>
+	const filterButtons = document.querySelectorAll('.star-radio input');
+	const cards = document.querySelectorAll('.rating-location');
+	const hrelements = document.querySelectorAll('hr');
+	const matchingHotel = [];
+	filterButtons.forEach(function (button) {
+		button.addEventListener('change', function () {
+			const ratingFilter = parseFloat(button.parentNode.querySelector('h5').textContent);
+			cards.forEach(function (card) {
+				const rating = parseFloat(card.querySelector('.cs-rating input').value);
+				if (rating === ratingFilter) {
+					card.parentNode.parentNode.parentNode.style.display = 'block';
+				} else {
+					card.parentNode.parentNode.parentNode.style.display = 'none';
+				}
+			});
+		});
+	});
+	hrelements.forEach(function (hr) {
+		var nextRowElement = hr.nextElementSibling;
+		if (nextRowElement && !matching.includes(nextRowElement)) {
+			hr.style.display = 'none';
+		} else {
+			hr.style.display = 'block';
+		}
+	});    
+</script>
+
+
+
+
+
+
+<script>
+	var priceFilterOptions = document.querySelectorAll('input[name="price-filter"]');
+	for (var i = 0; i < priceFilterOptions.length; i++) {
+		priceFilterOptions[i].addEventListener('change', updatePriceFilterOptions);
+	}
+	function updatePriceFilterOptions() {
+		for (var i = 0; i < priceFilterOptions.length; i++) {
+			if (priceFilterOptions[i] !== this) {
+				priceFilterOptions[i].checked = false;
+			}
+		}
+	}
+</script>
+<script>
+	var hotelListings = document.querySelectorAll('.hotel-list-item');
+	var priceFilterOptions = document.querySelectorAll('input[name="price-filter"]');
+	var hrele = document.querySelectorAll('hr');
+	var matching = [];
+	for (var i = 0; i < priceFilterOptions.length; i++) {
+		priceFilterOptions[i].addEventListener('change', updateHotelListings);
+	}
+	function updateHotelListings() {
+		var selectedRange = getSelectedPriceRange();
+		for (var i = 0; i < hotelListings.length; i++) {
+			var listing = hotelListings[i];
+			var priceElement = listing.querySelector('.price');
+			var price = parseFloat(priceElement.querySelector('span').textContent);
+			var rowElement = listing.closest('.row.gap-1');
+			if (!selectedRange || (price >= selectedRange.min && price <= selectedRange.max)) {
+				rowElement.style.display = 'block';
+			} else {
+				rowElement.style.display = 'none';
+			}
+		}
+	}
+	function getSelectedPriceRange() {
+		for (var i = 0; i < priceFilterOptions.length; i++) {
+			if (priceFilterOptions[i].checked) {
+				var value = priceFilterOptions[i].value;
+				var range = value.split('-');
+				return {
+					min: parseFloat(range[0]),
+					max: parseFloat(range[1])
+				};
+			}
+		}
+		return null;
+	}
+	hrele.forEach(function (hr) {
+		var nextRowElement = hr.nextElementSibling;
+		if (nextRowElement && !matching.includes(nextRowElement)) {
+			hr.style.display = 'none';
+		} else {
+			hr.style.display = 'block';
+		}
+	});
+
+</script>
+
+<script>
+	var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+	window.addEventListener("scroll", function () {
+		if (window.pageYOffset > 20) {
+			scrollToTopBtn.style.display = "block";
+		} else {
+			scrollToTopBtn.style.display = "none";
+		}
+	});
+
+	function scrollToTop() {
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth"
+		});
+	}
+</script>
+
+{% include "savaari_hotel/hotel_footer.html" %}

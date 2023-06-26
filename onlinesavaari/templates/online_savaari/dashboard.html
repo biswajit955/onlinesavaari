@@ -1,0 +1,223 @@
+{%load static%}
+{% include "online_savaari/header.html" %}
+
+<!-- Main -->
+<main class="main-body">
+	<section class="user-pg">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="title-sec">
+						<h3>
+							My Dashboard
+						</h3>
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-lg-3 col-md-6">
+					<div class="dashboard-box">
+						<div class="head-sec">
+							<h4 class="m-0">Modify Booking</h4>
+						</div>
+						<div class="body-sec">
+							<div class="img-sec">
+								<img src="{% static 'main/images/icon/modify-booking.svg' %}" alt="">
+							</div>
+							<ul>
+								<li>
+									<a href="{% url 'cancel' %}">Cancel
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+								<li>
+									<a href="{% url 'rescheduleclaim' %}">Reschedule
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+								<li>
+									<a href="{% url 'booking_history' %}">All Bookings
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="dashboard-box">
+						<div class="head-sec">
+							<h4 class="m-0">Ticket</h4>
+						</div>
+						<div class="body-sec">
+							<div class="img-sec">
+								<img src="{% static 'main/images/icon/ticket-voucher.svg' %}" alt="">
+							</div>
+							<ul>
+								<li>
+									<a href="{% url 'booking_history' %}">SMS/Email Ticket
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+								<li>
+									<a href="{% url 'booking_history' %}">Print Ticket
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+								<li>
+									<a href="{% url 'booking_history' %}">Print Invoice/Receipt
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- <div class="col-lg-3 col-md-6">
+					<div class="dashboard-box">
+						<div class="head-sec">
+							<h4 class="m-0">Fare Details</h4>
+						</div>
+						<div class="body-sec">
+							<div class="img-sec">
+								<img src="{% static 'main/images/icon/booking-details.svg' %}" alt="">
+							</div>
+							<ul>
+								<li>
+									<a href="fare-details.html">Fare Details
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+								<li>
+									<a href="make-payment.html">Make Payment
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div> -->
+				<div class="col-lg-3 col-md-6">
+					<div class="dashboard-box">
+						<div class="head-sec">
+							<h4 class="m-0">Claim Refund</h4>
+						</div>
+						<div class="body-sec">
+							<div class="img-sec">
+								<img src="{% static 'main/images/icon/claim-refund.svg' %}" alt="">
+							</div>
+							<ul>
+								<li>
+									<a href="{% url 'refundclaim' %}">Track Flight Refund Status
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+								<li>
+									<a href="{% url 'refundclaim' %}">Check your Refund
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="dashboard-box">
+						<div class="head-sec">
+							<h4 class="m-0">Profile</h4>
+						</div>
+						<div class="body-sec">
+							<div class="img-sec">
+								<img src="{% static 'main/images/icon/guest.svg' %}" alt="">
+							</div>
+							<ul>
+								<li>
+									<a href="{% url 'profile'%}">View profile
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+								<li>
+									<a href="{% url 'profile'%}">Edit profile
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+								<!-- <li>
+									<a href="{% url 'profile'%}">Deactivate your account
+										<i class="la la-angle-right"></i>
+									</a>
+								</li> -->
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="dashboard-box">
+						<div class="head-sec">
+							<h4 class="m-0">Savaari Cash</h4>
+						</div>
+						<div class="body-sec">
+							<div class="img-sec">
+								<img src="{% static 'main/images/icon/ecash.svg' %}" alt="">
+							</div>
+							<ul>
+								<li>
+									<a href="{% url 'savaari_cash' %}">Check balance
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+								<li>
+									<a href="{% url 'savaari_cash' %}">All Transactions
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+								<li>
+									<a href="{% url 'payments'%}">Recharge wallet
+										<i class="la la-angle-right"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+	{% include "online_savaari/footer.html" %}
+	<!-- Jquery min -->
+	<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+	<!-- Popper Min -->
+	<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+	<!-- Bootstrap -->
+	<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<!-- Jquery UI -->
+	<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+	<!-- Owl Carousel -->
+	<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+	<!-- Star Rating -->
+	<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+	<!-- Quantity -->
+	<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+	<!-- Phone -->
+	<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+	<!-- Select -->
+	<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+	<!-- Custom -->
+	<script src="{% static 'main/js/default.js' %}"></script>
+
+</body>
+
+</html>

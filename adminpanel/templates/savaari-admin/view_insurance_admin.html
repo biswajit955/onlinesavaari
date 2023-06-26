@@ -1,0 +1,327 @@
+{% load static %}
+{% include "savaari-admin/header.html" %}
+
+<style>
+    .flight--details h4 {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .fn--black {
+        color: black !important;
+    }
+
+    .ref__num {
+        padding-left: 1em;
+    }
+
+    /* passengers--details */
+
+    .passengers--details {
+        border: 1px solid #CCCCCC;
+        border-radius: 10px;
+        margin-bottom: 1.2em;
+    }
+
+    .passengers--details__label {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5em;
+        padding-right: 1.5em;
+    }
+
+    .passengers--details__header {
+        padding: 0.5em;
+        border-bottom: 1px dotted #CCCCCC;
+    }
+
+    .passengers--details__header h3 {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .passengers--details__label {
+        font-size: 0.72rem;
+    }
+
+    .label {
+        margin-bottom: 1em;
+    }
+
+    .label h4 {
+        font-size: 0.72rem;
+        font-weight: 900;
+    }
+
+    .passengers--details__label p {
+        font-size: 0.72rem;
+    }
+
+    .flight--img {
+        width: 100%;
+        object-fit: contain;
+    }
+</style>
+<!--  BEGIN CONTENT AREA  -->
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+        <div class="row layout-top-spacing" id="cancel-row">
+            <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                <div class="widget-content widget-content-area br-6">
+                    <section class="main" id="tblCustomers">
+                        <div class="invoice--main--container">
+                            <header class="invoice--container">
+                                <div class="flight--details">
+                                    <h3 class="ref--num">
+                                        Insurance Policy
+                                        <!-- <span class="ref__num fn--black">{{bookingId}}</span> -->
+                                    </h3>
+                                </div>
+                            </header>
+                            <section class="main" id="tblCustomers1">
+                                <div class="passengers--details">
+                                    <div class="passengers--details__header">
+                                        <h3>PERSONAL DETAILS</h3>
+                                    </div>
+                                    <div class="passengers--details__label">
+                                        <div class="pass__name">
+                                            <div class="name__label label">
+                                                <h4>NAME</h4>
+                                            </div>
+                                            <div class="name__value">
+                                                <h4 class="name">
+                                                    {{insurance.first_name}} {{insurance.last_name}}
+                                                </h4>
+                                                <!-- <p>({{ i.passenger_type }})</p> -->
+                                            </div>
+                                        </div>
+
+                                        <div class="pass__meals">
+                                            <div class="meals__label label">
+                                                <h4>DEPART FROM</h4>
+                                            </div>
+                                            <div class="meals__value">
+                                                <p>{{insurance.depart_from}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="pass__baggage">
+                                            <div class="baggage__label label">
+                                                <h4>GOING TO</h4>
+                                            </div>
+                                            <div class="baggage__value">
+                                                <p>{{insurance.going_to}}</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="pass__baggage">
+                                            <div class="baggage__label label">
+                                                <h4>START DATE</h4>
+                                            </div>
+                                            <div class="baggage__value">
+                                                <p>{{insurance.start_date}}</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="pass__seat">
+                                            <div class="seat__label label">
+                                                <h4>END DATE</h4>
+                                            </div>
+                                            <div class="seat__value">
+                                                <p>{{insurance.end_date}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="pass__ticket">
+                                            <div class="ticket__label label">
+                                                <h4>TOTAL DAYS</h4>
+                                            </div>
+                                            <div class="ticket__value">
+
+                                                <p><strong>{{insurance.total_days}}</strong>
+                                                </p>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="passengers--details__label">
+                                        <div class="pass__destination">
+                                            <div class="des__label label">
+                                                <h4>REFERENCE ID </h4>
+                                            </div>
+                                            <div class="des__value">
+                                                <p>
+                                                    <span class="from">
+                                                        {{insurance.reference_id}}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pass__destination">
+                                            <div class="des__label label">
+                                                <h4>DATE OF BIRTH</h4>
+                                            </div>
+                                            <div class="des__value">
+                                                <p>
+                                                    <span class="from">
+                                                        {{insurance.date_of_birth}}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pass__destination">
+                                            <div class="des__label label">
+                                                <h4>E-MAIL</h4>
+                                            </div>
+                                            <div class="des__value">
+                                                <p>
+                                                    <span class="from">
+                                                        {{insurance.email}}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pass__destination">
+                                            <div class="des__label label">
+                                                <h4>MOBILE</h4>
+                                            </div>
+                                            <div class="des__value">
+                                                <p>
+                                                    <span class="from">
+                                                        {{insurance.phone}}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pass__destination">
+                                            <div class="des__label label">
+                                                <h4>PNR NO.</h4>
+                                            </div>
+                                            <div class="des__value">
+                                                <p>
+                                                    <span class="from">
+                                                        {{insurance.pnr_no}}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                                <div class="passengers--details">
+                                    <div class="passengers--details__header">
+                                        <h3>PLAN DETAILS</h3>
+                                    </div>
+                                    <div class="passengers--details__label">
+                                        <div class="pass__meals">
+                                            <div class="meals__label label">
+                                                <h4>PLAN NAME</h4>
+                                            </div>
+                                            <div class="meals__value">
+                                                <p>{{plan.plan_name}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="pass__baggage">
+                                            <div class="baggage__label label">
+                                                <h4>PLAN DESCRIPTION</h4>
+                                            </div>
+                                            <div class="baggage__value">
+                                                <p>{{plan.plan_description}}</p>
+                                            </div>
+                                        
+                                        </div>
+                                       
+                                        <div class="pass__meals">
+                                            <div class="meals__label label">
+                                                <h4>POLICY NO.</h4>
+                                            </div>
+                                            <div class="meals__value">
+                                                <p>{{insurance.policy_no}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="pass__baggage">
+                                            <div class="baggage__label label">
+                                                <h4>AMOUNT</h4>
+                                            </div>
+                                            <div class="baggage__value">
+                                                <p>{{plan.premium}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="pass__meals">
+                                            <div class="meals__label label">
+                                                <h4>STATUS</h4>
+                                            </div>
+                                            <div class="meals__value">
+                                                <p>{{insurance.insurance_status}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="passengers--details__label">
+                                        <div class="pass__destination">
+                                            <div class="des__label label">
+                                                <h4>PLAN DESCRIPTION</h4>
+                                            </div>
+                                            <div class="des__value">
+                                                <p>
+                                                    <span class="from">
+                                                        {{plan.plan_description}}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="footer-wrapper">
+        <div class="footer-section f-section-1">
+            <p class="">Copyright © 2020 <a target="_blank" href="https://designreset.com">DesignReset</a>, All rights
+                reserved.</p>
+        </div>
+        <div class="footer-section f-section-2">
+            <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-heart">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                    </path>
+                </svg></p>
+        </div>
+    </div>
+</div>
+<!--  END CONTENT AREA  -->
+
+</div>
+<!-- END MAIN CONTAINER -->
+
+<script src="{% static 'admin/plugins/flatpickr/flatpickr.js' %}"></script>
+
+
+
+
+<!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+<script src="{% static 'admin/assets/js/libs/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'admin/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'admin/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'admin/plugins/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+<script src="{% static 'admin/assets/js/app.js' %} "></script>
+
+
+
+
+
+</body>
+
+</html>

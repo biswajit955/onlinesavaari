@@ -1,0 +1,560 @@
+// Logo Widget
+.logo-widget {
+    a {
+        display: inline-block;
+    }
+}
+
+// Owl Carousel Nav
+.owl-top-nav {
+    .owl-nav {
+        position: absolute;
+        top: -40px;
+        right: 0;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            position: relative;
+            top: auto;
+            bottom: 0;
+            margin-top: 10px;
+            text-align: center;
+        }
+        [class*="owl-"] {
+            &.owl-prev,
+            &.owl-next {
+                font-size: 20px;
+                line-height: 1;
+                margin: 0 10px;
+                &:hover {
+                    color: $red-clr;
+                    background-color: $no-clr;
+                }
+            }
+        }
+    }
+}
+
+// Breadcumb
+.breadcumb {
+    display: flex;
+    align-items: center;
+    li {
+        position: relative;
+        &:after {
+            content: "/";
+            display: inline-block;
+            padding: 0 5px;
+            color: $clr-999999;
+        }
+        a {
+            font-weight: 600;
+            color: $clr-333333;
+            &:hover {
+                color: $red-clr;
+            }
+        }
+        span {
+            color: $clr-999999;
+        }
+        &:last-child {
+            &:after {
+                display: none;
+            }
+        }
+    }
+}
+
+// Dropdown
+.dropdown {
+    .dropdown-toggle {
+        color: $clr-333333;
+        background-color: $no-clr;
+        border: none;
+        border-radius: 0;
+        cursor: pointer;
+        padding: 0;
+        &:after {
+            margin-left: 0;
+        }
+        img {
+            width: 20px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+    }
+    .dropdown-menu {
+        font-size: 1em;
+        padding: 0;
+        border: 1px solid rgba($black-clr, 0.05);
+        border-radius: 4px;
+        box-shadow: 0px 2px 4px 1px rgba($black-clr, 0.05);
+        min-width: 120px;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            position: fixed !important;
+            left: 0 !important;
+            bottom: 0;
+            top: auto !important;
+            transform: none !important;
+            width: 100%;
+            max-width: unset;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            box-shadow: 1px -4px 4px 1px rgba($black-clr, 0.05);
+        }
+        .dropdown-item {
+            padding: 6px 20px;
+            &:hover {
+                color: $blue-clr;
+                background-color: $clr-e4e4e4;
+            }
+        }
+    }
+}
+
+// Datepicker
+.ui-datepicker {
+    width: 100%;
+    max-width: 300px;
+    background: $white-clr;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid $clr-e4e4e4 !important;
+    box-shadow: 0 0 10px rgba($black-clr, 0.1);
+    border-radius: 4px;
+    padding: 24px;
+    font-size: 1em;
+
+    @media (max-width: $break_767) {
+        max-width: 100%;
+        padding: 15px;
+        top: auto !important;
+        bottom: 0;
+        left: 0 !important;
+    }
+    .ui-datepicker-header {
+        padding: 0;
+        background: none;
+        border: none;
+        .ui-datepicker-title {
+            margin: 0;
+            line-height: 18px;
+            font-size: 1em;
+        }
+        .ui-datepicker-prev,
+        .ui-datepicker-next {
+            display: inline;
+            cursor: pointer;
+            top: -4px;
+            border: none;
+            border-radius: 0;
+            background-color: $no-clr;
+            span {
+                background-position: center;
+                position: relative;
+                left: 0;
+                margin-left: 0;
+                top: 0;
+                margin-top: 0;
+                display: inline-block;
+            }
+        }
+        .ui-datepicker-prev {
+            left: 20px;
+            span {
+                background-image: url(../images/icon/arrow-left.png);
+            }
+        }
+        .ui-datepicker-next {
+            right: 20px;
+            span {
+                background-image: url(../images/icon/arrow-right.png);
+            }
+        }
+    }
+    .ui-datepicker-calendar {
+        tbody {
+            tr {
+                td {
+                    .ui-state-default {
+                        color: $clr-333333;
+                        background: none;
+                        border: 1px solid $clr-e4e4e4;
+                        text-align: center;
+                    }
+                    .ui-state-highlight,
+                    .ui-state-hover {
+                        color: $white-clr;
+                        background-color: $red-clr;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Booking Inputs
+.hotel-input {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    .hotel-group {
+        width: 45%;
+        border-bottom: 1px solid $clr-e4e4e4;
+        input {
+            padding: 0;
+            border: none;
+            font-size: 18px;
+            font-weight: 500;
+            width: 100%;
+
+            // Max 767px
+            @media (max-width: $break-767) {
+                font-size: 12px;
+            }
+        }
+        .two-span {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .with-time {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .dates {
+                width: 65%;
+
+                // Max 767px
+                @media (max-width: $break-767) {
+                    width: 60%;
+                }
+            }
+            .times {
+                width: 35%;
+
+                // Max 767px
+                @media (max-width: $break-767) {
+                    width: 40%;
+                }
+                span {
+                    display: flex;
+                    align-items: center;
+                    background-color: $clr-e4e4e4;
+                    border: 1px solid $clr-c5c5c5;
+                    border-radius: 4px;
+                    padding: 3px 2px;
+                    gap: 5px;
+                    input {
+                        background-color: $no-clr;
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+                }
+            }
+        }
+        &.form-group-full {
+            width: 100%;
+        }
+    }
+}
+
+// Person Quantity
+.person-quantity {
+    span {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+
+        // Max 767px
+        @media (max-width: $break-767) {
+            font-size: 13px;
+        }
+    }
+    .quantity-box {
+        display: flex;
+        button {
+            display: inline-block;
+            width: 25%;
+            color: $clr-333333;
+            background-color: $clr-f1f1f1;
+            border: 1px solid $clr-e4e4e4;
+            text-align: center;
+            padding: 5px;
+            font-weight: bold;
+            line-height: 1;
+            cursor: pointer;
+        }
+        input[type="number"] {
+            display: inline-block;
+            width: 50%;
+            text-align: center;
+            border: 1px solid $clr-e4e4e4;
+            border-left: 0;
+            border-right: 0;
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+            }
+        }
+    }
+}
+
+// Social List One
+.social-list-one {
+    display: flex;
+    a {
+        width: 32px;
+        height: 32px;
+        line-height: 30px;
+        margin: 0 5px 5px 0;
+        color: $clr-333333;
+        border: 1px solid $clr-333333;
+        border-radius: 3px;
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+        &:hover {
+            color: $red-clr;
+            border-color: $red-clr;
+        }
+    }
+}
+
+// Information Section
+.information-sec {
+    .heading-one {
+        h3 {
+            color: $red-clr;
+        }
+    }
+    ul {
+        li {
+            h5 {
+                margin-bottom: 10px;
+            }
+            p {
+                margin-bottom: 0;
+                text-align: justify;
+                color: $clr-999999;
+                + p {
+                    margin-top: 10px;
+                }
+            }
+            + li {
+                margin-top: 24px;
+            }
+        }
+    }
+}
+
+// Offer Listing Page Menu
+.menu-list {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    li {
+        a {
+            display: inline-block;
+            padding: 8px 15px;
+            color: $clr-333333;
+            border: 1px solid $clr-e4e4e4;
+            background-color: $white-clr;
+            white-space: nowrap;
+            &:hover {
+                color: $white-clr;
+                background-color: $red-clr;
+                border-color: $red-clr;
+            }
+        }
+        + li {
+            a {
+                border-left: none;
+            }
+        }
+    }
+}
+
+// Heading Banner
+.heading-banner {
+    text-align: center;
+    h1 {
+        color: $white-clr;
+        padding: 1em 0;
+        text-shadow: 0px 0px 5px rgba($black-clr, 0.6);
+    }
+}
+
+// Newsletter One
+.newsletter-one {
+    display: flex;
+    .form-group {
+        margin-bottom: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 15px;
+        border: 1px solid $clr-c5c5c5;
+        flex-grow: 1;
+        .form-control {
+            border: none;
+            border-radius: 0;
+            background-color: $no-clr;
+            padding: 0;
+        }
+    }
+    .btn {
+        border-radius: 0;
+    }
+}
+
+// Disk List
+.disk-list {
+    padding-left: 25px;
+    list-style-type: disc;
+    li {
+        + li {
+            margin-top: 10px;
+        }
+    }
+}
+
+// Check List
+.check-list {
+    li {
+        position: relative;
+        padding-left: 30px;
+        &:before {
+            content: "";
+            background-image: url(../images/icon/check.png);
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        + li {
+            margin-top: 5px;
+        }
+    }
+}
+
+// Icon List
+.icon-list {
+    li {
+        + li {
+            margin-top: 5px;
+        }
+    }
+}
+
+// Flex List
+.flex-list {
+    li {
+        display: flex;
+        justify-content: space-between;
+        + li {
+            margin-top: 5px;
+        }
+    }
+}
+
+// Modal One
+.modalone {
+    .modal-dialog {
+        .modal-content {
+            .modal-header {
+                padding: 10px 15px;
+            }
+            .modal-body {
+                padding: 15px;
+            }
+            .modal-footer {
+                padding: 10px 15px;
+            }
+        }
+    }
+    .add-person {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        h5 {
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        .person-quantity {
+            max-width: 150px;
+            span {
+                font-size: 12px;
+                small {
+                    font-size: 10px;
+                }
+            }
+        }
+    }
+    .add-more-btn {
+        button {
+            color: $red-clr;
+            background-color: $white-clr;
+            border: 1px solid $red-clr;
+            border-radius: 15px;
+            padding: 4px 15px;
+            font-size: 12px;
+            cursor: pointer;
+            &:hover {
+                color: $white-clr;
+                background-color: $red-clr;
+            }
+        }
+    }
+    .icon-group {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        border: 1px solid $clr-e4e4e4;
+        padding: 10px;
+        input {
+            border: none;
+            padding: 0;
+        }
+        i {
+            font-size: 1.2em;
+            line-height: 1;
+        }
+    }
+}
+
+// Review List
+.review-list {
+    li {
+        h5 {
+            margin-bottom: 5px;
+            span {
+                color: $clr-02CB66;
+                display: inline-block;
+                padding: 5px;
+                font-weight: 600;
+                border: 1px solid $clr-02CB66;
+                border-radius: 6px;
+                margin-right: 10px;
+            }
+        }
+        small {
+            color: $clr-999999;
+            display: block;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 0;
+        }
+        + li {
+            border-top: 1px solid $clr-e4e4e4;
+            padding-top: 1em;
+            margin-top: 1em;
+        }
+    }
+}

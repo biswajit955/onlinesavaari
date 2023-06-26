@@ -1,0 +1,16 @@
+  {% if messages %}
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-body">
+                {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ message | safe }}
+                </div>
+                {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}

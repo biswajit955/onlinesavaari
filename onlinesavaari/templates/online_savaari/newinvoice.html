@@ -1,0 +1,1445 @@
+
+{% load flight_tags %}
+{%load static%}
+<!-- {% include "online_savaari/header.html" %} -->
+<link href="{% static 'admin/plugins/animate/animate.css' %}" rel="stylesheet" type="text/css" />
+<script src="{% static 'admin/plugins/sweetalerts/promise-polyfill.js' %}"></script>
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/plugins/sweetalerts/sweetalert.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'admin/assets/css/components/custom-sweetalert.css' %}" rel="stylesheet" type="text/css" />
+<main class="main-body" style="background-color: #F2F2F2;padding-top: 50px;">
+    <section class="details-pg">
+      <div class="row" style="background-image: linear-gradient(to right,#d3d3d3,#dfe1e7);padding: 4.8em;">
+      </div>
+
+      <div class="container" style="margin-top: -3.5em;padding-top: 0;">
+        <div class="row">
+          <div class="col-lg-8 left-sec" style="position: relative;">
+            <div class="title" style="position: absolute;top:-3.8em;">
+              <h3 class="m-0 p-0" style="font-weight: 700;font-size: 1.4rem;">Your Flight booking status is {{flight_status}} {{sdata.status}}</h3>
+              <p class="m-0 p-0">Booking Id <b>{{os_bookingId}}</b></p>
+            </div>
+            <div class="date" style="position: absolute;top:-1.7em;right: 2em;">
+              <p class="m-0 p-0">Booking on <b>{{ data.order.createdOn|fix_date }}{{sdata.data.booking_date}}</b></p>
+            </div>
+            <div class="box-one review-box">
+              <div class="flight-info">
+                {{insurancelist}}
+                {{ sdata }}
+                {% if sdata %}
+                <div class="flight-title" style="margin-left: -16px;padding-left: 9px;border-left: 5px solid #B1B4BB;">
+                  <h2 class="m-0 p-0" style="display:flex;gap: 0.2em;align-items: center;">{{ src }} <svg style="padding-bottom: 0.1em;" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M438.6 278.6l-160 160C272.4 444.9 264.2 448 256 448s-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L338.8 288H32C14.33 288 .0016 273.7 .0016 256S14.33 224 32 224h306.8l-105.4-105.4c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160C451.1 245.9 451.1 266.1 438.6 278.6z"/></svg> {{ dest }}</h2>
+                </div>
+                <div class="flight-sec mt-3 d-flex" style="align-items: flex-start;">
+                  <div class="flight-img d-flex" style="align-items: center;gap:0.5em;">
+                    <img style="object-fit: contain;width: 40px;" src="{% static 'flight/airline_logo/' %}{{ flight_code }}.png" alt="">
+                    <p class="m-0">
+                      {{ airline_name }}
+                      <br>
+                      {{ flight_code }}{{sdata.data.flight_no}}
+                    </p>
+                  </div>
+                  <div class="da-info  d-flex" style="justify-content: space-evenly;flex: 1 1 80%;">
+                    <div class="a-info">
+                      <h4 class="m-0">
+                        {{ src }} - {{ a.da.code }}
+                        <br>
+                        {{ departure_date}} {{sdata.data.departure_time}}
+                      </h4>
+                      <hr style="margin: 0.5em 0;">
+                      <p>{{ src }}, {{ a.da.terminal }} <a href="">View location</a></p>
+                    </div>
+                    <div class="total-time small">
+                        <div>
+                          <i class="la la-clock"></i> <span id="total1">{{ a.duration }}</span>
+                        </div>
+                        <div>
+                          <span>--------</span>
+                          <i style="font-size: 2em;" class="la la-plane-departure"></i>
+                        </div>
+                        <div>{% if a.stops == 0 %}
+                          Non Stop
+                          {% else %}
+                          {{ a.stops }}
+                        {% endif %}</div>
+                      </div>
+                    <div class="a-info">
+                      <h4 class="m-0">
+                        {{ dest }} - {{ a.aa.code }}
+                        <br>
+                        {{ arrival_date}}   {{sdata.data.arrival_time}}                     </h4>
+                      <hr style="margin: 0.5em 0;">
+                      <p>{{ dest }}, {{ a.aa.terminal }} <a href="">View location</a></p>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% for i in data.itemInfos.AIR.tripInfos %}
+                {% for a in i.sI %}
+                <div class="flight-title" style="margin-left: -16px;padding-left: 9px;border-left: 5px solid #B1B4BB;">
+                  <h2 class="m-0 p-0" style="display:flex;gap: 0.2em;align-items: center;">{{ a.da.city }} <svg style="padding-bottom: 0.1em;" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M438.6 278.6l-160 160C272.4 444.9 264.2 448 256 448s-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L338.8 288H32C14.33 288 .0016 273.7 .0016 256S14.33 224 32 224h306.8l-105.4-105.4c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160C451.1 245.9 451.1 266.1 438.6 278.6z"/></svg> {{ a.aa.city }}</h2>
+                </div>
+                <div class="flight-sec mt-3 d-flex" style="align-items: flex-start;">
+                  <div class="flight-img d-flex" style="align-items: center;gap:0.5em;">
+                    <img style="object-fit: contain;width: 40px;" src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+                    <p class="m-0">
+                      {{ a.fD.aI.name }}{{sdata.data.airline}}
+                      <br>
+                      {{ a.fD.aI.code }} - {{ a.fD.fN }}{{sdata.data.flight_no}}
+                    </p>
+                  </div>
+                  <div class="da-info  d-flex" style="justify-content: space-evenly;flex: 1 1 80%;">
+                    <div class="a-info">
+                      <h4 class="m-0">
+                        {{ a.da.city }} - {{ a.da.code }}
+                        <br>
+                        {{ a.dt|fix_datetime }}{{sdata.data.departure_date}}  {{sdata.data.departure_time}}
+                      </h4>
+                      <hr style="margin: 0.5em 0;">
+                      <p>{{ a.da.name }}, {{ a.da.terminal }} <a href="">View location</a></p>
+                    </div>
+                      <div class="total-time small">
+                        <div>
+                          <i class="la la-clock"></i> <span id="total1">{{ a.duration|fix_duration }}</span>
+                        </div>
+                        <div>
+                          <span>--------</span>
+                          <i style="font-size: 2em;" class="la la-plane-departure"></i>
+                        </div>
+                        <div>{% if a.stops == 0 %}
+                          Non Stop
+                          {% else %}
+                          {{ a.stops }}
+                        {% endif %}</div>
+                      </div>
+                    <div class="a-info">
+                      <h4 class="m-0">
+                        {{ a.aa.city }} - {{ a.aa.code }}
+                        <br>
+                        {{ a.at|fix_datetime }}
+                      </h4>
+                      <hr style="margin: 0.5em 0;">
+                      <p>{{ a.aa.name }}, {{ a.aa.terminal }} {{sdata.data.arrival_date}}  {{sdata.data.arrival_time}}<a href="">View location</a></p>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+                {% endfor %}
+
+                <div class="flight-sec2" style="margin-top: 2em;">
+                  <ul class="first" style="
+                  display: grid;
+                  grid-template-columns: repeat(3, minmax(150px, 1fr));
+                  margin: 0.25em 0;
+                  ">
+                    <li><i class="la la-suitcase"></i>Corporate Fare</li>
+                    <li><i class="la la-suitcase"></i>SAVER</li>
+                    <li><i class="la la-suitcase"></i>Economy</li>
+                  </ul>
+                  <ul class="second" style="
+                  display: grid;
+                  grid-template-columns: repeat(3, minmax(150px, 1fr));
+                  margin: 0.25em 0;
+                  ">
+                    <li><i class="la la-suitcase"></i>Check in-15Kgs(1 piece only) per Adult</li>
+                    <li><i class="la la-suitcase"></i>Carry On-7Kgs(1piece only) per Adult</li>
+                    <li><i class="la la-suitcase"></i>Extra baggage - {{baggage}}</li>
+                  </ul>
+                </div>
+                {% if sdata %}
+                <div class="sec3">
+                  <div class="p-2" style="background-color: #F2F2F2;border-radius: 2px;">
+                      <ul class="pax-info" style="
+                      display: flex;
+                      width: 100%;
+                      margin: 0.5em 0;
+                      ";>
+                        <li style="flex: 4;">TRAVELLER</li>
+                        <li style="flex: 3;">PNR</li>
+                        <li style="flex: 3;">E-TICKET NUMBER</li>
+                        <li style="flex: 3;">SEAT</li>
+                        <li style="flex: 3;">MEAL</li>
+                        <li style="flex: 3">Insurance policy number</li>
+                      </ul>
+                      <ul class="pax-info" style="
+                      display: flex;
+                      width: 100%;
+                      margin: 0.8em 0;
+                      ";>
+                        <li style="flex: 4;">
+                          <P class="m-0" style="font-size: 0.7rem;">
+                            <strong style="font-size: 0.8rem;">{{sdata.data.passenger_details.Adult.0.Name}}</strong>
+                            </P>
+                        </li>
+                        <li style="flex: 3;">{{sdata.data.pnr}}</li>
+                        <li style="flex: 3;">{{ticketnumber}}</li>
+                        <li style="flex: 3;">-</li>
+                        <li style="flex: 3;">-</li>
+                        <li id="policy" style="flex: 3;"><button class="mr-2 btn message">Basic message</button></li>
+                        </ul>
+                  </div>
+                </div>  
+              </div>
+            </div>
+            {% endif %}
+            <div class="sec3">
+              <div class="p-2" style="background-color: #F2F2F2;border-radius: 2px;">
+                      <ul class="pax-info" style="
+                      display: flex;
+                      width: 100%;
+                      margin: 0.5em 0;
+                      ";>
+                        <li style="flex: 4;">TRAVELLER</li>
+                        <li style="flex: 3;">PNR</li>
+                        <li style="flex: 3;">E-TICKET NUMBER</li>
+                        <li style="flex: 3;">SEAT</li>
+                        <li style="flex: 3;">MEAL</li>
+                        <li style="flex: 3">Insurance policy number</li>
+                      </ul>
+                      {% for i in  data.itemInfos.AIR.travellerInfos %}
+                      <ul class="pax-info" style="
+                      display: flex;
+                      width: 100%;
+                      margin: 0.8em 0;
+                      ";>
+                        <li style="flex: 4;">
+                          <P class="m-0" style="font-size: 0.7rem;">
+                            <strong style="font-size: 0.8rem;">{{ i.ti }} {{ i.fN }} {{ i.lN }} {{sdata.data.passenger_details.Adult.Name}}</strong>
+                            {{ i.pt }}
+                          </P>
+                        </li>
+                        <li style="flex: 3;">{{pnr}}   {{sdata.data.pnr}}</li>
+                        <li style="flex: 3;">{{ticketnumber}}</li>
+                        <li style="flex: 3;">{{seat }}</li>
+                        <li style="flex: 3;">{{meal}}</li>
+                        <li id="policy" style="flex: 3;"><button class="mr-2 btn message">Insurance details</button></li>
+                      </ul>
+                      {% endfor %}
+                  </div>
+                </div>  
+              </div>
+            </div>
+            <!-- important -->
+            <div class="box-one cancel-box" style="background-color: #FEEDD1;">
+              <div class="flight-title" style="margin-left: -16px;padding-left: 9px;border-left: 5px solid #C37600;">
+                <h3 class="m-0 p-0" style="display:flex;gap: 0.2em;color: #CF9233;">IMPORTANT INFORMATION</h3>
+              </div>
+              <ul style="list-style-type:disc;">
+                <li style="margin-left: 1em;margin-top: 0.5em;">
+                 <h5 class="m-0">
+                  Valid ID proof needed:
+                 </h5> 
+                </li>
+                <p class="m-0">
+                  Carry a valid photo Identification proof (Driver Licence, Aadhar Card, Pan Card or any other Government recognised photo Identification)
+                </p>
+              </ul>
+            </div>
+            <div class="box-one mb-4">
+              <div class="flight-title" style="margin-left: -16px;padding-left: 9px;border-left: 5px solid #B1B4BB;">
+              <h4 class="m-0 p-0" style="display:flex;gap: 0.2em">
+                CONTACT INFORMATION
+              </h4>
+              <P class="m-0">
+                Information about primary traveller. Any communication by airlines will be sent to these details.
+              </P>
+              </div>
+              <div class="contact-detail pt-3">
+                <ul>
+                  <li><b>{{ data.itemInfos.AIR.travellerInfos.0.fN }} {{ data.itemInfos.AIR.travellerInfos.0.lN }}{{sdata.data.passenger_details.Adult.0.Name}}</b></li>
+                  <li>{{ data.order.deliveryInfo.emails.0 }}{{email}}</li>
+                  <li>{{ data.order.deliveryInfo.contacts.0 }}{{mobile}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>      
+
+          <div class="col-lg-4 right-sec" style="margin-top: 30px; top: 0;">
+            <div class="box-one">
+              <div class="title">
+                <h4 style="font-weight: 700;">Submit Refund Request</h4>
+              </div>
+              <ul class="ml-3">
+                <li><a href="{% url 'cancel' %}">I directly cancelled with the airline</a></li>
+                <li><a href="{% url 'refundclaim' %}">My flight was cancelled by the airline</a></li>
+                <li><a href="{% url 'cancel' %}">I want to cancel my flight</a></li>
+                <li><a href="/rescheduleclaim?bookingId={{os_bookingId}}{{sdata.data.booking_id}}">flight rescheduled & did not travel</a></li>
+              </ul>
+              <hr>
+              <div class="title">
+                <h4 style="font-weight: 700;">Ticket(s)</h4>
+              </div>
+              <ul class="ml-3">
+                <!-- <li><a href="">Download E-ticket(s)</a></li>
+                <li><a href="">Email/SMS E-Ticket(s)</a></li> -->
+                <li><a href="#" id="btnExport">E-ticket</a></li>   
+                <li><a href="#" id="btnExport2">Invoice</a></li>   
+                <li><a href="{% url 'booking_history' %}">Customer Booking confirmation</a></li>
+            </div>
+            <div class="box-one" style="margin: 1em 0;">
+              <div class="title">
+                <h4 style="font-weight: 700;">Price Breakup</h4>
+              </div>
+              <ul>
+                <li>
+                  <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                    <span>Airline Base Fare</span>
+                    <span><b>₹ {{ amount }}</b></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);">
+                    <span>
+                      <b>
+                        Total Amount
+                      </b>
+                    </span>
+                    <span><b>₹ {{ amount }}</b></span>
+                  </div>
+                </li>
+              </ul>
+          </div>
+          <div id="insurance" class="box-one hide" style="margin: 1em 0;">
+            <div class="title">
+              <h4 style="font-weight: 700;">insurance</h4>
+            </div>
+            <ul>
+              <li>
+                <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>policy</span>
+                  <span class="policy"><b></b></span>
+                </div>
+              </li>
+              <li>
+                <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>pdf link</span>
+                  <a href="" class="url-ins" target="_blank">pdf</a>
+                </div>
+              </li>
+              <li>
+                <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>reference</span>
+                  <span class="ref"></span>
+                </div>
+              </li>
+              <li>
+                <div class="d-flex" style="justify-content: space-between;width: 100%;padding: 0.5em 0;border-top: 1px solid rgba(0, 0, 0, 0.2);">
+                  <span>
+                    <b>
+                      claim code
+                    </b>
+                  </span>
+                  <span class="claim"><b>$ 8700</b></span>
+                </div>
+              </li>
+            </ul>
+        </div>                        
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {% include "online_savaari/footer.html" %}
+
+  <!-- Jquery min -->
+  <script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+  <!-- Popper Min -->
+  <script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+  <!-- Bootstrap -->
+  <script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+  <!-- Jquery UI -->
+  <script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+  <!-- Owl Carousel -->
+  <script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+  <!-- Star Rating -->
+  <script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+  <!-- Quantity -->
+  <script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+  <!-- Phone -->
+  <script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+  <!-- Select -->
+  <script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+  <!-- Select -->
+  <script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" ></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function($) 
+    { 
+  
+        $(document).on('click', '#btnExport', function(event) 
+        {
+            event.preventDefault();
+            console.log('done')
+            
+            var element = document.getElementById('tblCustomers'); 
+            var opt = 
+            {
+                margin:       0,
+                filename:     'e-ticket'+'.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+  
+            // New Promise-based usage:
+            html2pdf().set(opt).from(element).save();
+  
+                
+        });
+
+        $(document).on('click', '#btnExport2', function(event) 
+        {
+            event.preventDefault();
+            console.log('done')
+            
+            var element1 = document.getElementById('invoice-pdf'); 
+            var opt1 = 
+            {
+                margin:       0.1,
+                filename:     'invoice'+'.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+  
+            // New Promise-based usage:
+            html2pdf().set(opt1).from(element1).save();
+                
+        });
+  
+    
+    
+    });
+    </script>
+  
+    <style>
+      .d-flex {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1em;
+  }
+  
+  /* .passengers--details__header {
+      border-radius: 50%;
+  } */
+  
+  .invoice--main--container {
+      font-family: sans-serif;
+      color: #666666;
+  }
+  
+  ul li{
+      margin-left: ;
+  }
+  
+  .invoice--main--container {
+      width: 90%;
+      max-width: 1180px;
+      margin: 3.5em auto;
+  }
+  
+  nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #F0F0F0;
+      padding: 1em;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.229);
+  }
+  
+  .ban--logo {
+      font-family: 'Mouse Memoirs', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #DF212E;
+  }
+  .icon--apps {
+      display: flex;
+  }
+  
+  .flight--details {
+      display: flex;
+      gap: 1.5em;
+      padding: 0.8em 0;
+  }
+  
+  .flight--details h4{
+      font-size: 0.8rem;
+      font-weight: 600;
+  }
+  
+  .fn--black {
+      color: black !important;
+  }
+  
+  .ref__num {
+      padding-left: 1em;
+  }
+  
+  /* passengers--details */
+  
+  .passengers--details {
+      border: 1px solid #CCCCCC;
+      border-radius: 10px;
+      margin-bottom: 1.2em;
+  }
+  
+  .passengers--details__label {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5em;
+      padding-right: 1.5em;
+  }
+  .passengers--details__header {
+      padding: 0.5em;
+      border-bottom: 1px dotted #CCCCCC;
+  }
+  
+  .passengers--details__header h3 {
+      font-size: 0.8rem;
+      font-weight: 600;
+  }
+  
+  .passengers--details__label {
+      font-size: 0.72rem;
+  }
+  
+  .label {
+      margin-bottom: 1em;
+  }
+  
+  .label h4 {
+      font-size: 0.72rem;
+      font-weight: 500;
+  }
+  
+  .passengers--details__label p {
+      font-size: 0.72rem;
+  }
+  
+  .flight--img {
+      width: 100%;
+      object-fit: contain;
+  }
+  
+  .guidelines,
+  .information {
+      border: 2px solid #d1d1d1;
+      margin-bottom: 1em;
+      /* padding: 0.6em; */
+  }
+  
+  .guidelines--title {
+      background-color: #EBEBEB;
+      padding: 1em 0.8em;
+  }
+  
+  .guidelines--content {
+      padding: 0.5em;
+  }
+  
+  .guidelines--content ul li + li {
+      margin-top: 1em;
+  }
+  .air__img {
+      border-radius: 50%
+  }
+  .container-invoice{
+  margin: 0 0.6em;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.5em;
+  border-bottom: 1px solid black;
+}
+.header p {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.invoice-com-logo{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex: 5 1;
+}
+
+.com-details {
+  flex: 1 1 200px;
+  font-size: 0.9rem;
+}
+
+/* booking-details */
+.booking-details{
+  display: flex;
+  font-size: 0.9rem;
+}
+
+.booking-details p, .airline-details span {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.booking-details > * {
+  flex: 1 1 50%;
+  padding: 0.5em;
+}
+
+.context {
+  border-right: 1px solid black;
+}
+
+.airline-details {
+  display: flex;
+  align-items: center;
+}
+.airline-details > * {
+  flex: 1 1 50%;
+}
+
+/* flight-detials */
+
+.flight-title-invoice {
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.flight-title-invoice p {
+  padding-left: 1em;
+}
+#invoice-pdf h1,h2,h3,h4,h5,h6,p,span{
+  margin: 0;
+}
+/* #fare-table td {
+  padding-left: 0.5em;
+}
+#pax-table th,#pax-table td {
+  padding: 0 0.5em;
+} */
+th,td {
+  padding: 0 0.5em;
+}
+  </style>
+<div style="display: none;">
+  <section class="main" id="tblCustomers">
+    <div class="invoice--main--container" >
+        <header class="invoice--container" >
+            <nav>
+                <div class="ban--logo">
+                    <img src="{% static 'main/images/logo.png' %}" alt="">
+
+                </div>
+                <div class="icon--apps">
+                    <div class="android"></div>
+                    <div class="apple"></div>
+                </div>
+            </nav>
+            <div class="flight--details">
+                <h4 class="flight">FLIGHT</h4>
+                <h4 class="e-ticket fn--black">E-TICKET</h4>
+                <h4 class="ref--num">
+                    REF NUMBER
+                    <span class="ref__num fn--black">{{os_bookingId}}</span>
+                </h4>
+                <h4 class="ref--num">
+                    FLIGHT STATUS
+                    <span class="ref__num fn--black">{{flight_status}}</span>
+                </h4>
+            </div>
+        </header>
+        <section class="main" id="tblCustomers1">
+            {% for i in  data.itemInfos.AIR.travellerInfos %}
+            <div class="passengers--details">
+                <div class="passengers--details__header">
+                    <h3>PASSENGERS DETAILS</h3>
+                </div>
+                <div class="passengers--details__label">
+                    <div class="pass__name">
+                        <div class="name__label label">
+                            <h4>NAME</h4>
+                        </div>
+                        <div class="name__value">
+                            <h4 class="name">
+                              {{ i.ti }} {{ i.fN }} {{ i.lN }} 
+                            </h4>
+                            <p>({{ i.pt }})</p>
+                            <p>Insurance Policy:</p>
+                            {% for x in insurance %}
+                            {{x.reference}}
+                            {% endfor %}
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="pass__destination">
+                        <div class="des__label label">
+                            <h4>DESTINATION</h4>
+                        </div>
+                        <div class="des__value">
+                            <p>
+                                <span class="from">
+                                    {{ data.itemInfos.AIR.tripInfos.0.sI.0.da.code }}
+                                </span>
+                                <span>-</span>
+                                <span class="to">
+                                    {{ data.itemInfos.AIR.tripInfos.0.sI.0.aa.code }}
+                                </span>
+                                <span>-</span>
+                                <span class="to">
+                                    {{ data.itemInfos.AIR.tripInfos.0.sI.1.aa.code }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="pass__meals">
+                        <div class="meals__label label">
+                            <h4>MEALS</h4>
+                        </div>
+                        <div class="meals__value">
+                            <p>{{meal}}</p>
+                        </div>
+                    </div>
+                    <div class="pass__baggage">
+                        <div class="baggage__label label">
+                            <h4>BAGGAGE</h4>
+                        </div>
+                        <div class="baggage__value">
+                            <p>15kg (Free)</p>
+                        </div>
+                        
+                    </div>
+                    <div class="pass__baggage">
+                        <div class="baggage__label label">
+                            <h4>EXTRA BAGGAGE</h4>
+                        </div>
+                        <div class="baggage__value">
+                            <p>{{baggage}}</p>
+                        </div>
+                        
+                    </div>
+                    <div class="pass__seat">
+                        <div class="seat__label label">
+                            <h4>SEAT NO.</h4>
+                        </div>
+                        <div class="seat__value">
+                            <p>{{seat}}</p>
+                        </div>
+                    </div>
+                    <div class="pass__ticket">
+                        <div class="ticket__label label">
+                            <h4>TICKET NO.</h4>
+                        </div>
+                        <div class="ticket__value">
+                            <p><strong>{{pnr}}   {{sdata.data.pnr}}</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if sdata %}
+            <div class="passengers--details">
+                <div class="passengers--details__header">
+                    <h3>PASSENGERS DETAILS</h3>
+                </div>
+                <div class="passengers--details__label">
+                    <div class="pass__name">
+                        <div class="name__label label">
+                            <h4>NAME</h4>
+                        </div>
+                        <div class="name__value">
+                            <h4 class="name">
+                              {{sdata.data.passenger_details.Adult.0.Name}}{{sdata.data.passenger_details.Infant.0.Name}} 
+                            </h4>
+                            <p>({{ i.pt }})</p>
+                            <p>Insurance Policy:</p>
+                            {% for x in insurance %}
+                            {{x.reference}}
+                            {% endfor %}
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="pass__destination">
+                        <div class="des__label label">
+                            <h4>DESTINATION</h4>
+                        </div>
+                        <div class="des__value">
+                            <p>
+                                <span class="from">
+                                    {{ src }}
+                                </span>
+                                <span>-</span>
+                                <span class="to">
+                                    {{dest}}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="pass__meals">
+                        <div class="meals__label label">
+                            <h4>MEALS</h4>
+                        </div>
+                        <div class="meals__value">
+                            <p>NA</p>
+                        </div>
+                    </div>
+                    <div class="pass__baggage">
+                        <div class="baggage__label label">
+                            <h4>BAGGAGE</h4>
+                        </div>
+                        <div class="baggage__value">
+                            <p>15kg (Free)</p>
+                        </div>
+                        
+                    </div>
+                    <div class="pass__seat">
+                        <div class="seat__label label">
+                            <h4>SEAT NO.</h4>
+                        </div>
+                        <div class="seat__value">
+                            <p>NA</p>
+                        </div>
+                    </div>
+                    <div class="pass__ticket">
+                        <div class="ticket__label label">
+                            <h4>TICKET NO.</h4>
+                        </div>
+                        <div class="ticket__value">
+                            <p><strong>{{pnr}}   {{sdata.data.pnr}}</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% for i in data.itemInfos.AIR.tripInfos %}
+            {% for a in i.sI %}
+            <div class="passengers--details">
+                <div class="passengers--details__header d-flex">
+                    <img src="{% static '/main/images/arrow__air.png' %}" alt="">
+                    <h5>{{ a.da.city }}</h5>
+                    <img src="{% static '/main/images/air__logo.png' %}" alt="">
+                    <h5>{{ a.aa.city }}</h5>
+                    <p class="date">
+                        {{ a.dt|fix_datetime }}
+                    </p>
+                </div>
+                <div class="passengers--details__label">
+                    <div class="air__name">
+                        <div class="name__label label">
+                            <h4>AIRLINE</h4>
+                        </div>
+                        <div class="name__value">
+                            <img class="air__img" src="{% static 'flight/airline_logo/' %}{{ a.fD.aI.code }}.png" alt="">
+                            <p>{{ a.fD.aI.name }}</p>
+                            <p>{{ a.fD.aI.code }} - {{ a.fD.fN }}</p>
+                        </div>
+                    </div>
+                    <div class="air__departure">
+                        <div class="des__label label">
+                            <h4>DEPARTURE</h4>
+                        </div>
+                        <div class="des__value">
+                            <h4>{{ a.da.city }}</h4>
+                            <p>
+                                {{ a.dt|fix_datetime }}
+                            </p>
+                            <p>{{ a.da.name }}, {{ a.da.terminal }}</p>
+                        </div>
+                    </div>
+                    <div class="air__arrival">
+                        <div class="meals__label label">
+                            <h4>ARRIVAL</h4>
+                        </div>
+                        <div class="air__value">
+                            <h4>{{ a.aa.city }}</h4>
+                            <p>
+                                {{ a.at|fix_datetime }}
+                            </p>
+                            <p>{{ a.aa.name }}, {{ a.aa.terminal }}</p>
+                        </div>
+                    </div>
+                    <div class="air__duration">
+                        <div class="dur__label label">
+                            <h4>DURATION</h4>
+                        </div>
+                        <div class="baggage__value">
+                            <p>{{ a.duration|fix_duration }}</p>
+                            <p>{{ a.stops }}</p>
+                        </div>
+                    </div>
+                    <div class="pass__seat">
+                        <div class="seat__label label">
+                            <h4>SEAT NO.</h4>
+                        </div>
+                        <div class="seat__value">
+                            <p>NA</p>
+                        </div>
+                    </div>
+                    <div class="pass__ticket">
+                        <div class="ticket__label label">
+                            <h4>TICKET NO.</h4>
+                        </div>
+                        <div class="ticket__value">
+                            <p><strong>{{pnr}}   {{sdata.data.pnr}}</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endfor %}
+            {% if sdata %}
+            <div class="passengers--details">
+                <div class="passengers--details__header d-flex">
+                    <img src="{% static '/main/images/arrow__air.png' %}" alt="">
+                    <h5>{{ src }}</h5>
+                    <img src="{% static '/main/images/air__logo.png' %}" alt="">
+                    <h5>{{ dest }}</h5>
+                    <p class="date">
+                        {{ departure_date}} {{sdata.data.departure_time}}
+                    </p>
+                </div>
+                <div class="passengers--details__label">
+                    <div class="air__name">
+                        <div class="name__label label">
+                            <h4>AIRLINE</h4>
+                        </div>
+                        <div class="name__value">
+                            <img class="air__img" src="{% static 'flight/airline_logo/' %}{{ flight_code }}.png" alt="">
+                            <p>{{ airline_name }}</p>
+                            <p>{{ flight_code }} - {{sdata.data.flight_no}}</p>
+                        </div>
+                    </div>
+                    <div class="air__departure">
+                        <div class="des__label label">
+                            <h4>DEPARTURE</h4>
+                        </div>
+                        <div class="des__value">
+                            <h4>{{ src }}</h4>
+                            <p>
+                                {{ departure_date}} {{sdata.data.departure_time}}
+                            </p>
+                            <p>{{ a.da.name }}, {{ a.da.terminal }}</p>
+                        </div>
+                    </div>
+                    <div class="air__arrival">
+                        <div class="meals__label label">
+                            <h4>ARRIVAL</h4>
+                        </div>
+                        <div class="air__value">
+                            <h4> {{ dest }}</h4>
+                            <p>
+                                {{ arrival_date}}  {{sdata.data.arrival_time}}  
+                            </p>
+                            <p>{{ a.aa.name }}, {{ a.aa.terminal }}</p>
+                        </div>
+                    </div>
+                    <div class="air__duration">
+                        <div class="dur__label label">
+                            <h4>DURATION</h4>
+                        </div>
+                        <div class="baggage__value">
+                            <p>{{ a.duration}}</p>
+                            <p>{{ a.stops }}</p>
+                        </div>
+                    </div>
+                    <div class="pass__seat">
+                        <div class="seat__label label">
+                            <h4>SEAT NO.</h4>
+                        </div>
+                        <div class="seat__value">
+                            <p>NA</p>
+                        </div>
+                    </div>
+                    <div class="pass__ticket">
+                        <div class="ticket__label label">
+                            <h4>TICKET NO.</h4>
+                        </div>
+                        <div class="ticket__value">
+                            <p><strong>{{pnr}}{{sdata.data.pnr}}</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </section>
+        <div class="useful-tip">
+            <p>
+                Useful tip : You can go to Yatra Mybookings to check your refund status, if in future your flight is cancelled by the airline or you have cancelled the flight directly with the airline. Please bookmark this link for more details.
+            </p>
+        </div>
+        <section class="guidelines" id="tblCustomers2">
+            <div class="guidelines--title">
+                <h3>Compulsory Guidelines for Domestic Travel</h3>
+            </div>
+
+            <div class="guidelines--content">
+                <p>
+                    The Government has decided for recommencement of domestic air travel of passengers with effect from 25th May 2020. In order to 
+                    ensure safety of the passengers during prevailing circumstances due to COVID I9 pandemic, precautionary measures need to be taken 
+                    by passengers
+                </p>
+                <ul>
+                    <li>
+                        All travellers above 14 years of age must have the Aarogya Setu app activated on their mobiles before arriving at the airport.
+                    </li>
+                    <li>
+                        Travellers will be required to certify the status of their health through the Aarogya Setu app or a self-declaration form.
+                    </li>
+                    <li>
+                        No physical check-in at airport counters would be done. Only those passengers with confirmed web check-in will be allowed to enter the airport.
+                    </li>
+                    <li>
+                        Travellers should report to the airport at least 2 hours prior to the departure time
+                    </li>
+                    <li>
+                        Only passengers who have flights departing in the next 4 hours will be allowed to enter the terminal building.
+                    </li>
+                    <li>
+                        Passengers are required to wear face masks at the airport and in the flight.
+                    </li>
+                    <li>
+                        Only 1 check-in baggage and 1 cabin baggage will be allowed per passenger.
+                    </li>
+                    <li>
+                        Travellers will be required to print and paste a pre-filled baggage tag and affix it on the bags. Alternatively, they should mention the 
+                        PNR number and name on paper and affix it on the bags.
+                        
+                    </li>
+                    <li>
+                        Elderly, pregnant and ailing individuals are advised to avoid air travel. Additionally, individuals who have been tested COVID-19 
+                        positive or are staying in a containment zone should not travel.
+                    </li>
+                    <li>
+                        No meal service, newspapers or magazines will be available on-board.
+                    </li>
+                    <li>
+                        Travellers will be required to sign self-declaration forms. In case of a PNR having more than one passenger, the declaration would 
+                        be deemed to be covering all the passengers mentioned in the PNR.
+                    </li>
+                    <li>
+                        View all mandatory travel guidelines issued by Govt. of India here
+                    </li>
+                </ul>
+            </div>
+
+        </section>
+        <section class="information">
+            <div class="guidelines--title">
+                <h3>Information</h3>
+            </div>
+
+            <div class="guidelines--content">
+                <ul>
+                    <li>
+                        All time indicated are the local times (in 24 hrs. format) at the relevant airport.
+                    </li>
+                    <li>
+                        Cancellation and date change fees are applicable before departure and per passenger basis. In case of amendment, along with 
+                        the airline and Yatra fees, you will also have to pay fare difference, if any.
+                    </li>
+                    <li>
+                        Any change to a confirmed ticket including cancellation, postponement, and change of itinerary must be done at least 24 hours prior to flight departure.
+                    </li>
+                    <li>
+                        Please connect with the airline for refund or alternative to avoid no show before revised scheduled departure, in case you receive any email and SMS from airline about flight timings change.
+                    </li>
+                    <li>
+                        Please directly contact airline for any cancellation/reschedule within four hours of departure time
+                    </li>
+                    <li>
+                        Airline Contact Information: Go First : 18602-100-999,91-22-6273-2111 
+                    </li>
+                    <li>
+                        Please reference the Airline PNR Number when communicating with the airline regarding this booking.
+                    </li>
+                    <li>
+                        If a ticket is canceled directly from the airlines website, office or call center, the customer needs to Claim Refund from 
+                        MyBookings portal at Yatra. Yatra will levy Rs. 400 per passenger per segment.
+                    </li>
+                    <li>
+                        Delhi and Mumbai airports have multiple terminals catering to domestic flights, please check the departure/arrival terminal of your flight with the airlines before reaching airport.                        
+                    </li>
+                    <li>
+                        Passengers traveling on flights originating from Jammu, Srinagar and Leh will not be allowed to carry any cabin baggage due to security restrictions.
+                    </li>
+                    <li>
+                        Indian citizens need to carry a printout of the e ticket along with a photo identity proof such as driver's license, voters ID or 
+                        passport to the airline checkin counter. For infant passengers, it is mandatory to carry the Date of Birth certificate. Foreigners 
+                        travelling on Indian domestic sectors needs to carry their passport along with e ticket.
+                    </li>
+                    <li>
+                        Use your Airline PNR for all your communication for this booking with the airline.
+                    </li>
+                    <li>
+                        We recommend you checkin at least 2 hours prior to departure of your domestic flight and 3 hours prior to your international flight.
+                    </li>
+                    <li>
+                        When an infant (not entitled to a seat or free baggage allowance) accompanies an adult, a carrycot, or a fully collapsible push chair/stroller is allowed. This may be carried in the cabin if space is available, or else as checked in baggage.
+                    </li>
+                    <li>
+                        Airlines allows free checked baggage of 15kgs per passenger for all domestic flights.
+                    </li>
+                    <li>
+                        It is mandatory to carry the Date of Birth certificate for infant passengers.
+                    </li>
+                    <li>
+                        Hand Baggage and Cabin Baggage of 5-7 kg (which would include Laptop and duty free shopping bags) having maximum overall 
+                        dimensions of: 115 cms (L+W+H) on Boeing flights and 108 cms (L+W+H) on Bombardier flights, is allowed to be carried per 
+                        passenger, free of cost. The baggage information provided here is just for reference. Kindly check with the airline before check-in 
+                        Due to airport security regulations, no cabin baggage is allowed on flights originating from Jammu or Srinagar airports.                        
+                    </li>
+                    <li>
+                        For domestic airlines, baggage allowance of 1 piece is equivalent to one bag of 15 Kgs (max). However, this baggage information is just for reference. Please check with the airline before check-in.
+                    </li>
+                    <li>
+                        Please refer to the Passenger charter for any additional information.
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    </section>
+
+    <main id="invoice-pdf" class="container-invoice">
+      <section class="header">
+          <div class="invoice-com-logo">
+              <img src="{% static 'main/images/logo.png' %}" alt="">
+          </div>
+          <div class="com-details">
+              <h4>
+                  ONLINE SAVAARI PRIVATE LIMITED
+              </h4>
+              <p><strong>Email</strong>: onlinesavaari@gmail.com</p>
+              <p><strong>Phone</strong>: 1800 4199 066</p>
+              <p>
+                  <strong>Address</strong>: 302 RANGE HEIGHTS NEW LINK
+                  ROAD, BEHRAM BUG ROAD, OSHIWARA,
+                  JOGESHWARI Mumbai Maharashtra India 400102
+              </p>
+          </div>
+      </section>
+      <section class="booking-details">
+          <div class="context">
+              <p>Booking Time: {{ data.order.createdOn|fix_date }}{{sdata.data.booking_date}}</p>
+              <p>Booking ID: {{os_bookingId}}</p>
+              <p>Booking Status: <strong>{{flight_status}} {{sdata.status}}</strong></p>
+          </div>
+          <div class="airline-details">
+              <h4>{{data.itemInfos.AIR.tripInfos.0.sI.0.fD.aI.name}}{{ airline_name }}</h4>
+              <div>
+                  <h5>
+                    <strong>{{pnr}}   {{sdata.data.pnr}}</strong>
+                  </h5>
+                  <span>
+                      Airline PNR
+                  </span>
+              </div>
+          </div>
+      </section>
+      
+      <section class="flight-details">
+          <div class="flight-title-invoice">
+              <p>Flight Detail</p>
+              <p style="padding-right: 0.4em;">
+                  <em>
+                      *Please verify flight timings & terminal info with the airlines
+                  </em>
+              </p>
+          </div>
+          {% if sdata %}
+          <table style="width: 100%;border-collapse: collapse;">
+              <tr>
+                  <th style="background-color: gray;text-align: start;padding-left: 1em;">Flight</th>
+                  <th style="background-color: gray;text-align: start;">Fare Type</th>
+                  <th style="background-color: gray;text-align: start;">Class</th>
+                  <!-- <th style="background-color: gray;text-align: start;">Type</th> -->
+                  <th style="background-color: gray;text-align: start;">Departing</th>
+                  <th style="background-color: gray;text-align: start;">Arriving</th>
+                  <th style="background-color: gray;text-align: start;">Duration</th>
+              </tr>
+              <tr>
+                <td style="padding-left: 1em;">
+                  <p>{{ flight_code }}-{{sdata.data.flight_no}}</p>
+                  <p>{{ airline_name }}</p>
+                </td>
+                <td>NA</td>
+                <td>Economy</td>
+                <!-- <td>Refundable</td> -->
+                <td>
+                    <p>
+                        {{ departure_date}} {{sdata.data.departure_time}}
+                    </p>
+                    <p>
+                      {{ src }}
+                    </p>
+                </td>
+                <td>
+                  <p>
+                      {{ arrival_date}}  {{sdata.data.arrival_time}}  
+                  </p>
+                  <p>
+                      {{ dest }}
+                  </p>
+                </td>
+                <td>
+                  -
+                </td>
+              </tr>
+            </table>
+            {% endif %}
+            <table style="width: 100%;border-collapse: collapse;">
+              <tr>
+                <th style="background-color: gray;text-align: start;padding-left: 1em;">Flight</th>
+                <th style="background-color: gray;text-align: start;">Fare Type</th>
+                <th style="background-color: gray;text-align: start;">Class</th>
+                <!-- <th style="background-color: gray;text-align: start;">Type</th> -->
+                <th style="background-color: gray;text-align: start;">Departing</th>
+                <th style="background-color: gray;text-align: start;">Arriving</th>
+                <th style="background-color: gray;text-align: start;">Duration</th>
+              </tr>
+              {% for i in data.itemInfos.AIR.tripInfos %}
+              {% for a in i.sI %}
+              <tr style="border: 1px solid black;">
+                <td style="padding-left: 1em;">
+                  <p>{{ a.fD.aI.code }} - {{ a.fD.fN }}</p>
+                  <p>{{ a.fD.aI.name }}</p>
+                </td>
+                <td>NA</td>
+                <td>Economy</td>
+                <!-- <td>Refundable</td> -->
+                <td>
+                    <p>
+                        {{ a.dt|fix_datetime }}
+                    </p>
+                    <p>
+                       {{ a.da.name }}, {{ a.da.terminal }}
+                    </p>
+                </td>
+                <td>
+                  <p>
+                      {{ a.at|fix_datetime }}
+                  </p>
+                  <p>
+                      {{ a.aa.name }}, {{ a.aa.terminal }}
+                  </p>
+                </td>
+                <td>
+                  {{ a.duration|fix_duration }}
+                </td>
+              </tr>
+              {% endfor %}
+              {% endfor %} 
+            </table>
+      </section>
+      
+      <section class="flight-details">
+          <div class="flight-title-invoice">
+              <p>Passenger Details</p>
+          </div>
+          {% if sdata %}
+          <table style="width: 100%;border-collapse: collapse;">
+              <tr>
+                  <th style="background-color: gray;text-align: start;">
+                      Sr.
+                  </th>
+                  <th style="background-color: gray;text-align: start;">
+                      Name & FF
+                  </th>
+                  <th style="background-color: gray;text-align: start;padding: 0 0.5em;">
+                      Sector
+                  </th>
+                  <th style="background-color: gray;text-align: start;">PNR & Ticket No.</th>
+                  <th style="background-color: gray;text-align: start;">
+                      Baggage <br> 
+                      Check-in | Cabin
+                  </th>
+                  <th style="background-color: gray;text-align: start;">
+                      Meal, Seat & Other <br>
+                      Preference
+                  </th>
+                  <th style="background-color: gray;text-align: start;">
+                      Ticket Number
+                  </th>
+              </tr>
+              <tr style="border: 1px solid black;">
+                <td>
+                  1.
+                </td>
+                <td>
+                  <p>{{sdata.data.passenger_details.Adult.0.Name}}{{sdata.data.passenger_details.Infant.0.Name}}</p>
+                  <p><em>{{ i.pt }}</em></p>
+                </td>
+                <td>
+                  <P>{{src}}-{{dest}}</P>
+                </td>
+                <td><strong>{{pnr}}   {{sdata.data.pnr}}</strong></td>
+                <td>
+                    <p>
+                      15 Kg (01 Piece only) | 01 Small Handbag
+                      under the seat
+                    </p>
+                </td>
+                <td>
+                  NA
+                </td>
+                <td>
+                  {{ticketnumber}}
+                </td>
+              </tr>
+            </table>
+            {% endif %}
+            <table id="pax-table" style="width: 100%;border-collapse: collapse;">
+              <tr>
+                  <th style="background-color: gray;text-align: start;">
+                    Sr.
+                  </th>
+                  <th style="background-color: gray;text-align: start;">
+                      Name & FF
+                    </th>
+                    <th style="background-color: gray;text-align: start;">
+                      Sector
+                    </th>
+                    <th style="background-color: gray;text-align: start;">PNR & Ticket No.</th>
+                    <th style="background-color: gray;text-align: start;">
+                      Baggage <br> 
+                      Check-in | Cabin
+                    </th>
+                    <th style="background-color: gray;text-align: start;">
+                      Meal, Seat & Other <br>
+                      Preference
+                    </th>
+                    <th style="background-color: gray;text-align: start;">
+                      Document Id
+                    </th>
+                  </tr>
+              {% for i in  data.itemInfos.AIR.travellerInfos %}
+              <tr style="border: 1px solid black;">
+                <td>
+                  {{ forloop.counter }}
+                </td>
+                <td>
+                  <p style="white-space: nowrap;text-transform: capitalize;">{{ i.ti }} {{ i.fN }} {{ i.lN }}</p>
+                  <p style="font-size: 0.7rem;"><em>{{ i.pt }}</em></p>
+                </td>
+                <td>
+                  <P>{{routes}}</P>
+                </td>
+                <td><strong>{{pnr}}   {{sdata.data.pnr}}</strong></td>
+                <td>
+                    <p>
+                      15 Kg (01 Piece only) | 01 Small Handbag
+                      under the seat
+                    </p>
+                </td>
+                <td>
+                  {{meal }},<br/>{{seat }},<br/><{{baggage}}
+                </td>
+                <td>
+                  -
+                </td>
+              </tr>
+              {% endfor %} 
+            </table>
+      </section>
+      <section class="fare-details" style="border: 1px solid black;">
+          <div class="flight-title-invoice">
+              <p>Passenger Details</p>
+          </div>
+          <table id="fare-table" style="width: 100%;padding-left: 1em;">
+            {% if data %}
+              <tr>
+                  <td>Base Price</td>
+                  <td style="border-left: 1px solid black;">₹{{data.itemInfos.AIR.totalPriceInfo.totalFareDetail.fC.BF}}</td>
+              </tr>
+              <tr>
+                  <td>Airline Taxes and Fees</td>
+                  <td style="border-left: 1px solid black;">₹{{data.itemInfos.AIR.totalPriceInfo.totalFareDetail.fC.TAF}} </td>
+              </tr>
+              <tr>
+                  <td>Management Fee</td>
+                  <td style="border-left: 1px solid black;">₹{{data.itemInfos.AIR.totalPriceInfo.totalFareDetail.afC.TAF.MF}}</td>
+              </tr>
+              <tr>
+                  <td>Meal/ Seat/Baggage/ Misc Charges</td>
+                  <td style="border-left: 1px solid black;">₹0.00</td>
+              </tr>
+              <tr>
+                  <td>Meal/ Seat/Baggage/ Misc Charges</td>
+                  <td style="border-left: 1px solid black;">₹8.10 (SGST(9 %) 4.05 CGST(9 %) 4.05)</td>
+              </tr>
+            {% endif %} 
+              <tr>
+                  <td>Total Price</td>
+                  <td style="border-left: 1px solid black;">₹{{data.itemInfos.AIR.totalPriceInfo.totalFareDetail.fC.TF}}{{sdata.data.total_amount}}</td>
+              </tr>
+          </table>
+      </section>
+      <section class="important-notice">
+          <img style="max-width: 100%;width: 100%;object-fit: contain;" src="{% static 'main/images/imp.png' %}" alt="">
+      </section>
+      <section class="important-notice">
+          <img style="max-width: 100%;width: 100%;object-fit: contain;" src="{% static 'main/images/ivc-logo.png' %}" alt="">
+      </section>
+  </main>
+</div>
+  <!-- Jquery min -->
+  <script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+  <!-- Popper Min -->
+  <script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+  <!-- Bootstrap -->
+  <script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+  <!-- Jquery UI -->
+  <script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+  <!-- Owl Carousel -->
+  <script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+  <!-- Star Rating -->
+  <script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+  <!-- Quantity -->
+  <script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+  <!-- Phone -->
+  <script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+  <!-- Select -->
+  <script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+  <!-- Select -->
+  <script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+  <!-- Custom -->
+  <script src="{% static 'main/js/default.js' %}"></script>
+  <script>
+    $(document).ready(function(){
+      $('.message').on('click', function () {
+        swal({
+          title: '{{insurancelist.insr}}',
+          padding: '2em'
+        })
+      })
+    })
+  </script>

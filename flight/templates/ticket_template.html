@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        .d-flex {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+        }
+
+        .d-flex>* {
+            margin-right: 1em;
+        }
+
+        /* .passengers--details__header { border-radius: 50%; } */
+        .invoice--main--container {
+            font-family: sans-serif;
+            color: #666666;
+            width: 90%;
+            max-width: 1180px;
+            margin: 3.5em auto;
+        }
+
+        ul li {
+            margin-left: 0;
+        }
+
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #EBEBEB;
+            padding: 1em;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.229);
+        }
+
+
+        .flight--details {
+            display: flex;
+            padding: 0.8em 0;
+        }
+
+        .flight--details h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 1.5em;
+        }
+
+        .fn--black {
+            color: black !important;
+        }
+
+        .ref__num {
+            padding-left: 1em;
+        }
+
+        /* passengers--details */
+        .passengers--details {
+            border: 1px solid #CCCCCC;
+            border-radius: 10px;
+            margin-bottom: 1.2em;
+        }
+
+        .passengers--details__label {
+            display: flex;
+            /*justify-content: space-between;*/
+            padding: 0.5em;
+            padding-right: 1.5em;
+            font-size: 0.72rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em;
+            color:#7d7e7b;
+        }
+
+        tr {
+            font-size: 0.72rem;
+        }
+        th {
+            text-align: start;
+        }
+
+        .passengers--details__header {
+            padding: 0.5em;
+            border-bottom: 1px dotted #CCCCCC;
+        }
+
+        .passengers--details__header h3 {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .passengers--details__label div {
+            width: 25%;
+            margin-right: auto;
+            font-size: clamp(0.8rem, 5vw, 1rem);
+        }
+
+        .label {
+            margin-bottom: 1em;
+        }
+
+        .label h4 {
+            font-size: 0.72rem;
+            font-weight: 500;
+        }
+
+        .passengers--details__label p {
+            font-size: 0.72rem;
+        }
+
+        .flight--img {
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .guidelines,
+        .information {
+            border: 2px solid #d1d1d1;
+            margin-bottom: 1em;
+            /* padding: 0.6em; */
+        }
+
+        .guidelines--title {
+            background-color: #EBEBEB;
+            padding: 1em 0.8em;
+        }
+
+        .guidelines--content {
+            padding: 0.5em;
+        }
+
+        .guidelines--content ul li+li {
+            margin-top: 1em;
+        }
+
+        .air__img {
+            border-radius: 50%
+        }
+    </style>
+</head>
+
+<body>
+    <section class="main" id="tblCustomers">
+        <div class="invoice--main--container">
+            <header class="invoice--container">
+                <div class="nav-bar">
+                    <div class="ban--logo"> <img src="https://onlinesavaari.com/static/main/images/logo.png" alt="">
+                    </div>
+                    <div class="icon--apps">
+                        <div class="android"></div>
+                        <div class="apple"></div>
+                    </div>
+                </div>
+                <div class="flight--details">
+                    <h4 class="flight">FLIGHT</h4>
+                    <h4 class="e-ticket fn--black">E-TICKET</h4>
+                    <h4 class="ref--num"> REF NUMBER <span class="ref__num fn--black">"""+os_id+"""</span> </h4>
+                </div>
+            </header>
+            <section class="main" id="tblCustomers1">
+                <div class="passengers--details">
+                    <div class="passengers--details__header">
+                        <h3>PASSENGERS DETAILS</h3>
+                    </div>
+                    <table>
+                        <tr>
+                        <th>NAME</th>
+                        <th>DESTINATION</th>
+                        <th>MEALS</th>
+                        <th>BAGGAGE</th>
+                        <th>SEAT NO.</th>
+                        <th>TICKET NO.</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4 class="name"> """ +title+" "+first_name+" "+last_name+"""</h4>
+                                <p>("""+passenger_type+""")</p>
+                                <p>Insurance Policy:</p>
+                                <p></p>
+                            </td>
+                            <td>
+                                <p> <span class="from">"""+src+""" </span> <span>-</span> <span class="to">"""+dest+"""
+                                    </span> <span>-</span> <span class="to"> </span> </p>
+                            </td>
+                            <td>
+                                <p>"""+str(meal)+"""</p>
+                            </td>
+                            <td>
+                                15kg (Free)
+                            </td>
+                            <td>
+                                <p>"""+str(seat)+"""</p>
+                            </td>
+                            <td>
+                                <p>"""+pnr+"""</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="passengers--details">
+                    <div class="passengers--details__header d-flex"> <img
+                            src="https://onlinesavaari.com/static/main/images/arrow__air.png" alt="">
+                        <h5>"""+src+"""</h5> <img src="https://onlinesavaari.com/static/main/images/air__logo.png"
+                            alt="">
+                        <h5>"""+dest+"""</h5>
+                        <p class="date">"""+departure_date+""" </p>
+                    </div>
+                    <table>
+                        <th>AIRLINE</th>
+                        <th>DEPARTURE</th>
+                        <th>ARRIVAL</th>
+                        <th>DURATION</th>
+                        <th>SEAT NO.</th>
+                        <th>TICKET NO.</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img class="air__img" style="margin-top: 1em;" src="https://onlinesavaari.com/static/main/images/airline/4.png" alt="">
+                                <p>"""+str(airline_name)+"""</p>
+                                <p>"""+flight_code+"-"+flight_number+"""</p>
+                            </td>
+                            <td>
+                                <h4>"""+src+"""</h4>
+                                <p>"""+departure_date+" "+departure_time+""" </p>
+                                <p>"""+origin_airport+"""</p>
+                            </td>
+                            <td>
+                                <h4>"""+dest+"""</h4>
+                                <p> """+arrival_date+" "+arrival_time+"""</p>
+                                <p>"""+destination_airport+","+"""</p>
+                            </td>
+                            <td>
+                                <p>"""+str(duration)+"""</p>
+                            </td>
+                            <td>
+                                <p>NA</p>
+                            </td>
+                            <td>
+                                <p>"""+pnr+"""</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+            <div class="useful-tip">
+                <p> Useful tip : You can go to Yatra Mybookings to check your refund status, if in future your flight is
+                    cancelled by the airline or you have cancelled the flight directly with the airline. Please bookmark
+                    this link for more details. </p>
+            </div>
+            <section class="guidelines" id="tblCustomers2">
+                <div class="guidelines--title">
+                    <h3>Compulsory Guidelines for Domestic Travel</h3>
+                </div>
+                <div class="guidelines--content">
+                    <p> The Government has decided for recommencement of domestic air travel of passengers with effect
+                        from 25th May 2020. In order to ensure safety of the passengers during prevailing circumstances
+                        due to COVID I9 pandemic, precautionary measures need to be taken by passengers </p>
+                    <ul>
+                        <li> All travellers above 14 years of age must have the Aarogya Setu app activated on their
+                            mobiles before arriving at the airport. </li>
+                        <li> Travellers will be required to certify the status of their health through the Aarogya Setu
+                            app or a self-declaration form. </li>
+                        <li> No physical check-in at airport counters would be done. Only those passengers with
+                            confirmed web check-in will be allowed to enter the airport. </li>
+                        <li> Travellers should report to the airport at least 2 hours prior to the departure time </li>
+                        <li> Only passengers who have flights departing in the next 4 hours will be allowed to enter the
+                            terminal building. </li>
+                        <li> Passengers are required to wear face masks at the airport and in the flight. </li>
+                        <li> Only 1 check-in baggage and 1 cabin baggage will be allowed per passenger. </li>
+                        <li> Travellers will be required to print and paste a pre-filled baggage tag and affix it on the
+                            bags. Alternatively, they should mention the PNR number and name on paper and affix it on
+                            the bags. </li>
+                        <li> Elderly, pregnant and ailing individuals are advised to avoid air travel. Additionally,
+                            individuals who have been tested COVID-19 positive or are staying in a containment zone
+                            should not travel. </li>
+                        <li> No meal service, newspapers or magazines will be available on-board. </li>
+                        <li> Travellers will be required to sign self-declaration forms. In case of a PNR having more
+                            than one passenger, the declaration would be deemed to be covering all the passengers
+                            mentioned in the PNR. </li>
+                        <li> View all mandatory travel guidelines issued by Govt. of India here </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="information">
+                <div class="guidelines--title">
+                    <h3>Information</h3>
+                </div>
+                <div class="guidelines--content">
+                    <ul>
+                        <li> All time indicated are the local times (in 24 hrs. format) at the relevant airport. </li>
+                        <li> Cancellation and date change fees are applicable before departure and per passenger basis.
+                            In case of amendment, along with the airline and Yatra fees, you will also have to pay fare
+                            difference, if any. </li>
+                        <li> Any change to a confirmed ticket including cancellation, postponement, and change of
+                            itinerary must be done at least 24 hours prior to flight departure. </li>
+                        <li> Please connect with the airline for refund or alternative to avoid no show before revised
+                            scheduled departure, in case you receive any email and SMS from airline about flight timings
+                            change. </li>
+                        <li> Please directly contact airline for any cancellation/reschedule within four hours of
+                            departure time </li>
+                        <li> Airline Contact Information: Go First : 18602-100-999,91-22-6273-2111 </li>
+                        <li> Please reference the Airline PNR Number when communicating with the airline regarding this
+                            booking. </li>
+                        <li> If a ticket is canceled directly from the airlines website, office or call center, the
+                            customer needs to Claim Refund from MyBookings portal at Yatra. Yatra will levy Rs. 400 per
+                            passenger per segment. </li>
+                        <li> Delhi and Mumbai airports have multiple terminals catering to domestic flights, please
+                            check the departure/arrival terminal of your flight with the airlines before reaching
+                            airport. </li>
+                        <li> Passengers traveling on flights originating from Jammu, Srinagar and Leh will not be
+                            allowed to carry any cabin baggage due to security restrictions. </li>
+                        <li> Indian citizens need to carry a printout of the e ticket along with a photo identity proof
+                            such as driver's license, voters ID or passport to the airline checkin counter. For infant
+                            passengers, it is mandatory to carry the Date of Birth certificate. Foreigners travelling on
+                            Indian domestic sectors needs to carry their passport along with e ticket. </li>
+                        <li> Use your Airline PNR for all your communication for this booking with the airline. </li>
+                        <li> We recommend you checkin at least 2 hours prior to departure of your domestic flight and 3
+                            hours prior to your international flight. </li>
+                        <li> When an infant (not entitled to a seat or free baggage allowance) accompanies an adult, a
+                            carrycot, or a fully collapsible push chair/stroller is allowed. This may be carried in the
+                            cabin if space is available, or else as checked in baggage. </li>
+                        <li> Airlines allows free checked baggage of 15kgs per passenger for all domestic flights. </li>
+                        <li> It is mandatory to carry the Date of Birth certificate for infant passengers. </li>
+                        <li> Hand Baggage and Cabin Baggage of 5-7 kg (which would include Laptop and duty free shopping
+                            bags) having maximum overall dimensions of: 115 cms (L+W+H) on Boeing flights and 108 cms
+                            (L+W+H) on Bombardier flights, is allowed to be carried per passenger, free of cost. The
+                            baggage information provided here is just for reference. Kindly check with the airline
+                            before check-in Due to airport security regulations, no cabin baggage is allowed on flights
+                            originating from Jammu or Srinagar airports. </li>
+                        <li> For domestic airlines, baggage allowance of 1 piece is equivalent to one bag of 15 Kgs
+                            (max). However, this baggage information is just for reference. Please check with the
+                            airline before check-in. </li>
+                        <li> Please refer to the Passenger charter for any additional information. </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </section>
+</body>
+
+</html>

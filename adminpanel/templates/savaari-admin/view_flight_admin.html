@@ -1,0 +1,759 @@
+{% load static %} 
+{% load flight_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>Online Savaari </title>
+    <link rel="icon" type="image/x-icon" href="{% static 'main/images/favicon.png' %}"/>
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
+    <link href="{% static 'admin/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'admin/assets/css/plugins.css' %}" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <link href="{% static 'admin/plugins/animate/animate.css' %}" rel="stylesheet" type="text/css" />
+     <!--  BEGIN CUSTOM STYLE FILE  -->
+     <link href="{% static 'admin/assets/css/scrollspyNav.css' %}" rel="stylesheet" type="text/css" />
+     <link href="{% static 'admin/assets/css/components/custom-modal.css' %}" rel="stylesheet" type="text/css" />
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/plugins/table/datatable/datatables.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/plugins/table/datatable/dt-global_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/plugins/table/datatable/custom_dt_multiple_tables.css' %}">
+    <link href="{% static 'admin/plugins/flatpickr/flatpickr.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'admin/plugins/flatpickr/custom-flatpickr.css' %}" rel="stylesheet" type="text/css">
+    <!-- END PAGE LEVEL STYLES -->
+    <style>
+        div.dataTables_wrapper div.dataTables_filter input{
+            width: 300px;
+        }
+    </style>
+</head>
+<body class="sidebar-noneoverflow">
+    
+    <!--  BEGIN NAVBAR  -->
+    {% comment %} <!-- BEGIN LOADER -->
+    <div id="load_screen"> <div class="loader"> <div class="loader-content">
+        <div class="spinner-grow align-self-center"></div>
+    </div></div></div>
+    <!--  END LOADER --> {% endcomment %}
+
+    <!--  BEGIN NAVBAR  -->
+    <div class="header-container">
+        <header class="header navbar navbar-expand-sm">
+
+            <a href="javascript:void(0);" class="sidebarCollapse" data-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
+
+            <div class="nav-logo align-self-center">
+                <a class="navbar-brand" href="{% url 'base' %}"><img alt="logo" src="{% static 'admin/assets/img/savaari_logo.png' %}"> <span class="navbar-brand-name"></span></a>
+            </div>
+
+            <ul class="navbar-item flex-row mr-auto">
+                <li class="nav-item align-self-center search-animated">
+                    <form class="form-inline search-full form-inline search" role="search">
+                        <div class="search-bar">
+                            <input type="text" class="form-control search-form-control  ml-lg-auto" placeholder="Search...">
+                        </div>
+                    </form>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search toggle-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </li>
+            </ul>
+
+            <ul class="navbar-item flex-row nav-dropdowns">
+                <li class="nav-item dropdown language-dropdown more-dropdown">
+                    <div class="dropdown custom-dropdown-icon">
+                        <a class="dropdown-toggle btn" href="#" role="button" id="customDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'admin/assets/img/india.png' %}" class="flag-width" alt="flag"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></a>
+
+                        <div class="dropdown-menu dropdown-menu-right animated fadeInUp" aria-labelledby="customDropdown">
+                            <a class="dropdown-item" data-img-value="india" data-value="india" href="javascript:void(0);"><img src="{% static 'admin/assets/img/india.png' %}" class="flag-width" alt="flag"> India</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown message-dropdown">
+                    <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="messageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg><span class="badge badge-success"></span>
+                    </a>
+                    <div class="dropdown-menu p-0 position-absolute animated fadeInUp" aria-labelledby="messageDropdown">
+                        <div class="">
+                            <a class="dropdown-item">
+                                <div class="">
+
+                                    <div class="media">
+                                        <div class="user-img">
+                                            <div class="avatar avatar-xl">
+                                                <span class="avatar-title rounded-circle">KY</span>
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="">
+                                                <h5 class="usr-name">Kara Young</h5>
+                                                <p class="msg-title">ACCOUNT UPDATE</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </a>
+                            <a class="dropdown-item">
+                                <div class="">
+                                    <div class="media">
+                                        <div class="user-img">
+                                            <div class="avatar avatar-xl">
+                                                <span class="avatar-title rounded-circle">DA</span>
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="">
+                                                <h5 class="usr-name">Daisy Anderson</h5>
+                                                <p class="msg-title">ACCOUNT UPDATE</p>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </a>
+                            <a class="dropdown-item">
+                                <div class="">
+
+                                    <div class="media">
+                                        <div class="user-img">
+                                            <div class="avatar avatar-xl">
+                                                <span class="avatar-title rounded-circle">OG</span>
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="">
+                                                <h5 class="usr-name">Oscar Garner</h5>
+                                                <p class="msg-title">ACCOUNT UPDATE</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown notification-dropdown">
+                    <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="notificationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class="badge badge-success"></span>
+                    </a>
+                    <div class="dropdown-menu position-absolute animated fadeInUp" aria-labelledby="notificationDropdown">
+                        <div class="notification-scroll">
+
+                            <div class="dropdown-item">
+                                <div class="media server-log">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-server"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="6"></line><line x1="6" y1="18" x2="6" y2="18"></line></svg>
+                                    <div class="media-body">
+                                        <div class="data-info">
+                                            <h6 class="">Server Rebooted</h6>
+                                            <p class="">45 min ago</p>
+                                        </div>
+
+                                        <div class="icon-status">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dropdown-item">
+                                <div class="media ">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                    <div class="media-body">
+                                        <div class="data-info">
+                                            <h6 class="">Licence Expiring Soon</h6>
+                                            <p class="">8 hrs ago</p>
+                                        </div>
+
+                                        <div class="icon-status">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dropdown-item">
+                                <div class="media file-upload">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                    <div class="media-body">
+                                        <div class="data-info">
+                                            <h6 class="">Kelly Portfolio.pdf</h6>
+                                            <p class="">670 kb</p>
+                                        </div>
+
+                                        <div class="icon-status">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown user-profile-dropdown order-lg-0 order-1">
+                    <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="user-profile-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="media">
+                            <img src="{% static 'admin/assets/img/profile.png' %}" class="img-fluid" alt="admin-profile">
+                            <div class="media-body align-self-center">
+                                <h6>{{user.username}}</h6>
+                            </div>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </a>
+                    <div class="dropdown-menu position-absolute animated fadeInUp" aria-labelledby="user-profile-dropdown">
+                        <div class="">
+                            <div class="dropdown-item">
+                                <a class="" href="user_profile.html"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> My Profile</a>
+                            </div>
+                            <div class="dropdown-item">
+                                <a class="" href="apps_mailbox.html"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-inbox"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg> Inbox</a>
+                            </div>
+                            <div class="dropdown-item">
+                                <a class="" href="{% url 'admin_logout' %}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Sign Out</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </li>
+            </ul>
+        </header>
+    </div>
+    <!--  END NAVBAR  -->
+
+    <!--  BEGIN MAIN CONTAINER  -->
+    <div class="main-container" id="container">
+
+        <div class="overlay"></div>
+        <div class="search-overlay"></div>
+
+        <!--  BEGIN TOPBAR  -->
+        <div class="topbar-nav header navbar" role="banner">
+            <nav id="topbar">
+                <ul class="navbar-nav theme-brand flex-row  text-center">
+                    <li class="nav-item theme-logo">
+                        <a href="{% url 'base' %}">
+                            <img src="{% static 'admin/assets/img/90x90.jpg' %}" class="navbar-logo" alt="logo">
+                        </a>
+                    </li>
+                    <li class="nav-item theme-text">
+                        <a href="{% url 'base' %}" class="nav-link"> CORK </a>
+                    </li>
+                </ul>
+                <ul class="list-unstyled menu-categories" id="topAccordion">
+
+                    <li class="menu single-menu">
+                        <a href="{% url 'base' %}" class="dropdown-toggle autodroprown">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+                                    <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
+                                  </svg>
+                                <span>Dashboard</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </a>
+                        {% comment %} <ul class="collapse submenu list-unstyled" id="dashboard" data-parent="#topAccordion">
+                            <li>
+                                <a href="{% url 'base' %}"> Analytics </a>
+                            </li>
+                        </ul> {% endcomment %}
+                    </li>
+                    
+                    <li class="menu single-menu">
+                        <a href="#usermanager" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clipboard"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                                <span>User Manager</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </a>
+                        <ul class="collapse submenu list-unstyled" id="forms"  data-parent="#topAccordion">
+                             <li>
+                                <a href="{% url 'agent_list' %}"> Agent Manager </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'corporation_list' %}"> Corporate Manager </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'customer_list' %}"> Customer Manager </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'distribution_list' %}"> Distributor Manager </a>
+                            </li>
+                             <li>
+                                <a href="{% url 'staff' %}"> Staff Manager </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="menu single-menu active">
+                        <a href="#booking" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
+                                    <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                                  </svg>
+                                <span>Booking</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </a>
+                        <ul class="collapse submenu list-unstyled" id="app" data-parent="#topAccordion">
+                            <li>
+                                <a href="{% url 'flightbooking' %}"> Flight</a>
+                            </li>
+                            <li>
+                                <a href="apps_mailbox.html"> Hotels </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="menu single-menu">
+                        <a href="{% url 'markup' %}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                                  </svg>
+                                <span>Mark Up</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </a>
+                        <ul class="collapse submenu list-unstyled" id="components" data-parent="#topAccordion">
+                            <li>
+                                <a href="{% url 'markup' %}"> Markup </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'serialmarkup' %}">Series Markup</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="menu single-menu">
+                        <a href="{% url 'apibalance' %}" class="dropdown-toggle">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path style="fill:white;" d="M151.6 42.4C145.5 35.8 137 32 128 32s-17.5 3.8-23.6 10.4l-88 96c-11.9 13-11.1 33.3 2 45.2s33.3 11.1 45.2-2L96 146.3V448c0 17.7 14.3 32 32 32s32-14.3 32-32V146.3l32.4 35.4c11.9 13 32.2 13.9 45.2 2s13.9-32.2 2-45.2l-88-96zM320 480h32c17.7 0 32-14.3 32-32s-14.3-32-32-32H320c-17.7 0-32 14.3-32 32s14.3 32 32 32zm0-128h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H320c-17.7 0-32 14.3-32 32s14.3 32 32 32zm0-128H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H320c-17.7 0-32 14.3-32 32s14.3 32 32 32zm0-128H544c17.7 0 32-14.3 32-32s-14.3-32-32-32H320c-17.7 0-32 14.3-32 32s14.3 32 32 32z"/></svg>
+                                <span>Api Balance</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="menu single-menu">
+                        <a href="#booking" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <svg width="1024px" height="1024px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                                    <style type="text/css">
+                                        .sketchy_een{fill:#fff;}
+                                    </style>
+                                    <path class="sketchy_een" d="M512 0C229.232 0 0 229.232 0 512c0 282.784 229.232 512 512 512 282.784 0 512.017-229.216 512.017-512C1024.017 229.232 794.785 0 512 0zm0 961.008c-247.024 0-448-201.984-448-449.01 0-247.024 200.976-448 448-448s448.017 200.977 448.017 448S759.025 961.009 512 961.009zm-47.056-160.529h80.512v-81.248h-80.512zm46.112-576.944c-46.88 0-85.503 12.64-115.839 37.889-30.336 25.263-45.088 75.855-44.336 117.775l1.184 2.336h73.44c0-25.008 8.336-60.944 25.008-73.84 16.656-12.88 36.848-19.328 60.56-19.328 27.328 0 48.336 7.424 63.073 22.271 14.72 14.848 22.063 36.08 22.063 63.664 0 23.184-5.44 42.976-16.368 59.376-10.96 16.4-29.328 39.841-55.088 70.322-26.576 23.967-42.992 43.231-49.232 57.807-6.256 14.592-9.504 40.768-9.744 78.512h76.96c0-23.68 1.503-41.136 4.496-52.336 2.975-11.184 11.504-23.823 25.568-37.888 30.224-29.152 54.496-57.664 72.88-85.551 18.336-27.857 27.52-58.593 27.52-92.193 0-46.88-14.176-83.408-42.577-109.568-28.416-26.176-68.272-39.248-119.568-39.248z"/></svg>
+                                <span>Query</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </a>
+                        <ul class="collapse submenu list-unstyled" id="app" data-parent="#topAccordion">
+                            <li>
+                                <a href="{% url 'refund' %}"> Refund</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'reschedule' %}"> Reschedule </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'deposit_request' %}">Deposit Request</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu single-menu">
+                        <a href="#booking" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path style="fill:white" d="M432 48H208C190.3 48 176 62.33 176 80V96H128V80C128 35.82 163.8 0 208 0H432C476.2 0 512 35.82 512 80V304C512 348.2 476.2 384 432 384H416V336H432C449.7 336 464 321.7 464 304V80C464 62.33 449.7 48 432 48zM320 128C355.3 128 384 156.7 384 192V448C384 483.3 355.3 512 320 512H64C28.65 512 0 483.3 0 448V192C0 156.7 28.65 128 64 128H320zM64 464H320C328.8 464 336 456.8 336 448V256H48V448C48 456.8 55.16 464 64 464z"/></svg>
+                                <span>Website</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </a>
+                        <ul class="collapse submenu list-unstyled" id="app" data-parent="#topAccordion">
+                            <li>
+                                <a href="{% url 'promocode' %}">Promocode</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'banner' %}">Banner</a>
+                            </li>
+                            <!-- <li>
+                                <a href="{% url 'reschedule' %}">Offers</a>
+                            </li> -->
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!--  END TOPBAR  -->
+        <style>
+        
+        .flight--details h4{
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .fn--black {
+            color: black !important;
+        }
+        
+        .ref__num {
+            padding-left: 1em;
+        }
+        
+        /* passengers--details */
+        
+        .passengers--details {
+            border: 1px solid #CCCCCC;
+            border-radius: 10px;
+            margin-bottom: 1.2em;
+        }
+        
+        .passengers--details__label {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5em;
+            padding-right: 1.5em;
+        }
+        .passengers--details__header {
+            padding: 0.5em;
+            border-bottom: 1px dotted #CCCCCC;
+        }
+        
+        .passengers--details__header h3 {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .passengers--details__label {
+            font-size: 0.72rem;
+        }
+        
+        .label {
+            margin-bottom: 1em;
+        }
+        
+        .label h4 {
+            font-size: 0.72rem;
+            font-weight: 500;
+        }
+        
+        .passengers--details__label p {
+            font-size: 0.72rem;
+        }
+        
+        .flight--img {
+            width: 100%;
+            object-fit: contain;
+        }
+
+
+        </style>
+        <!--  BEGIN CONTENT AREA  -->
+        <div id="content" class="main-content">
+            <div class="layout-px-spacing">
+                <div class="row layout-top-spacing" id="cancel-row">
+                    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                        <div class="widget-content widget-content-area br-6">
+                            <section class="main" id="tblCustomers">
+                                <div class="invoice--main--container" >
+                                    <header class="invoice--container" >
+                                        <div class="flight--details">
+                                            <h3 class="ref--num">
+                                                Booking NUMBER
+                                                <span class="ref__num fn--black">{{bookingId}}</span>
+                                            </h3>
+                                        </div>
+                                    </header>
+                                    <section class="main" id="tblCustomers1">
+                                        <div class="passengers--details">
+                                            <div class="passengers--details__header">
+                                                <h3>PASSENGERS DETAILS</h3>
+                                            </div>
+                                            {% for i in flight_detail %}
+                                            <div class="passengers--details__label">
+                                                <div class="pass__name">
+                                                    <div class="name__label label">
+                                                        <h4>NAME</h4>
+                                                    </div>
+                                                    <div class="name__value">
+                                                        <h4 class="name">
+                                                          {{i.first_name}} {{i.last_name}}
+                                                        </h4>
+                                                        <p>({{ i.passenger_type }})</p>
+                                                    </div>
+                                                </div>
+                                                <div class="pass__destination">
+                                                    <div class="des__label label">
+                                                        <h4>DESTINATION</h4>
+                                                    </div>
+                                                    <div class="des__value">
+                                                        <p>
+                                                            <span class="from">
+                                                                {{ i.src }} 
+                                                            <span>-</span>
+                                                            <span class="to">
+                                                                {{i.dest}}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                            
+                                                <div class="pass__meals">
+                                                    <div class="meals__label label">
+                                                        <h4>MEALS</h4>
+                                                    </div>
+                                                    <div class="meals__value">
+                                                        <p>{{i.meal}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="pass__baggage">
+                                                    <div class="baggage__label label">
+                                                        <h4>BAGGAGE</h4>
+                                                    </div>
+                                                    <div class="baggage__value">
+                                                        <p>15kg (Free)</p>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="pass__baggage">
+                                                    <div class="baggage__label label">
+                                                        <h4>EXTRA BAGGAGE</h4>
+                                                    </div>
+                                                    <div class="baggage__value">
+                                                        <p>{{i.baggage}}</p>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="pass__seat">
+                                                    <div class="seat__label label">
+                                                        <h4>SEAT NO.</h4>
+                                                    </div>
+                                                    <div class="seat__value">
+                                                        <p>{{i.seat_no}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="pass__ticket">
+                                                    <div class="ticket__label label">
+                                                        <h4>TICKET NO.</h4>
+                                                    </div>
+                                                    <div class="ticket__value">
+                                                        
+                                                        <p><strong>{{i.pnr}}</strong>
+                                                        </p>
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="passengers--details__label">
+                                                <div class="pass__destination">
+                                                    <div class="des__label label">
+                                                        <h4>BOOKING ID </h4>
+                                                    </div>
+                                                    <div class="des__value">
+                                                        <p>
+                                                            <span class="from">
+                                                                {{i.os_bookingId}}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="pass__destination">
+                                                    <div class="des__label label">
+                                                        <h4>INSURANCE POLICY:</h4>
+                                                    </div>
+                                                    <div class="des__value">
+                                                        <p>
+                                                            <span class="from">
+                                                                {{i.insurance_policy}}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="pass__destination">
+                                                    <div class="des__label label">
+                                                        <h4>E-MAIL</h4>
+                                                    </div>
+                                                    <div class="des__value">
+                                                        <p>
+                                                            <span class="from">
+                                                                {{i.email}}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="pass__destination">
+                                                    <div class="des__label label">
+                                                        <h4>MOBILE</h4>
+                                                    </div>
+                                                    <div class="des__value">
+                                                        <p>
+                                                            <span class="from">
+                                                                {{i.mobile}}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="pass__destination">
+                                                    <div class="des__label label">
+                                                        <h4>INSURANCE POLICY:</h4>
+                                                    </div>
+                                                    <div class="des__value">
+                                                        <p>
+                                                            <span class="from">
+                                                                {{i.insurance_policy}}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="pass__destination">
+                                                    <div class="des__label label">
+                                                        <h4>PASSPORT NO.</h4>
+                                                    </div>
+                                                    <div class="des__value">
+                                                        <p>
+                                                            <span class="from">
+                                                                {{i.passport_no}}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="pass__destination">
+                                                    <div class="des__label label">
+                                                        <h4>PAN NO.</h4>
+                                                    </div>
+                                                    <div class="des__value">
+                                                        <p>
+                                                            <span class="from">
+                                                                {{i.panno}}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                       
+                                        
+                                        {% for a in flight_detail %}
+                                        <div class="passengers--details">
+                                            <div class="passengers--details__label">
+                                                
+                                                <div class="air__name">
+                                                    <div class="name__label label">
+                                                        <h4>AIRLINE</h4>
+                                                    </div>
+                                                    <div class="name__value">
+                                                        <img class="air__img" src="{% static 'main/images/airline/4.png' %}" alt="">
+                                                        <p>{{ a.airline_name }}</p>
+                                                        <p>{{ a.flight_code }} - {{ a.flight_number }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="air__departure">
+                                                    <div class="des__label label">
+                                                        <h4>DEPARTURE</h4>
+                                                    </div>
+                                                    <div class="des__value">
+                                                        <h4>{{ a.src }}</h4>
+                                                        <p>
+                                                            {{ a.departure_date }} {{ a.departure_time }}
+                                                        </p>
+                                                        <p>{{ a.origin_airport }}, {{ a.origin_terminal }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="air__arrival">
+                                                    <div class="meals__label label">
+                                                        <h4>ARRIVAL</h4>
+                                                    </div>
+                                                    <div class="air__value">
+                                                        <h4>{{ a.dest }}</h4>
+                                                        <p>
+                                                            {{ a.arrival_date }} {{ a.arrival_time }}
+                                                        </p>
+                                                        <p>{{ a.destination_airport }}, {{ a.destination_terminal }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="air__duration">
+                                                    <div class="dur__label label">
+                                                        <h4>DURATION</h4>
+                                                    </div>
+                                                    <div class="baggage__value">
+                                                        <p>{{ a.duration|fix_duration }}</p>
+                                                        <p>{{ a.stop }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="pass__seat">
+                                                    <div class="seat__label label">
+                                                        <h4>SEAT NO.</h4>
+                                                    </div>
+                                                    <div class="seat__value">
+                                                        <p>{{a.seat_no}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="pass__ticket">
+                                                    <div class="ticket__label label">
+                                                        <h4>TICKET NO.</h4>
+                                                    </div>
+                                                    <div class="ticket__value">
+                                                        <p><strong>{{a.pnr}}</strong></p>
+                                                    </div>
+                                                </div>
+                                                <div class="pass__ticket">
+                                                    <div class="ticket__label label">
+                                                        <h4>FLIGHT STATUS</h4>
+                                                    </div>
+                                                    <div class="ticket__value">
+                                                        <p><strong>{{a.flight_status}}</strong></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        
+                                    </section>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                </div>
+
+                </div>
+        <div class="footer-wrapper">
+                <div class="footer-section f-section-1">
+                    <p class="">Copyright © 2020 <a target="_blank" href="https://designreset.com">DesignReset</a>, All rights reserved.</p>
+                </div>
+                <div class="footer-section f-section-2">
+                    <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></p>
+                </div>
+            </div>
+        </div>
+        <!--  END CONTENT AREA  -->
+
+    </div>
+    <!-- END MAIN CONTAINER -->
+
+    <script src="{% static 'admin/plugins/flatpickr/flatpickr.js' %}"></script>
+
+
+
+    
+    <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+    <script src="{% static 'admin/assets/js/libs/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'admin/bootstrap/js/popper.min.js' %}"></script>
+    <script src="{% static 'admin/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'admin/assets/js/app.js' %} "></script>
+    
+
+
+
+
+</body>
+</html>

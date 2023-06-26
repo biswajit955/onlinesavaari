@@ -1,0 +1,84 @@
+// Buttons
+.btn {
+    font-size: 1em;
+    font-weight: 500;
+    line-height: 1.4;
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 8px 15px;
+    box-shadow: none;
+    text-shadow: none;
+    outline: none;
+    &:hover,
+    &:focus {
+        outline: none;
+        box-shadow: none;
+        text-shadow: none;
+    }
+
+    // Max 767px
+    @media (max-width: $break-767) {
+        padding: 10px 15px;
+    }
+}
+
+// Red
+.btn-red {
+    color: $white-clr;
+    background-color: $red-clr;
+    border-color: $red-clr;
+    &:hover,
+    &:focus {
+        color: $white-clr;
+        background-color: darken($red-clr, 5%);
+        border-color: darken($red-clr, 5%);
+    }
+}
+// Red Light
+.btn-red-light {
+    color: $white-clr;
+    background-color: $light-red-clr;
+    border-color: $light-red-clr;
+    &:hover,
+    &:focus {
+        color: $white-clr;
+        background-color: darken($light-red-clr, 5%);
+        border-color: darken($light-red-clr, 5%);
+    }
+}
+// Blue
+.btn-blue {
+    color: $white-clr;
+    background-color: $blue-clr;
+    border-color: $blue-clr;
+    &:hover,
+    &:focus {
+        color: $white-clr;
+        background-color: darken($blue-clr, 5%);
+        border-color: darken($blue-clr, 5%);
+    }
+}
+// Blue Light
+.btn-blue-light {
+    color: $white-clr;
+    background-color: $light-blue-clr;
+    border-color: $light-blue-clr;
+    &:hover,
+    &:focus {
+        color: $white-clr;
+        background-color: darken($light-blue-clr, 5%);
+        border-color: darken($light-blue-clr, 5%);
+    }
+}
+// White
+.btn-white {
+    color: $clr-333333;
+    background-color: $white-clr;
+    border-color: $clr-333333;
+    &:hover,
+    &:focus {
+        color: $clr-333333;
+        background-color: darken($white-clr, 5%);
+        border-color: $clr-333333;
+    }
+}

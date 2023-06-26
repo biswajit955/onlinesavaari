@@ -1,0 +1,63 @@
+<html>
+<head>
+    <title>API Display</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <pre>
+                        {{ data.tripSeatMap.tripSeat }}
+                        {{ data.bookingId }}
+                        </pre>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id&nbps;</th>
+                        <th>Flight Name&nbps;</th>
+                        <th>Flight code</th>
+                        <th>FLight Number</th>
+                        <th>Flight code</th>
+                        <th>FLight Number</th>
+                        <th>Departure Terminal</th>
+                        <th>Arrival Terminal</th>
+                        <th>checkin Baggage</th>
+                        <th>cabin baggage</th>
+                        <th>Free Meal</th>
+                        <th>TAF&nbps;</th>
+                        <th>Base Fare</th>
+                        <th>Total Fare</th>
+                        <th>Class</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in data.tripInfos%}
+                    <tr>
+                        <td>{{ i.totalPriceList.0.id }}</td>
+                        {% for a in i.sI %}
+                        <td>{{ a.da.name }}</td>
+                        <td>{{ a.aa.name }}</td>
+                        {% endfor %}
+                        <td>{{ i.sI.0.fD.fN}}</td>
+                        <td>{{ i.sI.0.da.terminal }}</td>
+                        <td>{{ i.sI.0.aa.terminal }}</td>
+                        <td>{{ i.totalPriceList.0.fd.ADULT.bI.iB }}</td>
+                        <td>{{ i.totalPriceList.0.fd.ADULT.bI.cB  }}</td>
+                        <td>{{ i.totalPriceList.0.fd.ADULT.mI }}</td>
+                        <td>{{ i.totalPriceList.0.fd.ADULT.fC.TAF }}</td>
+                        <td>{{ i.totalPriceList.0.fd.ADULT.fC.BF }}</td>
+                        <td>{{ i.totalPriceList.0.fd.ADULT.fC.TF }}</td>
+                        <td>{% for a in i.sI.0.ssrInfo.MEAL %}
+                                {{a.code}}
+                                {{a.amount}}
+                                {{a.desc}}
+                        {% endfor%}</td>
+                    </tr>
+                    {% endfor %}
+              
+                </tbody>
+            </table>
+            
+       </div>
+    
+</body>
+</html>

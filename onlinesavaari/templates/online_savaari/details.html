@@ -1,0 +1,1993 @@
+{% load static %}
+{% load flight_tags %}
+{% include "online_savaari/header.html" %}
+<!-- <link href="{% static 'admin/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" /> -->
+<!-- <link href="{% static 'admin/assets/css/plugins.css' %}" rel="stylesheet" type="text/css" /> -->
+<!-- <link href="{% static 'admin/assets/css/scrollspyNav.css' %}" rel="stylesheet" type="text/css" /> -->
+<link href="{% static 'admin/assets/css/components/tabs-accordian/custom-tabs.css' %}" rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+<link rel="stylesheet" type="text/css" href="{% static 'admin/assets/css/forms/theme-checkbox-radio.css' %}">
+<style>
+	.logo-widget,
+	.social-list {
+		margin-bottom: 0.5em;
+	}
+
+	.btn {
+		background: #EA2330;
+		color: white;
+		font-weight: bold;
+	}
+
+	#search-again {
+		background: blue;
+	}
+
+	@media (max-width: 768px) {
+		.carousel-inner .carousel-item>div {
+			display: none;
+		}
+
+		.carousel-inner .carousel-item>div:first-child {
+			display: block;
+		}
+	}
+
+	.img-fluid {
+		max-width: 100%;
+		height: 70px;
+		object-fit: contain;
+	}
+
+	.carousel-inner .carousel-item.active,
+	.carousel-inner .carousel-item-next,
+	.carousel-inner .carousel-item-prev {
+		display: flex;
+	}
+
+	/* display 3 */
+	@media (min-width: 768px) {
+
+		.carousel-inner .carousel-item-right.active,
+		.carousel-inner .carousel-item-next {
+			transform: translateX(33.333%);
+		}
+
+		.carousel-inner .carousel-item-left.active,
+		.carousel-inner .carousel-item-prev {
+			transform: translateX(-33.333%);
+		}
+	}
+
+	.carousel-inner .carousel-item-right,
+	.carousel-inner .carousel-item-left {
+		transform: translateX(0);
+	}
+
+	#loginModal3-insurance #table-body td {
+		vertical-align: middle;
+	}
+
+	.nav-fill .nav-item {
+		max-width: 200px;
+	}
+
+	.select {
+		background-color: transparent;
+		border: 1px solid red;
+		color: black;
+		position: relative;
+	}
+
+	.seatactive {
+		background-color: blue;
+	}
+
+	.select:hover {
+		background: rgb(255, 145, 61);
+	}
+
+	.select .label {
+		visibility: hidden;
+	}
+
+	.select::before {
+		position: absolute;
+		content: '\f058';
+		font-family: "Font Awesome 5 Free";
+		inset: 0;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+</style>
+<style type="text/css">
+	:root {
+		--grid: 9;
+	}
+
+	td {
+		padding: 6px;
+	}
+
+	.availableSeat {
+		cursor: pointer;
+	}
+
+	#seat-layout {
+		display: grid;
+		grid-auto-flow: column dense;
+		;
+		grid-auto-rows: 35px;
+		padding: 1em 1em 2.5em;
+		box-shadow: 0 0 10px 0px rgb(0 0 0 / 20%);
+		overflow-x: scroll;
+	}
+
+	#showseat {
+		display: none;
+		width: 180px;
+		height: max-content;
+		inset: 0;
+		position: absolute;
+		background: white;
+		transform: translate(-50%, -100%);
+		z-index: 8;
+		box-shadow: 0 4px 26px 0 rgb(60 60 60 / 50%);
+	}
+
+	.seat-amount {
+		color: green;
+		font-weight: bold;
+	}
+
+	.showseat__title {
+		padding: 1.5em 0.5em;
+		color: white;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background-color: black;
+		height: 30px;
+	}
+
+	.showseat__title p {
+		margin-bottom: 0;
+		margin-top: 0;
+	}
+
+	.grid-cell {
+		margin: 0.8em;
+	}
+
+	#seat-layout button {
+		margin: 1px 5px;
+	}
+
+	.row-no {
+		margin: 0 0.5em;
+		padding-top: 1.5px;
+		text-align: center;
+	}
+
+	.tab-pane {
+		padding-top: 0 !important;
+	}
+
+	.cn-st {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2em;
+		border: 1px solid black;
+		border-radius: 10px;
+	}
+
+	.num {
+		display: flex;
+		justify-content: center;
+	}
+
+	.wt-sp {
+		height: 20px;
+	}
+
+	.af-st {
+		position: relative;
+		z-index: 5;
+	}
+
+	.af-st img {
+		position: relative;
+		z-index: 33;
+	}
+
+	.af-st::after {
+		content: '';
+		display: block;
+		position: absolute;
+		top: 3.5px;
+		left: 0;
+		right: 0;
+		bottom: 7px;
+		background-color: #4BB9F0;
+		transform: translateY(2px);
+		z-index: 2;
+	}
+
+	#flight-list.active {
+		display: grid;
+		place-content: center;
+	}
+
+	#flight-list.active img {
+		object-fit: cover;
+		width: 100%;
+		height: 100%;
+	}
+
+	#loader {
+		display: none;
+		color: black;
+		z-index: 1;
+	}
+
+	:root {
+		/* 	Size is a variable for both - height and width dimensions of the circle  */
+		--size: 300px;
+		/* 	First Color Value */
+		--clrFirstSpin: lightpink;
+		/* 	Second Color Value */
+		--clrSecondSpin: aqua;
+		/* 	Third Color Value */
+		--clrThirdSpin: purple;
+		/* 	Duration for text blinking animation  */
+		--displayingTextTime: 2500ms;
+		--spinnerFont: calc(var(--size)/10);
+	}
+
+	.cn-st #loader {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: 0;
+		font-family: 'Verdana', sans-serif;
+	}
+
+	.spinner {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--size);
+		height: var(--size);
+		position: relative;
+
+	}
+
+	.spinner-area {
+		border: 15px solid transparent;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		animation: rotate var(--duration) var(--timing) infinite;
+		mix-blend-mode: overlay;
+	}
+
+	@keyframes rotate {
+		0% {
+			transform: rotate(0);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	.spinner-third {
+		border-top-color: var(--clrThirdSpin);
+		--duration: 1.5s;
+		--timing: ease-in;
+	}
+
+	.spinner-second {
+		border-left-color: var(--clrSecondSpin);
+		--duration: 2s;
+		--timing: ease-in
+	}
+
+	.spinner-first {
+		border-bottom-color: var(--clrFirstSpin);
+		--duration: 3s;
+		--timing: ease-in-out
+	}
+
+	.spinner p {
+		font-size: var(--spinnerFont);
+		text-transform: none;
+		animation: displaying-text var(--displayingTextTime) ease-in-out infinite;
+		color: #000;
+	}
+
+	@keyframes displaying-text {
+		0% {
+			opacity: 1;
+		}
+
+		50% {
+			opacity: 0.2;
+		}
+
+		100% {
+			opacity: 1;
+		}
+	}
+
+
+
+	.spinner:after {
+		content: 'Nothing will be loaded!';
+		width: 100px;
+		padding: 15px;
+		height: 50px;
+		display: block;
+		position: absolute;
+		top: -85px;
+		right: -40px;
+		background: white;
+		clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 42% 75%, 22% 100%, 22% 75%, 0% 75%);
+		animation-name: displayMessage;
+		animation-duration: 3s;
+		animation-timing-function: ease-in-out;
+		animation-delay: 5s;
+		animation-iteration-count: 1;
+		animation-fill-mode: forwards;
+		animation-play-state: pause;
+		opacity: 0;
+	}
+
+	body.active {
+		margin: 0;
+		height: 100%;
+		overflow: hidden
+	}
+
+	.sh {
+		display: block;
+	}
+
+	.hi {
+		display: none;
+	}
+
+	.text-radio {
+		border: 1px solid black;
+		margin-top: 1em;
+	}
+
+	.fttag {
+		background-color: red;
+	}
+
+	.text-radio input:checked~.trip-label {
+		color: white;
+	}
+</style>
+<!-- Main -->
+
+<main class="main-body">
+	<section class="details-pg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 left-sec">
+					<div class="title-sec">
+						<h3>
+							{{errs}}
+							<span>
+								<img src="{% static 'main/images/icon/notepad.png' %}" alt=""> Review Your Booking
+							</span>
+							<a href="{% url 'index' %}">Change Flight</a>
+						</h3>
+					</div>
+					{% if data %}
+					<div class="box-one review-box mb-4">
+						<div class="flight-info">
+							{% for i in data.tripInfos %}
+							{% for a in i.sI %}
+							<input type="hidden" class="durfrom" id="durationfrom{{ forloop.counter0 }}"
+								value="{{ a.dt|fix_datetime }}">
+							<input type="hidden" class="durto" id="durationto{{ forloop.counter0 }}"
+								value="{{a.at|fix_datetime}}">
+							<div class="sec1">
+								<div class="name">
+									<img src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png" alt="">
+									<div>{{a.fD.aI.name}} <span>({{i.totalPriceList.0.fd.ADULT.cc}})</span></div>
+									<div class="small">{{a.fD.aI.code}}-{{a.fD.fN}}</div>
+								</div>
+								<div class="total-time">Total Time: <span id="total">{{a.duration|fix_duration}}</span>
+								</div>
+							</div>
+							<div class="sec2">
+								<div class="all-info">
+									<div>{{ a.da.name }}</div>
+									<div><b id="duration2">{{ a.dt|fix_datetime }}</b></div>
+									<div class="small"><b></b></div>
+									<div class="small"></div>
+								</div>
+								<div class="total-time small">
+									<div>
+										<i class="la la-clock"></i> <span id="total1">{{a.duration|fix_duration}}</span>
+									</div>
+									<div>
+										<span></span>
+										<i class="la la-plane-departure"></i>
+									</div>
+									<div>Non Stop</div>
+								</div>
+								<div class="all-info">
+									<div>{{ a.aa.name }}</div>
+									<div><b id="duration1">{{a.at|fix_datetime}}</b></div>
+									<div class="small"><b></b></div>
+									<div class="small"></div>
+								</div>
+							</div>
+							{% endfor %}
+							{% endfor %}
+							<div class="sec3">
+								<div class="packadge">
+									<div>
+										Checkin Baggage:
+										<b>
+											<i class="la la-suitcase"></i>
+											{{data.tripInfos.0.totalPriceList.0.fd.ADULT.bI.iB}}
+										</b>
+									</div>
+									<div>
+										<b>
+											<i class="la la-cutlery"></i>
+											{% if data.tripInfos.0.totalPriceList.totalPriceList.0.fd.ADULT.mI %}
+											Free Meal
+											{% else %}
+											Paid Meal
+											{% endif %}
+										</b>
+									</div>
+								</div>
+							</div>
+							{% elif result %}
+							<div class="box-one review-box mb-4">
+								<div class="flight-info">
+									<input type="hidden" class="durfrom" id="durationfrom{{ forloop.counter0 }}"
+										value="{{ a.dt|fix_datetime }}">
+									<input type="hidden" class="durto" id="durationto{{ forloop.counter0 }}"
+										value="{{a.at|fix_datetime}}">
+									<div class="sec1">
+										<div class="name">
+											<img id="series_img"
+												src="{% static 'flight/airline_logo/' %}{{i.sI.0.fD.aI.code}}.png"
+												alt="">
+											<div>{{result.0.airline}}</div>
+											<div class="small">{{result.0.flight_number}}</div>
+										</div>
+										<div class="total-time">Total Time: <span class="series_dur"
+												id="total">{{result.0.duration}}</span></div>
+									</div>
+									<div class="sec2">
+										<div class="all-info">
+											<div>{{ result.0.origin }}</div>
+											<div><b id="duration2">{{ result.0.departure_date }}</b></div>
+											<div class="small"><b>{{ result.0.departure_time }}</b></div>
+											<div class="small"></div>
+										</div>
+										<div class="total-time small">
+											<div>
+												<i class="la la-clock"></i> <span class="series_dur"
+													id="total1"><span></span></span>
+											</div>
+											<div>
+												<span></span>
+												<i class="la la-plane-departure"></i>
+											</div>
+											<div>{{ result.0.flight_route }}</div>
+										</div>
+										<div class="all-info">
+											<div>{{ result.0.destination }}</div>
+											<div><b id="duration1">{{result.0.arival_date}}</b></div>
+											<div class="small"><b>{{result.0.arival_time}}</b></div>
+											<div class="small"></div>
+										</div>
+									</div>
+									{% elif akasaa_data %}
+									<div class="box-one review-box">
+										<div class="flight-info">
+											{% for c in akasaa_data.data.journeys %}
+											<input type="hidden" class="durfrom" id="durationfrom{{ forloop.counter0 }}"
+												value="{{ a.dt|fix_datetime }}">
+											<input type="hidden" class="durto" id="durationto{{ forloop.counter0 }}"
+												value="{{a.at|fix_datetime}}">
+											<div class="sec1">
+												<div class="name">
+													<img src="{% static 'flight/airline_logo/AK.png' %}" alt="">
+													<div>Akasa Airline <span>({{i.totalPriceList.0.fd.ADULT.cc}})</span>
+													</div>
+													<div class="small">{{a.fD.aI.code}}-{{a.fD.fN}}</div>
+												</div>
+												<div class="total-time">Total Time: <span
+														id="total">{{a.duration}}</span></div>
+											</div>
+											<!-- {% for d in c.segments %}
+                            	{% for e in d.legs %} -->
+											<div class="sec2">
+												<div class="all-info">
+													<div>{{ e.designator.origin }}</div>
+													<div><b id="duration2">{{e.designator.departure|fix_datetime}}</b>
+													</div>
+													<div class="small"><b></b></div>
+													<div class="small"></div>
+												</div>
+												<div class="total-time small">
+													<div>
+														<i class="la la-clock"></i> <span
+															id="total1">{{a.duration}}</span>
+													</div>
+													<div>
+														<span></span>
+														<i class="la la-plane-departure"></i>
+													</div>
+													<div>{{c.stops}} Stop</div>
+												</div>
+												<div class="all-info">
+													<div>{{e.designator.destination}}</div>
+													<div><b id="duration1">{{e.designator.arrival|fix_datetime}}</b>
+													</div>
+													<div class="small"><b></b></div>
+													<div class="small"></div>
+												</div>
+											</div>
+											<!-- {% endfor %}
+                            	{% endfor %} -->
+											{% endfor %}
+											<div class="sec3">
+												<div class="packadge">
+													<div>
+														Checkin Baggage:
+														<b>
+															<i class="la la-suitcase"></i> 25 KG
+														</b>
+													</div>
+													<div>
+														<b>
+															<i class="la la-cutlery"></i>
+															7 KG
+
+														</b>
+													</div>
+												</div>
+											</div>
+											{% endif %}
+
+
+											<div class="sec3">
+												<div class="notes-list">
+													<h5>
+														<i class="la la-info-circle"></i> Important Note
+													</h5>
+													<ul>
+														<li>
+															The Fare Rules for your flight selection have changed.
+															Please review them before proceeding.
+														</li>
+													</ul>
+													<h5>
+														<i class="la la-info-circle"></i> Compulsory Guidelines for
+														Passengers
+													</h5>
+													<ul>
+														<li>
+															You need to certify your health status through Aarogya Setu
+															app preactivated on your mobile or self-declaration form.
+														</li>
+														<li>
+															Face Mask is mandatory both at the airport & in flight.
+														</li>
+														<li>
+															Failure to comply with Covid-19 protocols and the directions
+															of ground staff and/or crew may attract penal action against
+															the
+															concerned individual.
+														</li>
+														<li>
+															Only passengers with confirmed web check-in will be allowed
+															to enter 2 hours prior to the flight departure.
+														</li>
+														<li>
+															Only one check-in bag and cabin bag will be allowed per
+															customer with a baggage tag affixed on the bag.
+														</li>
+														<li>
+															View all mandatory travel guidelines issued by Govt. of
+															India here <a target="_blank" href="{% url " covid"
+																%}">click here</a>
+														</li>
+														<!-- <li>
+												View all mandatory Covid guidelines issued by Govt. of India here <a href="#">click here</a>
+											</li> -->
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="title-sec" style="display: none;">
+										<h3>
+											<span>
+												<img src="{% static 'main/images/icon/cancel.png' %}" alt="">
+												Cancellation Protection
+											</span>
+										</h3>
+									</div>
+									<div class="box-one cancel-box" style="display: none;">
+										<div class="table-responsive">
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th colspan="2">Without Cancellation Protection</th>
+														<th colspan="2">With Cancellation Protection</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>Cancellation Fee</td>
+														<td>Refund Amount</td>
+														<td>Cancellation Fee</td>
+														<td>Refund Amount</td>
+													</tr>
+													<tr>
+														<td>
+															<h4 class="m-0">₹ 3,400</h4>
+														</td>
+														<td>
+															<h4 class="m-0">₹ 2,728</h4>
+														</td>
+														<td>
+															<h4 class="m-0">
+																<s>₹ 3,400</s>
+																₹ 0
+																</h3>
+														</td>
+														<td>
+															<h4 class="m-0">₹ 6,128</h4>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<h4>
+											<i class="fa fa-trophy green"></i> Additional Refund: <span class="green"><i
+													class="la la-rupee"></i> 3,400</span> With Cancellation Protection
+										</h4>
+										<div class="notes-list">
+											<h5>
+
+												<i class="la la-info-circle"></i> Please Note :
+											</h5>
+											<ul>
+												<li>
+													Cancellation Fee includes Airlines Cancellation Fee as well as
+													Savari Cancellation Fee.
+												</li>
+												<li>
+													The premium amount is inclusive of GST.
+												</li>
+												<li>
+													The Refund Amount shown above is based on the cancellation of the
+													entire trip for all passengers does not account for any discounts
+													applied
+													or add-ons purchased.
+												</li>
+												<li>
+													Savari will process refund to the customer after deducting the
+													airline cancellation charge.
+												</li>
+												<li>
+													The process for refund of Airline cancellation charges will be
+													initiated by the customer (upto a maximum amount of INR 5000 per
+													passenger
+													per sector). To claim the refund of cancellation charges, customers
+													must register their claim online by visiting <a
+														href="#">www.libertyinsurance.in.</a>
+												</li>
+												<li>
+													By accepting this Cancellation Protection, you agree to abide by the
+													<a href="#">Terms & Conditions</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<form id="form_url" action="{% url  'get_payment' %}" method="post">
+										<div class="title-sec">
+											<h3>
+												<span>
+													<img src="{% static 'main/images/icon/umbrella.png' %}" alt="">
+													Travel Insurance <span>(Recommended)</span>
+												</span>
+											</h3>
+										</div>
+										<div class="box-one insurance-box">
+											<div class="heading-one"
+												style="display: flex;gap: 1em;align-items: center;">
+												<input id="insurance-check" name="insurance_checked" type="checkbox"
+													class="mt-0">
+												{% if data.searchQuery.isDomestic == True %}
+												<label for="insurance-check">
+													<h4>Add travel insurance to protect my trip (Rs.135 per traveller
+														including of 18% GST)</h4>
+												</label>
+												{% else %}
+												<label for="insurance-check">
+													<h4>Add travel insurance to protect my trip (Rs.873 to Rs.1489 per
+														traveller including of 18% GST)</h4>
+												</label>
+												{% endif %}
+											</div>
+											<h5>Benefits of Travel Assistance with Insurance</h5>
+											<div class="owl-carousel owl-theme slider-full-arrow slider-five">
+												<div class="item">
+													<div class="benefit-box">
+														<div class="icon-sec">
+															<span style="position: relative;">
+																<svg style="width: 45px;position:absolute;top:9px;left:7.5px"
+																	xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 640 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+																	<path
+																		d="M296 96C296 87.16 303.2 80 312 80H328C336.8 80 344 87.16 344 96V120H368C376.8 120 384 127.2 384 136V152C384 160.8 376.8 168 368 168H344V192C344 200.8 336.8 208 328 208H312C303.2 208 296 200.8 296 192V168H272C263.2 168 256 160.8 256 152V136C256 127.2 263.2 120 272 120H296V96zM408 0C447.8 0 480 32.24 480 72V80H568C607.8 80 640 112.2 640 152V440C640 479.8 607.8 512 568 512H71.98C32.19 512 0 479.8 0 440V152C0 112.2 32.24 80 72 80H160V72C160 32.24 192.2 0 232 0L408 0zM480 128V464H568C581.3 464 592 453.3 592 440V336H536C522.7 336 512 325.3 512 312C512 298.7 522.7 288 536 288H592V240H536C522.7 240 512 229.3 512 216C512 202.7 522.7 192 536 192H592V152C592 138.7 581.3 128 568 128H480zM48 152V192H104C117.3 192 128 202.7 128 216C128 229.3 117.3 240 104 240H48V288H104C117.3 288 128 298.7 128 312C128 325.3 117.3 336 104 336H48V440C48 453.3 58.74 464 71.98 464H160V128H72C58.75 128 48 138.7 48 152V152zM208 464H272V400C272 373.5 293.5 352 320 352C346.5 352 368 373.5 368 400V464H432V72C432 58.75 421.3 48 408 48H232C218.7 48 208 58.75 208 72V464z" />
+																</svg>
+															</span>
+															<i class="fa fa-check-circle"></i>
+														</div>
+														<div class="info-sec">
+															<ul>
+																<li></li>
+															</ul>
+															<h5>Emergency Medical</h5>
+														</div>
+													</div>
+												</div>
+												<div class="item">
+													<div class="benefit-box">
+														<div class="icon-sec">
+															<span style="position: relative;">
+																<svg style="width: 45px;position:absolute;top:9px;left:7.5px"
+																	xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+																	<path
+																		d="M256 32H181.2c-27.1 0-51.3 17.1-60.3 42.6L3.1 407.2C1.1 413 0 419.2 0 425.4C0 455.5 24.5 480 54.6 480H256V416c0-17.7 14.3-32 32-32s32 14.3 32 32v64H521.4c30.2 0 54.6-24.5 54.6-54.6c0-6.2-1.1-12.4-3.1-18.2L455.1 74.6C446 49.1 421.9 32 394.8 32H320V96c0 17.7-14.3 32-32 32s-32-14.3-32-32V32zm64 192v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V224c0-17.7 14.3-32 32-32s32 14.3 32 32z" />
+																</svg>
+															</span>
+															<i class="fa fa-check-circle"></i>
+														</div>
+														<div class="info-sec">
+															<ul>
+																<li></li>
+															</ul>
+															<h5>Domestic Roadside</h5>
+														</div>
+													</div>
+												</div>
+												<div class="item">
+													<div class="benefit-box">
+														<div class="icon-sec">
+															<span style="position: relative;">
+																<svg style="width: 45px;position:absolute;top:9px;left:7.5px"
+																	xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+																	<path
+																		d="M482.3 192c34.2 0 93.7 29 93.7 64c0 36-59.5 64-93.7 64l-116.6 0L265.2 495.9c-5.7 10-16.3 16.1-27.8 16.1l-56.2 0c-10.6 0-18.3-10.2-15.4-20.4l49-171.6L112 320 68.8 377.6c-3 4-7.8 6.4-12.8 6.4l-42 0c-7.8 0-14-6.3-14-14c0-1.3 .2-2.6 .5-3.9L32 256 .5 145.9c-.4-1.3-.5-2.6-.5-3.9c0-7.8 6.3-14 14-14l42 0c5 0 9.8 2.4 12.8 6.4L112 192l102.9 0-49-171.6C162.9 10.2 170.6 0 181.2 0l56.2 0c11.5 0 22.1 6.2 27.8 16.1L365.7 192l116.6 0z" />
+																</svg>
+															</span>
+															<i class="fa fa-check-circle"></i>
+														</div>
+														<div class="info-sec">
+															<ul>
+																<li>Upto Rs. 10500</li>
+															</ul>
+															<h5>Trip Delay</h5>
+														</div>
+													</div>
+												</div>
+												<div class="item">
+													<div class="benefit-box">
+														<div class="icon-sec">
+															<span style="position: relative;">
+																<svg style="width: 45px;position:absolute;top:9px;left:8.5px"
+																	xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 640 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+																	<path
+																		d="M48 0C21.5 0 0 21.5 0 48V368c0 26.5 21.5 48 48 48H64c0 53 43 96 96 96s96-43 96-96H384c0 53 43 96 96 96s96-43 96-96h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V288 256 237.3c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7H416V48c0-26.5-21.5-48-48-48H48zM416 160h50.7L544 237.3V256H416V160zM208 416c0 26.5-21.5 48-48 48s-48-21.5-48-48s21.5-48 48-48s48 21.5 48 48zm272 48c-26.5 0-48-21.5-48-48s21.5-48 48-48s48 21.5 48 48s-21.5 48-48 48zM112 144c0-8.8 7.2-16 16-16h48V80c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16v48h48c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H240v48c0 8.8-7.2 16-16 16H192c-8.8 0-16-7.2-16-16V192H128c-8.8 0-16-7.2-16-16V144z" />
+																</svg>
+															</span>
+															<i class="fa fa-check-circle"></i>
+														</div>
+														<div class="info-sec">
+															<ul>
+																<li>Emergency Medical Expenses(including Covid19)</li>
+															</ul>
+															<h5>Upto Rs.50000</h5>
+														</div>
+													</div>
+												</div>
+												<div class="item">
+													<div class="benefit-box">
+														<div class="icon-sec">
+															<span style="position: relative;">
+																<svg style="width: 35px;position:absolute;top:13px;left:12.5px"
+																	xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+																	<path
+																		d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64V448c-17.7 0-32 14.3-32 32s14.3 32 32 32H208V448h96v64H480c17.7 0 32-14.3 32-32s-14.3-32-32-32V64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zm80 96h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H112c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16zm112 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H240c-8.8 0-16-7.2-16-16V112zM368 96h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16zM96 208c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H112c-8.8 0-16-7.2-16-16V208zm144-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H240c-8.8 0-16-7.2-16-16V208c0-8.8 7.2-16 16-16zm112 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V208zm-3 152.2c3.3 12.8-7.8 23.8-21 23.8H184c-13.3 0-24.3-10.9-21-23.8c10.6-41.5 48.2-72.2 93-72.2s82.5 30.7 93 72.2z" />
+																</svg>
+															</span>
+															<i class="fa fa-check-circle"></i>
+														</div>
+														<div class="info-sec">
+															<ul>
+																<li>Loss of HOtel Deposit</li>
+															</ul>
+															<h5>Upto Rs.25000</h5>
+														</div>
+													</div>
+												</div>
+												<div class="item">
+													<div class="benefit-box">
+														<div class="icon-sec">
+															<span style="position: relative;">
+																<svg style="width: 35px;position:absolute;top:5px;left:12.5px"
+																	xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 384 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+																	<path
+																		d="M144 56c0-4.4 3.6-8 8-8h80c4.4 0 8 3.6 8 8v72H144V56zm176 72H288V56c0-30.9-25.1-56-56-56H152C121.1 0 96 25.1 96 56v72H64c-35.3 0-64 28.7-64 64V416c0 35.3 28.7 64 64 64c0 17.7 14.3 32 32 32s32-14.3 32-32H256c0 17.7 14.3 32 32 32s32-14.3 32-32c35.3 0 64-28.7 64-64V192c0-35.3-28.7-64-64-64zM112 224H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 128H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z" />
+																</svg>
+															</span>
+															<i class="fa fa-check-circle"></i>
+														</div>
+														<div class="info-sec">
+															<ul>
+																<li>Total loss of Ckecked-in baggage</li>
+															</ul>
+															<h5>Upto Rs.10000</h5>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="mt-3"></div>
+											<div class="notes-list">
+												<h5>
+													<i class="la la-info-circle"></i> Important Note :
+												</h5>
+												<ul>
+													<li>
+														Please ensure that the names of the passengers on the travel
+														documents is the same as on their government issued identity
+														proof.
+													</li>
+													<li>
+														Note: Travel Insurance is applicable only for Indian citizens
+														below the age of 70 years. <a href="#">Terms & Conditions</a>
+													</li>
+												</ul>
+											</div>
+											<div class="div"
+												style="display: flex;justify-content: flex-end;align-items: center;margin-top: 1em;gap:0.2em">
+												<p class="m-0" style="font-style: italic;font-size: 0.8rem;"><em>Powered
+														By</em></p>
+												<img style="width: 77px;height: 47px;object-fit:cover"
+													src="{% static 'main/images/insuranceLogoAsego.png' %}" alt="">
+											</div>
+										</div>
+										<div id="service-container" class="mt-3 mb-3"></div>
+										<div class="title-sec">
+											<h3>
+												<span>
+													<img src="{% static 'main/images/icon/user-plus.png' %}" alt="">
+													Enter Traveller Details
+												</span>
+											</h3>
+										</div>
+										<div class="box-one login-box">
+
+											<input id="pay__url" type="hidden" value="{% url  'get_payment' %}">
+											<input id="seat__url" type="hidden" value="{% url 'select_seat' %}">
+											{% csrf_token %}
+											<div>
+												<div class="row person__detail">
+													<div class="col-12">
+														<h5 class="mb-2">Traveller Information</h5>
+													</div>
+													<div class="col-md-12 col-12">
+														<input type="hidden" name="pp" value='ADULT'>
+														<h5 style="margin: 0">Adult</h5>
+													</div>
+													<div class="col-md-2 col-4 pr-0">
+														<div class="form-group">
+															<select name="title" id="title" class="form-control"
+																required>
+																<option value selected disabled hidden>Title</option>
+																<option value="Mr">MR.</option>
+																<option value="Mrs">MRS.</option>
+																<option value="Ms">MS.</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-md-5 col-6">
+														<div class="form-group">
+															<input style="text-transform:uppercase" type="text"
+																class="form-control" name="first_name"
+																placeholder="First Name" required>
+														</div>
+													</div>
+													<div class="col-md-5">
+														<div class="form-group">
+															<input style="text-transform:uppercase" type="text"
+																class="form-control" name="last_name"
+																placeholder="Last Name">
+														</div>
+													</div>
+													<div class="col-md-12"
+														style="margin-bottom: 0.5em;margin-top:-10px">
+														{% if data.searchQuery.isDomestic == False %}
+														<a style="cursor: pointer;" data-toggle="collapse"
+															data-target="#frequent" aria-expanded="true"
+															aria-controls="collapse2">
+															Passport Details
+														</a>
+														<div id="frequent" class="collapse show"
+															data-parent="#option-acc-one">
+															<div class="row"
+																style="justify-content: center;align-items: center;">
+																<div class="col-md-5">
+																	<div class="form-group">
+																		<label for="passport">Passport Number</label>
+																		<input type="text" class="form-control"
+																			name="passport" placeholder="passport"
+																			required>
+																	</div>
+																</div>
+																<div class="col-md-3">
+																	<div class="form-group">
+																		<label for="exp">Expiry Date</label>
+																		<input type="date"
+																			class="datepicker hasDatepicker" name="exp"
+																			placeholder="Expiry date">
+																	</div>
+																</div>
+																<div class="col-md-3">
+																	<div class="form-group">
+																		<label for="issue">Issued Date</label>
+																		<input type="date"
+																			class="datepicker hasDatepicker"
+																			name="issue" placeholder="Issued date">
+																	</div>
+																</div>
+															</div>
+														</div>
+														{% else %}
+														<a style="cursor: pointer;" data-toggle="collapse"
+															data-target="#frequent" aria-expanded="false"
+															aria-controls="collapse2">
+															Optional (Frequent Flyer Number)
+														</a>
+														<div id="frequent" class="collapse"
+															data-parent="#option-acc-one">
+															<p
+																style="margin: 0 0 0 1em;font-size:0.9em;font-weight:700;">
+																Frequent Flyer Details</p>
+															<p style="font-size: 0.8em;margin:0 0 0.5em 1em;">Please
+																verify the credit of your frequent flyer miles at the
+																airport checkin counter.</p>
+															<div class="row" style="justify-content: center;">
+																<div class="col-md-5">
+																	<div class="form-group">
+																		<select class="form-control"
+																			name="frequent-airline">
+																			<option value selected disabled hidden>
+																				Select</option>
+																			<option value="GF" label="Gulf Air">Gulf Air
+																			</option>
+																			<option value="S4"
+																				label="Sata International">Sata
+																				International</option>
+																			<option value="UK" label="Vistara">Vistara
+																			</option>
+																			<option value="OS"
+																				label="AUSTRIAN AIRLINES">AUSTRIAN
+																				AIRLINES</option>
+																			<option value="AI" label="AIR INDIA">AIR
+																				INDIA</option>
+																			<option value="ET"
+																				label="ETHIOPIAN AIRLINES">ETHIOPIAN
+																				AIRLINES</option>
+																			<option value="MS"
+																				label="EGYPTAIR AIRLINES">EGYPTAIR
+																				AIRLINES</option>
+																			<option value="CA" label="AIR CHINA">AIR
+																				CHINA</option>
+																			<option value="TP" label="TAP PORTUGAL">TAP
+																				PORTUGAL</option>
+																			<option value="UA" label="UNITED AIRLINES">
+																				UNITED AIRLINES</option>
+																			<option value="OZ" label="ASIANA AIRLINES">
+																				ASIANA AIRLINES</option>
+																			<option value="SQ"
+																				label="SINGAPORE AIRLINES">SINGAPORE
+																				AIRLINES</option>
+																			<option value="CM" label="COPA AIRLINES">
+																				COPA AIRLINES</option>
+																			<option value="TK" label="TURKISH AIRLINES">
+																				TURKISH AIRLINES</option>
+																			<option value="LO" label="POLISH AIRLINES">
+																				POLISH AIRLINES</option>
+																			<option value="TG"
+																				label="THAI AIRWAYS INTERNATIONAL">THAI
+																				AIRWAYS INTERNATIONAL</option>
+																			<option value="SA"
+																				label="SOUTH AFRICAN AIRWAYS">SOUTH
+																				AFRICAN AIRWAYS</option>
+																			<option value="BR" label="EVA AIR">EVA AIR
+																			</option>
+																			<option value="SK" label="SAS">SAS</option>
+																			<option value="NZ"
+																				label="AIR NEW ZEALAND LTD">AIR NEW
+																				ZEALAND LTD</option>
+																			<option value="NH"
+																				label="ALL NIPPON AIRWAYS">ALL NIPPON
+																				AIRWAYS</option>
+																			<option value="A3" label="AEGEAN AIRLINES">
+																				AEGEAN AIRLINES</option>
+																			<option value="LH" label="LUFTHANSA">
+																				LUFTHANSA</option>
+																			<option value="SN"
+																				label="BRUSSELS AIRLINES">BRUSSELS
+																				AIRLINES</option>
+																			<option value="JP" label="ADRIA AIRWAYS">
+																				ADRIA AIRWAYS</option>
+																			<option value="OU" label="CROATIA AIRLINES">
+																				CROATIA AIRLINES</option>
+																			<option value="ZH"
+																				label="SHENZHEN AIRLINES">SHENZHEN
+																				AIRLINES</option>
+																			<option value="LX" label="SWISS">SWISS
+																			</option>
+																			<option value="AC" label="AIR CANADA">AIR
+																				CANADA</option>
+																			<option value="AV" label="AVIANCA">AVIANCA
+																			</option>
+																			<option value="MH"
+																				label="MALAYSIA AIRLINES">MALAYSIA
+																				AIRLINES</option>
+																			<option value="CX"
+																				label="CATHAY PACIFIC AIRWAYS">CATHAY
+																				PACIFIC AIRWAYS</option>
+																			<option value="NU"
+																				label="JAPAN TRANSOCEAN AIR">JAPAN
+																				TRANSOCEAN AIR</option>
+																			<option value="HG" label="NIKI">NIKI
+																			</option>
+																			<option value="JL"
+																				label="JAPAN AIRLINES INTL">JAPAN
+																				AIRLINES INTL</option>
+																			<option value="AB" label="AIR BERLIN">AIR
+																				BERLIN</option>
+																			<option value="KA" label="DRAGONAIR">
+																				DRAGONAIR</option>
+																			<option value="LA" label="LAN AIRLINES">LAN
+																				AIRLINES</option>
+																			<option value="RJ" label="ROYAL JORDANIAN">
+																				ROYAL JORDANIAN</option>
+																			<option value="AA"
+																				label="AMERICAN AIRLINES">AMERICAN
+																				AIRLINES</option>
+																			<option value="JC" label="JAL EXPRESS">JAL
+																				EXPRESS</option>
+																			<option value="US" label="US AIRWAYS">US
+																				AIRWAYS</option>
+																			<option value="MJ" label="MIHIN LANKA">MIHIN
+																				LANKA</option>
+																			<option value="XL"
+																				label="LANECUADOR AEROLANE SA">
+																				LANECUADOR AEROLANE SA</option>
+																			<option value="IB" label="IBERIA">IBERIA
+																			</option>
+																			<option value="4M" label="LANARGENTINA">
+																				LANARGENTINA</option>
+																			<option value="LP" label="LANPERU">LANPERU
+																			</option>
+																			<option value="AY" label="FINNAIR">FINNAIR
+																			</option>
+																			<option value="BA" label="BRITISH AIRWAYS">
+																				BRITISH AIRWAYS</option>
+																			<option value="S7" label="S7 AIRLINES">S7
+																				AIRLINES</option>
+																			<option value="UL"
+																				label="SRILANKAN AIRLINES">SRILANKAN
+																				AIRLINES</option>
+																			<option value="JJ"
+																				label="TAM LINHAS AEREAS">TAM LINHAS
+																				AEREAS</option>
+																			<option value="QR" label="QATAR AIRWAYS">
+																				QATAR AIRWAYS</option>
+																			<option value="QF"
+																				label="QANTAS AIRWAYS LTD">QANTAS
+																				AIRWAYS LTD</option>
+																			<option value="EK" label="Emirates">Emirates
+																			</option>
+																			<option value="AM" label="AEROMEXICO">
+																				AEROMEXICO</option>
+																			<option value="MU"
+																				label="CHINA EASTERN AIRLINES">CHINA
+																				EASTERN AIRLINES</option>
+																			<option value="KQ" label="KENYA AIRWAYS">
+																				KENYA AIRWAYS</option>
+																			<option value="UX" label="AIR EUROPA">AIR
+																				EUROPA</option>
+																			<option value="AZ" label="ALITALIA">ALITALIA
+																			</option>
+																			<option value="KL"
+																				label="KLM ROYAL DUTCH AIRLINES">KLM
+																				ROYAL DUTCH AIRLINES</option>
+																			<option value="GA" label="GARUDA INDONESIA">
+																				GARUDA INDONESIA</option>
+																			<option value="SU" label="AEROFLOT">AEROFLOT
+																			</option>
+																			<option value="OK" label="CZECH AIRLINES">
+																				CZECH AIRLINES</option>
+																			<option value="DL" label="DELTA AIRLINES">
+																				DELTA AIRLINES</option>
+																			<option value="MF" label="XIAMEN AIRLINES">
+																				XIAMEN AIRLINES</option>
+																			<option value="CI" label="CHINA AIRLINES">
+																				CHINA AIRLINES</option>
+																			<option value="ME"
+																				label="MIDDLE EAST AIRLINES">MIDDLE EAST
+																				AIRLINES</option>
+																			<option value="RO" label="TAROM">TAROM
+																			</option>
+																			<option value="SV"
+																				label="SAUDI ARABIAN AIRLINES">SAUDI
+																				ARABIAN AIRLINES</option>
+																			<option value="KE" label="KOREAN AIR">KOREAN
+																				AIR</option>
+																			<option value="AR"
+																				label="AEROLINEAS ARGENTINAS">AEROLINEAS
+																				ARGENTINAS</option>
+																			<option value="CZ" label="CHINA SOUTHERN">
+																				CHINA SOUTHERN</option>
+																			<option value="VN" label="VIETNAM AIRLINES">
+																				VIETNAM AIRLINES</option>
+																			<option value="AF" label="AIR FRANCE">AIR
+																				FRANCE</option>
+																			<option value="MK" label="Air Mauritius">Air
+																				Mauritius</option>
+																			<option value="VS" label="Virgin Atlantic">
+																				Virgin Atlantic</option>
+																			<option value="HY"
+																				label="Uzbekistan Airways">Uzbekistan
+																				Airways</option>
+																			<option value="OD" label="Malindo Air">
+																				Malindo Air</option>
+																			<option value="BG"
+																				label="Biman Bangladesh Airline">Biman
+																				Bangladesh Airline</option>
+																			<option value="WE" label="Thai Smile">Thai
+																				Smile</option>
+																			<option value="QP" label="Regional Air">
+																				Regional Air</option>
+																			<option value="S5" label="Shuttle America">
+																				Shuttle America</option>
+																			<option value="WY" label="Oman Air">Oman Air
+																			</option>
+																			<option value="BS"
+																				label="US-Bangla Airlines">US-Bangla
+																				Airlines</option>
+																			<option value="9I" label="Thai Sky">Thai Sky
+																			</option>
+																			<option value="KU" label="Kuwait Airways">
+																				Kuwait Airways</option>
+																			<option value="XY" label="Flynas">Flynas
+																			</option>
+																			<option value="VJ" label="VietJet Air">
+																				VietJet Air</option>
+																			<option value="PR"
+																				label="Philippine Airlines">Philippine
+																				Airlines</option>
+																			<option value="EY" label="Etihad Airways">
+																				Etihad Airways</option>
+																			<option value="TC" label="Air Tanzania">Air
+																				Tanzania</option>
+																			<option value="S9"
+																				label="Sae Swe Aviation Europe">Sae Swe
+																				Aviation Europe</option>
+																			<option value="JQ" label="Jetstar">Jetstar
+																			</option>
+																			<option value="EW" label="Eurowings">
+																				Eurowings</option>
+																			<option value="HX"
+																				label="Hong Kong Airlines">Hong Kong
+																				Airlines</option>
+																			<option value="KC" label="Air Astana">Air
+																				Astana</option>
+																		</select>
+																		<!-- <input type="text" class="form-control" placeholder="Airline" name="frequent-airline"> -->
+																	</div>
+																</div>
+																<div class="col-md-5">
+																	<div class="form-group">
+																		<input type="text" class="form-control"
+																			placeholder="Frequent flyer No."
+																			name="frequent-flyer">
+																	</div>
+																</div>
+															</div>
+														</div>
+														{% endif %}
+													</div>
+
+												</div>
+
+												<div class="row">
+													<div class="col-12">
+														<h5 class="mb-2">Contact Details</h5>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<input type="text" class="form-control" min="10" max="10"
+																name="mobile" placeholder="Phone Number"
+																value="{{gstdetail.0.0.mobile}}" required>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<input type="text" class="form-control"
+																placeholder="Official Email ID (Will be your Login ID)"
+																name="email" value="{{gstdetail.0.0.email}}" required>
+														</div>
+													</div>
+												</div>
+												<!-- <div class="heading-one" style="display: flex;gap: 1em;align-items: center;">
+									<input id="insurance-check" type="checkbox" class="mt-0" checked>
+									<h5>Also send my booking details on WhatsApp </h5>
+									<img src="{% static 'main/images/icon/whatsapp.png' %}" alt="">
+								</div> -->
+											</div>
+											<div class="notes-list">
+												<h5>
+													<i class="la la-info-circle"></i> Important Note :
+												</h5>
+												<ul>
+													<li>
+														Please ensure that the names of the passengers on the travel
+														documents is the same as on their government issued identity
+														proof.
+													</li>
+												</ul>
+											</div>
+											<div class="box-one service-box accordion-three" style="margin-top: 1em;">
+												<div class="heading-one">
+													<h4>Add your GST Details <span>(Optional)</span></h4>
+													<p>Claim credit of GST charges. Your taxes may get updated post
+														submitting your GST details.</p>
+													<a class="" id="gst" data-toggle="collapse" data-target="#collapseg"
+														aria-expanded="false" aria-controls="collapse2"
+														style="float: right;margin-top: -2em;cursor: pointer;background: red;padding: 0.3em 0.8em;color: white;border-radius: 4px;">
+														Add
+													</a>
+												</div>
+												<div id="collapseg" class="collapse" data-parent="#option-acc-one">
+													<div class="row">
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="">GST Number:</label>
+																<input id="gstnumber" type="text" class="form-control"
+																	placeholder="" name="gstno"
+																	placeholder="Gst Number">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="">Company Name:</label>
+																<input id="companyname" type="text" class="form-control"
+																	placeholder="" name="company_name">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="">Email Id:</label>
+																<input id="gstemail" type="text" class="form-control"
+																	placeholder="Email" name="gst_email">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="">Mobile Number</label>
+																<input id="gstmobile" type="text" class="form-control"
+																	placeholder="" name="gst_mobile">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="">Address:</label>
+																<input id="gstaddress" type="text" class="form-control"
+																	placeholder="" name="address">
+															</div>
+														</div>
+														<!-- <div class="col-md-3">
+										<div class="form-group">
+											<label for="">City:</label>
+											<input type="text" class="form-control" placeholder="">
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="">Pincode:</label>
+											<input type="text" class="form-control" placeholder="">
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="">State:</label>
+											<input type="text" class="form-control" placeholder="">
+										</div>
+									</div> -->
+													</div>
+												</div>
+											</div>
+
+										</div>
+
+										{% if akasaa_data%}
+										<input type="hidden" name="passengerkey" value="{{ passengerkey }}">
+										<input type="hidden" name="apiamount" value="{{apiamount }}">
+										<input type="hidden" name="akasa_token" value="{{akasa_token}}">
+										<input type="hidden" name="rtype" value="{{rtype}}">
+										<input type="hidden" name="amount"
+											value="{{akasaa_data.data.breakdown.totalAmount}}">
+										<input type="hidden" name="Person" value="{{Person}}">
+										<input type="hidden" name="token" value="{{token}}">
+										<input type="hidden" name="adult" value="{{adult}}">
+										<input type="hidden" name="child" value="{{child}}">
+										<input type="hidden" name="infant" value="{{infant}}">
+										<input type="hidden" name="skey" value="{{skey}}">
+										{% endif %}
+										{% if result %}
+										<input type="hidden" name="Person" value="{{Person}}">
+
+										<input type="hidden" name="rtype" value="{{rtype}}">
+										<input type="hidden" name="token" value="{{token}}">
+										<input type="hidden" name="adult" value="{{adult}}">
+										<input type="hidden" name="child" value="{{child}}">
+										<input type="hidden" name="infant" value="{{infant}}">
+										<input type="hidden" name="origin" value="{{result.0.origin}}">
+										<input type="hidden" name="destination" value="{{result.0.destination}}">
+										<input type="hidden" name="amount" value="{{ result.0.price }}">
+										<input type="hidden" name="arrival_date" value="{{result.0.arival_date}}">
+										<input type="hidden" name="departure_date" value="{{result.0.departure_date}}">
+										<input type="hidden" name="ticketid" value="{{result.0.ticket_id}}">
+										<input type="hidden" name="flight_num" value="{{result.0.flight_number}}">
+										<input type="hidden" name="apiamount" value="{{ apiamount }}">
+										<input type="hidden" name="cabinClass" value="Economy">
+										{% endif %}
+										{% if data %}
+										{% for i in data.tripInfos %}
+										<input type="hidden" name="apiamount" value="{{ apiamount }}">
+										<input type="hidden" name="cabinClass" value="{{data.searchQuery.cabinClass}}">
+										<input type="hidden" name="rtype" value="{{ rtype }}">
+										<input type="hidden" name="Person" value="{{Person}}">
+										<input type="hidden" name="key" value="{{i.totalPriceList.0.id}}">
+										<input type="hidden" name="bookingId" value="{{ data.bookingId }}">
+										<input type="hidden" name="isDomestic" value="{{data.searchQuery.isDomestic}}">
+										<input type="hidden" name="arrival_date" value="{{i.sI.0.at|fix_date}}">
+										<input type="hidden" name="departure_date"
+											value="{% if i.sI.1.dt %}{{ i.sI.1.dt|fix_date }}{% else %}{{ i.sI.0.dt|fix_date }}{% endif %}">
+										<input type="hidden" name="amount"
+											value="{{data.totalPriceInfo.totalFareDetail.fC.TF}}">
+										<input type="hidden" name="bid" value="{{ data.tripInfos.0.sI.0.id }}">
+										<input type="hidden" name="adult" value="{{data.searchQuery.paxInfo.ADULT}}">
+										<input type="hidden" name="child" value="{{data.searchQuery.paxInfo.CHILD}}">
+										<input type="hidden" name="infant" value="{{data.searchQuery.paxInfo.INFANT}}">
+										<input type="hidden" name="meal" value="{{i.totalPriceList.0.fd.ADULT.mI}}">
+										<input type="hidden" name="origin" value="{{i.sI.0.da.name}}">
+										<input type="hidden" name="src" value="{{i.sI.0.da.code}}">
+										<input type="hidden" name="destination"
+											value="{% if i.sI.1.aa.name %}{{ i.sI.1.aa.name }}{% else %}{{ i.sI.0.aa.name }}{% endif %}">
+										<input type="hidden" name="dest"
+											value="{% if i.sI.1.aa.code %}{{ i.sI.1.aa.code }}{% else %}{{ i.sI.0.aa.code }}{% endif %}">
+										<input type="hidden" name="baggage"
+											value="{{i.totalPriceList.0.fd.ADULT.bI.iB}}">
+										<input type="hidden" name="seat_no" value="Not Selected">
+										<input type="hidden" name="panno" value="None">
+										<input type="hidden" name="stop" value="0">
+										<input type="hidden" name="flightcode"
+											value="{{data.tripInfos.0.sI.0.fD.aI.code}}">
+										<input type="hidden" name="flightno" value="{{data.tripInfos.0.sI.0.fD.fN}}">
+										<input type="hidden" name="passport_no" value="None">
+										{% endfor %}
+										{% endif %}
+										<div id="makepayment" class="col-md-4 mt-3">
+											{%if not request.user.is_authenticated %}
+											<button type="button" id="btn__submit" class="btn btn-block btn-red"
+												data-toggle="modal" data-target="#loginModal">
+												Edit
+											</button>
+											{% else %}
+											<button id="btn__submit" class="btn btn-block btn-red" type="submit">
+												Make payment
+												<i class="la la-long-arrow-right la-lg"></i>
+
+												{% endif %}
+												{% if data.conditions.isBA %}
+												<!-- <button id="btn__submit_hold" class="btn btn-block btn-red" type="button">
+								Hold
+								<i class="la la-long-arrow-right la-lg"></i>
+							</button> -->
+												<button type="button" id="btn__submit" class="btn btn-block btn-red"
+													data-toggle="modal" data-target="#confirmhold">
+													Hold
+													<i class="la la-long-arrow-right la-lg"></i>
+												</button>
+												{% endif %}
+										</div>
+									</form>
+									{% if False %}
+									<form action="{% url  'hold_ticket' %}" method="post">
+										{% csrf_token %}
+										<input type="hidden" name="apiamount" value="{{ apiamount }}">
+										<input type="hidden" name="cabinClass" value="{{data.searchQuery.cabinClass}}">
+										<input type="hidden" name="rtype" value="{{ rtype }}">
+										<input type="hidden" name="Person" value="{{Person}}">
+										<input type="hidden" name="key" value="{{i.totalPriceList.0.id}}">
+										<input type="hidden" name="bookingId" value="{{ data.bookingId }}">
+										<input type="hidden" name="isDomestic" value="{{data.searchQuery.isDomestic}}">
+										<input type="hidden" name="arrival_date" value="{{i.sI.0.at|fix_date}}">
+										<input type="hidden" name="departure_date"
+											value="{% if i.sI.1.dt %}{{ i.sI.1.dt|fix_date }}{% else %}{{ i.sI.0.dt|fix_date }}{% endif %}">
+										<input type="hidden" name="amount"
+											value="{{data.totalPriceInfo.totalFareDetail.fC.TF}}">
+										<input type="hidden" name="bid" value="{{ data.tripInfos.0.sI.0.id }}">
+										<input type="hidden" name="adult" value="{{data.searchQuery.paxInfo.ADULT}}">
+										<input type="hidden" name="child" value="{{data.searchQuery.paxInfo.CHILD}}">
+										<input type="hidden" name="infant" value="{{data.searchQuery.paxInfo.INFANT}}">
+										<input type="hidden" name="meal" value="{{i.totalPriceList.0.fd.ADULT.mI}}">
+										<input type="hidden" name="origin" value="{{i.sI.0.da.name}}">
+										<input type="hidden" name="src" value="{{i.sI.0.da.code}}">
+										<input type="hidden" name="destination"
+											value="{% if i.sI.1.aa.name %}{{ i.sI.1.aa.name }}{% else %}{{ i.sI.0.aa.name }}{% endif %}">
+										<input type="hidden" name="dest"
+											value="{% if i.sI.1.aa.code %}{{ i.sI.1.aa.code }}{% else %}{{ i.sI.0.aa.code }}{% endif %}">
+										<input type="hidden" name="baggage"
+											value="{{i.totalPriceList.0.fd.ADULT.bI.iB}}">
+										<input type="hidden" name="seat_no" value="Not Selected">
+										<input type="hidden" name="panno" value="None">
+										<input type="hidden" name="stop" value="0">
+										<input type="hidden" name="flightcode"
+											value="{{data.tripInfos.0.sI.0.fD.aI.code}}">
+										<input type="hidden" name="flightno" value="{{data.tripInfos.0.sI.0.fD.fN}}">
+										<input type="hidden" name="passport_no" value="None">
+										<button id="btn__submit" class="btn btn-block btn-red" type="submit">
+											Hold
+											<i class="la la-long-arrow-right la-lg"></i>
+										</button>
+									</form>
+									{% endif %}
+								</div>
+
+								<div class="col-lg-4 right-sec">
+									<div class="title-sec">
+										<h4>Fare Details <a href="javascript:void(0)" class="fare-sidebar-open">View
+												Fare Rules</a></h4>
+									</div>
+									<div class="box-one fare-box">
+
+										<p>{{mark_up}}
+											<span>Base Fare <span>({{Person}} Traveller)</span></span>
+											<span>₹ {{data.totalPriceInfo.totalFareDetail.fC.BF}} {{ result.0.price
+												}}{{akasaa_data.data.breakdown.totalAmount}}</span>
+										</p>
+										{% if data%}
+										<p>
+											<span>Fee & Surcharges </span>
+											<span>₹ {{data.totalPriceInfo.totalFareDetail.fC.TAF}} </span>
+										</p>
+										{% endif %}
+										<div class="bg-grey">
+											{% if data%}
+											<p class="small">
+												<span>User Development Fee</span>
+												<span>₹ {{data.totalPriceInfo.totalFareDetail.afC.TAF.AGST}}</span>
+											</p>
+											<p class="small">
+												<span>Passenger Service Fee</span>
+												<span>₹ {{data.totalPriceInfo.totalFareDetail.afC.TAF.MF}} </span>
+											</p>
+											<p class="small">
+												<span>Airline Fuel Surcharges</span>
+												<span>₹ {{data.totalPriceInfo.totalFareDetail.afC.TAF.YQ}}
+												</span>
+											</p>
+											<p class="small">
+												<span>Management Fee</span>
+												<span>₹ {{data.totalPriceInfo.totalFareDetail.fC.TF|manage_fee:apiamount
+													}}
+												</span>
+											</p>
+											<p class="small">
+												<span>Other Charges</span>
+												<span>₹ {{data.totalPriceInfo.totalFareDetail.afC.TAF.OT}} </span>
+											</p>
+											{% endif%}
+										</div>
+
+										<hr>
+										<h4>
+											<span>Total Fare</span>
+											<span>{{data.totalPriceInfo.totalFareDetail.fC.TF}} {{ result.0.price
+												}}{{akasaa_data.data.breakdown.totalAmount}}</span>
+										</h4>
+										<div id="add-on">
+											<p>
+												<span>
+													Savari Promo Offer
+													<a href="javascript:void(0)" class="close">
+														<i class="fa fa-close"></i>
+													</a>
+												</span>
+												<span class="green savaari-save">(-) ₹ 0</span>
+											</p>
+										</div>
+										<div class="promocode-add">
+											<h3>
+												<span>You Pay :</span>
+												<span id="total-flight-amount">{{ result.0.price }}
+													{{data.totalPriceInfo.totalFareDetail.fC.TF|floatformat:0}}{{akasaa_data.data.breakdown.totalAmount}}
+												</span>
+											</h3>
+
+											<h5 class="green">
+												<span>Total Savings</span>
+												<span class="savaari-save">₹ 0</span>
+											</h5>
+										</div>
+									</div>
+									<div class="title-sec">
+										<h4>Promo Code</h4>
+									</div>
+									<div class="box-one promocode-box">
+										<h4>Select a Promo Code</h4>
+										<div class="input-sec">
+											<input id="promo-code-input" type="text" value=""
+												placeholder="Your Promo Code">
+											<button class="active">
+												Applied
+												<i class="la la-check"></i>
+											</button>
+										</div>
+										<div class="promocode-applied">
+											<i class="fa fa-check-circle green"></i>
+											<small>Congrats! You have availed a discount of Rs.0 , TnC apply.</small>
+										</div>
+										<ul>
+											{% for x in promo %}
+											<li>
+												<label class="promo-radio2">
+													<input type="radio" name="promocode2" value={{x.amount}}>
+													<span class="checkmark"></span>
+													<div class="promo-info">
+														<span class="code">{{x.promo_code}}</span>
+														<span class="price yellow">Save ₹ {{x.amount}}</span>
+														<p class="small m-0">FLat 13% off on using CITI Bank Credit &
+															Debit cards</p>
+													</div>
+												</label>
+												<div class="promo-terms">
+													<a href="{% url 'term'%}">Terms & Conditions</a>
+												</div>
+											</li>
+											{% endfor %}
+
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	</section>
+
+
+
+	<!-- Fare Rules Sidebar -->
+	<div class="fare-rules-sidebar">
+		<button class="fare-sidebar-close">
+			<img src="{% static 'main/images/icon/close-w.png' %}" alt="">
+		</button>
+		<div class="fare-body">
+			<h3>Fare Rules</h3>
+			<div class="flight-code">
+				{% for i in data.tripInfos %}
+				{% for a in i.sI %}
+				{% if forloop.first %}{{ a.da.code }}{% elif forloop.last %} - {{ a.aa.code }} {% endif %}
+				{% endfor %}
+				{% endfor %}
+			</div>
+			<table class="table table-bordered mb-4">
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>Airline Cancellation Fee</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<span>DURATION (Prior to the date/time of departure)</span>
+						</td>
+						<td>
+							<span>Per Passenger</span>
+						</td>
+					</tr>
+					<tr>
+						<td>0 hour to 2 hours</td>
+						<td>Non Refundable</td>
+					</tr>
+					<tr>
+						<td>2 hours to 4 days</td>
+						<td><i class="la la-rupee"></i>3,500</td>
+					</tr>
+					<tr>
+						<td>> 4 days</td>
+						<td><i class="la la-rupee"></i>3,000</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table table-bordered mb-4">
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>Airline Date Change Fee</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<span>DURATION (Prior to the date/time of departure)</span>
+						</td>
+						<td>
+							<span>Per Passenger</span>
+						</td>
+					</tr>
+					<tr>
+						<td>2 hours to 4 days</td>
+						<td><i class="la la-rupee"></i>3,250</td>
+					</tr>
+					<tr>
+						<td>> 4 days</td>
+						<td><i class="la la-rupee"></i>2,750</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table table-bordered mb-4">
+				<thead>
+					<tr>
+						<th colspan="2">Savari Service Fee*</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="2">
+							<span>(charged per passenger in addition to airline fee as applicable)</span>
+						</td>
+					</tr>
+					<tr>
+						<td>Online Cancellation Service Fee</td>
+						<td><i class="la la-rupee"></i>400</td>
+					</tr>
+					<tr>
+						<td>Offline Cancellation Service Fee</td>
+						<td><i class="la la-rupee"></i>400</td>
+					</tr>
+					<tr>
+						<td>Online Rescheduling Service Fee</td>
+						<td><i class="la la-rupee"></i>400</td>
+					</tr>
+					<tr>
+						<td>Offline Rescheduling Service Fee</td>
+						<td><i class="la la-rupee"></i>1,250</td>
+					</tr>
+					<tr>
+						<td>Savaari Processing Fee</td>
+						{% if request.user|has_group:"Agent" %}
+						<td><i class="la la-rupee"></i>100</td>
+						{% else %}
+						<td><i class="la la-rupee"></i>500</td>
+						{% endif %}
+					</tr>
+				</tbody>
+			</table>
+			<p class="small">*Please note: Savari Service Fee is over and above the airline cancellation fee due to
+				which refund type may vary.</p>
+			<p class="small">
+				In case of full/partial cancellation the offer stands void and the customer will not be eligible for the
+				discount. Savari will refund the amount after adjusting
+				the discount and any other applicable charges/penalties.
+			</p>
+		</div>
+	</div>
+</main>
+
+{%if not request.user.is_authenticated %}
+<div class="modal fade login-modal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content " id="login-div">
+			<!-- <div class="modal-header" id="loginModalLabel">
+			  <h4 class="modal-title">Please login for better experience</h4>
+			  <h4 id="error-msg" style="color: red;"></h4>
+			</div>
+			<div class="modal-body">
+				<form id="login-form" action="{% url 'custlogin' %}" method="POST">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="">Username / Email / Mobile No.</label>
+						<input type="text" name ="username" class="form-control" placeholder="Username / Email / Mobile No." required>
+					</div>
+					<div class="form-group">
+						<label for="">Password</label>
+						<input type="password" name ="password" class="form-control" placeholder="******" required>
+					</div>
+					<div class="form-group">
+						<label class="custom-checkbox">
+							Remember me
+							<input type="checkbox" checked="checked">
+							<span class="checkmark"></span>
+						</label>
+					</div>
+					<div class="form-group">
+						<button class="btn btn-block btn-blue" type="submit">Login</button>
+					</div>
+				</form>
+			</div> -->
+		</div>
+	</div>
+</div>
+{%endif%}
+
+<div class="modal fade login-modal" id="loginModal2" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header" id="loginModalLabel"
+				style="display: flex;flex-direction: column;justify-content: center;align-items: center;gap:2em;">
+				<h3 class="modal-title" style="color: red;">Session Expired</h3>
+				<img src="{% static 'main/images/icons8-alarm-clock.gif' %}" alt=""
+					style="width: 150px;height: 150px;object-fit: contain;">
+				<div style="text-align: center;">
+					<h4>Timed Out</h4>
+					<p>Please recheck Fare & Availability of your selected flight(s) as air fares are dynamic and
+						subject to change</p>
+				</div>
+			</div>
+			<div class="modal-body d-flex" style="justify-content: center;gap:1em;">
+				<button id="search-again" class="btn btn-blue">New Search</button>
+				<button id="refresh" class="btn btn-red px-4">Search Result</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade login-modal" id="confirmhold" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="loginModalLabel">Vertically Aligned</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+						viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+						stroke-linejoin="round" class="feather feather-x">
+						<line x1="18" y1="6" x2="6" y2="18"></line>
+						<line x1="6" y1="6" x2="18" y2="18"></line>
+					</svg>
+				</button>
+			</div>
+			<div class="modal-body">
+				<h4 class="modal-heading mb-4 mt-2">Aligned Center</h4>
+				<p class="modal-text">In hac habitasse platea dictumst. Proin sollicitudin et lacus in tincidunt.
+					Integer nisl ex, sollicitudin eget nulla nec, pharetra lacinia nisl. Aenean nec nunc ex. Integer
+					varius neque at dolor scelerisque porttitor.</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+				<button type="button" class="btn btn-primary" id="confirm_btn">Save</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- <div class="modal fade login-modal" id="confirmhold" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header" id="loginModalLabel" style="display: flex;flex-direction: column;justify-content: center;align-items: center;gap:2em;">
+					<h3 class="modal-title" style="color: red;">Session Expired</h3>
+					<img src="{% static 'main/images/icons8-alarm-clock.gif' %}" alt="" style="width: 150px;height: 150px;object-fit: contain;">
+					<div style="text-align: center;">
+						<h4>Timed Out</h4>
+						<p>Please recheck Fare & Availability of your selected flight(s) as air fares are dynamic and subject to change</p>
+					</div>
+			    </div>
+				<div class="modal-body d-flex" style="justify-content: center;gap:1em;">
+					<button id="search-again" class="btn btn-blue">New Search</button>
+					<button id="refresh" class="btn btn-red px-4">Search Result</button>
+				</div>
+			</div>
+		  </div>
+	</div> -->
+<div class="modal fade login-modal" id="loginModal3" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header" id="loginModalLabel" style="background-color: red;">
+				<div class="logo" style="background-color: white;padding:1em;border-radius: 10px;">
+					<img src="{% static 'main/images/logo.png' %}" alt="">
+				</div>
+				<div class="comp" style="color: white;margin-top: 0.5em;margin-left: 0.2em;">
+					<h2 style="margin: 0;">Online Savaari</h2>
+					<p style="margin: 0;">Travel Company</p>
+				</div>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true"
+						xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="feather feather-x">
+						<line x1="18" y1="6" x2="6" y2="18"></line>
+						<line x1="6" y1="6" x2="18" y2="18"></line>
+					</svg></button>
+			</div>
+			<table class="table">
+				<thead>
+					<tr id="table-header">
+						<th scope="col">#</th>
+						<th scope="col">Title</th>
+						<th scope="col">First Name</th>
+						<th scope="col">Last Name</th>
+						<th scope="col">Passport</th>
+					</tr>
+				</thead>
+				<tbody id="table-body">
+				</tbody>
+			</table>
+			<div>
+				<h5 style="padding-left: 0.5em;">Contact Details & Insurance</h5>
+				<table class="table">
+					<thead>
+						<tr id="table-header">
+							<th scope="col">Mobile</th>
+							<th scope="col">Gmail</th>
+							<th scope="col">Insurance</th>
+						</tr>
+					</thead>
+					<tbody id="table-body_contact">
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn close"
+					style="color:black;border:1px solid red;padding: 0.5em 1.5em;">Edit</button>
+				<button id="contiune" type="button" class="btn">Continue</button>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<div class="modal fade login-modal" id="loginModal3-insurance" tabindex="-1" role="dialog"
+	aria-labelledby="loginModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<form id="insurance_data" action="">
+				<div class="modal-header" id="loginModalLabel" style="background-color: red;">
+					<div class="logo" style="background-color: white;padding:1em;border-radius: 10px;">
+						<img src="{% static 'main/images/logo.png' %}" alt="">
+					</div>
+					<div class="comp" style="color: white;margin-top: 0.5em;margin-left: 0.2em;">
+						<h2 style="margin: 0;">Online Savaari</h2>
+						<p style="margin: 0;">Travel Company</p>
+					</div>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+							stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+							class="feather feather-x">
+							<line x1="18" y1="6" x2="6" y2="18"></line>
+							<line x1="6" y1="6" x2="18" y2="18"></line>
+						</svg></button>
+				</div>
+				<table class="table">
+					<thead>
+						<tr id="table-header">
+							<th scope="col">#</th>
+							<th scope="col">Title</th>
+							<th scope="col">First Name</th>
+							<th scope="col">Last Name</th>
+							<th scope="col">Date of Birth</th>
+						</tr>
+					</thead>
+					<tbody id="table-body">
+					</tbody>
+				</table>
+				<div class="modal-footer">
+					<button type="button" class="btn close"
+						style="color:black;border:1px solid red;padding: 0.5em 1.5em;">Cancel</button>
+					<button id="contiune" type="submit" class="btn">Add</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</div>
+{% include "online_savaari/footer.html" %}
+<div style="position: fixed;bottom: 0;width: 100%;background: #000;color: white;text-align: center;z-index: 999999;">
+	<h4 class="m-0 py-3" style="display: flex;align-items: center;justify-content: center;gap:0.2em">
+		<svg class="mr-2" width="25px" height="25px" xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+			<path style="fill:white;"
+				d="M232 120C232 106.7 242.7 96 256 96C269.3 96 280 106.7 280 120V243.2L365.3 300C376.3 307.4 379.3 322.3 371.1 333.3C364.6 344.3 349.7 347.3 338.7 339.1L242.7 275.1C236 271.5 232 264 232 255.1L232 120zM256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256z" />
+		</svg>
+		Session will Expires in <span id="session-timer"></span>
+	</h4>
+</div>
+
+<!-- Jquery min -->
+<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+<!-- Popper Min -->
+<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+<!-- Jquery UI -->
+<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+<!-- Owl Carousel -->
+<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+<!-- Star Rating -->
+<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+<!-- Quantity -->
+<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+<!-- Phone -->
+<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+<!-- Custom -->
+<script src="{% static 'main/js/default.js' %}"></script>
+
+<script src="{% static 'main/js/src/service.js' %}"></script>
+<script src="{% static 'main/js/src/insurance.js' %}"></script>
+<script type="text/javascript">
+	
+	let alldata = JSON.parse('{{ jsondata | escapejs }}')
+	console.log('data is----', alldata);
+
+	const serv = new Service(alldata, $('#service-container'), {{ Person }})
+	const cl_in = new Insurance(alldata, {{ Person }}, true)
+	serv.paxobjsetter()
+	serv.rend()
+	$('#service-container').find("#border-top-contact-tab").click(function () {
+		serv.seatdata()
+	})
+	 serv.slider()
+	console.log(serv.meal, serv.tripinfo, serv.bagg)
+
+	
+</script>
+</body>
+
+</html>

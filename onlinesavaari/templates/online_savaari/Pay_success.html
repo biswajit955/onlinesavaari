@@ -1,0 +1,132 @@
+{% load static %}
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
+  </head>
+    <style>
+      body {
+        text-align: center;
+        padding: 40px 0;
+        background: #EBF0F5;
+      }
+        h1 {
+          color: #88B04B;
+          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+          font-weight: 900;
+          font-size: 40px;
+          margin-bottom: 10px;
+        }
+        p {
+          color: #404F5E;
+          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+          font-size:20px;
+          margin: 0;
+        }
+      i {
+        color: #9ABC66;
+        font-size: 100px;
+        line-height: 200px;
+        margin-left:-15px;
+      }
+      .card {
+        background: white;
+        padding: 60px;
+        border-radius: 4px;
+        box-shadow: 0 2px 3px #C8D0D8;
+        display: inline-block;
+        margin: 0 auto;
+      }
+    </style>
+    <body>
+      <div class="card">
+      <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+        <i class="checkmark">✓</i>
+      </div>
+        <h1>Success</h1> 
+        <p>We received your purchase request;<br/> we'll be in touch shortly!</p>
+      </div>
+	  <script src="{% static 'main/js/jquery.min.js' %}"></script>
+    {% if bookingId %}
+    {% csrf_token %}
+	  <script>
+    let checkid = '{{bookingId}}'
+    let review_form_data = window.sessionStorage.getItem('review_form_data')
+    review_form_data = JSON.parse(review_form_data)
+    review_form_data['csrfmiddlewaretoken'] = $('[name="csrfmiddlewaretoken"]').val();
+		$.ajax({
+			type: "GET",
+			url: "/flight/instant_booking/",
+			data: {...review_form_data},
+      // data: {
+      //   datatest: review_form_data
+      // },
+			success: function(res){
+        console.log(res)
+        review_form_data['data'] = res;
+        if (review_form_data.rtype == 'series'){
+          review_form_data['sbookindId'] = res.booking_id
+          checkid = res.booking_id
+        }else {
+          review_form_data.rtype == 'normal'
+        }
+        $.ajax({
+          type: "GET",
+          url: "/flight/get_details/",
+          data : review_form_data,
+          success: function(data){
+            // $('body').html(data)
+            console.log(data)
+            // $('html').html(data)
+            location.href = 'https://onlinesavaari.com/flight/newinvoice/?bookingId='+checkid;
+          },
+        });
+        }
+		});
+    // $.ajax({
+    //     type: "GET",
+    //     url: "/flight/get_details/",
+    //     data : review_form_data,
+    //     success: function(data){
+    //       // $('body').html(data)
+    //       console.log(data)
+    //       location.href = 'https://onlinesavaari.com/flight/newinvoice/?bookingId='+checkid;
+    //     },
+    //   });
+
+    // $.ajax({
+    //     type: "GET",
+    //     url: "/flight/get_details/",
+    //     data : review_form_data,
+    //     success: function(data){
+    //       $('body').html(data)
+    //     },
+		// });
+	  </script>
+    {% elif paymentid %}
+    {% csrf_token %}
+    <script>
+      let paymentid = '{{paymentid}}'
+      let newpaymentid = paymentid.split(':')[0]
+      let amount = paymentid.split(":")[1]
+      console.log(newpaymentid, amount)
+      $.ajax({
+        type: "POST",
+        url: "/savaari_cash",
+        data: {
+          'ajax':'ajax-payment-done',
+          'payment_id': newpaymentid,
+          "amount": amount,
+          'csrfmiddlewaretoken': $('[name="csrfmiddlewaretoken"]').val()
+        },
+        // data: {
+        //   datatest: review_form_data
+        // },
+        success: function(res){
+          console.log(res)
+          location.href = 'http://127.0.0.1:8000/savaari_cash';
+        }
+      });
+    </script>
+    {% endif %}
+    </body>
+</html>

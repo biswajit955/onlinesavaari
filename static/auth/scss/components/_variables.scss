@@ -1,0 +1,29 @@
+// Base
+$base-fz: 13px;
+$primary-ff: "Rubik", sans-serif;
+
+// Colors
+$no-clr: transparent;
+$white-clr: #ffffff;
+$black-clr: #000000;
+$red-clr: #ea2330;
+$light-red-clr: #f34f4f;
+$blue-clr: #228ee9;
+$light-blue-clr: #4bb9f0;
+$clr-333333: #333333;
+$clr-999999: #999999;
+$clr-c5c5c5: #c5c5c5;
+$clr-e4e4e4: #e4e4e4;
+$clr-f9f9f9: #f9f9f9;
+$clr-feeab8: #feeab8;
+$clr-fef2d8: #fef2d8;
+
+// Media Sizes
+$break-1280: 1280px;
+$break-1080: 1080px;
+$break-991: 991px;
+$break-767: 768px;
+
+/*
+@media (max-width: $break-767) {}
+*/
