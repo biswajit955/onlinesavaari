@@ -23,6 +23,7 @@ from django.contrib.auth.models import User
 from dicttoxml import dicttoxml
 from xml.dom.minidom import parseString
 from datetime import datetime as dt
+# Create your views here.
 from rest_framework import status
 import json
 import smtplib
