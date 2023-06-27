@@ -69,8 +69,8 @@ def hotel_markup_filter_one_hotel(price,grp,rating):
             markup_data =   percentage(price,int(markup.amount))
         else:
             markup_data = price
-    # if markup_data == 0:
-    #     markup_data = price
+    if markup_data == 0:
+        markup_data = price
 
     return round(markup_data)+00
 
