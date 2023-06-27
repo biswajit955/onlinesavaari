@@ -883,7 +883,7 @@ def loader_list(request):
     start_time = request.GET.get('start_time')
     end_time = request.GET.get('end_time')
 
-    # encrypt(xml_policy)
+    print(travelDate)
     conv = travelDate.split("-")
     dd= int(conv[0])
     mm = int(conv[1])
@@ -898,7 +898,7 @@ def loader_list(request):
     num =[int(adult),int(child),int(infant)]
     Person = sum(num)
     print("Person",Person)
-    akasaa_data = None
+    # akasaa_data = None
     if (radio1 == "one-way"):
         search_series = {
             "origin":fromCityOrAirport,
@@ -925,9 +925,8 @@ def loader_list(request):
             gds_ref["INF"] = []
             for adt in range(infant):
                 gds_ref['INF'].append('OS' + str(randint(1000000000, 9999999999)))
-        for ky, val in gds_ref.items():
-            for v in val:
-                reflist.append(f'<com:SearchPassenger Code="{ky}" BookingTravelerRef="{v}"/>')
+        reflist = [f'<com:SearchPassenger Code="{ky}" BookingTravelerRef="{v}"/>' 
+           for ky, val in gds_ref.items() for v in val]
         # """<com:SearchPassenger Code="ADT" BookingTravelerRef="OS0000000001"/>
         # <com:SearchPassenger Code="INF" BookingTravelerRef="OS0000000002" Age="1" PricePTCOnly="true"/>
         # <com:SearchPassenger Code="CNN" BookingTravelerRef="OS0000000003" Age="10"/>"""
@@ -973,41 +972,41 @@ def loader_list(request):
         
         
         # print(gds_data)
-        try:
-            temp = []
-            type = [{"type":"ADT","count":adult}]
-            if child != 0:
-                type.append({"type":"CHD","count":child})
-            if infant != 0:
-                type.append({"type":"INFT","count":infant})
+        # try:
+        #     temp = []
+        #     type = [{"type":"ADT","count":adult}]
+        #     if child != 0:
+        #         type.append({"type":"CHD","count":child})
+        #     if infant != 0:
+        #         type.append({"type":"INFT","count":infant})
 
-            akasa_request ={"origin":fromCityOrAirport,"destination":toCityOrAirport,"searchDestinationMacs":True,"searchOriginMacs":True,"beginDate":travelDate_akasa,"endDate":None,"getAllDetails":True,"taxesAndFees":"TaxesAndFees","passengers":{"types": type},"codes":{"currencyCode":"INR","promotionCode":""},"numberOfFaresPerJourney":4,"filters":{"compressionType":1,"groupByDate":False,"carrierCode":"QP","type":"ALL","maxConnections":4,"productClasses":["EC","AV","SP"],"sortOptions":["NoSort"],"fareTypes":["R","V","S"]}}
-            akasaa_data = akasa_data(akasa_url, '/api/nsk/v4/availability/search/simple', akasa_request,akasa_header={"Authorization":akasa_token})
-            akasaa_data=akasaa_data.json()
-            with open("static/flight/airport_list.json", "r") as f:
-                airport = json.loads(f.read())
-            print('errors' not in akasaa_data)
-            if('errors' not in akasaa_data):
-                for i in akasaa_data['data']['results']:
-                    for a in i['trips']: 
-                        for b in a['journeysAvailableByMarket'].values():
-                            for c in b:
-                                for d in c['segments']:
-                                    for e in d['legs']:
-                                        origin = e['designator']['origin']
-                                        destination = e['designator']['destination']
-                                        for i in airport:
-                                            if(origin in i['code']):
-                                                e['designator']['origin'] = i['name']
-                                            if(destination in i['code']):
-                                                e['designator']['destination'] = i['name']
-                                fare_key = c['fares'][0]['fareAvailabilityKey']
-                                print(fare_key)
-                                result = [d for d in akasaa_data['data']['faresAvailable'].values() if d['fareAvailabilityKey'] == fare_key]
-                                for e in result:
-                                    price = e['totals']['fareTotal']
-        except:
-            akasa_data = []
+        #     akasa_request ={"origin":fromCityOrAirport,"destination":toCityOrAirport,"searchDestinationMacs":True,"searchOriginMacs":True,"beginDate":travelDate_akasa,"endDate":None,"getAllDetails":True,"taxesAndFees":"TaxesAndFees","passengers":{"types": type},"codes":{"currencyCode":"INR","promotionCode":""},"numberOfFaresPerJourney":4,"filters":{"compressionType":1,"groupByDate":False,"carrierCode":"QP","type":"ALL","maxConnections":4,"productClasses":["EC","AV","SP"],"sortOptions":["NoSort"],"fareTypes":["R","V","S"]}}
+        #     akasaa_data = akasa_data(akasa_url, '/api/nsk/v4/availability/search/simple', akasa_request,akasa_header={"Authorization":akasa_token})
+        #     akasaa_data=akasaa_data.json()
+        #     with open("static/flight/airport_list.json", "r") as f:
+        #         airport = json.loads(f.read())
+        #     print('errors' not in akasaa_data)
+        #     if('errors' not in akasaa_data):
+        #         for i in akasaa_data['data']['results']:
+        #             for a in i['trips']: 
+        #                 for b in a['journeysAvailableByMarket'].values():
+        #                     for c in b:
+        #                         for d in c['segments']:
+        #                             for e in d['legs']:
+        #                                 origin = e['designator']['origin']
+        #                                 destination = e['designator']['destination']
+        #                                 for i in airport:
+        #                                     if(origin in i['code']):
+        #                                         e['designator']['origin'] = i['name']
+        #                                     if(destination in i['code']):
+        #                                         e['designator']['destination'] = i['name']
+        #                         fare_key = c['fares'][0]['fareAvailabilityKey']
+        #                         print(fare_key)
+        #                         result = [d for d in akasaa_data['data']['faresAvailable'].values() if d['fareAvailabilityKey'] == fare_key]
+        #                         for e in result:
+        #                             price = e['totals']['fareTotal']
+        # except:
+        #     akasa_data = []
 
     route = [
         {
@@ -1130,6 +1129,7 @@ def loader_list(request):
     markup_fix = list(Markup.objects.filter(markup_type="domestic", user_type=grp,amount_type= 'fixed').values())
     markup_per = list(Markup.objects.filter(markup_type="domestic", user_type=grp,amount_type='percent').values())
     all_markup = markup_fix + markup_per
+    
     for air_name in all_markup:
         test_air = air_name["airline_type"]
         if test_air:
@@ -1142,6 +1142,7 @@ def loader_list(request):
         test_air = air_name_int["airline_type"]
         if test_air:
             all_airline_type_int.append(test_air)
+    print(all_airline_type_int)
         
     if (radio1 == "one-way"):
         airlist = []
@@ -1265,7 +1266,7 @@ def loader_list(request):
             "radio1" : radio1,
             "search_sdata" : search_sdata,
             "token" : token,
-            "akasaa_data":akasaa_data,
+            # "akasaa_data":akasaa_data,
             "travelDate_akasa":travelDate_akasa,
             "akasa_token":akasa_token,
             "comm": list_comm,
@@ -1290,7 +1291,7 @@ def loader_list(request):
         "token" : token,
         "num" : num,
         "akasa_token" : akasa_token,
-        "akasaa_data" : akasaa_data
+        # "akasaa_data" : akasaa_data
     }
     return JsonResponse(context)
 
@@ -1303,7 +1304,6 @@ def search_flight(request):
     for key, value in request.GET.items():
         data[key] = value
     promo = list(Promocode.objects.all().values())
-
     num = [int(data['ADULT']),int(data['CHILD']),int(data['INFANT'])]
     Person = sum(num)
     token = None
@@ -1341,7 +1341,6 @@ def search_flight(request):
     except:
         pass
     data['token'] = token
-
 
     context={
         'data': data,
