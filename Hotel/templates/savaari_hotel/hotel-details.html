@@ -51,7 +51,7 @@
               <h3>
 
                 {% if data %}
-                ₹{{data.hotel.ops.0.ris.0.tp|floatformat:2}}
+                ₹{{data.hotel.ops.0.tp|floatformat:2}}
                 {% else %}
                 ₹ {{Price|floatformat:2}}
                 {% endif %}
@@ -415,7 +415,7 @@
                           <small>
                             <del>₹1,00,00</del>
                           </small>
-                          ₹{{rooms.ris.0.tp}}
+                          ₹{{rooms.tp}}
                         </h3>
                       </div>
                       <div class="col text-right">

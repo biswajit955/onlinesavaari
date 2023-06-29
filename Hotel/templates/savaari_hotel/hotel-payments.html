@@ -246,7 +246,7 @@ body.active {margin: 0; height: 100%; overflow: hidden}
 											<div class="row">
 												<div class="col-12 mt-4">
 													<div class="total-pay">
-														<h1>₹ {{data.hInfo.ops.0.ris.0.tp}}</h1>
+														<h1>₹ {{data.hInfo.ops.0.tp}}</h1>
 														<button type="button" class="btn btn-red" id="rzp-button1">Pay Now</button>
 													</div>
 													<p class="small m-0">
@@ -313,7 +313,7 @@ body.active {margin: 0; height: 100%; overflow: hidden}
 											<div class="row">
 												<div class="col-12 mt-4">
 													<div class="total-pay">
-														<h1>₹ {{data.hInfo.ops.0.ris.0.tp}}</h1>
+														<h1>₹ {{data.hInfo.ops.0.tp}}</h1>
 														<button class="btn btn-red" >Pay Now</button>
 													</div>
 													<p class="small m-0">
@@ -343,7 +343,7 @@ body.active {margin: 0; height: 100%; overflow: hidden}
 												<div class="row">
 													<div class="col-12 mt-4">
 														<div class="total-pay">
-															<h1>₹ {{data.hInfo.ops.0.ris.0.tp}}</h1>
+															<h1>₹ {{data.hInfo.ops.0.tp}}</h1>
 		
 															{% comment %} <button  ></button> {% endcomment %}
 															<input type="submit" class="btn btn-red" id="btn-wallet" value="Pay Now">
@@ -645,18 +645,18 @@ body.active {margin: 0; height: 100%; overflow: hidden}
 							
 							<p>
 								<span>Total Room Price</span>
-								<span>₹ {{data.hInfo.ops.0.ris.0.tfcs.BF}}</span>
+								<span>₹ {{total_rs}}</span>
 							</p>
 							
 							
 							<p>
 								<span>Convenience Fee</span>
-								<span>₹ {{data.hInfo.ops.0.ris.0.tfcs.TAF}}</span>
+								<span>₹ {{total_tax}}</span>
 							</p>
 							<div class="total-pay">
 								<h3>
 									<span>You Pay :</span>
-									<span>₹ {{data.hInfo.ops.0.ris.0.tp}}</span>
+									<span>₹ {{data.hInfo.ops.0.tp}}</span>
 								</h3>
 							</div>
 						</div>
