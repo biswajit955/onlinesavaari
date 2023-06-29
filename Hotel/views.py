@@ -76,6 +76,8 @@ def hotel_markup_filter_one_hotel(price,grp,rating):
 
 class HotelHomeView(View):
     def get(self, request, *args, **kwargs):
+        result = request.GET.get('result', None)
+        request.session['no_of_rooms'] = result
         return render(request, 'savaari_hotel/index.html')
 
     def post(self, request, *args, **kwargs):
@@ -83,18 +85,22 @@ class HotelHomeView(View):
         grp = find_group(request.user)
 
         if request.method == 'POST':
+            no_of_rooms = request.session.get('no_of_rooms')
+            if no_of_rooms is None:
+                no_of_rooms = 1
             city_name = request.POST.get('city_name')
             check_in_date = request.POST.get('check_in_date')
             check_in_time = request.POST.get('check_in_time')
             check_out_date = request.POST.get('check_out_date')
             check_out_time = request.POST.get('check_out_time')
-            no_of_adultes = request.POST.get('no_of_adultes')
-            no_of_child = request.POST.get('no_of_child')
+            no_of_adultes = request.POST.get('no_of_adulte')
+            no_of_childs = request.POST.get('no_of_child')
             no_of_day = datetime.strptime(check_out_date, "%d-%m-%Y")-datetime.strptime(check_in_date, "%d-%m-%Y")
             check_in_date = datetime.strptime(check_in_date, "%d-%m-%Y").strftime('%Y-%m-%d')
             check_out_date = datetime.strptime(check_out_date, "%d-%m-%Y").strftime('%Y-%m-%d')
-            if no_of_child == None:
-                no_of_child = 0
+            print(no_of_adultes)
+            if no_of_childs == None:
+                no_of_childs = 0
 
             city_name = city_name.split(',')[0]
             
@@ -132,13 +138,22 @@ class HotelHomeView(View):
                 return render(request, 'savaari_hotel/index.html')
             
             else:
+                roomInfo= []
                 age_of_child = []
-                if int(no_of_child) > 0:
-                    for i in range(int(no_of_child)):
-                        age_of_child.append(10)
-                    roomInfo = {"numberOfAdults": int(no_of_adultes),"numberOfChild": int(no_of_child),"childAge": age_of_child},
-                else:
-                    roomInfo = {"numberOfAdults": int(no_of_adultes),"numberOfChild": int(no_of_child)},
+                print(no_of_rooms,"no_of_rooms")
+                if no_of_rooms is not None:
+                    for room in range(1,int(no_of_rooms)+1):
+                        a =request.POST.get(f"no_of_child{room}")
+                        if int(a)> 0:
+                            for i in range(int(request.POST.get(f"no_of_child{room}"))):
+                                age_of_child.append(10)
+                            one_roomInfo = {"numberOfAdults": request.POST.get(f"no_of_adulte{room}"),"numberOfChild": request.POST.get(f"no_of_child{room}"),"childAge": age_of_child}
+                            roomInfo.append(one_roomInfo)
+                            age_of_child = []
+                        else:
+                            one_roomInfo = {"numberOfAdults": request.POST.get(f"no_of_adulte{room}"),"numberOfChild": request.POST.get(f"no_of_child{room}")}
+                            roomInfo.append(one_roomInfo)
+                print(roomInfo)
 
                 body= {
                 "searchQuery": {
@@ -200,7 +215,7 @@ class HotelHomeView(View):
                                                                                     'check_in_date':check_in_date,
                                                                                     'check_out_date':check_out_date,
                                                                                     'no_of_adultes':no_of_adultes,
-                                                                                    'no_of_child':no_of_child})
+                                                                                    'no_of_child':no_of_childs})
                 elif resp.status_code == 400:
                     json_data = resp.json()
                     hotel_data = json_data['errors'][0]['message']
@@ -221,11 +236,19 @@ class HotelListView(View):
 
         resp = requests.post(url = hotel_details_api, data=json.dumps(body),headers=headers)
         data = resp.json()
+        with open("one_hotel.json", 'w') as file:
+            json.dump({}, file)
+
+        with open("one_hotel.json", "w") as file:
+            json.dump(data, file)
         if resp.status_code == 200:
-            des = json.loads(data['hotel']["des"])
-            des_keys = [k.upper() for k in des.keys() if k != "attractions" and k != "dining"]
-            des_values = [v for k, v in des.items() if k != "attractions"and k != "dining"]
-            des_list = zip(des_keys, des_values)
+            try:
+                des = json.loads(data['hotel']["des"])
+                des_keys = [k.upper() for k in des.keys() if k != "attractions" and k != "dining"]
+                des_values = [v for k, v in des.items() if k != "attractions"and k != "dining"]
+                des_list = zip(des_keys, des_values)
+            except:
+                des_list =""
 
             insts = data['hotel']["inst"]
             inst_list = []
@@ -303,14 +326,6 @@ class HotelDetailsView(View):
         hotel_review_resp = requests.post(url = hotel_review_url, data=json.dumps(hotel_review_body),headers=headers)
         hotel_review_data = hotel_review_resp.json()
 
-        with open("one_hotel.json", 'w') as file:
-
-            # Write an empty JSON object to the file
-            json.dump({}, file)
-
-        with open("one_hotel.json", "w") as file:
-            json.dump(hotel_review_resp.json(), file)
-
         check_in = datetime.strptime(hotel_review_data['query']['checkinDate'], '%Y-%m-%d')
         check_out = datetime.strptime(hotel_review_data['query']['checkoutDate'], '%Y-%m-%d')
         date_diff = check_out.day - check_in.day
@@ -321,23 +336,28 @@ class HotelDetailsView(View):
         grp = find_group(request.user)
 
         hotel_review_data['hInfo']['ops'][0]['ris'][0]['tfcs']['BF'] = hotel_markup_filter_one_hotel(hotel_review_data['hInfo']['ops'][0]['ris'][0]['tfcs']['BF'],grp,hotel_review_data['hInfo']['rt'])
-
         hotel_review_data['hInfo']['ops'][0]['ris'][0]['tp'] = hotel_markup_filter_one_hotel(hotel_review_data['hInfo']['ops'][0]['ris'][0]['tp'],grp,hotel_review_data['hInfo']['rt'])
+
+        total_rs = sum(room['tfcs']['BF'] for room in hotel_review_data['hInfo']['ops'][0]['ris'] if room['tfcs']['BF'])
+        total_tax = sum(room['tfcs']['TAF'] for room in hotel_review_data['hInfo']['ops'][0]['ris'] if room['tfcs']['TAF'])
         return render(request, 'savaari_hotel/hotel_payment_review.html',context={'data':hotel_review_data,
                                                                                   'cancellation_data':hotel_cancellation_policy_data,
                                                                                   'check_out':check_out,
                                                                                   'check_in':check_in,
-                                                                                  'date_diff':date_diff})
+                                                                                  'date_diff':date_diff,
+                                                                                  'total_rs':total_rs,
+                                                                                  'total_tax':total_tax})
 
     def post(self, request,ids,ops_ids, *args, **kwargs):
         review_body = {"hotelId": ids,"optionId":ops_ids}
 
         resp = requests.post(url = hotel_review_url, data=json.dumps(review_body),headers=headers)
         review_data = resp.json()
+        travellerInfo =[]
+        for num in range(1,len(review_data['hInfo']['ops'][0]['ris'])+1):
+            traveller = {"fN": request.POST.get(f'first_name{num}'),"lN": request.POST.get(f'first_name{num}'),"ti": request.POST.get(f'title{num}'),"pt": "ADULT","pan": "ABCDE1234F"}
+            travellerInfo.append(traveller)
 
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        title = request.POST.get('title')
         email = request.POST.get('email')
         mobile = request.POST.get('mobile')
 
@@ -346,15 +366,7 @@ class HotelDetailsView(View):
             "bookingId": review_data['bookingId'],
             "roomTravellerInfo": [
                 {
-                    "travellerInfo":[
-                        {
-                        "fN": first_name,
-                        "lN": last_name,
-                        "ti": title,
-                        "pt": "ADULT",
-                        "pan": "ABCDE1234F"
-                        }
-                    ]
+                    "travellerInfo":travellerInfo
                 }
             ],
             "deliveryInfo": {
@@ -375,7 +387,7 @@ class HotelDetailsView(View):
                 }
             ]
         }
-        request.session['first_name'] = first_name
+        request.session['first_name'] = request.POST.get('first_name1')
         request.session['email'] = email
         request.session['mobile'] = mobile
         request.session['review_data'] = review_data
@@ -389,6 +401,11 @@ class HotelPaymentView(View):
         email = request.session.get('email')
         mobile = request.session.get('mobile')
         review_data = request.session.get('review_data')
+        with open("one_hotel.json", 'w') as file:
+            json.dump({}, file)
+
+        with open("one_hotel.json", "w") as file:
+            json.dump(review_data, file)
         try:
             wallet_balance = (WalletDetails.objects.filter(username=request.user)).latest('id').wallet_balance
         except:
@@ -400,8 +417,11 @@ class HotelPaymentView(View):
         grp = find_group(request.user)
         review_data['hInfo']['ops'][0]['ris'][0]['tp'] = hotel_markup_filter_one_hotel(review_data['hInfo']['ops'][0]['ris'][0]['tp'],grp,review_data['hInfo']['rt'])
 
-        amount1 = review_data['hInfo']['ops'][0]['ris'][0]['tp']
-        first_name = first_name
+        total_rs = sum(room['tfcs']['BF'] for room in review_data['hInfo']['ops'][0]['ris'] if room['tfcs']['BF'])
+        total_tax = sum(room['tfcs']['TAF'] for room in review_data['hInfo']['ops'][0]['ris'] if room['tfcs']['TAF'])
+
+        print(review_data['bookingId'])
+        amount1 = review_data['hInfo']['ops'][0]['tp']
         email = email
         mobile = mobile
         bookingId= review_data['hInfo']['id']
@@ -439,7 +459,9 @@ class HotelPaymentView(View):
                                                                             "easebuzzjson":json.dumps(result),
                                                                              'email':email,
                                                                              'mobile':mobile,
-                                                                             'wallet_balance':wallet_balance})
+                                                                             'wallet_balance':wallet_balance,
+                                                                             'total_rs':total_rs,
+                                                                             'total_tax':total_tax})
 
     def post(self, request, *args, **kwargs):
         review_data = request.session.get('review_data')
@@ -454,10 +476,14 @@ class HotelPaymentView(View):
 
         if resp.status_code == 400:
             resp = requests.post(url = hotel_booking_url, data=json.dumps(booking_body),headers=headers)
+            with open("one_hotel.json", 'w') as file:
+                json.dump({}, file)
 
+            with open("one_hotel.json", "w") as file:
+                json.dump(resp.json(), file)
             if resp.status_code == 200:
                 booking_data = resp.json()
-                print(booking_data)
+                print(booking_data,",,,,,,,,,,,,,,,,,,,,")
 
                 amount = review_data['hInfo']['ops'][0]['tp']
                 print(amount)

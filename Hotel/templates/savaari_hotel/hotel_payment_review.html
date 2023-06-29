@@ -372,7 +372,9 @@
 										</div>
 									</div>
 									<div class="col-md-9">
-										<h4> {{data.hInfo.ad.adr}},{{data.hInfo.ad.adr2}},{{data.hInfo.ad.city.name}},{{data.hInfo.ad.state.name}},{{data.hInfo.ad.postalCode}}</h4>
+										<h3 class="mb-1">{{data.hInfo.name}}</h3>
+										<h5 style="color: darkgray;"> {{data.hInfo.ad.adr}},{{data.hInfo.ad.adr2}},{{data.hInfo.ad.city.name}},{{data.hInfo.ad.state.name}},{{data.hInfo.ad.postalCode}}</h5>
+										<br>
 										<div class="row">
 											<div class="col-md-6">
 												<div class="check-in-out">												
@@ -389,12 +391,14 @@
 												</div>
 											</div>
 											<div class="col-md-6">
-												<h4 class="mb-1">{{data.hInfo.name}}</h4>
 												<p class="mb-1">
 													<b>{{ date_diff|add:+1 }} Days & {{ date_diff }} Nights</b>
 												</p>
 												<p class="mb-1">
-													<b>Room 1:</b> {{data.hInfo.ops.0.ris.0.adt}} Adults & {{data.hInfo.ops.0.ris.0.chd}} Child
+												{% for room in data.hInfo.ops.0.ris%}
+													<b>Room {{ forloop.counter }}:</b> {{room.adt}} Adults & {{room.chd}} Child
+													<br>
+												{% endfor %}
 												</p>
 											</div>
 										</div>
@@ -445,17 +449,19 @@
 								<input id="seat__url" type="hidden" value="{% url 'select_seat' %}"> {% endcomment %}
 							{% csrf_token %}
 							<div>
+								<div class="col-12">
+									<h3 style="color: darkgray;" >Traveller Information</h3>
+								</div>
+								{% for room in data.hInfo.ops.0.ris%}
 								<div class="row person__detail">
-									<div class="col-12">
-										<h5 class="mb-2">Traveller Information</h5>
-									</div>
+									
 									<div class="col-md-12 col-12">
 										<input type="hidden" name="pp" value='ADULT'>
-										<h5 style="margin: 0">Adult</h5>
+										<h5 style="margin: 0">Room {{ forloop.counter }}</h5>
 									</div>
 									<div class="col-md-2 col-4 pr-0">
 										<div class="form-group">
-											<select name="title" id="title" class="form-control" required>
+											<select name="title{{ forloop.counter }}" id="title" class="form-control" required>
 												<option value selected disabled hidden>Title</option>
 												<option value="Mr">MR.</option>
 												<option value="Mrs">MRS.</option>
@@ -465,17 +471,16 @@
 									</div>
 									<div class="col-md-5 col-6">
 										<div class="form-group">
-											<input style="text-transform:uppercase" type="text" class="form-control" name="first_name" placeholder="First Name" required>
+											<input style="text-transform:uppercase" type="text" class="form-control" name="first_name{{ forloop.counter }}" placeholder="First Name" required>
 										</div>
 									</div>
 									<div class="col-md-5">
 										<div class="form-group">
-											<input style="text-transform:uppercase" type="text" class="form-control" name="last_name" placeholder="Last Name">
+											<input style="text-transform:uppercase" type="text" class="form-control" name="last_name{{ forloop.counter }}" placeholder="Last Name">
 										</div>
 									</div>
-									
-
 							    </div>
+								{% endfor %}
 								
 								<div class="row">
 									<div class="col-12">
@@ -605,11 +610,11 @@
 							
 							<p>
 								<span>Hotel Charges</span>
-								<span>₹ {{data.hInfo.ops.0.ris.0.tfcs.BF}}</span>
+								<span>₹ {{total_rs|floatformat:2}}</span>
 							</p>
 							<p>
 								<span>Taxes & Management Fee</span>
-								<span>₹ {{data.hInfo.ops.0.ris.0.tfcs.TAF}}</span>
+								<span>₹ {{total_tax|floatformat:2}}</span>
 							</p>
 						
 							<hr>
@@ -636,7 +641,7 @@
 
 								<h5 class="green">
 									<span>Total Savings</span>
-									<span class="savaari-save">₹ {{data.hInfo.ops.0.ris.0.tp}}</span>
+									<span class="savaari-save">₹ {{data.hInfo.ops.0.tp}}</span>
 								</h5>
 							</div>
 						</div>

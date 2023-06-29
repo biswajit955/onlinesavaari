@@ -1,17 +1,85 @@
-// Index Add Room
-$(document).ready(function() {
-    $(".add_room").click(function() {
-        var n = $('.room-sec').length + 1;
+$(document).ready(function () {
+    function attachButton(roomSection) {
+        const addAdultButton = roomSection.find(".add-adult");
+        const subtractAdultButton = roomSection.find(".sub-adult");
+        const adultInput = roomSection.find('input[name^="no_of_adulte"]');
+
+        addAdultButton.click(function () {
+            if (parseInt(adultInput.val()) < 10) {
+                adultInput.val(parseInt(adultInput.val()) + 1);
+            }
+        });
+
+        subtractAdultButton.click(function () {
+            if (parseInt(adultInput.val()) > 0) {
+                adultInput.val(parseInt(adultInput.val()) - 1);
+            }
+        });
+
+        const addChildButton = roomSection.find(".add-child");
+        const subtractChildButton = roomSection.find(".sub-child");
+        const childInput = roomSection.find('input[name^="no_of_child"]');
+
+        addChildButton.click(function () {
+            if (parseInt(childInput.val()) < 10) {
+                childInput.val(parseInt(childInput.val()) + 1);
+            }
+        });
+
+        subtractChildButton.click(function () {
+            if (parseInt(childInput.val()) > 0) {
+                childInput.val(parseInt(childInput.val()) - 1);
+            }
+        });
+    }
+
+    $(".add_room").click(function () {
+        var n = $(".room-sec").length + 1;
         if (10 < n) {
-            alert('You have reached maximum number of rooms!');
+            alert("You have reached the maximum number of rooms!");
             return false;
         }
-        $(".room_list").append('<div class="room-sec"><div class="add-person"><h5>Room <span class="room-number">' + n + '</span>:</h5><div class="person-quantity"><span>Adults <small>Above 12 years</small></span><div class="quantity-box"><button type="button" class="sub">-</button><input type="number" required class="num" value="1" name="no_of_adultes" /><button type="button" class="add">+</button></div></div><div class="person-quantity"><span>Child <small>Below 12 Years</small></span><div class="quantity-box"><button type="button" class="sub">-</button><input type="number" value="0" min="0" max="9" name="no_of_child" /><button type="button" class="add">+</button></div></div></div><div class="text-right"><a href="javascript:void(0)" class="remove-box">Remove</a></div></div>');
+
+        $.ajax({
+            type: "GET",
+            url: "/Hotel/",
+            data: {
+                "result": n,
+            },
+            dataType: "json",
+            success: function (data) {
+                // any process in data
+                alert("successfull")
+            },
+            failure: function () {
+                alert("failure");
+            }
+        });
+        console.log(n);
+        var newRoomSection =
+            '<div class="room-sec"><div class="add-person"><h5>Room <span class="room-number">' +
+            n +
+            '</span>:</h5><div class="person-quantity"><span>Adults <small>Above 12 years</small></span><div class="quantity-box"><button type="button" class="sub-adult">-</button><input type="number" required class="num" value="1" name="no_of_adulte' +
+            (n) +
+            '" /><button type="button" class="add-adult">+</button></div></div><div class="person-quantity"><span>Child <small>Below 12 Years</small></span><div class="quantity-box"><button type="button" class="sub-child">-</button><input type="number" value="0" min="0" max="9" name="no_of_child' +
+            (n) +
+            '" /><button type="button" class="add-child">+</button></div></div></div><div class="text-right"><a href="javascript:void(0)" class="remove-box">Remove</a></div></div>';
+
+        console.log(newRoomSection);
+        var roomSection = $(newRoomSection);
+        $(".room_list").append(roomSection);
+
+        attachButton(roomSection);
     });
-    $('body').on('click', '.remove-box', function() {
-        $(this).parent().parent('div.room-sec').remove()
+
+    $("body").on("click", ".remove-box", function () {
+        $(this).parent().parent().remove();
+        n--;
     });
+    attachButton($(".room-sec"));
 });
+
+
 
 // Flatpicker
 flatpickr('js-flatpickr-time', {
@@ -27,24 +95,24 @@ flatpickr('js-flatpickr-time', {
 $("#country-select").IconSelectBox(true);
 
 // Quantity Box
-$(".add").click(function() {
+$(".add").click(function () {
     if ($(this).prev().val() < 10) {
         $(this)
             .prev()
             .val(+$(this).prev().val() + 1);
     }
 });
-$(".sub").click(function() {
+$(".sub").click(function () {
     if ($(this).next().val() > 1) {
         if ($(this).next().val() > 1)
             $(this)
-            .next()
-            .val(+$(this).next().val() - 1);
+                .next()
+                .val(+$(this).next().val() - 1);
     }
 });
 
 // Date Picker
-$(function() {
+$(function () {
     $(".datepicker").datepicker({
         dateFormat: "dd-mm-yy",
     });
@@ -55,18 +123,18 @@ $(function() {
 });
 
 // Phone Number
-$(document).ready(function() {
+$(document).ready(function () {
     $(".input-phone").intlInputPhone();
 });
 
 // Price Range Slilder
-$(function() {
+$(function () {
     $("#price-range").slider({
         range: true,
         min: 0,
         max: 500,
         values: [75, 300],
-        slide: function(event, ui) {
+        slide: function (event, ui) {
             $("#amount").val("₹" + ui.values[0] + " - ₹" + ui.values[1]);
         },
     });
@@ -123,7 +191,7 @@ $(".hotel-list-slider").owlCarousel({
 });
 
 // Hotel Details Slider
-$(document).ready(function() {
+$(document).ready(function () {
     var bigimage = $("#big-slider");
     var thumbs = $("#thumbs-slider");
     //var totalslides = 10;
@@ -147,7 +215,7 @@ $(document).ready(function() {
         .on("changed.owl.carousel", syncPosition);
 
     thumbs
-        .on("initialized.owl.carousel", function() {
+        .on("initialized.owl.carousel", function () {
             thumbs.find(".owl-item").eq(0).addClass("current");
         })
         .owlCarousel({
@@ -201,7 +269,7 @@ $(document).ready(function() {
         }
     }
 
-    thumbs.on("click", ".owl-item", function(e) {
+    thumbs.on("click", ".owl-item", function (e) {
         e.preventDefault();
         var number = $(this).index();
         bigimage.data("owl.carousel").to(number, 300, true);
@@ -210,30 +278,30 @@ $(document).ready(function() {
 
 // Smooth Scroll
 $('.scroll')
-.not('[href="#"]')
-.not('[href="#0"]')
-.click(function (event) {
-    if (
-        location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
-        &&
-        location.hostname == this.hostname
-    ) {
-        var target = $(this.hash);
-        target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-        if (target.length) {
-            event.preventDefault();
-            $('html, body').animate({
-                scrollTop: target.offset().top
-            }, 1000, function () {
-                var $target = $(target);
-                $target.focus();
-                if ($target.is(":focus")) {
-                    return false;
-                } else {
-                    $target.attr('tabindex', '-1');
+    .not('[href="#"]')
+    .not('[href="#0"]')
+    .click(function (event) {
+        if (
+            location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+            &&
+            location.hostname == this.hostname
+        ) {
+            var target = $(this.hash);
+            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+            if (target.length) {
+                event.preventDefault();
+                $('html, body').animate({
+                    scrollTop: target.offset().top
+                }, 1000, function () {
+                    var $target = $(target);
                     $target.focus();
-                };
-            });
+                    if ($target.is(":focus")) {
+                        return false;
+                    } else {
+                        $target.attr('tabindex', '-1');
+                        $target.focus();
+                    };
+                });
+            }
         }
-    }
-});
+    });
