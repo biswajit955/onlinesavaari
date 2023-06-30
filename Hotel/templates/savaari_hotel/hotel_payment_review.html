@@ -448,7 +448,7 @@
 								{% comment %} <input id="pay__url" type="hidden" value="{% url  'get_payment' %}">
 								<input id="seat__url" type="hidden" value="{% url 'select_seat' %}"> {% endcomment %}
 							{% csrf_token %}
-							<div>
+							 <div>
 								<div class="col-12">
 									<h3 style="color: darkgray;" >Traveller Information</h3>
 								</div>
@@ -469,19 +469,20 @@
 											</select>
 										</div>
 									</div>
-									<div class="col-md-5 col-6">
+									  <div class="col-md-5 col-6">
 										<div class="form-group">
-											<input style="text-transform:uppercase" type="text" class="form-control" name="first_name{{ forloop.counter }}" placeholder="First Name" required>
+											<input style="text-transform:uppercase" type="text" class="form-control first-name" name="first_name{{ forloop.counter }}" placeholder="First Name" required oninput="validateInput(this)">
+
 										</div>
 									</div>
 									<div class="col-md-5">
 										<div class="form-group">
-											<input style="text-transform:uppercase" type="text" class="form-control" name="last_name{{ forloop.counter }}" placeholder="Last Name">
+											<input style="text-transform:uppercase" type="text" class="form-control" name="last_name{{ forloop.counter }}" placeholder="Last Name" oninput="validateInput(this)">
 										</div>
 									</div>
-							    </div>
-								{% endfor %}
+							    </div>   
 								
+								{% endfor %}	
 								<div class="row">
 									<div class="col-12">
 										<h5 class="mb-2">Contact Details</h5>
@@ -913,7 +914,7 @@
 				</div>
 				`
 			}
-			$('.person__detail').append(`
+			 $('.person__detail').append(`
 				<div class="col-12">
 			   		<input type="hidden" name="pp${i}" value=${pp}>
 					<h5 style="margin: 0">${pp}</h5>
@@ -930,7 +931,7 @@
 				</div>
 				<div class="col-md-5 col-8">
 					<div class="form-group">
-						<input type="text" class="form-control" name="first_name${i}" placeholder="First Name" required>
+						 <input type="text" class="form-control first-name" name="first_name${i}" placeholder="First Name" required>
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -940,7 +941,8 @@
 				</div>
 				${date}
 				${frequentflyer}
-			`)
+			`) 
+
 		}
 
 	})
@@ -1290,6 +1292,43 @@
 		}
 
 	})
-</script>							
+</script>	
+  <script>
+ function validateInput(element) {
+    var firstName = $(element).val();
+    var pattern = /^[A-Za-z\s]+$/;
+    if (!pattern.test(firstName)) {
+        $(element).val('');
+        return;
+    }
+    var previousFirstNames = $('.first-name').not(element);
+    var duplicateExists = previousFirstNames.filter(function() {
+        return $(this).val().toUpperCase() === firstName.toUpperCase();
+    }).length > 0;
+    if (duplicateExists) {
+        alert("You cannot enter the same name in multiple rooms.");
+        $(element).val(''); 
+    }
+} 
+
+</script> 
+ {% comment %} <script>
+function validateInput(element) {
+    var firstName = $(element).val().toUpperCase(); 
+    var previousFirstNames = $('.first-name').not(element);
+    var duplicateExists = previousFirstNames.filter(function() {
+        return $(this).val().toUpperCase() === firstName;
+    }).length > 0;
+    if (duplicateExists) {
+        alert("You cannot enter the same name in multiple rooms.");
+        $(element).val(''); 
+    }
+}
+</script> 
+<script>
+function validateInput(input) {
+    input.value = input.value.replace(/[^a-zA-Z]/g, '');
+}
+</script> {% endcomment %}
 </body>
 </html>
