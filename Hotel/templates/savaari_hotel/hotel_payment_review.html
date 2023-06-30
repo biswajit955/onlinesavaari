@@ -838,6 +838,10 @@
 	<script src="{% static 'main/js/src/akasa_sevice.js' %}"></script>
 
 <script type="text/javascript">
+	let hotel_review_data = JSON.parse('{{ hotel_review_data | escapejs }}')
+	console.log(hotel_review_data,"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+
+	
 	let ssr = JSON.parse('{{ akasa_ssr|escapejs }}')
 	let seat = JSON.parse('{{ seat|escapejs }}')
 	let sr = new Service(ssr, seat, $('#service-container'), parseFloat('{{ apiamount }}'), parseFloat('{{akasaa_data.data.breakdown.totalAmount}}'))
