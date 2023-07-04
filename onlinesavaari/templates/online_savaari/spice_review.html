@@ -983,7 +983,8 @@
 						</div>	
 
 						<input type="hidden" name="spice_token" value="{{spice_token}}">
-						<input type="hidden" name="apiamount" value="{{apiamount}}">
+						<input type="hidden" name="spice_seat" value="{{spice_seat}}">
+						<input type="hidden" name="spice_ssr" value="{{spice_ssr}}">
 						<input type="hidden" name="amount" value="{{ spice_data.Envelope.Body.PriceItineraryResponse.Booking.BookingSum.BalanceDue }}">
 						<input type="hidden" name="Person" value="{{Person}}">
 						<input type="hidden" name="adult" value="{{adult}}">
@@ -1051,7 +1052,7 @@
 						<input type="hidden" name="passport_no" value="None">
 						{% endfor %}
 						{% endif %}
-						<div id="makepayment" class="col-md-4 mt-3">
+						<<div id="makepayment" class="col-md-4 mt-3">
 							{%if not request.user.is_authenticated %}
 							<button type="button" id="btn__submit" class="btn btn-block btn-red" data-toggle="modal" data-target="#loginModal">
 								Edit
@@ -1060,6 +1061,16 @@
 							<button id="btn__submit" class="btn btn-block btn-red" type="submit" >
 							Make payment
 							<i class="la la-long-arrow-right la-lg"></i>
+							
+							{% endif %}
+							{% if data.conditions.isBA %}
+							<!-- <button id="btn__submit_hold" class="btn btn-block btn-red" type="button">
+								Hold
+								<i class="la la-long-arrow-right la-lg"></i>
+							</button> -->
+							<button type="button" id="btn__submit" class="btn btn-block btn-red" data-toggle="modal" data-target="#confirmhold">
+								Hold
+								<i class="la la-long-arrow-right la-lg"></i>
 							</button>
 							{% endif %}
 						</div>			
@@ -1478,47 +1489,54 @@
 	<!-- Custom -->
 	<script src="{% static 'main/js/default.js' %}"></script>
 
-	<script src="{% static 'main/js/src/service.js' %}"></script>
+	<!-- <script src="{% static 'main/js/src/service.js' %}"></script> -->
+	<script src="{% static 'main/js/src/spice_service.js' %}"></script>
 	<script src="{% static 'main/js/src/insurance.js' %}"></script>
 <script type="text/javascript">
-	console.log({{num}})
-	{% if data %}
-	let alldata = JSON.parse('{{ jsondata | escapejs }}')
-	console.log(alldata)
+	let ssr = $('[name="spice_ssr"]').val();
+	let seat = $('[name="spice_seat"]').val();
+	//console.log(JSON.parse(ssr));
+	//console.log(JSON.parse(seat));
 
-	const serv = new Service(alldata, $('#service-container'), {{Person}})
-	const cl_in = new Insurance(alldata, {{Person}}, true)
-	serv.paxobjsetter()
-	serv.rend()
+	//console.log(ssr);
+	//console.log(seat);
+
+	//let ssr = JSON.parse('{{ spice_ssr|escapejs }}')
+	//let seat = JSON.parse('{{ spice_seat|escapejs }}')
+	//let spice_data1 = JSON.parse(spice_data)
+	//console.log(ssr);
+	//console.log(seat);
+	//let spdata='{{spice_data}}';
+	//console.log('{{spice_data}}');
+	//console.log(JSON.parse(spdata));
+	//console.log(spice_data1);
+	let person = $('[name="Person"]').val()
+	let adult = $('[name="adult"]').val()
+	let child = $('[name="child"]').val()
+	let infant = $('[name="infant"]').val()
+
+	let sr = new Service(ssr, seat, person,adult,child,infant, $('#service-container'), parseFloat('{{ apiamount }}'), parseFloat('{{spice_data.Envelope.Body.PriceItineraryResponse.Booking.BookingSum.BalanceDue}}'))
+	sr.rend()
 	$('#service-container').find("#border-top-contact-tab").click(function(){
-		serv.seatdata()
+		sr.seatdata()
 	})
-	serv.slider()
-	console.log(serv.meal, serv.tripinfo, serv.bagg)
+	sr.slider()
+	//console.log(sr.srr)
+	//console.log(sr.seat)
 
-	{% elif result %}
-	let alldata = JSON.parse('{{ jsonresult | escapejs }}')
-	console.log(alldata)
-	let flight_number = '{{result.0.flight_number}}'.split(" ")[0];
-	let series_img =  `{% static 'flight/airline_logo/' %}${flight_number}.png`;
-	let dur = findDur('{{result.0.arival_time}}', '{{ result.0.departure_time }}')
-	$('.series_dur').text(dur)
-	function findDur(a, b) {
-        let at = new Date(`${(new Date()).getDate()} ${a}`)
-		let dt = new Date(`${(new Date()).getDate()} ${b}`)
-		let min = Math.floor((((at - dt)/1000)%3600)/60)
-		let hour = Math.floor(((at - dt)/1000)/3600)
-		return `${hour}h ${min}m`
-    }
-	$('#series_img').attr('src', series_img);
-	{% endif %}
 	$(document).ready(function(){
+		let spice_ssr = $('[name="spice_ssr"]').val();
+		let spice_seat = $('[name="spice_seat"]').val();
+		console.log(JSON.parse(spice_ssr));
+		console.log(JSON.parse(spice_seat));
+		// console.log(spice_seat)
+
 		let person = $('[name="Person"]').val()
 		let adult = $('[name="adult"]').val()
 		let child = $('[name="child"]').val()
 		let infant = $('[name="infant"]').val()
 
-		console.log(person, adult, child, infant)
+		//console.log(person, adult, child, infant,"mmmmmmmmmmmmmm")
 		for(let i = 2; i <= person; i++) {
 			let pp;
 			let opt_dis;
@@ -1526,23 +1544,6 @@
 			let miss;
 			let date = "";
 			let frequentflyer = "";
-			let international = `
-			<div class="col-md-5">
-				<div class="form-group">
-					<input type="text" class="form-control" name="passport${i}" placeholder="passport" required>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-						<input type="date" class="datepicker hasDatepicker"  name="exp${i}" placeholder="Expiry date">
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-					<input type="date" class="datepicker hasDatepicker"  name="issue${i}" placeholder="Issued date">
-				</div>
-			</div>
-			`
 			if($('[name="isDomestic"]').val() == 'True'){
 				international = ""
 				console.log($('[name="isDomestic"]').val())
@@ -1624,74 +1625,15 @@
 				${frequentflyer}
 			`)
 		}
-
 	})
 
-	function bookNow(key, price){
-		console.clear();
-		console.log(key);
-
-		window.location.href = "/flight/get_payment/?key="+key+"&amount="+price
-		;
-	};
-
-	console.log(
-		$('[name=Person]').val()
-	)
-
-		
-		
 	let totalAmount = parseFloat($('#total-flight-amount').text());
 	let apiAmount = parseFloat($('input[name="apiamount"]').val())
 	let inscAmount = 0;
 	let save = 0;
 	let mealAdd = 0;
 	let addBag = 0;
-
-	function changeAmount(){
-		if($('#insurance-check').prop('checked')){
-			let person = $('[name=Person]').val()
-			inscAmount = cl_in.amount;
-			serv.insurance = inscAmount
-			serv.test(serv.selection)
-			$('#insurance').remove()
-			$('#add-on').append(`
-			<p id="insurance">
-				<span>
-					Insurance
-					<a onclick="onremove()" href="javascript:void(0)" class="close">
-						<i class="fa fa-close"></i>
-					</a>
-				</span>
-				<span class="green">(+) ₹ ${inscAmount}</span>
-			</p>
-			`)
-			$('#form_url').append(`
-			<input id="insurance-input" type="hidden" name="insurance" value=${inscAmount}>
-			`)
-		}
-		else{
-			cl_in.amount = 0;
-			serv.insurance = cl_in.amount;
-			cl_in.maindata = {};
-			serv.test(serv.selection);
-		}
-	}
 	
-	changeAmount();
-	
-	$('#insurance-check').on('change', function(){
-		if($('#insurance-check').prop('checked')){
-			$('#loginModal3-insurance').addClass('show') 
-			$('#loginModal3-insurance').css({"display": "block", "padding-right": "8px"}) 
-			$('body').addClass('modal-open')
-			$('body').append(`<div class="modal-backdrop fade show"></div>`)
-		} else {
-			changeAmount()
-			$('#insurance-input').remove()
-			$('#insurance').remove()
-		}
-	})
 
 	$('[name="promocode2"]').on('change', function(){
 		save = parseInt(this.value);
@@ -1702,13 +1644,6 @@
 		$('#total-flight-amount').text(Math.round(totalAmount - save + inscAmount + mealAdd + addBag))
 		$('input[name="amount"]').val(Math.round(totalAmount - save + inscAmount + mealAdd + addBag))
 	})
-
-	function onremove(){
-		$('#insurance-check').attr('checked', false);
-		changeAmount()
-		$('#insurance-input').remove()
-		$('#insurance').remove()
-	}
 
 	$('#promo-code-input').keydown(function(){
 		console.log("done")
@@ -1743,9 +1678,9 @@
 	function onremoveMeal(k){
 		$('#meal-add').remove();
 		$(`#addonmeal${k}`).remove()
-		delete serv.selection[k]
-		console.log(serv.selection)
-		serv.test(serv.selection, 'meal')
+		delete sr.selection[k]
+		console.log(sr.selection)
+		sr.test(sr.selection, 'meal')
 		$(`#${k} input`).prop('checked', false)
 		$(`#${k} label`).removeClass('select')
 	}
@@ -1753,9 +1688,9 @@
 		console.log(k)
 		$('#meal-add').remove();
 		$(`#addonbag${k}`).remove()
-		delete serv.bagselection[k]
-		console.log(serv.bagselection)
-		serv.test(serv.bagselection, 'bag')
+		delete sr.bagselection[k]
+		console.log(sr.bagselection)
+		sr.test(sr.bagselection, 'bag')
 		$(`#bagg${k}0 input`).prop('checked', false)
 		$(`#bagg${k}0 label`).removeClass('select')
 	}
@@ -1879,89 +1814,78 @@ $('#gst').click(function(){
 	$("#companyname").val(gst_company)
 })
 
-$('#form_url').on('submit', function(e){
-	e.preventDefault()
-	// console.log(routeinfo)
-	console.log(serv.selection)
-	let straddon = JSON.stringify(serv.selection)
-	let bagaddon = JSON.stringify(serv.bagselection)
-	let seataddon = JSON.stringify(serv.paxobj)
-	let routeinfo = JSON.stringify(serv.routeinfo)
-	let route = JSON.stringify(serv.routedata)
+// $('#form_url').on('submit', function(e){
+// 	e.preventDefault()
+// 	let data = {}
+// 	let checkdata = {}
+// 	$(this).find('select, input').map(function() {
+// 		data[$(this).attr('name')] = $(this).val()
+// 		if ($(this).attr('type') != "hidden" && this.value){
+// 			checkdata[$(this).attr('name')] = $(this).val()
+// 		}
+// 	})
+// 	let straddon = JSON.stringify(sr.selection)
+// 	let bagaddon = JSON.stringify(sr.bagselection)
+// 	let seataddon = JSON.stringify(sr.paxobj)
+// 	console.log(seataddon, bagaddon, straddon)
 	
-	$('#addoninput').remove()
-	$('#bagaddoninput').remove()
-	$('#insuranceinput').remove()
-	$('#routeinfoinput').remove()
-	$('#route').remove()
-	$(this).append(`<input id='addoninput' type="hidden" name="addon" value='${straddon}'>`)
-	$(this).append(`<input id='seatinput' type="hidden" name="seataddon" value='${seataddon}'>`)
-	$(this).append(`<input id='bagaddoninput' type="hidden" name="bagaddon" value='${bagaddon}'>`)
-	$(this).append(`<input id='route' type="hidden" name="route" value='${route}'>`)
-	let data = {}
-	data['addon'] = straddon;
-	data['bagaddon'] = bagaddon;
-	data['seataddon'] = seataddon;
-	let checkdata = {}
-	$(this).find('select, input').map(function() {
-		data[$(this).attr('name')] = $(this).val()
-		if ($(this).attr('type') != "hidden" && this.value){
-			checkdata[$(this).attr('name')] = $(this).val()
-		}
-	})
-	console.log(data)
-	let person = parseInt(data['Person'])
-	console.log(checkdata)
-	let newcheck = {};
-	let pax_data = []
-	for (let i = 0;i<=(person-1);i++){
-		if (i == 0){
-			pax_data.push({
-				first_name: checkdata['first_name'],
-				last_name: checkdata['last_name'],
-				title: checkdata['title'],
-				passport: checkdata['passport'] || "-"
-			})
-		}
-		else {
-			pax_data.push({
-				first_name: checkdata[`first_name${i + 1}`],
-				last_name: checkdata[`last_name${i + 1}`],
-				title: checkdata[`title${i + 1}`],
-				passport: checkdata[`passport${i + 1}`] || "-"
-			})
-		}
-	}	
-	$('#table-body').html("")
-	$('#table-body').append(Object.values(pax_data).map((el, i) => {
-		($.isEmptyObject(cl_in.maindata[`person_${i + 1}`])) || cl_in.maindata[`person_${i + 1}`].map(it => it['passport'] = el['passport'])
-		console.log(cl_in.maindata[`person_${i + 1}`])
-		return `<tr>
-			<th scope="row">${i + 1}</th>
-			<td>${el['title']}</td>
-			<td>${el['first_name']}</td>
-			<td>${el['last_name']}</td>
-			<td>${el['passport']}</td>
-		</tr>
-	`}))
-	$('#table-body_contact').html("")
-	$('#table-body_contact').append(`
-		<tr>
-			<td>${checkdata['mobile']}</td>
-			<td>${checkdata['email']}</td>
-			<td>${checkdata['insurance_checked']}</td>
-		</tr>
-	`)
-	let insurancedata = JSON.stringify(cl_in.maindata)
-	data['insurance_data'] = insurancedata;
-	$(this).append(`<input id='insuranceinput' type="hidden" name="insurance_data" value=${insurancedata}>`)
-	window.sessionStorage.setItem('review_form_data', JSON.stringify(data))
-	$('#loginModal3').addClass('show') 
-	$('#loginModal3').css({"display": "block", "padding-right": "8px"}) 
-	$('body').addClass('modal-open')
-	$('body').append(`<div class="modal-backdrop fade show"></div>`)
-	// document.getElementById('form_url').submit();
-})
+// 	$('#addoninput').remove()
+// 	$('#bagaddoninput').remove()
+// 	$('#insuranceinput').remove()
+// 	$('#routeinfoinput').remove()
+// 	$(this).append(`<input id='addoninput' type="hidden" name="addon" value='${straddon}'>`)
+// 	$(this).append(`<input id='seatinput' type="hidden" name="seataddon" value='${seataddon}'>`)
+// 	$(this).append(`<input id='bagaddoninput' type="hidden" name="bagaddon" value='${bagaddon}'>`)
+// 	data['addon'] = straddon;
+// 	data['bagaddon'] = bagaddon;
+// 	data['seataddon'] = seataddon;
+// 	console.log(data)
+// 	let person = parseInt(data['Person'])
+// 	console.log(checkdata)
+// 	let newcheck = {};
+// 	let pax_data = []
+// 	for (let i = 0;i<=(person-1);i++){
+// 		if (i == 0){
+// 			pax_data.push({
+// 				first_name: checkdata['first_name'],
+// 				last_name: checkdata['last_name'],
+// 				title: checkdata['title'],
+// 				passport: checkdata['passport'] || "-"
+// 			})
+// 		}
+// 		else {
+// 			pax_data.push({
+// 				first_name: checkdata[`first_name${i + 1}`],
+// 				last_name: checkdata[`last_name${i + 1}`],
+// 				title: checkdata[`title${i + 1}`],
+// 				passport: checkdata[`passport${i + 1}`] || "-"
+// 			})
+// 		}
+// 	}	
+// 	$('#table-body').html("")
+// 	$('#table-body').append(Object.values(pax_data).map((el, i) => {
+// 		return `<tr>
+// 			<th scope="row">${i + 1}</th>
+// 			<td>${el['title']}</td>
+// 			<td>${el['first_name']}</td>
+// 			<td>${el['last_name']}</td>
+// 			<td>${el['passport']}</td>
+// 		</tr>
+// 	`}))
+// 	$('#table-body_contact').html("")
+// 	$('#table-body_contact').append(`
+// 		<tr>
+// 			<td>${checkdata['mobile']}</td>
+// 			<td>${checkdata['email']}</td>
+// 			<td>${checkdata['insurance_checked']}</td>
+// 		</tr>
+// 	`)
+// 	window.sessionStorage.setItem('review_form_data', JSON.stringify(data))
+// 	$('#loginModal3').addClass('show') 
+// 	$('#loginModal3').css({"display": "block", "padding-right": "8px"}) 
+// 	$('body').addClass('modal-open')
+// 	$('body').append(`<div class="modal-backdrop fade show"></div>`)
+// })
 $('.close').click(function(){
 	$('#loginModal3').removeClass('show') 
 	$('#loginModal3').css({"display": "none", "padding-right": "0"}) 
@@ -1978,7 +1902,6 @@ $('#loginModal3-insurance .close').click(function(){
 $('#contiune').click(function(){
 	document.getElementById('form_url').submit();
 })
-
 
 $(document).ready(function(){
 		let person = $('[name="Person"]').val()
@@ -2049,6 +1972,584 @@ $(document).ready(function(){
 		}
 
 	})
+
+
+
+
+	// let ssr = JSON.parse('{{ spice_ssr|escapejs }}')
+	// let seat = JSON.parse('{{ spice_seat|escapejs }}')
+	// console.log(srr)
+	// console.log(seat)
+	//let alldata1 = JSON.parse('{{ spice_data | escapejs }}')
+	//console.log(alldata1)
+	//console.log({{num}})
+// 	{% if data %}
+// 	let alldata = JSON.parse('{{ alldata | escapejs }}')
+// 	console.log(alldata)
+
+// 	const serv = new Service(alldata, $('#service-container'), {{Person}})
+// 	const cl_in = new Insurance(alldata, {{Person}}, true)
+// 	serv.paxobjsetter()
+// 	serv.rend()
+// 	$('#service-container').find("#border-top-contact-tab").click(function(){
+// 		serv.seatdata()
+// 	})
+// 	serv.slider()
+// 	console.log(serv.meal, serv.tripinfo, serv.bagg)
+
+// 	{% elif result %}
+// 	let alldata = JSON.parse('{{ jsonresult | escapejs }}')
+// 	console.log(alldata)
+// 	let flight_number = '{{result.0.flight_number}}'.split(" ")[0];
+// 	let series_img =  `{% static 'flight/airline_logo/' %}${flight_number}.png`;
+// 	let dur = findDur('{{result.0.arival_time}}', '{{ result.0.departure_time }}')
+// 	$('.series_dur').text(dur)
+// 	function findDur(a, b) {
+//         let at = new Date(`${(new Date()).getDate()} ${a}`)
+// 		let dt = new Date(`${(new Date()).getDate()} ${b}`)
+// 		let min = Math.floor((((at - dt)/1000)%3600)/60)
+// 		let hour = Math.floor(((at - dt)/1000)/3600)
+// 		return `${hour}h ${min}m`
+//     }
+// 	$('#series_img').attr('src', series_img);
+// 	{% endif %}
+// 	$(document).ready(function(){
+// 		let person = $('[name="Person"]').val()
+// 		let adult = $('[name="adult"]').val()
+// 		let child = $('[name="child"]').val()
+// 		let infant = $('[name="infant"]').val()
+
+// 		console.log(person, adult, child, infant)
+// 		for(let i = 2; i <= person; i++) {
+// 			let pp;
+// 			let opt_dis;
+// 			let master;
+// 			let miss;
+// 			let date = "";
+// 			let frequentflyer = "";
+// 			let international = `
+// 			<div class="col-md-5">
+// 				<div class="form-group">
+// 					<input type="text" class="form-control" name="passport${i}" placeholder="passport" required>
+// 				</div>
+// 			</div>
+// 			<div class="col-md-3">
+// 				<div class="form-group">
+// 						<input type="date" class="datepicker hasDatepicker"  name="exp${i}" placeholder="Expiry date">
+// 				</div>
+// 			</div>
+// 			<div class="col-md-3">
+// 				<div class="form-group">
+// 					<input type="date" class="datepicker hasDatepicker"  name="issue${i}" placeholder="Issued date">
+// 				</div>
+// 			</div>
+// 			`
+// 			if($('[name="isDomestic"]').val() == 'True'){
+// 				international = ""
+// 				console.log($('[name="isDomestic"]').val())
+// 				frequentflyer = `
+// 				<div class="col-md-12" style="margin-bottom: 0.5em;margin-top:-10px">
+// 					<a data-toggle="collapse" data-target="#frequent${i}" aria-expanded="false" aria-controls="collapse2">
+// 						Optional (Frequent Flyer Number)
+// 					</a>
+// 					<div id="frequent${i}" class="collapse" data-parent="#option-acc-one">
+// 						<p style="margin: 0 0 0 1em;font-size:0.9em;font-weight:700;">Frequent Flyer Details</p>
+// 						<p style="font-size: 0.8em;margin:0 0 0.5em 1em;" >Please verify the credit of your frequent flyer miles at the airport checkin counter.</p>
+// 						<div class="row" style="justify-content: center;">
+// 							<div class="col-md-5">
+// 								<div class="form-group">
+// 									<input type="text" class="form-control" placeholder="Airline" name="frequent-airline${i}">
+// 								</div>
+// 							</div>
+// 							<div class="col-md-5">
+// 								<div class="form-group">
+// 									<input type="text" class="form-control" placeholder="Frequent flyer No." name="frequent-flyer${i}">
+// 								</div>
+// 							</div>
+// 						</div>
+// 					</div>
+// 				</div>`
+// 			}
+// 			if(adult > 1){
+// 				pp = 'ADULT'
+// 				opt_dis = '';
+// 				master = 'Mr'
+// 				miss = 'Ms'
+// 				adult--;
+// 			}
+// 			else if(child > 0){
+// 				pp = 'CHILD'
+// 				opt_dis = 'desabled hidden';
+// 				master = 'Master'
+// 				miss = 'Miss'
+// 				child--;
+// 			}else {
+// 				pp = 'INFANT'
+// 				opt_dis = 'desabled hidden';
+// 				master = 'Master'
+// 				miss = 'Miss'
+// 				date = `
+// 				<div class="col-md-2">
+// 					<div class="form-group">
+// 						<input type="date" class="datepicker hasDatepicker" name="dob${i}" >
+// 					</div>
+// 				</div>
+// 				`
+// 			}
+// 			$('.person__detail').append(`
+// 				<div class="col-12">
+// 			   		<input type="hidden" name="pp${i}" value=${pp}>
+// 					<h5 style="margin: 0">${pp}</h5>
+// 				</div>
+// 				<div class="col-md-2 col-2 pr-0">
+// 					<div class="form-group">
+// 						<select name="title${i}" id="" class="form-control" required>
+// 							<option value selected disabled hidden>Title</option>
+// 							<option value="${master}">${master}</option>
+// 							<option value="mrs" ${opt_dis}>Mrs</option>
+// 							<option value="${miss}">${miss}</option>
+// 						</select>
+// 					</div>
+// 				</div>
+// 				<div class="col-md-5 col-8">
+// 					<div class="form-group">
+// 						<input type="text" class="form-control" name="first_name${i}" placeholder="First Name" required>
+// 					</div>
+// 				</div>
+// 				<div class="col-md-5">
+// 					<div class="form-group">
+// 						<input type="text" class="form-control" name="last_name${i}" placeholder="Last Name">
+// 					</div>
+// 				</div>
+// 				${date}
+// 				${frequentflyer}
+// 			`)
+// 		}
+
+// 	})
+
+// 	function bookNow(key, price){
+// 		console.clear();
+// 		console.log(key);
+
+// 		window.location.href = "/flight/get_payment/?key="+key+"&amount="+price
+// 		;
+// 	};
+
+// 	console.log(
+// 		$('[name=Person]').val()
+// 	)
+
+		
+		
+// 	let totalAmount = parseFloat($('#total-flight-amount').text());
+// 	let apiAmount = parseFloat($('input[name="apiamount"]').val())
+// 	let inscAmount = 0;
+// 	let save = 0;
+// 	let mealAdd = 0;
+// 	let addBag = 0;
+
+// 	function changeAmount(){
+// 		if($('#insurance-check').prop('checked')){
+// 			let person = $('[name=Person]').val()
+// 			inscAmount = cl_in.amount;
+// 			serv.insurance = inscAmount
+// 			serv.test(serv.selection)
+// 			$('#insurance').remove()
+// 			$('#add-on').append(`
+// 			<p id="insurance">
+// 				<span>
+// 					Insurance
+// 					<a onclick="onremove()" href="javascript:void(0)" class="close">
+// 						<i class="fa fa-close"></i>
+// 					</a>
+// 				</span>
+// 				<span class="green">(+) ₹ ${inscAmount}</span>
+// 			</p>
+// 			`)
+// 			$('#form_url').append(`
+// 			<input id="insurance-input" type="hidden" name="insurance" value=${inscAmount}>
+// 			`)
+// 		}
+// 		else{
+// 			cl_in.amount = 0;
+// 			serv.insurance = cl_in.amount;
+// 			cl_in.maindata = {};
+// 			serv.test(serv.selection);
+// 		}
+// 	}
+	
+// 	changeAmount();
+	
+// 	$('#insurance-check').on('change', function(){
+// 		if($('#insurance-check').prop('checked')){
+// 			$('#loginModal3-insurance').addClass('show') 
+// 			$('#loginModal3-insurance').css({"display": "block", "padding-right": "8px"}) 
+// 			$('body').addClass('modal-open')
+// 			$('body').append(`<div class="modal-backdrop fade show"></div>`)
+// 		} else {
+// 			changeAmount()
+// 			$('#insurance-input').remove()
+// 			$('#insurance').remove()
+// 		}
+// 	})
+
+// 	$('[name="promocode2"]').on('change', function(){
+// 		save = parseInt(this.value);
+// 		let code = $(this).parent().children('div.promo-info').children('span.code').text();
+// 		$('.savaari-save').text(`(-) ₹ ${save}`)
+// 		$('#promo-code-input').val(code)
+		
+// 		$('#total-flight-amount').text(Math.round(totalAmount - save + inscAmount + mealAdd + addBag))
+// 		$('input[name="amount"]').val(Math.round(totalAmount - save + inscAmount + mealAdd + addBag))
+// 	})
+
+// 	function onremove(){
+// 		$('#insurance-check').attr('checked', false);
+// 		changeAmount()
+// 		$('#insurance-input').remove()
+// 		$('#insurance').remove()
+// 	}
+
+// 	$('#promo-code-input').keydown(function(){
+// 		console.log("done")
+// 		save = 0
+// 		$('.savaari-save').text(`(-) ₹ 0`)
+// 		$('[name="promocode2"]:checked').attr('checked', false);
+// 		$('#total-flight-amount').text(Math.round(totalAmount - save + inscAmount + mealAdd + addBag))
+// 		$('input[name="amount"]').val(Math.round(totalAmount - save + inscAmount + mealAdd + addBag))
+// 	})
+
+
+// 	$('#login-form').submit(function(e){
+// 		e.preventDefault()
+// 		console.log('done')
+// 		let user = $("input[name='username']").val();
+// 		let password = $("input[name='password']").val();
+// 		$.ajax({
+// 			type: "POST",
+// 			url: "/custlogin",
+// 			data : {
+// 				csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val(),
+// 				username:user,
+// 				password:password,
+// 			},
+// 			success: function(data){
+// 				location.reload();
+// 			},
+// 		});
+// 	})
+	
+	
+// 	function onremoveMeal(k){
+// 		$('#meal-add').remove();
+// 		$(`#addonmeal${k}`).remove()
+// 		delete serv.selection[k]
+// 		console.log(serv.selection)
+// 		serv.test(serv.selection, 'meal')
+// 		$(`#${k} input`).prop('checked', false)
+// 		$(`#${k} label`).removeClass('select')
+// 	}
+// 	function onremoveBag(k){
+// 		console.log(k)
+// 		$('#meal-add').remove();
+// 		$(`#addonbag${k}`).remove()
+// 		delete serv.bagselection[k]
+// 		console.log(serv.bagselection)
+// 		serv.test(serv.bagselection, 'bag')
+// 		$(`#bagg${k}0 input`).prop('checked', false)
+// 		$(`#bagg${k}0 label`).removeClass('select')
+// 	}
+
+// 	$('#refresh').click(function(){
+// 		let url =  window.sessionStorage.getItem('search_result');
+// 		window.sessionStorage.removeItem('search_result')
+// 		location.href = url;
+// 	})
+
+// 	$('#search-again').click(function(){
+// 		location.href = '/';
+// 	})
+
+// 	const session_time = setInterval(() => {
+// 		let block_ses_time = window.sessionStorage.getItem('stimer');
+// 		if(block_ses_time > 0){
+// 			dtime = block_ses_time - 1
+// 			window.sessionStorage.setItem('stimer', dtime)
+// 			let min = Math.floor(window.sessionStorage.getItem('stimer')/60);
+// 			let sec = window.sessionStorage.getItem('stimer')%60;
+// 			$('#session-timer').text(`${min} min ${sec} sec`)
+// 			if(block_ses_time < 0){
+// 				window.sessionStorage.removeItem('stimer')
+// 				clearInterval(session_time);
+// 				console.log('refresh')
+// 				$('#loginModal2').addClass('show') 
+// 				$('#loginModal2').css({"display": "block", "padding-right": "8px"}) 
+// 				$('body').addClass('modal-open')
+// 				$('body').append(`<div class="modal-backdrop fade show"></div>`)
+// 			}
+// 		}
+// 	}, 1000);
+
+// 	function logindata(){
+// 		$('#login-div').find('#login-id').submit(function(e){
+// 			e.preventDefault()
+// 			console.log('done')
+// 			let user = $("input[name='username']").val();
+// 			let password = $("input[name='password']").val();
+// 			$.ajax({
+// 				type: "POST",
+// 				url: "/custlogin",
+// 				data : {
+// 					csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val(),
+// 					username:user,
+// 					password:password,
+// 				},
+// 				success: function(data){
+// 					location.reload();
+// 				},
+// 			});
+// 		})
+
+// 		$('.signup-btn').removeAttr('href')
+// 		$('.signup-btn').click(function(){
+// 			$.ajax({
+// 				type: "GET",
+// 				url: "/api/register_customer/",
+// 				success: function(data){
+// 					success = $($.parseHTML(data))
+// 					$('#login-div').html($(success[19]).find('.login-box'))
+// 				},
+// 				complete: function(){
+// 					data = {}
+// 					$('#login-div').find('#login-id').submit(function(e){
+// 						e.preventDefault()
+// 						$(this).find('input').each(function(){
+// 							let keyy = $(this).attr('name');
+// 							let value = $(this).val()
+// 							value = value.toString().replace(/^\s\t+/gm, '')
+// 							data[keyy] = value;
+// 						})
+// 						$.ajax({
+// 							type: "POST",
+// 							url: "/custlogin",
+// 							data : data,
+// 							success: function(response){
+// 								location.reload();
+// 							},
+// 						});
+// 					})
+// 					$('.login-btn').removeAttr('href')
+// 					$('.login-btn').click(function(){	
+// 						signupdata()
+// 					})
+// 				}
+// 			});
+// 		})
+
+
+// 	}
+	
+// function signupdata(){
+// 	$.ajax({
+// 		type: "GET",
+// 		url: "/custlogin",
+// 		success: function(data){
+// 			success = $($.parseHTML(data))
+// 			$('#login-div').html($(success[19]).find('.login-box'))
+
+// 		},
+// 		complete: function(){
+// 			logindata()
+// 		}
+// 	});
+// }
+
+// signupdata()
+
+// $('#gst').click(function(){
+// 	let gstnumber = '{{gstdetail.0.0.gstin}}' == 'None' ? "" : '{{gstdetail.0.0.gstin}}'
+// 	let gst_email = '{{gstdetail.0.0.email}}' == 'None' ? "" : '{{gstdetail.0.0.email}}'
+// 	let gst_mobile = '{{gstdetail.0.0.mobile}}' == 'None' ? "" : '{{gstdetail.0.0.mobile}}'
+// 	let gst_address = '{{gstdetail.0.0.address}}' == 'None' ? "" : '{{gstdetail.0.0.address}}'
+// 	let gst_company = '{{gstdetail.0.0.address}}' == 'None' ? "" : '{{gstdetail.0.0.company}}'
+// 	$("#gstnumber").val(gstnumber)
+// 	$("#gstemail").val(gst_email)
+// 	$("#gstmobile").val(gst_mobile)
+// 	$("#gstaddress").val(gst_address)
+// 	$("#companyname").val(gst_company)
+// })
+
+// $('#form_url').on('submit', function(e){
+// 	e.preventDefault()
+// 	// console.log(routeinfo)
+// 	console.log(serv.selection)
+// 	let straddon = JSON.stringify(serv.selection)
+// 	let bagaddon = JSON.stringify(serv.bagselection)
+// 	let seataddon = JSON.stringify(serv.paxobj)
+// 	let routeinfo = JSON.stringify(serv.routeinfo)
+// 	let route = JSON.stringify(serv.routedata)
+	
+// 	$('#addoninput').remove()
+// 	$('#bagaddoninput').remove()
+// 	$('#insuranceinput').remove()
+// 	$('#routeinfoinput').remove()
+// 	$('#route').remove()
+// 	$(this).append(`<input id='addoninput' type="hidden" name="addon" value='${straddon}'>`)
+// 	$(this).append(`<input id='seatinput' type="hidden" name="seataddon" value='${seataddon}'>`)
+// 	$(this).append(`<input id='bagaddoninput' type="hidden" name="bagaddon" value='${bagaddon}'>`)
+// 	$(this).append(`<input id='route' type="hidden" name="route" value='${route}'>`)
+// 	let data = {}
+// 	data['addon'] = straddon;
+// 	data['bagaddon'] = bagaddon;
+// 	data['seataddon'] = seataddon;
+// 	let checkdata = {}
+// 	$(this).find('select, input').map(function() {
+// 		data[$(this).attr('name')] = $(this).val()
+// 		if ($(this).attr('type') != "hidden" && this.value){
+// 			checkdata[$(this).attr('name')] = $(this).val()
+// 		}
+// 	})
+// 	console.log(data)
+// 	let person = parseInt(data['Person'])
+// 	console.log(checkdata)
+// 	let newcheck = {};
+// 	let pax_data = []
+// 	for (let i = 0;i<=(person-1);i++){
+// 		if (i == 0){
+// 			pax_data.push({
+// 				first_name: checkdata['first_name'],
+// 				last_name: checkdata['last_name'],
+// 				title: checkdata['title'],
+// 				passport: checkdata['passport'] || "-"
+// 			})
+// 		}
+// 		else {
+// 			pax_data.push({
+// 				first_name: checkdata[`first_name${i + 1}`],
+// 				last_name: checkdata[`last_name${i + 1}`],
+// 				title: checkdata[`title${i + 1}`],
+// 				passport: checkdata[`passport${i + 1}`] || "-"
+// 			})
+// 		}
+// 	}	
+// 	$('#table-body').html("")
+// 	$('#table-body').append(Object.values(pax_data).map((el, i) => {
+// 		($.isEmptyObject(cl_in.maindata[`person_${i + 1}`])) || cl_in.maindata[`person_${i + 1}`].map(it => it['passport'] = el['passport'])
+// 		console.log(cl_in.maindata[`person_${i + 1}`])
+// 		return `<tr>
+// 			<th scope="row">${i + 1}</th>
+// 			<td>${el['title']}</td>
+// 			<td>${el['first_name']}</td>
+// 			<td>${el['last_name']}</td>
+// 			<td>${el['passport']}</td>
+// 		</tr>
+// 	`}))
+// 	$('#table-body_contact').html("")
+// 	$('#table-body_contact').append(`
+// 		<tr>
+// 			<td>${checkdata['mobile']}</td>
+// 			<td>${checkdata['email']}</td>
+// 			<td>${checkdata['insurance_checked']}</td>
+// 		</tr>
+// 	`)
+// 	let insurancedata = JSON.stringify(cl_in.maindata)
+// 	data['insurance_data'] = insurancedata;
+// 	$(this).append(`<input id='insuranceinput' type="hidden" name="insurance_data" value=${insurancedata}>`)
+// 	window.sessionStorage.setItem('review_form_data', JSON.stringify(data))
+// 	$('#loginModal3').addClass('show') 
+// 	$('#loginModal3').css({"display": "block", "padding-right": "8px"}) 
+// 	$('body').addClass('modal-open')
+// 	$('body').append(`<div class="modal-backdrop fade show"></div>`)
+// 	// document.getElementById('form_url').submit();
+// })
+// $('.close').click(function(){
+// 	$('#loginModal3').removeClass('show') 
+// 	$('#loginModal3').css({"display": "none", "padding-right": "0"}) 
+// 	$('body').removeClass('modal-open')
+// 	$(`.modal-backdrop`).remove()
+// })
+// $('#loginModal3-insurance .close').click(function(){
+// 	$('#loginModal3-insurance').removeClass('show') 
+// 	$('#loginModal3-insurance').css({"display": "none", "padding-right": "0"}) 
+// 	$('body').removeClass('modal-open')
+// 	$(`.modal-backdrop`).remove()
+// 	$('#insurance-check').attr('checked', false)
+// })
+// $('#contiune').click(function(){
+// 	document.getElementById('form_url').submit();
+// })
+
+
+// $(document).ready(function(){
+// 		let person = $('[name="Person"]').val()
+// 		let adult = $('[name="adult"]').val()
+// 		let child = $('[name="child"]').val()
+// 		let infant = $('[name="infant"]').val()
+
+// 		console.log(person, adult, child, infant)
+// 		for(let i = 0; i < person; i++) {
+// 			let pp;
+// 			let opt_dis;
+// 			let master;
+// 			let miss;
+// 			if(adult >= 1){
+// 				pp = 'ADULT'
+// 				opt_dis = '';
+// 				master = 'Mr'
+// 				miss = 'Ms'
+// 				adult--;
+// 			}
+// 			else if(child > 0){
+// 				pp = 'CHILD'
+// 				opt_dis = 'desabled hidden';
+// 				master = 'Master'
+// 				miss = 'Miss'
+// 				child--;
+// 			}else {
+// 				pp = 'INFANT'
+// 				opt_dis = 'desabled hidden';
+// 				master = 'Master'
+// 				miss = 'Miss'
+// 			}
+// 			$('#loginModal3-insurance #table-body').append(`
+// 			<tr>
+// 				<td>
+// 					<div class="form-group">
+// 			   			<input class="form-control" type="hidden" name="pp${i ? (i + 1) : ""}" value=${pp}>
+// 						<h5 style="margin: 0">${pp}</h5>
+// 					</div>
+// 				</td>
+// 				<td>
+// 					<div class="form-group">
+// 						<select name="title${i ? (i + 1) : ""}" id="" class="form-control" required>
+// 							<option value selected disabled hidden>Title</option>
+// 							<option value="${master}">${master}</option>
+// 							<option value="mrs" ${opt_dis}>Mrs</option>
+// 							<option value="${miss}">${miss}</option>
+// 						</select>
+// 					</div>
+// 				</td>
+// 				<td>
+// 					<div class="form-group">
+// 						<input type="text" class="form-control" name="first_name${i ? (i + 1) : ""}" placeholder="First Name" required>
+// 					</div>
+// 				</td>
+// 				<td>
+// 					<div class="form-group">
+// 						<input type="text" class="form-control" name="last_name${i ? (i + 1) : ""}" placeholder="Last Name" required>
+// 					</div>
+// 				</td>
+// 				<td>
+// 					<div class="form-group">
+// 						<input style="padding: 0em 1em;" class="form-control datepicker hasDatepicker" type="date" name="dob${i ? (i + 1) : ""}" required>
+// 					</div>
+// 				</td>
+// 			</tr>
+// 			`)
+// 		}
+
+// 	})
 
 	// insuranceData()
 
