@@ -4,6 +4,14 @@
 
 
 <style>
+	input[name="first_name"]::placeholder {
+  		color: #a5a2a2;
+  		
+	}	
+	input[name="last_name"]::placeholder {	
+  		color: #a5a2a2;
+  		
+	}
 	.logo-widget,
 	.social-list{
 		margin-bottom: 0.5em;
@@ -452,37 +460,13 @@
 								<div class="col-12">
 									<h3 style="color: darkgray;" >Traveller Information</h3>
 								</div>
-								{% for room in data.hInfo.ops.0.ris%}
-								<div class="row person__detail">
-									
-									<div class="col-md-12 col-12">
-										<input type="hidden" name="pp" value='ADULT'>
-										<h5 style="margin: 0">Room {{ forloop.counter }}</h5>
-									</div>
-									<div class="col-md-2 col-4 pr-0">
-										<div class="form-group">
-											<select name="title{{ forloop.counter }}" id="title" class="form-control" required>
-												<option value selected disabled hidden>Title</option>
-												<option value="Mr">MR.</option>
-												<option value="Mrs">MRS.</option>
-												<option value="Ms">MS.</option>
-											</select>
-										</div>
-									</div>
-									  <div class="col-md-5 col-6">
-										<div class="form-group">
-											<input style="text-transform:uppercase" type="text" class="form-control first-name" name="first_name{{ forloop.counter }}" placeholder="First Name" required oninput="validateInput(this)">
 
-										</div>
-									</div>
-									<div class="col-md-5">
-										<div class="form-group">
-											<input style="text-transform:uppercase" type="text" class="form-control" name="last_name{{ forloop.counter }}" placeholder="Last Name" oninput="validateInput(this)">
-										</div>
-									</div>
-							    </div>   
+
+								<div id="formContainer"></div>
 								
-								{% endfor %}	
+								
+
+
 								<div class="row">
 									<div class="col-12">
 										<h5 class="mb-2">Contact Details</h5>
@@ -834,505 +818,157 @@
 			<svg class="mr-2" width="25px" height="25px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path style="fill:white;" d="M232 120C232 106.7 242.7 96 256 96C269.3 96 280 106.7 280 120V243.2L365.3 300C376.3 307.4 379.3 322.3 371.1 333.3C364.6 344.3 349.7 347.3 338.7 339.1L242.7 275.1C236 271.5 232 264 232 255.1L232 120zM256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256z"/></svg>
 			Session will Expires in <span id="session-timer"></span></h4>
 	</div>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-	<script src="{% static 'main/js/src/akasa_sevice.js' %}"></script>
-
-<script type="text/javascript">
-	let hotel_review_data = JSON.parse('{{ hotel_review_data | escapejs }}')
-	console.log(hotel_review_data,"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
-
-	
-	let ssr = JSON.parse('{{ akasa_ssr|escapejs }}')
-	let seat = JSON.parse('{{ seat|escapejs }}')
-	let sr = new Service(ssr, seat, $('#service-container'), parseFloat('{{ apiamount }}'), parseFloat('{{akasaa_data.data.breakdown.totalAmount}}'))
-	sr.rend()
-	$('#service-container').find("#border-top-contact-tab").click(function(){
-		sr.seatdata()
-	})
-	sr.slider()
-	console.log(sr.srr)
-	console.log(sr.seat)
-	$(document).ready(function(){
-		let person = $('[name="Person"]').val()
-		let adult = $('[name="adult"]').val()
-		let child = $('[name="child"]').val()
-		let infant = $('[name="infant"]').val()
-
-		console.log(person, adult, child, infant)
-		for(let i = 2; i <= person; i++) {
-			let pp;
-			let opt_dis;
-			let master;
-			let miss;
-			let date = "";
-			let frequentflyer = "";
-			if($('[name="isDomestic"]').val() == 'True'){
-				international = ""
-				console.log($('[name="isDomestic"]').val())
-				frequentflyer = `
-				<div class="col-md-12" style="margin-bottom: 0.5em;margin-top:-10px">
-					<a data-toggle="collapse" data-target="#frequent${i}" aria-expanded="false" aria-controls="collapse2">
-						Optional (Frequent Flyer Number)
-					</a>
-					<div id="frequent${i}" class="collapse" data-parent="#option-acc-one">
-						<p style="margin: 0 0 0 1em;font-size:0.9em;font-weight:700;">Frequent Flyer Details</p>
-						<p style="font-size: 0.8em;margin:0 0 0.5em 1em;" >Please verify the credit of your frequent flyer miles at the airport checkin counter.</p>
-						<div class="row" style="justify-content: center;">
-							<div class="col-md-5">
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Airline" name="frequent-airline${i}">
-								</div>
-							</div>
-							<div class="col-md-5">
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Frequent flyer No." name="frequent-flyer${i}">
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>`
-			}
-			if(adult > 1){
-				pp = 'ADULT'
-				opt_dis = '';
-				master = 'Mr'
-				miss = 'Ms'
-				adult--;
-			}
-			else if(child > 0){
-				pp = 'CHILD'
-				opt_dis = 'desabled hidden';
-				master = 'Master'
-				miss = 'Miss'
-				child--;
-			}else {
-				pp = 'INFANT'
-				opt_dis = 'desabled hidden';
-				master = 'Master'
-				miss = 'Miss'
-				date = `
-				<div class="col-md-2">
-					<div class="form-group">
-						<input type="date" class="datepicker hasDatepicker" name="dob${i}" >
-					</div>
-				</div>
-				`
-			}
-			 $('.person__detail').append(`
-				<div class="col-12">
-			   		<input type="hidden" name="pp${i}" value=${pp}>
-					<h5 style="margin: 0">${pp}</h5>
-				</div>
-				<div class="col-md-2 col-2 pr-0">
-					<div class="form-group">
-						<select name="title${i}" id="" class="form-control" required>
-							<option value selected disabled hidden>Title</option>
-							<option value="${master}">${master}</option>
-							<option value="mrs" ${opt_dis}>Mrs</option>
-							<option value="${miss}">${miss}</option>
-						</select>
-					</div>
-				</div>
-				<div class="col-md-5 col-8">
-					<div class="form-group">
-						 <input type="text" class="form-control first-name" name="first_name${i}" placeholder="First Name" required>
-					</div>
-				</div>
-				<div class="col-md-5">
-					<div class="form-group">
-						<input type="text" class="form-control" name="last_name${i}" placeholder="Last Name">
-					</div>
-				</div>
-				${date}
-				${frequentflyer}
-			`) 
-
-		}
-
-	})
-		
-	let totalAmount = parseFloat($('#total-flight-amount').text());
-	let apiAmount = parseFloat($('input[name="apiamount"]').val())
-	let inscAmount = 0;
-	let save = 0;
-	let mealAdd = 0;
-	let addBag = 0;
-	
-
-	$('[name="promocode2"]').on('change', function(){
-		save = parseInt(this.value);
-		let code = $(this).parent().children('div.promo-info').children('span.code').text();
-		$('.savaari-save').text(`(-) ₹ ${save}`)
-		$('#promo-code-input').val(code)
-		
-		$('#total-flight-amount').text(Math.round(totalAmount - save + inscAmount + mealAdd + addBag))
-		$('input[name="amount"]').val(Math.round(totalAmount - save + inscAmount + mealAdd + addBag))
-	})
-
-	$('#promo-code-input').keydown(function(){
-		console.log("done")
-		save = 0
-		$('.savaari-save').text(`(-) ₹ 0`)
-		$('[name="promocode2"]:checked').attr('checked', false);
-		$('#total-flight-amount').text(Math.round(totalAmount - save + inscAmount + mealAdd + addBag))
-		$('input[name="amount"]').val(Math.round(totalAmount - save + inscAmount + mealAdd + addBag))
-	})
-
-
-	$('#login-form').submit(function(e){
-		e.preventDefault()
-		console.log('done')
-		let user = $("input[name='username']").val();
-		let password = $("input[name='password']").val();
-		$.ajax({
-			type: "POST",
-			url: "/custlogin",
-			data : {
-				csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val(),
-				username:user,
-				password:password,
-			},
-			success: function(data){
-				location.reload();
-			},
-		});
-	})
-	
-	
-	function onremoveMeal(k){
-		$('#meal-add').remove();
-		$(`#addonmeal${k}`).remove()
-		delete sr.selection[k]
-		console.log(sr.selection)
-		sr.test(sr.selection, 'meal')
-		$(`#${k} input`).prop('checked', false)
-		$(`#${k} label`).removeClass('select')
-	}
-	function onremoveBag(k){
-		console.log(k)
-		$('#meal-add').remove();
-		$(`#addonbag${k}`).remove()
-		delete sr.bagselection[k]
-		console.log(sr.bagselection)
-		sr.test(sr.bagselection, 'bag')
-		$(`#bagg${k}0 input`).prop('checked', false)
-		$(`#bagg${k}0 label`).removeClass('select')
-	}
-
-	$('#refresh').click(function(){
-		let url =  window.sessionStorage.getItem('search_result');
-		window.sessionStorage.removeItem('search_result')
-		location.href = url;
-	})
-
-	$('#search-again').click(function(){
-		location.href = '/';
-	})
-
-	const session_time = setInterval(() => {
-		let block_ses_time = window.sessionStorage.getItem('stimer');
-		if(block_ses_time > 0){
-			dtime = block_ses_time - 1
-			window.sessionStorage.setItem('stimer', dtime)
-			let min = Math.floor(window.sessionStorage.getItem('stimer')/60);
-			let sec = window.sessionStorage.getItem('stimer')%60;
-			$('#session-timer').text(`${min} min ${sec} sec`)
-			if(block_ses_time < 0){
-				window.sessionStorage.removeItem('stimer')
-				clearInterval(session_time);
-				console.log('refresh')
-				$('#loginModal2').addClass('show') 
-				$('#loginModal2').css({"display": "block", "padding-right": "8px"}) 
-				$('body').addClass('modal-open')
-				$('body').append(`<div class="modal-backdrop fade show"></div>`)
-			}
-		}
-	}, 1000);
-
-	function logindata(){
-		$('#login-div').find('#login-id').submit(function(e){
-			e.preventDefault()
-			console.log('done')
-			let user = $("input[name='username']").val();
-			let password = $("input[name='password']").val();
-			$.ajax({
-				type: "POST",
-				url: "/custlogin",
-				data : {
-					csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val(),
-					username:user,
-					password:password,
-				},
-				success: function(data){
-					location.reload();
-				},
-			});
-		})
-
-		$('.signup-btn').removeAttr('href')
-		$('.signup-btn').click(function(){
-			$.ajax({
-				type: "GET",
-				url: "/api/register_customer/",
-				success: function(data){
-					success = $($.parseHTML(data))
-					$('#login-div').html($(success[19]).find('.login-box'))
-				},
-				complete: function(){
-					data = {}
-					$('#login-div').find('#login-id').submit(function(e){
-						e.preventDefault()
-						$(this).find('input').each(function(){
-							let keyy = $(this).attr('name');
-							let value = $(this).val()
-							value = value.toString().replace(/^\s\t+/gm, '')
-							data[keyy] = value;
-						})
-						$.ajax({
-							type: "POST",
-							url: "/custlogin",
-							data : data,
-							success: function(response){
-								location.reload();
-							},
-						});
-					})
-					$('.login-btn').removeAttr('href')
-					$('.login-btn').click(function(){	
-						signupdata()
-					})
-				}
-			});
-		})
-
-
-	}
-	
-	function signupdata(){
-		$.ajax({
-			type: "GET",
-			url: "/custlogin",
-			success: function(data){
-				success = $($.parseHTML(data))
-				$('#login-div').html($(success[19]).find('.login-box'))
-
-			},
-			complete: function(){
-				logindata()
-			}
-		});
-	}
-
-	signupdata()
-
-	$('#gst').click(function(){
-		let gstnumber = '{{gstdetail.0.0.gstin}}' == 'None' ? "" : '{{gstdetail.0.0.gstin}}'
-		let gst_email = '{{gstdetail.0.0.email}}' == 'None' ? "" : '{{gstdetail.0.0.email}}'
-		let gst_mobile = '{{gstdetail.0.0.mobile}}' == 'None' ? "" : '{{gstdetail.0.0.mobile}}'
-		let gst_address = '{{gstdetail.0.0.address}}' == 'None' ? "" : '{{gstdetail.0.0.address}}'
-		let gst_company = '{{gstdetail.0.0.address}}' == 'None' ? "" : '{{gstdetail.0.0.company}}'
-		$("#gstnumber").val(gstnumber)
-		$("#gstemail").val(gst_email)
-		$("#gstmobile").val(gst_mobile)
-		$("#gstaddress").val(gst_address)
-		$("#companyname").val(gst_company)
-	})
-
-	$('#form_url').on('submit', function(e){
-		e.preventDefault()
-		let data = {}
-		let checkdata = {}
-		$(this).find('select, input').map(function() {
-			data[$(this).attr('name')] = $(this).val()
-			if ($(this).attr('type') != "hidden" && this.value){
-				checkdata[$(this).attr('name')] = $(this).val()
-			}
-		})
-		let straddon = JSON.stringify(sr.selection)
-		let bagaddon = JSON.stringify(sr.bagselection)
-		let seataddon = JSON.stringify(sr.paxobj)
-		console.log(seataddon, bagaddon, straddon)
-		
-		$('#addoninput').remove()
-		$('#bagaddoninput').remove()
-		$('#insuranceinput').remove()
-		$('#routeinfoinput').remove()
-		$(this).append(`<input id='addoninput' type="hidden" name="addon" value='${straddon}'>`)
-		$(this).append(`<input id='seatinput' type="hidden" name="seataddon" value='${seataddon}'>`)
-		$(this).append(`<input id='bagaddoninput' type="hidden" name="bagaddon" value='${bagaddon}'>`)
-		data['addon'] = straddon;
-		data['bagaddon'] = bagaddon;
-		data['seataddon'] = seataddon;
-		console.log(data)
-		let person = parseInt(data['Person'])
-		console.log(checkdata)
-		let newcheck = {};
-		let pax_data = []
-		for (let i = 0;i<=(person-1);i++){
-			if (i == 0){
-				pax_data.push({
-					first_name: checkdata['first_name'],
-					last_name: checkdata['last_name'],
-					title: checkdata['title'],
-					passport: checkdata['passport'] || "-"
-				})
-			}
-			else {
-				pax_data.push({
-					first_name: checkdata[`first_name${i + 1}`],
-					last_name: checkdata[`last_name${i + 1}`],
-					title: checkdata[`title${i + 1}`],
-					passport: checkdata[`passport${i + 1}`] || "-"
-				})
-			}
-		}	
-		$('#table-body').html("")
-		$('#table-body').append(Object.values(pax_data).map((el, i) => {
-			return `<tr>
-				<th scope="row">${i + 1}</th>
-				<td>${el['title']}</td>
-				<td>${el['first_name']}</td>
-				<td>${el['last_name']}</td>
-				<td>${el['passport']}</td>
-			</tr>
-		`}))
-		$('#table-body_contact').html("")
-		$('#table-body_contact').append(`
-			<tr>
-				<td>${checkdata['mobile']}</td>
-				<td>${checkdata['email']}</td>
-				<td>${checkdata['insurance_checked']}</td>
-			</tr>
-		`)
-		window.sessionStorage.setItem('review_form_data', JSON.stringify(data))
-		$('#loginModal3').addClass('show') 
-		$('#loginModal3').css({"display": "block", "padding-right": "8px"}) 
-		$('body').addClass('modal-open')
-		$('body').append(`<div class="modal-backdrop fade show"></div>`)
-	})
-	$('.close').click(function(){
-		$('#loginModal3').removeClass('show') 
-		$('#loginModal3').css({"display": "none", "padding-right": "0"}) 
-		$('body').removeClass('modal-open')
-		$(`.modal-backdrop`).remove()
-	})
-	$('#loginModal3-insurance .close').click(function(){
-		$('#loginModal3-insurance').removeClass('show') 
-		$('#loginModal3-insurance').css({"display": "none", "padding-right": "0"}) 
-		$('body').removeClass('modal-open')
-		$(`.modal-backdrop`).remove()
-		$('#insurance-check').attr('checked', false)
-	})
-	$('#contiune').click(function(){
-		document.getElementById('form_url').submit();
-	})
-
-	$(document).ready(function(){
-		let person = $('[name="Person"]').val()
-		let adult = $('[name="adult"]').val()
-		let child = $('[name="child"]').val()
-		let infant = $('[name="infant"]').val()
-
-		console.log(person, adult, child, infant)
-		for(let i = 0; i < person; i++) {
-			let pp;
-			let opt_dis;
-			let master;
-			let miss;
-			if(adult >= 1){
-				pp = 'ADULT'
-				opt_dis = '';
-				master = 'Mr'
-				miss = 'Ms'
-				adult--;
-			}
-			else if(child > 0){
-				pp = 'CHILD'
-				opt_dis = 'desabled hidden';
-				master = 'Master'
-				miss = 'Miss'
-				child--;
-			}else {
-				pp = 'INFANT'
-				opt_dis = 'desabled hidden';
-				master = 'Master'
-				miss = 'Miss'
-			}
-			$('#loginModal3-insurance #table-body').append(`
-			<tr>
-				<td>
-					<div class="form-group">
-			   			<input class="form-control" type="hidden" name="pp${i ? (i + 1) : ""}" value=${pp}>
-						<h5 style="margin: 0">${pp}</h5>
-					</div>
-				</td>
-				<td>
-					<div class="form-group">
-						<select name="title${i ? (i + 1) : ""}" id="" class="form-control" required>
-							<option value selected disabled hidden>Title</option>
-							<option value="${master}">${master}</option>
-							<option value="mrs" ${opt_dis}>Mrs</option>
-							<option value="${miss}">${miss}</option>
-						</select>
-					</div>
-				</td>
-				<td>
-					<div class="form-group">
-						<input type="text" class="form-control" name="first_name${i ? (i + 1) : ""}" placeholder="First Name" required>
-					</div>
-				</td>
-				<td>
-					<div class="form-group">
-						<input type="text" class="form-control" name="last_name${i ? (i + 1) : ""}" placeholder="Last Name" required>
-					</div>
-				</td>
-				<td>
-					<div class="form-group">
-						<input style="padding: 0em 1em;" class="form-control datepicker hasDatepicker" type="date" name="dob${i ? (i + 1) : ""}" required>
-					</div>
-				</td>
-			</tr>
-			`)
-		}
-
-	})
-</script>	
-  <script>
- function validateInput(element) {
-    var firstName = $(element).val();
-    var pattern = /^[A-Za-z\s]+$/;
-    if (!pattern.test(firstName)) {
-        $(element).val('');
-        return;
-    }
-    var previousFirstNames = $('.first-name').not(element);
-    var duplicateExists = previousFirstNames.filter(function() {
-        return $(this).val().toUpperCase() === firstName.toUpperCase();
-    }).length > 0;
-    if (duplicateExists) {
-        alert("You cannot enter the same name in multiple rooms.");
-        $(element).val(''); 
-    }
-} 
-
-</script> 
- {% comment %} <script>
-function validateInput(element) {
-    var firstName = $(element).val().toUpperCase(); 
-    var previousFirstNames = $('.first-name').not(element);
-    var duplicateExists = previousFirstNames.filter(function() {
-        return $(this).val().toUpperCase() === firstName;
-    }).length > 0;
-    if (duplicateExists) {
-        alert("You cannot enter the same name in multiple rooms.");
-        $(element).val(''); 
-    }
-}
-</script> 
 <script>
-function validateInput(input) {
-    input.value = input.value.replace(/[^a-zA-Z]/g, '');
-}
-</script> {% endcomment %}
+	let hotel_review_data = JSON.parse('{{ hotel_review_data | escapejs }}')
+	console.log(hotel_review_data);
+	persons = hotel_review_data['hInfo']['ops'][0]['ris']
+	const form = document.createElement('form');
+	form.className = 'form-inline';
+
+	function validateTextOnly(event) {
+    	const input = event.target;
+    	const value = input.value;
+    	const regex = /^[A-Za-z\s]*$/;
+    	if (!regex.test(value)) {{}
+    		input.value = value.replace(/[^A-Za-z\s]/g, ''); 
+  		}
+	}
+
+	persons.forEach((person, index) => {
+  	const fieldset = document.createElement('fieldset');
+  	fieldset.style.border = 'none'; 
+  	const roomHeading = document.createElement('h3');
+  	roomHeading.textContent = 'Room ' + (index + 1);
+ 	fieldset.appendChild(roomHeading);
+  
+  for (let i = 0; i < person.adt; i++) {
+    const adultHeading = document.createElement('p');
+    adultHeading.textContent = 'Adult ' + (i + 1);
+	adultHeading.style.marginBottom = '0';
+    const inlineDiv = document.createElement('div');
+    inlineDiv.className = 'form-group'; 
+
+    const titleSelect = document.createElement('select');
+    titleSelect.name = 'title';
+    titleSelect.id = 'title';
+    titleSelect.className = 'form-control mr-4';
+    titleSelect.required = true;
+    const titleOptionDefault = document.createElement('option');
+    titleOptionDefault.value = '';
+    titleOptionDefault.disabled = true;
+    titleOptionDefault.selected = true;
+    titleOptionDefault.textContent = 'Title';
+    const titleOptionMr = document.createElement('option');
+    titleOptionMr.value = 'Mr';
+    titleOptionMr.textContent = 'MR.';
+    const titleOptionMrs = document.createElement('option');
+    titleOptionMrs.value = 'Mrs';
+    titleOptionMrs.textContent = 'MRS.';
+    const titleOptionMs = document.createElement('option');
+    titleOptionMs.value = 'Ms';
+    titleOptionMs.textContent = 'MS.';
+    titleSelect.appendChild(titleOptionDefault);
+    titleSelect.appendChild(titleOptionMr);
+    titleSelect.appendChild(titleOptionMrs);
+    titleSelect.appendChild(titleOptionMs);
+    inlineDiv.appendChild(titleSelect);
+
+    const firstNameInput = document.createElement('input');
+    firstNameInput.style.textTransform = 'uppercase';
+    firstNameInput.type = 'text';
+    firstNameInput.className = 'form-control mr-3 first-name';
+    firstNameInput.name = 'first_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
+    firstNameInput.placeholder = 'First Name';
+	firstNameInput.addEventListener('input', validateTextOnly); 
+    firstNameInput.required = true;
+    firstNameInput.style.padding = '10px 55px';
+	firstNameInput.setAttribute='required'
+    inlineDiv.appendChild(firstNameInput);
+    const lastNameInput = document.createElement('input');
+    lastNameInput.style.textTransform = 'uppercase';
+    lastNameInput.type = 'text';
+    lastNameInput.className = 'form-control';
+    lastNameInput.name = 'last_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
+    lastNameInput.placeholder = 'Last Name'; 
+	lastNameInput.addEventListener('input', validateTextOnly); 
+    lastNameInput.style.padding = '10px 55px'; 
+    inlineDiv.appendChild(lastNameInput);
+    fieldset.appendChild(adultHeading);
+    fieldset.appendChild(inlineDiv);
+  }
+
+  const headingGap = document.createElement('div');
+  headingGap.style.marginBottom = '15px';
+  fieldset.appendChild(headingGap);
+
+  for (let i = 0; i < person.chd; i++) {
+    const childHeading = document.createElement('p');
+    childHeading.textContent = 'Child ' + (i + 1);
+	childHeading.style.marginBottom = '0';
+    const inlineDiv = document.createElement('div');
+    inlineDiv.className = 'form-group';
+
+    const titleSelect = document.createElement('select');
+    titleSelect.name = 'title';
+    titleSelect.id = 'title';
+    titleSelect.className = 'form-control mr-4';
+    titleSelect.required = true;
+    const titleOptionDefault = document.createElement('option');
+    titleOptionDefault.value = '';
+    titleOptionDefault.disabled = true;
+    titleOptionDefault.selected = true;
+    titleOptionDefault.textContent = 'Title';
+    const titleOptionMr = document.createElement('option');
+    titleOptionMr.value = 'Mr';
+    titleOptionMr.textContent = 'MR.';
+    const titleOptionMrs = document.createElement('option');
+    titleOptionMrs.value = 'Mrs';
+    titleOptionMrs.textContent = 'MRS.';
+    const titleOptionMs = document.createElement('option');
+    titleOptionMs.value = 'Ms';
+    titleOptionMs.textContent = 'MS.';
+    titleSelect.appendChild(titleOptionDefault);
+    titleSelect.appendChild(titleOptionMr);
+    titleSelect.appendChild(titleOptionMrs);
+    titleSelect.appendChild(titleOptionMs);
+    inlineDiv.appendChild(titleSelect);
+
+    const firstNameInput = document.createElement('input');
+    firstNameInput.style.textTransform = 'uppercase';
+    firstNameInput.type = 'text';
+    firstNameInput.className = 'form-control mr-3 first-name';
+    firstNameInput.name = 'first_name_Room_'+(index + 1)+"_"+'Child'+"_"+(i + 1);
+    firstNameInput.placeholder = 'First Name';
+	firstNameInput.addEventListener('input', validateTextOnly); 
+    firstNameInput.required = true;
+    firstNameInput.style.padding = '10px 55px';
+    inlineDiv.appendChild(firstNameInput);
+    const lastNameInput = document.createElement('input');
+    lastNameInput.style.textTransform = 'uppercase';
+    lastNameInput.type = 'text';
+    lastNameInput.className = 'form-control';
+    lastNameInput.name = 'last_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
+    lastNameInput.placeholder = 'Last Name';
+	lastNameInput.addEventListener('input', validateTextOnly); 
+    lastNameInput.style.padding = '10px 55px';
+    inlineDiv.appendChild(lastNameInput);
+    fieldset.appendChild(childHeading);
+    fieldset.appendChild(inlineDiv);
+	
+  }
+  const roomGap = document.createElement('div');
+  roomGap.style.marginBottom = '30px';
+  fieldset.appendChild(roomGap);
+  const hr = document.createElement('hr');
+  fieldset.appendChild(hr);
+  form.appendChild(fieldset);
+});
+	const formContainer = document.getElementById('formContainer');
+ 	formContainer.appendChild(form); 
+</script>
+
+
 </body>
 </html>

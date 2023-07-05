@@ -2069,6 +2069,7 @@ select.form-control-lg:not([size]):not([multiple]),
 
 .form-group {
   margin-bottom: 1rem;
+
 }
 
 .form-text {
@@ -3169,6 +3170,11 @@ tbody.collapse.show {
 
 .dropdown-toggle:empty::after {
   margin-left: 0;
+}
+
+.form-control.dropdown_menu {
+  padding: 10px 20px;
+  margin-top: 14px;
 }
 
 .dropdown-menu {
