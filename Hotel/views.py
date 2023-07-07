@@ -341,6 +341,7 @@ class HotelDetailsView(View):
         total_rs = sum(room['tfcs']['BF'] for room in hotel_review_data['hInfo']['ops'][0]['ris'] if room['tfcs']['BF'])
         total_tax = sum(room['tfcs']['TAF'] for room in hotel_review_data['hInfo']['ops'][0]['ris'] if room['tfcs']['TAF'])
         return render(request, 'savaari_hotel/hotel_payment_review.html',context={'data':hotel_review_data,
+                                                                                  "hotel_review_data": json.dumps(hotel_review_data),
                                                                                   'cancellation_data':hotel_cancellation_policy_data,
                                                                                   'check_out':check_out,
                                                                                   'check_in':check_in,
