@@ -1,544 +1,585 @@
-{% load static %}
-{% include "savaari_hotel/hotel_header.html" %}
+{% load static %} {% include "savaari_hotel/hotel_header.html" %}
 <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
 
 
 <style>
-	input[name="first_name"]::placeholder {
-  		color: #a5a2a2;
-  		
-	}	
-	input[name="last_name"]::placeholder {	
-  		color: #a5a2a2;
-  		
-	}
-	.logo-widget,
-	.social-list{
-		margin-bottom: 0.5em;
-	}
-	.btn {
-		background: #EA2330;
-		color: white;
-		font-weight: bold;
-	}
-	#search-again{
-		background: blue;
-	}
-	@media (max-width: 768px) {
-    .carousel-inner .carousel-item > div {
-        display: none;
-    }
-    .carousel-inner .carousel-item > div:first-child {
-        display: block;
-    }
-}
-
-.img-fluid{
-	max-width: 100%;
-    height: 70px;
-    object-fit: contain;
-}
-
-.carousel-inner .carousel-item.active,
-.carousel-inner .carousel-item-next,
-.carousel-inner .carousel-item-prev {
-    display: flex;
-}
-
-/* display 3 */
-@media (min-width: 768px) {
-    
-    .carousel-inner .carousel-item-right.active,
-    .carousel-inner .carousel-item-next {
-      transform: translateX(33.333%);
+    input[name="first_name"]::placeholder {
+        color: #a5a2a2;
     }
     
-    .carousel-inner .carousel-item-left.active, 
+    input[name="last_name"]::placeholder {
+        color: #a5a2a2;
+    }
+    
+    .pan_number_edit {
+        margin-left: 110px;
+        margin-top: 20Px;
+    }
+    
+    .logo-widget,
+    .social-list {
+        margin-bottom: 0.5em;
+    }
+    
+    .btn {
+        background: #EA2330;
+        color: white;
+        font-weight: bold;
+    }
+    
+    #search-again {
+        background: blue;
+    }
+    
+    @media (max-width: 768px) {
+        .carousel-inner .carousel-item>div {
+            display: none;
+        }
+        .carousel-inner .carousel-item>div:first-child {
+            display: block;
+        }
+    }
+    
+    .img-fluid {
+        max-width: 100%;
+        height: 70px;
+        object-fit: contain;
+    }
+    
+    .carousel-inner .carousel-item.active,
+    .carousel-inner .carousel-item-next,
     .carousel-inner .carousel-item-prev {
-      transform: translateX(-33.333%);
+        display: flex;
     }
-}
-
-.carousel-inner .carousel-item-right,
-.carousel-inner .carousel-item-left{ 
-  transform: translateX(0);
-}
-#loginModal3-insurance #table-body td{
-	vertical-align: middle;
-}
-.nav-fill .nav-item {
-	max-width: 200px;
-}
-.select {
-	background-color: transparent;
-    border: 1px solid red;
-    color: black;
-	position: relative;
-}
-.seatactive {
-	background-color: blue;
-}
-.select:hover {
-	background: rgb(255, 145, 61);
-}
-.select .label {
-	visibility: hidden;
-}
-.select::before {
-	position: absolute;
-	content: '\f058';
-	font-family: "Font Awesome 5 Free";
-	inset: 0;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-}
-
+    /* display 3 */
+    
+    @media (min-width: 768px) {
+        .carousel-inner .carousel-item-right.active,
+        .carousel-inner .carousel-item-next {
+            transform: translateX(33.333%);
+        }
+        .carousel-inner .carousel-item-left.active,
+        .carousel-inner .carousel-item-prev {
+            transform: translateX(-33.333%);
+        }
+    }
+    
+    .carousel-inner .carousel-item-right,
+    .carousel-inner .carousel-item-left {
+        transform: translateX(0);
+    }
+    
+    #loginModal3-insurance #table-body td {
+        vertical-align: middle;
+    }
+    
+    .nav-fill .nav-item {
+        max-width: 200px;
+    }
+    
+    .select {
+        background-color: transparent;
+        border: 1px solid red;
+        color: black;
+        position: relative;
+    }
+    
+    .seatactive {
+        background-color: blue;
+    }
+    
+    .select:hover {
+        background: rgb(255, 145, 61);
+    }
+    
+    .select .label {
+        visibility: hidden;
+    }
+    
+    .select::before {
+        position: absolute;
+        content: '\f058';
+        font-family: "Font Awesome 5 Free";
+        inset: 0;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
 </style>
 <style type="text/css">
-	:root {
-		--grid: 9;
-	}
-	td{
-		padding: 6px;
-	}
-	.availableSeat{
-		cursor: pointer;
-	}
-	#seat-layout {
-		display: grid;
-		grid-auto-flow: column dense;;
-		/* grid-auto-rows: 35px; */
-		/* padding: 1em 1em 2.5em; */
-		box-shadow: 0 0 10px 0px rgb(0 0 0 / 20%);
-		overflow-x: scroll;
-	}
-	#showseat{
-		display: none;
-		width:180px;
-		height:max-content;
-		inset:0;
-		position:absolute;
-		background:white;
-		transform: translate(-50%, -100%);
-		z-index: 8;
-		box-shadow: 0 4px 26px 0 rgb(60 60 60 / 50%);
-	}
-	.seat-amount {
-		color:green;
-		font-weight:bold;
-	}
-	.showseat__title{
-		padding: 1.5em 0.5em;
-		color: white;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		background-color: black;
-		height: 30px;
-	}
-	.showseat__title p {
-		margin-bottom: 0;
-		margin-top: 0;
-	}
-	.grid-cell {
-		margin: 0.8em;
-	}
-	#seat-layout button {
-		margin: 1px 5px;
-	}
-	.row-no {
-		margin: 0 0.5em;
-		padding-top: 1.5px;
-		text-align: center;
-	}
-	.tab-pane {
-		padding-top: 0 !important;
-	}
-	.cn-st {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 2em;
-		border: 1px solid black;
-		border-radius: 10px;
-	}
-	.num {
-		display: flex;
-		justify-content: center;
-	}
-	.wt-sp {
-		height: 20px;
-	}
-	.af-st {
-		position: relative;
-		z-index: 5;
-	}
-	.af-st img {
-		position: relative;
-		z-index: 33;
-	}
-	.af-st::after {
-		content: '';
-		display: block;
-		position: absolute;
-		top: 3.5px;
-		left: 0;
-		right: 0;
-		bottom: 7px;
-		background-color: #4BB9F0;
-		transform: translateY(2px);
-		z-index: 2;
-	}
-
-	#flight-list.active {	
-			display: grid;	
-			place-content: center;	
-		}	
-		#flight-list.active img {	
-			object-fit: cover;	
-			width: 100%;	
-			height: 100%;	
-		}
-		#loader{
-		display: none;
-		color: black;
-		z-index: 1;
-	}
-
-	:root {
-	/* 	Size is a variable for both - height and width dimensions of the circle  */
-		--size: 300px;
-	/* 	First Color Value */
-		--clrFirstSpin: lightpink;
-	/* 	Second Color Value */
-		--clrSecondSpin: aqua;
-	/* 	Third Color Value */
-		--clrThirdSpin: purple;
-	/* 	Duration for text blinking animation  */
-		--displayingTextTime: 2500ms;
-		--spinnerFont: calc(var(--size)/10);
-	}
-
-	.cn-st #loader {
-		display: flex;
-		align-items:center;
-		justify-content:center;
-		margin:0;
-		font-family:'Verdana', sans-serif;
-	}
-
-	.spinner {
-		display: flex;
-		align-items:center;
-		justify-content:center;
-		width:var(--size);
-		height:var(--size);
-		position:relative;
-
-	}
-
-	.spinner-area {
-		border: 15px solid transparent;
-		position: absolute;
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-		animation: rotate var(--duration) var(--timing) infinite;
-	mix-blend-mode: overlay;
-	}
-
-	@keyframes rotate {
-	0% {
-		transform: rotate(0);
-	}
-
-	100% {
-		transform: rotate(360deg);
-	}
-	}
-
-	.spinner-third {
-		border-top-color:var(--clrThirdSpin);
-		--duration: 1.5s;
-		--timing: ease-in;	
-	}
-
-	.spinner-second {
-		border-left-color:var(--clrSecondSpin);
-		--duration: 2s;
-		--timing: ease-in
-	}
-
-	.spinner-first {
-		border-bottom-color: var(--clrFirstSpin);
-		--duration: 3s;
-		--timing: ease-in-out
-	}
-
-	.spinner p {
-		font-size: var(--spinnerFont);
-		text-transform:none;
-		animation: displaying-text var(--displayingTextTime) ease-in-out infinite;
-		color: #000;
-	}
-
-	@keyframes displaying-text {
-	0% {
-		opacity:1;
-	}
-		50% {
-		opacity: 0.2;
-	}
-		100% {
-		opacity:1;
-		}
-	}
-
-
-
-	.spinner:after {
-		content:'Nothing will be loaded!';
-	width:100px;
-	padding:15px;
-	height:50px;
-	display:block;
-	position:absolute;
-	top:-85px;
-	right:-40px;
-		background:white;
-	clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 42% 75%, 22% 100%, 22% 75%, 0% 75%);
-			animation-name:displayMessage;
-			animation-duration:3s;
-			animation-timing-function:ease-in-out;
-			animation-delay: 5s;
-			animation-iteration-count: 1;
-		animation-fill-mode: forwards;
-			animation-play-state:pause;
-			opacity:0;
-	}
-	body.active {margin: 0; height: 100%; overflow: hidden}
-	.sh{display: block;}
-	.hi{display: none;}
-	.text-radio{
-		border: 1px solid black;
-		margin-top: 1em;
-	}
-	.fttag{
-		background-color: red;
-	}
-	.text-radio input:checked ~ .trip-label {
-		color: white;
-	}
+     :root {
+        --grid: 9;
+    }
+    
+    td {
+        padding: 6px;
+    }
+    
+    .availableSeat {
+        cursor: pointer;
+    }
+    
+    #seat-layout {
+        display: grid;
+        grid-auto-flow: column dense;
+        ;
+        /* grid-auto-rows: 35px; */
+        /* padding: 1em 1em 2.5em; */
+        box-shadow: 0 0 10px 0px rgb(0 0 0 / 20%);
+        overflow-x: scroll;
+    }
+    
+    #showseat {
+        display: none;
+        width: 180px;
+        height: max-content;
+        inset: 0;
+        position: absolute;
+        background: white;
+        transform: translate(-50%, -100%);
+        z-index: 8;
+        box-shadow: 0 4px 26px 0 rgb(60 60 60 / 50%);
+    }
+    
+    .seat-amount {
+        color: green;
+        font-weight: bold;
+    }
+    
+    .showseat__title {
+        padding: 1.5em 0.5em;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: black;
+        height: 30px;
+    }
+    
+    .showseat__title p {
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+    
+    .grid-cell {
+        margin: 0.8em;
+    }
+    
+    #seat-layout button {
+        margin: 1px 5px;
+    }
+    
+    .row-no {
+        margin: 0 0.5em;
+        padding-top: 1.5px;
+        text-align: center;
+    }
+    
+    .tab-pane {
+        padding-top: 0 !important;
+    }
+    
+    .cn-st {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2em;
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+    
+    .num {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .wt-sp {
+        height: 20px;
+    }
+    
+    .af-st {
+        position: relative;
+        z-index: 5;
+    }
+    
+    .af-st img {
+        position: relative;
+        z-index: 33;
+    }
+    
+    .af-st::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 3.5px;
+        left: 0;
+        right: 0;
+        bottom: 7px;
+        background-color: #4BB9F0;
+        transform: translateY(2px);
+        z-index: 2;
+    }
+    
+    #flight-list.active {
+        display: grid;
+        place-content: center;
+    }
+    
+    #flight-list.active img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+    
+    #loader {
+        display: none;
+        color: black;
+        z-index: 1;
+    }
+    
+     :root {
+        /* 	Size is a variable for both - height and width dimensions of the circle  */
+        --size: 300px;
+        /* 	First Color Value */
+        --clrFirstSpin: lightpink;
+        /* 	Second Color Value */
+        --clrSecondSpin: aqua;
+        /* 	Third Color Value */
+        --clrThirdSpin: purple;
+        /* 	Duration for text blinking animation  */
+        --displayingTextTime: 2500ms;
+        --spinnerFont: calc(var(--size)/10);
+    }
+    
+    .cn-st #loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        font-family: 'Verdana', sans-serif;
+    }
+    
+    .spinner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--size);
+        height: var(--size);
+        position: relative;
+    }
+    
+    .spinner-area {
+        border: 15px solid transparent;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        animation: rotate var(--duration) var(--timing) infinite;
+        mix-blend-mode: overlay;
+    }
+    
+    @keyframes rotate {
+        0% {
+            transform: rotate(0);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    
+    .spinner-third {
+        border-top-color: var(--clrThirdSpin);
+        --duration: 1.5s;
+        --timing: ease-in;
+    }
+    
+    .spinner-second {
+        border-left-color: var(--clrSecondSpin);
+        --duration: 2s;
+        --timing: ease-in
+    }
+    
+    .spinner-first {
+        border-bottom-color: var(--clrFirstSpin);
+        --duration: 3s;
+        --timing: ease-in-out
+    }
+    
+    .spinner p {
+        font-size: var(--spinnerFont);
+        text-transform: none;
+        animation: displaying-text var(--displayingTextTime) ease-in-out infinite;
+        color: #000;
+    }
+    
+    @keyframes displaying-text {
+        0% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.2;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    
+    .spinner:after {
+        content: 'Nothing will be loaded!';
+        width: 100px;
+        padding: 15px;
+        height: 50px;
+        display: block;
+        position: absolute;
+        top: -85px;
+        right: -40px;
+        background: white;
+        clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 42% 75%, 22% 100%, 22% 75%, 0% 75%);
+        animation-name: displayMessage;
+        animation-duration: 3s;
+        animation-timing-function: ease-in-out;
+        animation-delay: 5s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        animation-play-state: pause;
+        opacity: 0;
+    }
+    
+    body.active {
+        margin: 0;
+        height: 100%;
+        overflow: hidden
+    }
+    
+    .sh {
+        display: block;
+    }
+    
+    .hi {
+        display: none;
+    }
+    
+    .text-radio {
+        border: 1px solid black;
+        margin-top: 1em;
+    }
+    
+    .fttag {
+        background-color: red;
+    }
+    
+    .text-radio input:checked~.trip-label {
+        color: white;
+    }
+    
     div.flight-info {
-
         border: 1px solid #ddd;
         border-radius: 4px;
         padding: 5px;
         width: 150px;
-}
-
-/* add by me */
-.img-thumbnail {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-.list-item {
-    list-style: none;
-    display: flex;
-    align-items: center;
-}
-.list-item::before {
-    content: "\2713";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    margin-right: 10px;
-}
+    }
+    /* add by me */
+    
+    .img-thumbnail {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    
+    .list-item {
+        list-style: none;
+        display: flex;
+        align-items: center;
+    }
+    
+    .list-item::before {
+        content: "\2713";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        margin-right: 10px;
+    }
 </style>
-	<!-- Main -->
-	
-	<main class="main-body">
-		<section class="details-pg">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-8 left-sec">
-						<div class="title-sec">
-							<h3>
+<!-- Main -->
 
-								<span>
+<main class="main-body">
+    <section class="details-pg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 left-sec">
+                    <div class="title-sec">
+                        <h3>
+
+                            <span>
 									<img src="{% static 'main/images/icon/notepad.png' %}" alt=""> Review Your Booking 
 								</span>
-								<a href="{% url 'index' %}">Change Room</a>
-							</h3>
-						</div>
-							<div class="box-one review-box">
-								<div class="row">
-									<div class="col-md-3">
-										<div class="img-container">
-											<img src="{{data.hInfo.img.0.url}}" class="img-thumbnail" alt="...">
-										</div>
-									</div>
-									<div class="col-md-9">
-										<h3 class="mb-1">{{data.hInfo.name}}</h3>
-										<h5 style="color: darkgray;"> {{data.hInfo.ad.adr}},{{data.hInfo.ad.adr2}},{{data.hInfo.ad.city.name}},{{data.hInfo.ad.state.name}},{{data.hInfo.ad.postalCode}}</h5>
-										<br>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="check-in-out">												
-													<div class="cb-top">
-														<span>Check-In</span>
-														<h4>{{check_in|date:"d" }}</h4>
-														<small>{{ check_in|date:"D" }} &nbsp;|&nbsp; 3:00 PM</small>
-													</div>
-													<div class="cb-top">
-														<span>Check-Out</span>
-														<h4>{{check_out|date:"d" }}</h4>
-														<small>{{ check_out|date:"D" }} &nbsp;|&nbsp;  11:00 AM</small>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<p class="mb-1">
-													<b>{{ date_diff|add:+1 }} Days & {{ date_diff }} Nights</b>
-												</p>
-												<p class="mb-1">
-												{% for room in data.hInfo.ops.0.ris%}
-													<b>Room {{ forloop.counter }}:</b> {{room.adt}} Adults & {{room.chd}} Child
-													<br>
-												{% endfor %}
-												</p>
-											</div>
-										</div>
-									</div>
-									<div class="col-12">										
-										<div class="notes-list mt-3">
-											<h5>
-												<i class="la la-info-circle"></i> Inclusion :
-											</h5>
-											<ul>
-												{% for i in data.hInfo.ops.0.ris.0.fcs %}
-												<li class="list-item">{{i}}</li>
-												{% endfor %}
-											</ul>
-										</div>
-										<div class="notes-list mt-3">
-											<h5>
-												<i class="la la-info-circle"></i> Cancellation Policy:
-											</h5>
-											<ul>
-												{% if cancellation_data.cancellationPolicy.ifra == True %}
-												<li class="list-item">{{cancellation_data.cancellationPolicy.pd.note}}</li>
-												{% else %}
-												<li class="list-item">No refund if you cancel this booking.You might be charged upto the full cost of stay (including taxes &amp; service charge) if you do not check-in to the hotel.</li>
-												{% endif %}
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
+                            <a href="{% url 'index' %}">Change Room</a>
+                        </h3>
+                    </div>
+                    <div class="box-one review-box">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="img-container">
+                                    <img src="{{data.hInfo.img.0.url}}" class="img-thumbnail" alt="...">
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <h3 class="mb-1">{{data.hInfo.name}}</h3>
+                                <h5 style="color: darkgray;"> {{data.hInfo.ad.adr}},{{data.hInfo.ad.adr2}},{{data.hInfo.ad.city.name}},{{data.hInfo.ad.state.name}},{{data.hInfo.ad.postalCode}}</h5>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="check-in-out">
+                                            <div class="cb-top">
+                                                <span>Check-In</span>
+                                                <h4>{{check_in|date:"d" }}</h4>
+                                                <small>{{ check_in|date:"D" }} &nbsp;|&nbsp; 3:00 PM</small>
+                                            </div>
+                                            <div class="cb-top">
+                                                <span>Check-Out</span>
+                                                <h4>{{check_out|date:"d" }}</h4>
+                                                <small>{{ check_out|date:"D" }} &nbsp;|&nbsp;  11:00 AM</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="mb-1">
+                                            <b>{{ date_diff|add:+1 }} Days & {{ date_diff }} Nights</b>
+                                        </p>
+                                        <p class="mb-1">
+                                            {% for room in data.hInfo.ops.0.ris%}
+                                            <b>Room {{ forloop.counter }}:</b> {{room.adt}} Adults & {{room.chd}} Child
+                                            <br> {% endfor %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="notes-list mt-3">
+                                    <h5>
+                                        <i class="la la-info-circle"></i> Inclusion :
+                                    </h5>
+                                    <ul>
+                                        {% for i in data.hInfo.ops.0.ris.0.fcs %}
+                                        <li class="list-item">{{i}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="notes-list mt-3">
+                                    <h5>
+                                        <i class="la la-info-circle"></i> Cancellation Policy:
+                                    </h5>
+                                    <ul>
+                                        {% if cancellation_data.cancellationPolicy.ifra == True %}
+                                        <li class="list-item">{{cancellation_data.cancellationPolicy.pd.note}}</li>
+                                        {% else %}
+                                        <li class="list-item">No refund if you cancel this booking.You might be charged upto the full cost of stay (including taxes &amp; service charge) if you do not check-in to the hotel.</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-						
-						
-					<form id="form_url" method="post">
-						
-						
-				       <div id="service-container" class="mt-3 mb-3"></div>
-						<div class="title-sec">
-							<h3>
-								<span>
+
+
+                    <form id="form_url" method="post">
+
+
+                        <div id="service-container" class="mt-3 mb-3"></div>
+                        <div class="title-sec">
+                            <h3>
+                                <span>
 									<img src="{% static 'main/images/icon/user-plus.png' %}" alt=""> Enter Traveller Details
 								</span>
-							</h3>
-						</div>
-						<div class="box-one login-box">
-							
-								{% comment %} <input id="pay__url" type="hidden" value="{% url  'get_payment' %}">
-								<input id="seat__url" type="hidden" value="{% url 'select_seat' %}"> {% endcomment %}
-							{% csrf_token %}
-							 <div>
-								<div class="col-12">
-									<h3 style="color: darkgray;" >Traveller Information</h3>
-								</div>
+                            </h3>
+                        </div>
+                        <div class="box-one login-box">
+
+                            {% comment %} <input id="pay__url" type="hidden" value="{% url  'get_payment' %}">
+                            <input id="seat__url" type="hidden" value="{% url 'select_seat' %}"> {% endcomment %} {% csrf_token %}
+                            <div>
+                                <div class="col-12">
+                                    <h3 style="color: darkgray;">Traveller Information</h3>
+                                </div>
 
 
-								<div id="formContainer"></div>
-								
-								
+                                <div id="formContainer"></div>
 
 
-								<div class="row">
-									<div class="col-12">
-										<h5 class="mb-2">Contact Details</h5>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<input type="text" class="form-control" min="10" max="10" name="mobile" placeholder="Phone Number" value="{{gstdetail.0.0.mobile}}" required>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<input type="text" class="form-control" placeholder="Official Email ID (Will be your Login ID)" name="email" value="{{gstdetail.0.0.email}}" required>
-										</div>
-									</div>
-							    </div>
-								<!-- <div class="heading-one" style="display: flex;gap: 1em;align-items: center;">
+
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5 class="mb-2">Contact Details</h5>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" min="10" max="10" name="mobile" placeholder="Phone Number" value="{{gstdetail.0.0.mobile}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="Official Email ID (Will be your Login ID)" name="email" value="{{gstdetail.0.0.email}}" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="heading-one" style="display: flex;gap: 1em;align-items: center;">
 									<input id="insurance-check" type="checkbox" class="mt-0" checked>
 									<h5>Also send my booking details on WhatsApp </h5>
 									<img src="{% static 'main/images/icon/whatsapp.png' %}" alt="">
 								</div> -->
-							</div>
-							<div class="notes-list">
-								<h5>
-									<i class="la la-info-circle"></i> Important Note :
-								</h5>
-								<ul>
-									<li>
-										Please ensure that the names of the passengers on the travel documents is the same as on their government issued identity proof.
-									</li>
-								</ul>
-							</div>
-							<div class="box-one service-box accordion-three" style="margin-top: 1em;">
-							<div class="heading-one">
-								<h4>Add your GST Details <span>(Optional)</span></h4>
-								<p>Claim credit of GST charges. Your taxes may get updated post submitting your GST details.</p>
-								<a class="" id="gst" data-toggle="collapse" data-target="#collapseg" aria-expanded="false" aria-controls="collapse2" style="float: right;margin-top: -2em;cursor: pointer;background: red;padding: 0.3em 0.8em;color: white;border-radius: 4px;">
+                            </div>
+                            <div class="notes-list">
+                                <h5>
+                                    <i class="la la-info-circle"></i> Important Note :
+                                </h5>
+                                <ul>
+                                    <li>
+                                        Please ensure that the names of the passengers on the travel documents is the same as on their government issued identity proof.
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="box-one service-box accordion-three" style="margin-top: 1em;">
+                                <div class="heading-one">
+                                    <h4>Add your GST Details <span>(Optional)</span></h4>
+                                    <p>Claim credit of GST charges. Your taxes may get updated post submitting your GST details.</p>
+                                    <a class="" id="gst" data-toggle="collapse" data-target="#collapseg" aria-expanded="false" aria-controls="collapse2" style="float: right;margin-top: -2em;cursor: pointer;background: red;padding: 0.3em 0.8em;color: white;border-radius: 4px;">
 									Add
 								</a>
-							</div>
-							<div id="collapseg" class="collapse" data-parent="#option-acc-one">
-								<div class="row">
-									<div class="col-md-3">
-										<div class="form-group">
-											<label for="">GST Number:</label>
-											<input id="gstnumber" type="text" class="form-control" placeholder="" name="gstno" placeholder="Gst Number">
-										</div>
-									</div>
-									<div class="col-md-3">
-										<div class="form-group">
-											<label for="">Company Name:</label>
-											<input id="companyname" type="text" class="form-control" placeholder="" name="company_name">
-										</div>
-									</div>
-									<div class="col-md-3">
-										<div class="form-group">
-											<label for="">Email Id:</label>
-											<input id="gstemail" type="text" class="form-control" placeholder="Email" name="gst_email">
-										</div>
-									</div>
-									<div class="col-md-3">
-										<div class="form-group">
-											<label for="">Mobile Number</label>
-											<input id="gstmobile" type="text" class="form-control" placeholder="" name="gst_mobile" >
-										</div>
-									</div>
-									<div class="col-md-3">
-										<div class="form-group">
-											<label for="">Address:</label>
-											<input id="gstaddress" type="text" class="form-control" placeholder="" name="address">
-										</div>
-									</div>
-									<!-- <div class="col-md-3">
+                                </div>
+                                <div id="collapseg" class="collapse" data-parent="#option-acc-one">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">GST Number:</label>
+                                                <input id="gstnumber" type="text" class="form-control" placeholder="" name="gstno" placeholder="Gst Number">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Company Name:</label>
+                                                <input id="companyname" type="text" class="form-control" placeholder="" name="company_name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Email Id:</label>
+                                                <input id="gstemail" type="text" class="form-control" placeholder="Email" name="gst_email">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Mobile Number</label>
+                                                <input id="gstmobile" type="text" class="form-control" placeholder="" name="gst_mobile">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Address:</label>
+                                                <input id="gstaddress" type="text" class="form-control" placeholder="" name="address">
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-md-3">
 										<div class="form-group">
 											<label for="">City:</label>
 											<input type="text" class="form-control" placeholder="">
@@ -556,100 +597,98 @@
 											<input type="text" class="form-control" placeholder="">
 										</div>
 									</div> -->
-								</div>
-						    </div>
-						    </div>
+                                    </div>
+                                </div>
+                            </div>
 
-						</div>	
-						<input type="hidden" name="passengerkey" value="{{ passengerkey }}">
-						<input type="hidden" name="apiamount" value="{{apiamount }}">
-						<input type="hidden" name="akasa_token" value="{{akasa_token}}">
-						<input type="hidden" name="rtype" value="{{rtype}}">
-						<input type="hidden" name="amount" value="{{akasaa_data.data.breakdown.totalAmount}}">
-						<input type="hidden" name="Person" value="{{Person}}">
-						<input type="hidden" name="token" value="{{token}}">
-						<input type="hidden" name="adult" value="{{adult}}">
-						<input type="hidden" name="child" value="{{child}}">
-						<input type="hidden" name="infant" value="{{infant}}">
-						<input type="hidden" name="skey" value="{{skey}}">
-						<div id="makepayment" class="col-md-4 mt-3">
-							{%if not request.user.is_authenticated %}
-							<button type="button" id="btn__submit" class="btn btn-block btn-red" data-toggle="modal" data-target="#loginModal">
+                        </div>
+                        <input type="hidden" name="passengerkey" value="{{ passengerkey }}">
+                        <input type="hidden" name="apiamount" value="{{apiamount }}">
+                        <input type="hidden" name="akasa_token" value="{{akasa_token}}">
+                        <input type="hidden" name="rtype" value="{{rtype}}">
+                        <input type="hidden" name="amount" value="{{akasaa_data.data.breakdown.totalAmount}}">
+                        <input type="hidden" name="Person" value="{{Person}}">
+                        <input type="hidden" name="token" value="{{token}}">
+                        <input type="hidden" name="adult" value="{{adult}}">
+                        <input type="hidden" name="child" value="{{child}}">
+                        <input type="hidden" name="infant" value="{{infant}}">
+                        <input type="hidden" name="skey" value="{{skey}}">
+                        <div id="makepayment" class="col-md-4 mt-3">
+                            {%if not request.user.is_authenticated %}
+                            <button type="button" id="btn__submit" class="btn btn-block btn-red" data-toggle="modal" data-target="#loginModal">
 								Login
-							</button>
-							{% else %}
-							<button id="btn__submit" class="btn btn-block btn-red" type="submit" >
+							</button> {% else %}
+                            <button id="btn__submit" class="btn btn-block btn-red" type="submit">
 							Make payment
 							<i class="la la-long-arrow-right la-lg"></i>
-							</button>
-							{% endif %}
-						</div>			
-				</form>
-					</div>			
-					
-					<div class="col-lg-4 right-sec">
-						<div class="title-sec">
-							<h4>Tariff Details <a href="javascript:void(0)" class="fare-sidebar-open">View Fare Rules</a></h4>
-						</div>
-						<div class="box-one fare-box">
-							
-							<p>
-								<span>Hotel Charges</span>
-								<span>₹ {{total_rs|floatformat:2}}</span>
-							</p>
-							<p>
-								<span>Taxes & Management Fee</span>
-								<span>₹ {{total_tax|floatformat:2}}</span>
-							</p>
-						
-							<hr>
-							<h4>
-								<span>Sub Total</span>
-								<span></span>
-							</h4>
-							<div id="add-on">
-								<p>
-									<span>
+							</button> {% endif %}
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-4 right-sec">
+                    <div class="title-sec">
+                        <h4>Tariff Details <a href="javascript:void(0)" class="fare-sidebar-open">View Fare Rules</a></h4>
+                    </div>
+                    <div class="box-one fare-box">
+
+                        <p>
+                            <span>Hotel Charges</span>
+                            <span>₹ {{total_rs|floatformat:2}}</span>
+                        </p>
+                        <p>
+                            <span>Taxes & Management Fee</span>
+                            <span>₹ {{total_tax|floatformat:2}}</span>
+                        </p>
+
+                        <hr>
+                        <h4>
+                            <span>Sub Total</span>
+                            <span></span>
+                        </h4>
+                        <div id="add-on">
+                            <p>
+                                <span>
 										Savari Promo Offer
 										<a href="javascript:void(0)" class="close">
 											<i class="fa fa-close"></i>
 										</a>
 									</span>
-									<span class="green savaari-save">(-) ₹ 0</span>
-								</p>
-							</div>		
-							<div class="promocode-add">
-								<h3>
-									<span>You Pay :</span>
-									<span id="total-flight-amount"></span>
-								</h3>
+                                <span class="green savaari-save">(-) ₹ 0</span>
+                            </p>
+                        </div>
+                        <div class="promocode-add">
+                            <h3>
+                                <span>You Pay :</span>
+                                <span id="total-flight-amount"></span>
+                            </h3>
 
-								<h5 class="green">
-									<span>Total Savings</span>
-									<span class="savaari-save">₹ {{data.hInfo.ops.0.tp}}</span>
-								</h5>
-							</div>
-						</div>
-						<div class="title-sec">
-							<h4>Promo Code</h4>
-						</div>
-						<div class="box-one promocode-box">
-							<h4>Select a Promo Code</h4>
-							<div class="input-sec">
-								<input id="promo-code-input" type="text" value="" placeholder="Your Promo Code">
-								<button class="active">
+                            <h5 class="green">
+                                <span>Total Savings</span>
+                                <span class="savaari-save">₹ {{data.hInfo.ops.0.tp}}</span>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="title-sec">
+                        <h4>Promo Code</h4>
+                    </div>
+                    <div class="box-one promocode-box">
+                        <h4>Select a Promo Code</h4>
+                        <div class="input-sec">
+                            <input id="promo-code-input" type="text" value="" placeholder="Your Promo Code">
+                            <button class="active">
 									Applied
 									<i class="la la-check"></i>
 								</button>
-							</div>
-							<div class="promocode-applied">
-								<i class="fa fa-check-circle green"></i>
-								<small>Congrats! You have availed a discount of Rs.0 , TnC apply.</small>
-							</div>
-							<ul>
-								{% for x in promo %}
-								<li>
-									<label class="promo-radio2">
+                        </div>
+                        <div class="promocode-applied">
+                            <i class="fa fa-check-circle green"></i>
+                            <small>Congrats! You have availed a discount of Rs.0 , TnC apply.</small>
+                        </div>
+                        <ul>
+                            {% for x in promo %}
+                            <li>
+                                <label class="promo-radio2">
 										<input type="radio" name="promocode2" value={{x.amount}}>
 										<span class="checkmark"></span>
 										<div class="promo-info">
@@ -658,317 +697,405 @@
 											<p class="small m-0">FLat 13% off on using CITI Bank Credit & Debit cards</p>
 										</div>
 									</label>
-									<div class="promo-terms">
-										<a href="{% url 'term'%}">Terms & Conditions</a>
-									</div>
-								</li>
-								{% endfor %}
-								
-							</ul>
-						</div>
-					</div>						
-                  </div>
-				</div>
-			</div>
-		</section>
+                                <div class="promo-terms">
+                                    <a href="{% url 'term'%}">Terms & Conditions</a>
+                                </div>
+                            </li>
+                            {% endfor %}
 
-	</main>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
 
-	
-	<div class="modal fade login-modal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
-		  <div class="modal-content " id="login-div">
-			<div class="modal-header" id="loginModalLabel">
-			  <h4 class="modal-title">Please login for better experience</h4>
-			  <h4 id="error-msg" style="color: red;"></h4>
-			</div>
-			<div class="modal-body">
-				<form id="login-form" action="{% url 'custlogin' %}" method="POST">
-					{% csrf_token %}
-					<div class="form-group">
-						<label for="">Username / Email / Mobile No.</label>
-						<input type="text" name ="username" class="form-control" placeholder="Username / Email / Mobile No." required>
-					</div>
-					<div class="form-group">
-						<label for="">Password</label>
-						<input type="password" name ="password" class="form-control" placeholder="******" required>
-					</div>
-					<div class="form-group">
-						<label class="custom-checkbox">
+</main>
+
+
+<div class="modal fade login-modal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content " id="login-div">
+            <div class="modal-header" id="loginModalLabel">
+                <h4 class="modal-title">Please login for better experience</h4>
+                <h4 id="error-msg" style="color: red;"></h4>
+            </div>
+            <div class="modal-body">
+                <form id="login-form" action="{% url 'custlogin' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="">Username / Email / Mobile No.</label>
+                        <input type="text" name="username" class="form-control" placeholder="Username / Email / Mobile No." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="******" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-checkbox">
 							Remember me
 							<input type="checkbox" checked="checked">
 							<span class="checkmark"></span>
 						</label>
-					</div>
-					<div class="form-group">
-						<button class="btn btn-block btn-blue" type="submit">Login</button>
-					</div>
-				</form>
-			</div>
-		  </div>
-		</div>
-	</div>
-	
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-block btn-blue" type="submit">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-	<div class="modal fade login-modal" id="loginModal2" role="dialog">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header" id="loginModalLabel" style="display: flex;flex-direction: column;justify-content: center;align-items: center;gap:2em;">
-					<h3 class="modal-title" style="color: red;">Session Expired</h3>
-					<img src="{% static 'main/images/icons8-alarm-clock.gif' %}" alt="" style="width: 150px;height: 150px;object-fit: contain;">
-					<div style="text-align: center;">
-						<h4>Timed Out</h4>
-						<p>Please recheck Fare & Availability of your selected flight(s) as air fares are dynamic and subject to change</p>
-					</div>
-			    </div>
-				<div class="modal-body d-flex" style="justify-content: center;gap:1em;">
-					<button id="search-again" class="btn btn-blue">New Search</button>
-					<button id="refresh" class="btn btn-red px-4">Search Result</button>
-				</div>
-			</div>
-		  </div>
-	</div>
-	<div class="modal fade login-modal" id="loginModal3" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          	<div class="modal-content">
-				<div class="modal-header" id="loginModalLabel" style="background-color: red;">
-				<div class="logo" style="background-color: white;padding:1em;border-radius: 10px;">
-					<img src="{% static 'main/images/logo.png' %}" alt="">
-				</div>
-				<div class="comp" style="color: white;margin-top: 0.5em;margin-left: 0.2em;">
-					<h2 style="margin: 0;">Online Savaari</h2>
-					<p style="margin: 0;">Travel Company</p>
-				</div>
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-				</div>
-				<table class="table">
-					<thead>
-					<tr id="table-header">
-						<th scope="col">#</th>
-						<th scope="col">Title</th>
-						<th scope="col">First Name</th>
-						<th scope="col">Last Name</th>
-						<th scope="col">Hotel Name</th>
-					</tr>
-					</thead>
-					<tbody id="table-body">
-					</tbody>
-				</table>
-				<div>
-					<h5 style="padding-left: 0.5em;">Contact Details & Hotel</h5>
-					<table class="table">
-						<thead>
-						<tr id="table-header">
-							<th scope="col">Mobile</th>
-							<th scope="col">Gmail</th>
-							<th scope="col">Room</th>
-						</tr>
-						</thead>
-						<tbody id="table-body_contact">
-						</tbody>
-					</table>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn close" style="color:black;border:1px solid red;padding: 0.5em 1.5em;">Edit</button>
-					<button id="contiune" type="button" class="btn">Continue</button>
-				</div>
-			</div>
-          </div>
+
+<div class="modal fade login-modal" id="loginModal2" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" id="loginModalLabel" style="display: flex;flex-direction: column;justify-content: center;align-items: center;gap:2em;">
+                <h3 class="modal-title" style="color: red;">Session Expired</h3>
+                <img src="{% static 'main/images/icons8-alarm-clock.gif' %}" alt="" style="width: 150px;height: 150px;object-fit: contain;">
+                <div style="text-align: center;">
+                    <h4>Timed Out</h4>
+                    <p>Please recheck Fare & Availability of your selected flight(s) as air fares are dynamic and subject to change</p>
+                </div>
+            </div>
+            <div class="modal-body d-flex" style="justify-content: center;gap:1em;">
+                <button id="search-again" class="btn btn-blue">New Search</button>
+                <button id="refresh" class="btn btn-red px-4">Search Result</button>
+            </div>
         </div>
     </div>
-	<div class="modal fade login-modal" id="loginModal3-insurance" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          	<div class="modal-content">
-				<form id="insurance_data" action="">
-					<div class="modal-header" id="loginModalLabel" style="background-color: red;">
-					<div class="logo" style="background-color: white;padding:1em;border-radius: 10px;">
-						<img src="{% static 'main/images/logo.png' %}" alt="">
-					</div>
-					<div class="comp" style="color: white;margin-top: 0.5em;margin-left: 0.2em;">
-						<h2 style="margin: 0;">Online Savaari</h2>
-						<p style="margin: 0;">Travel Company</p>
-					</div>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-					</div>
-					<table class="table">
-						<thead>
-						<tr id="table-header">
-							<th scope="col">#</th>
-							<th scope="col">Title</th>
-							<th scope="col">First Name</th>
-							<th scope="col">Last Name</th>
-							<th scope="col">Date of Birth</th>
-						</tr>
-						</thead>
-						<tbody id="table-body">
-						</tbody>
-					</table>
-					<div class="modal-footer">
-						<button type="button" class="btn close" style="color:black;border:1px solid red;padding: 0.5em 1.5em;">Cancel</button>
-						<button id="contiune" type="submit" class="btn">Add</button>
-					</div>
-				</form>
-			</div>
-          </div>
+</div>
+<div class="modal fade login-modal" id="loginModal3" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" id="loginModalLabel" style="background-color: red;">
+                <div class="logo" style="background-color: white;padding:1em;border-radius: 10px;">
+                    <img src="{% static 'main/images/logo.png' %}" alt="">
+                </div>
+                <div class="comp" style="color: white;margin-top: 0.5em;margin-left: 0.2em;">
+                    <h2 style="margin: 0;">Online Savaari</h2>
+                    <p style="margin: 0;">Travel Company</p>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr id="table-header">
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Hotel Name</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+            </table>
+            <div>
+                <h5 style="padding-left: 0.5em;">Contact Details & Hotel</h5>
+                <table class="table">
+                    <thead>
+                        <tr id="table-header">
+                            <th scope="col">Mobile</th>
+                            <th scope="col">Gmail</th>
+                            <th scope="col">Room</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body_contact">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn close" style="color:black;border:1px solid red;padding: 0.5em 1.5em;">Edit</button>
+                <button id="contiune" type="button" class="btn">Continue</button>
+            </div>
         </div>
     </div>
-	{% include "savaari_hotel/hotel_footer.html" %}
-	<div style="position: fixed;bottom: 0;width: 100%;background: #000;color: white;text-align: center;z-index: 999999;">
-		<h4 class="m-0 py-3" style="display: flex;align-items: center;justify-content: center;gap:0.2em">
-			<svg class="mr-2" width="25px" height="25px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path style="fill:white;" d="M232 120C232 106.7 242.7 96 256 96C269.3 96 280 106.7 280 120V243.2L365.3 300C376.3 307.4 379.3 322.3 371.1 333.3C364.6 344.3 349.7 347.3 338.7 339.1L242.7 275.1C236 271.5 232 264 232 255.1L232 120zM256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256z"/></svg>
-			Session will Expires in <span id="session-timer"></span></h4>
-	</div>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</div>
+</div>
+<div class="modal fade login-modal" id="loginModal3-insurance" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="insurance_data" action="">
+                <div class="modal-header" id="loginModalLabel" style="background-color: red;">
+                    <div class="logo" style="background-color: white;padding:1em;border-radius: 10px;">
+                        <img src="{% static 'main/images/logo.png' %}" alt="">
+                    </div>
+                    <div class="comp" style="color: white;margin-top: 0.5em;margin-left: 0.2em;">
+                        <h2 style="margin: 0;">Online Savaari</h2>
+                        <p style="margin: 0;">Travel Company</p>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr id="table-header">
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Date of Birth</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                </table>
+                <div class="modal-footer">
+                    <button type="button" class="btn close" style="color:black;border:1px solid red;padding: 0.5em 1.5em;">Cancel</button>
+                    <button id="contiune" type="submit" class="btn">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+{% include "savaari_hotel/hotel_footer.html" %}
+<div style="position: fixed;bottom: 0;width: 100%;background: #000;color: white;text-align: center;z-index: 999999;">
+    <h4 class="m-0 py-3" style="display: flex;align-items: center;justify-content: center;gap:0.2em">
+        <svg class="mr-2" width="25px" height="25px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path style="fill:white;" d="M232 120C232 106.7 242.7 96 256 96C269.3 96 280 106.7 280 120V243.2L365.3 300C376.3 307.4 379.3 322.3 371.1 333.3C364.6 344.3 349.7 347.3 338.7 339.1L242.7 275.1C236 271.5 232 264 232 255.1L232 120zM256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256z"/></svg>        Session will Expires in <span id="session-timer"></span></h4>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-	let hotel_review_data = JSON.parse('{{ hotel_review_data | escapejs }}')
-	console.log(hotel_review_data);
-	persons = hotel_review_data['hInfo']['ops'][0]['ris']
-	const form = document.createElement('form');
-	form.className = 'form-inline';
+    let hotel_review_data = JSON.parse('{{ hotel_review_data | escapejs }}')
+    console.log(hotel_review_data);
 
-	function validateTextOnly(event) {
-    	const input = event.target;
-    	const value = input.value;
-    	const regex = /^[A-Za-z\s]*$/;
-    	if (!regex.test(value)) {{}
-    		input.value = value.replace(/[^A-Za-z\s]/g, ''); 
-  		}
-	}
+    persons = hotel_review_data['hInfo']['ops'][0]['ris']
+    const form = document.createElement('form');
+    form.className = 'form-inline';
 
-	persons.forEach((person, index) => {
-  	const fieldset = document.createElement('fieldset');
-  	fieldset.style.border = 'none'; 
-  	const roomHeading = document.createElement('h3');
-  	roomHeading.textContent = 'Room ' + (index + 1);
- 	fieldset.appendChild(roomHeading);
-  
-  for (let i = 0; i < person.adt; i++) {
-    const adultHeading = document.createElement('p');
-    adultHeading.textContent = 'Adult ' + (i + 1);
-	adultHeading.style.marginBottom = '0';
-    const inlineDiv = document.createElement('div');
-    inlineDiv.className = 'form-group'; 
+    function validateTextOnly(event) {
+        const input = event.target;
+        const value = input.value;
+        const regex = /^[A-Za-z\s]*$/;
+        if (!regex.test(value)) {
+            {}
+            input.value = value.replace(/[^A-Za-z\s]/g, '');
+        }
+    }
 
-    const titleSelect = document.createElement('select');
-    titleSelect.name = 'title';
-    titleSelect.id = 'title';
-    titleSelect.className = 'form-control mr-4';
-    titleSelect.required = true;
-    const titleOptionDefault = document.createElement('option');
-    titleOptionDefault.value = '';
-    titleOptionDefault.disabled = true;
-    titleOptionDefault.selected = true;
-    titleOptionDefault.textContent = 'Title';
-    const titleOptionMr = document.createElement('option');
-    titleOptionMr.value = 'Mr';
-    titleOptionMr.textContent = 'MR.';
-    const titleOptionMrs = document.createElement('option');
-    titleOptionMrs.value = 'Mrs';
-    titleOptionMrs.textContent = 'MRS.';
-    const titleOptionMs = document.createElement('option');
-    titleOptionMs.value = 'Ms';
-    titleOptionMs.textContent = 'MS.';
-    titleSelect.appendChild(titleOptionDefault);
-    titleSelect.appendChild(titleOptionMr);
-    titleSelect.appendChild(titleOptionMrs);
-    titleSelect.appendChild(titleOptionMs);
-    inlineDiv.appendChild(titleSelect);
+    persons.forEach((person, index) => {
+        const fieldset = document.createElement('fieldset');
+        fieldset.style.border = 'none';
+        const roomHeading = document.createElement('h3');
+        roomHeading.textContent = 'Room ' + (index + 1);
+        fieldset.appendChild(roomHeading);
 
-    const firstNameInput = document.createElement('input');
-    firstNameInput.style.textTransform = 'uppercase';
-    firstNameInput.type = 'text';
-    firstNameInput.className = 'form-control mr-3 first-name';
-    firstNameInput.name = 'first_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
-    firstNameInput.placeholder = 'First Name';
-	firstNameInput.addEventListener('input', validateTextOnly); 
-    firstNameInput.required = true;
-    firstNameInput.style.padding = '10px 55px';
-	firstNameInput.setAttribute='required'
-    inlineDiv.appendChild(firstNameInput);
-    const lastNameInput = document.createElement('input');
-    lastNameInput.style.textTransform = 'uppercase';
-    lastNameInput.type = 'text';
-    lastNameInput.className = 'form-control';
-    lastNameInput.name = 'last_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
-    lastNameInput.placeholder = 'Last Name'; 
-	lastNameInput.addEventListener('input', validateTextOnly); 
-    lastNameInput.style.padding = '10px 55px'; 
-    inlineDiv.appendChild(lastNameInput);
-    fieldset.appendChild(adultHeading);
-    fieldset.appendChild(inlineDiv);
-  }
+        for (let i = 0; i < person.adt; i++) {
+            const adultHeading = document.createElement('p');
+            adultHeading.textContent = 'Adult ' + (i + 1);
+            adultHeading.style.marginBottom = '0';
+            const inlineDiv = document.createElement('div');
+            inlineDiv.className = 'form-group';
 
-  const headingGap = document.createElement('div');
-  headingGap.style.marginBottom = '15px';
-  fieldset.appendChild(headingGap);
+            const titleSelect = document.createElement('select');
+            titleSelect.name = 'title';
+            titleSelect.id = 'title';
+            titleSelect.className = 'form-control mr-4';
+            titleSelect.required = true;
+            const titleOptionDefault = document.createElement('option');
+            titleOptionDefault.value = '';
+            titleOptionDefault.disabled = true;
+            titleOptionDefault.selected = true;
+            titleOptionDefault.textContent = 'Title';
+            const titleOptionMr = document.createElement('option');
+            titleOptionMr.value = 'Mr';
+            titleOptionMr.textContent = 'MR.';
+            const titleOptionMrs = document.createElement('option');
+            titleOptionMrs.value = 'Mrs';
+            titleOptionMrs.textContent = 'MRS.';
+            const titleOptionMs = document.createElement('option');
+            titleOptionMs.value = 'Ms';
+            titleOptionMs.textContent = 'MS.';
+            titleSelect.appendChild(titleOptionDefault);
+            titleSelect.appendChild(titleOptionMr);
+            titleSelect.appendChild(titleOptionMrs);
+            titleSelect.appendChild(titleOptionMs);
+            inlineDiv.appendChild(titleSelect);
 
-  for (let i = 0; i < person.chd; i++) {
-    const childHeading = document.createElement('p');
-    childHeading.textContent = 'Child ' + (i + 1);
-	childHeading.style.marginBottom = '0';
-    const inlineDiv = document.createElement('div');
-    inlineDiv.className = 'form-group';
+            const firstNameInput = document.createElement('input');
+            firstNameInput.style.textTransform = 'uppercase';
+            firstNameInput.type = 'text';
+            firstNameInput.className = 'form-control mr-3 first-name';
+            // firstNameInput.name = 'first_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
+            // firstNameInput.placeholder = 'First Name';
+            firstNameInput.name = 'first_name';
+            firstNameInput.placeholder = 'First Name Room ' + (index + 1) + ' Adult ' + (i + 1);
 
-    const titleSelect = document.createElement('select');
-    titleSelect.name = 'title';
-    titleSelect.id = 'title';
-    titleSelect.className = 'form-control mr-4';
-    titleSelect.required = true;
-    const titleOptionDefault = document.createElement('option');
-    titleOptionDefault.value = '';
-    titleOptionDefault.disabled = true;
-    titleOptionDefault.selected = true;
-    titleOptionDefault.textContent = 'Title';
-    const titleOptionMr = document.createElement('option');
-    titleOptionMr.value = 'Mr';
-    titleOptionMr.textContent = 'MR.';
-    const titleOptionMrs = document.createElement('option');
-    titleOptionMrs.value = 'Mrs';
-    titleOptionMrs.textContent = 'MRS.';
-    const titleOptionMs = document.createElement('option');
-    titleOptionMs.value = 'Ms';
-    titleOptionMs.textContent = 'MS.';
-    titleSelect.appendChild(titleOptionDefault);
-    titleSelect.appendChild(titleOptionMr);
-    titleSelect.appendChild(titleOptionMrs);
-    titleSelect.appendChild(titleOptionMs);
-    inlineDiv.appendChild(titleSelect);
+            firstNameInput.addEventListener('input', validateTextOnly);
+            firstNameInput.required = true;
+            firstNameInput.style.padding = '10px 55px';
+            firstNameInput.setAttribute = 'required'
+            inlineDiv.appendChild(firstNameInput);
+            const lastNameInput = document.createElement('input');
+            lastNameInput.style.textTransform = 'uppercase';
+            lastNameInput.type = 'text';
+            lastNameInput.className = 'form-control';
+            // lastNameInput.name = 'last_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
+            // lastNameInput.placeholder = 'Last Name'; 
+            lastNameInput.name = 'last_name';
+            lastNameInput.placeholder = 'Last Name Room ' + (index + 1) + ' Adult ' + (i + 1);
+            lastNameInput.addEventListener('input', validateTextOnly);
+            lastNameInput.style.padding = '10px 55px';
+            inlineDiv.appendChild(lastNameInput);
+            fieldset.appendChild(adultHeading);
+            fieldset.appendChild(inlineDiv);
+            const panInput = document.createElement('input');
+            panInput.type = 'text';
+            panInput.className = 'form-control mr-2 pan_number_edit';
+            panInput.name = 'pan_number';
+            panInput.placeholder = 'PAN NUMBER';
+            panInput.required = true;
+            panInput.maxLength = 10;
+            panInput.style.padding = '10px 55px';
+            inlineDiv.appendChild(panInput);
 
-    const firstNameInput = document.createElement('input');
-    firstNameInput.style.textTransform = 'uppercase';
-    firstNameInput.type = 'text';
-    firstNameInput.className = 'form-control mr-3 first-name';
-    firstNameInput.name = 'first_name_Room_'+(index + 1)+"_"+'Child'+"_"+(i + 1);
-    firstNameInput.placeholder = 'First Name';
-	firstNameInput.addEventListener('input', validateTextOnly); 
-    firstNameInput.required = true;
-    firstNameInput.style.padding = '10px 55px';
-    inlineDiv.appendChild(firstNameInput);
-    const lastNameInput = document.createElement('input');
-    lastNameInput.style.textTransform = 'uppercase';
-    lastNameInput.type = 'text';
-    lastNameInput.className = 'form-control';
-    lastNameInput.name = 'last_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
-    lastNameInput.placeholder = 'Last Name';
-	lastNameInput.addEventListener('input', validateTextOnly); 
-    lastNameInput.style.padding = '10px 55px';
-    inlineDiv.appendChild(lastNameInput);
-    fieldset.appendChild(childHeading);
-    fieldset.appendChild(inlineDiv);
-	
-  }
-  const roomGap = document.createElement('div');
-  roomGap.style.marginBottom = '30px';
-  fieldset.appendChild(roomGap);
-  const hr = document.createElement('hr');
-  fieldset.appendChild(hr);
-  form.appendChild(fieldset);
-});
-	const formContainer = document.getElementById('formContainer');
- 	formContainer.appendChild(form); 
+            fieldset.appendChild(adultHeading);
+            fieldset.appendChild(inlineDiv);
+        }
+
+        const headingGap = document.createElement('div');
+        headingGap.style.marginBottom = '15px';
+        fieldset.appendChild(headingGap);
+
+        for (let i = 0; i < person.chd; i++) {
+            const childHeading = document.createElement('p');
+            childHeading.textContent = 'Child ' + (i + 1);
+            childHeading.style.marginBottom = '0';
+            const inlineDiv = document.createElement('div');
+            inlineDiv.className = 'form-group';
+
+            const titleSelect = document.createElement('select');
+
+            titleSelect.name = 'title';
+            titleSelect.id = 'title';
+            titleSelect.className = 'form-control mr-4 custom-select';
+            titleSelect.required = true;
+            // const titleOptionDefault = document.createElement('option');
+            // titleOptionDefault.value = '';
+            // titleOptionDefault.disabled = true;
+            // titleOptionDefault.selected = true;
+            // titleOptionDefault.textContent = 'Title';
+            const titleOptionMr = document.createElement('option');
+            titleOptionMr.value = 'master';
+            titleOptionMr.textContent = 'MASTER';
+            titleOptionMr.className = "master_style"
+                // const titleOptionMrs = document.createElement('option');
+                // titleOptionMrs.value = 'Mrs';
+                // titleOptionMrs.textContent = 'MRS.';
+                // const titleOptionMs = document.createElement('option');
+                // titleOptionMs.value = 'Ms';
+                // titleOptionMs.textContent = 'MS.';
+                // titleSelect.appendChild(titleOptionDefault);
+            titleSelect.appendChild(titleOptionMr);
+            // titleSelect.appendChild(titleOptionMrs);
+            // titleSelect.appendChild(titleOptionMs);
+            inlineDiv.appendChild(titleSelect);
+
+            const firstNameInput = document.createElement('input');
+            firstNameInput.style.textTransform = 'uppercase';
+            firstNameInput.type = 'text';
+            firstNameInput.className = 'form-control mr-3 first-name';
+            // firstNameInput.name = 'first_name_Room_'+(index + 1)+"_"+'Child'+"_"+(i + 1);
+            // firstNameInput.placeholder = 'First Name';
+            firstNameInput.name = 'first_name';
+            firstNameInput.placeholder = 'First Name Room ' + (index + 1) + ' Child ' + (i + 1);
+            firstNameInput.addEventListener('input', validateTextOnly);
+            firstNameInput.required = true;
+            firstNameInput.style.padding = '10px 55px';
+            inlineDiv.appendChild(firstNameInput);
+            const lastNameInput = document.createElement('input');
+            lastNameInput.style.textTransform = 'uppercase';
+            lastNameInput.type = 'text';
+            lastNameInput.className = 'form-control';
+            // lastNameInput.name = 'last_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
+            // lastNameInput.placeholder = 'Last Name';
+            lastNameInput.name = 'last_name';
+            lastNameInput.placeholder = 'Last Name Room ' + (index + 1) + ' Child ' + (i + 1);
+            lastNameInput.addEventListener('input', validateTextOnly);
+            lastNameInput.style.padding = '10px 55px';
+            inlineDiv.appendChild(lastNameInput);
+            fieldset.appendChild(childHeading);
+            fieldset.appendChild(inlineDiv);
+
+        }
+        const roomGap = document.createElement('div');
+        roomGap.style.marginBottom = '30px';
+        fieldset.appendChild(roomGap);
+        const hr = document.createElement('hr');
+        fieldset.appendChild(hr);
+        form.appendChild(fieldset);
+    });
+
+
+
+
+    // const button = document.createElement('button');
+    // button.textContent = 'Submit';
+    // button.className = 'btn btn-primary mt-3';
+
+    btn__submit.addEventListener('click', function(event) {
+        event.preventDefault();
+        const travellerInfo = [];
+
+
+
+        const fieldsets = form.querySelectorAll('fieldset');
+        fieldsets.forEach((fieldset) => {
+            const roomData = {};
+            // const titleSelect = fieldset.querySelector('select[name="title"]');
+            // if (titleSelect) {
+            //   const roomTitle = titleSelect.value;
+            //   roomData.title = roomTitle;
+            // }
+
+            const persons = [];
+
+            const adultInputs = fieldset.querySelectorAll('input[name="first_name"][placeholder*="Adult"]');
+            adultInputs.forEach((input, index) => {
+                const lastNameInput = input.closest('.form-group').querySelector('input[name="last_name"]');
+                const titleSelect = input.closest('.form-group').querySelector('select[name="title"]');
+                const panInput = input.closest('.form-group').querySelector('input[name="pan_number"]');
+                const personData = {
+                    fN: input.value,
+                    lN: lastNameInput.value,
+                    ti: titleSelect ? titleSelect.value : '',
+                    pt: 'ADULT',
+                    pan: panInput.value,
+                };
+                persons.push(personData);
+            });
+
+            const childInputs = fieldset.querySelectorAll('input[name="first_name"][placeholder*="Child"]');
+            childInputs.forEach((input, index) => {
+                const lastNameInput = input.closest('.form-group').querySelector('input[name="last_name"]');
+                const titleSelect = input.closest('.form-group').querySelector('select[name="title"]');
+                const personData = {
+                    fN: input.value,
+                    lN: lastNameInput.value,
+                    ti: titleSelect ? titleSelect.value : '',
+                    pt: 'CHILD'
+                };
+                persons.push(personData);
+            });
+            roomData.travellerInfo = persons;
+
+            travellerInfo.push(roomData);
+        });
+
+        console.log(travellerInfo);
+    });
+
+    // form.appendChild(button);
+
+
+    const formContainer = document.getElementById('formContainer');
+    formContainer.appendChild(form);
 </script>
 
 
 </body>
+
 </html>
