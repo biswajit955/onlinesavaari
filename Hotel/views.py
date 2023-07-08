@@ -293,24 +293,25 @@ class HotelListView(View):
                                                                            'Nearest_Airport':Nearest_Airport
                                                                            })       
         else:
-            database_img = []
-            hotel = HotelRegister.objects.get(hotel_id=ids)
-            if hotel.image1:
-                database_img.append(hotel.image1.url)
-            if hotel.image2:
-                database_img.append(hotel.image2.url)
-            if hotel.image3:
-                database_img.append(hotel.image3.url)
-            if hotel.image4:
-                database_img.append(hotel.image4.url)
+            # it's local data base hotel    
 
-            rooms = [checked_object for checked_object in hotel.room.all()]
-            Price = min([int(i.current_price) for i in hotel.room.all()])
+            # database_img = []
+            # hotel = HotelRegister.objects.get(hotel_id=ids)
+            # if hotel.image1:
+            #     database_img.append(hotel.image1.url)
+            # if hotel.image2:
+            #     database_img.append(hotel.image2.url)
+            # if hotel.image3:
+            #     database_img.append(hotel.image3.url)
+            # if hotel.image4:
+            #     database_img.append(hotel.image4.url)
 
-            return render(request, 'savaari_hotel/hotel-details.html',context={'hotel':hotel,
-                                                                               'database_img':database_img,
-                                                                               'Price':Price,
-                                                                               'rooms':rooms})
+            # rooms = [checked_object for checked_object in hotel.room.all()]
+            # Price = min([int(i.current_price) for i in hotel.room.all()])
+            json_data = resp.json()
+            hotel_data = json_data['errors'][0]['message']
+            messages.error(request, f"{hotel_data}")
+            return render(request, 'savaari_hotel/index.html')
         
 
     def post(self, request, *args, **kwargs):
@@ -325,29 +326,32 @@ class HotelDetailsView(View):
 
         hotel_review_resp = requests.post(url = hotel_review_url, data=json.dumps(hotel_review_body),headers=headers)
         hotel_review_data = hotel_review_resp.json()
+        if hotel_review_data['status']['httpStatus'] == 200:
+            check_in = datetime.strptime(hotel_review_data['query']['checkinDate'], '%Y-%m-%d')
+            check_out = datetime.strptime(hotel_review_data['query']['checkoutDate'], '%Y-%m-%d')
+            date_diff = check_out.day - check_in.day
 
-        check_in = datetime.strptime(hotel_review_data['query']['checkinDate'], '%Y-%m-%d')
-        check_out = datetime.strptime(hotel_review_data['query']['checkoutDate'], '%Y-%m-%d')
-        date_diff = check_out.day - check_in.day
+            hotel_cancellation_policy_resp = requests.post(url = hotel_cancellation_policy_url, data=json.dumps(hotel_cancellation_policy_body),headers=headers)
+            hotel_cancellation_policy_data = hotel_cancellation_policy_resp.json()
 
-        hotel_cancellation_policy_resp = requests.post(url = hotel_cancellation_policy_url, data=json.dumps(hotel_cancellation_policy_body),headers=headers)
-        hotel_cancellation_policy_data = hotel_cancellation_policy_resp.json()
+            grp = find_group(request.user)
 
-        grp = find_group(request.user)
+            hotel_review_data['hInfo']['ops'][0]['ris'][0]['tfcs']['BF'] = hotel_markup_filter_one_hotel(hotel_review_data['hInfo']['ops'][0]['ris'][0]['tfcs']['BF'],grp,hotel_review_data['hInfo']['rt'])
+            hotel_review_data['hInfo']['ops'][0]['ris'][0]['tp'] = hotel_markup_filter_one_hotel(hotel_review_data['hInfo']['ops'][0]['ris'][0]['tp'],grp,hotel_review_data['hInfo']['rt'])
 
-        hotel_review_data['hInfo']['ops'][0]['ris'][0]['tfcs']['BF'] = hotel_markup_filter_one_hotel(hotel_review_data['hInfo']['ops'][0]['ris'][0]['tfcs']['BF'],grp,hotel_review_data['hInfo']['rt'])
-        hotel_review_data['hInfo']['ops'][0]['ris'][0]['tp'] = hotel_markup_filter_one_hotel(hotel_review_data['hInfo']['ops'][0]['ris'][0]['tp'],grp,hotel_review_data['hInfo']['rt'])
-
-        total_rs = sum(room['tfcs']['BF'] for room in hotel_review_data['hInfo']['ops'][0]['ris'] if room['tfcs']['BF'])
-        total_tax = sum(room['tfcs']['TAF'] for room in hotel_review_data['hInfo']['ops'][0]['ris'] if room['tfcs']['TAF'])
-        return render(request, 'savaari_hotel/hotel_payment_review.html',context={'data':hotel_review_data,
-                                                                                  "hotel_review_data": json.dumps(hotel_review_data),
-                                                                                  'cancellation_data':hotel_cancellation_policy_data,
-                                                                                  'check_out':check_out,
-                                                                                  'check_in':check_in,
-                                                                                  'date_diff':date_diff,
-                                                                                  'total_rs':total_rs,
-                                                                                  'total_tax':total_tax})
+            total_rs = sum(room['tfcs']['BF'] for room in hotel_review_data['hInfo']['ops'][0]['ris'] if room['tfcs']['BF'])
+            total_tax = sum(room['tfcs']['TAF'] for room in hotel_review_data['hInfo']['ops'][0]['ris'] if room['tfcs']['TAF'])
+            return render(request, 'savaari_hotel/hotel_payment_review.html',context={'data':hotel_review_data,
+                                                                                    "hotel_review_data": json.dumps(hotel_review_data),
+                                                                                    'cancellation_data':hotel_cancellation_policy_data,
+                                                                                    'check_out':check_out,
+                                                                                    'check_in':check_in,
+                                                                                    'date_diff':date_diff,
+                                                                                    'total_rs':total_rs,
+                                                                                    'total_tax':total_tax})
+        else:
+            messages.error(request, f"Requested Room is no longer available. Please try different option")
+            return redirect('hotel_home')
 
     def post(self, request,ids,ops_ids, *args, **kwargs):
         review_body = {"hotelId": ids,"optionId":ops_ids}
