@@ -924,6 +924,7 @@
             firstNameInput.name = 'first_name';
             firstNameInput.placeholder = 'First Name Room ' + (index + 1) + ' Adult ' + (i + 1);
 
+
             firstNameInput.addEventListener('input', validateTextOnly);
             firstNameInput.required = true;
             firstNameInput.style.padding = '10px 55px';
@@ -968,16 +969,15 @@
             inlineDiv.className = 'form-group';
 
             const titleSelect = document.createElement('select');
-
             titleSelect.name = 'title';
             titleSelect.id = 'title';
             titleSelect.className = 'form-control mr-4 custom-select';
             titleSelect.required = true;
-            // const titleOptionDefault = document.createElement('option');
-            // titleOptionDefault.value = '';
-            // titleOptionDefault.disabled = true;
-            // titleOptionDefault.selected = true;
-            // titleOptionDefault.textContent = 'Title';
+            const titleOptionDefault = document.createElement('option');
+            titleOptionDefault.value = '';
+            titleOptionDefault.disabled = true;
+            titleOptionDefault.selected = true;
+            titleOptionDefault.textContent = 'Title';
             const titleOptionMr = document.createElement('option');
             titleOptionMr.value = 'master';
             titleOptionMr.textContent = 'MASTER';
@@ -988,7 +988,7 @@
                 // const titleOptionMs = document.createElement('option');
                 // titleOptionMs.value = 'Ms';
                 // titleOptionMs.textContent = 'MS.';
-                // titleSelect.appendChild(titleOptionDefault);
+            titleSelect.appendChild(titleOptionDefault);
             titleSelect.appendChild(titleOptionMr);
             // titleSelect.appendChild(titleOptionMrs);
             // titleSelect.appendChild(titleOptionMs);
@@ -1088,9 +1088,8 @@
         console.log(travellerInfo);
     });
 
+
     // form.appendChild(button);
-
-
     const formContainer = document.getElementById('formContainer');
     formContainer.appendChild(form);
 </script>
