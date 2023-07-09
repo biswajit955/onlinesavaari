@@ -6,96 +6,100 @@
     input[name="first_name"]::placeholder {
         color: #a5a2a2;
     }
-    
+
     input[name="last_name"]::placeholder {
         color: #a5a2a2;
     }
-    
+
     .pan_number_edit {
         margin-left: 110px;
         margin-top: 20Px;
     }
-    
+
     .logo-widget,
     .social-list {
         margin-bottom: 0.5em;
     }
-    
+
     .btn {
         background: #EA2330;
         color: white;
         font-weight: bold;
     }
-    
+
     #search-again {
         background: blue;
     }
-    
+
     @media (max-width: 768px) {
         .carousel-inner .carousel-item>div {
             display: none;
         }
+
         .carousel-inner .carousel-item>div:first-child {
             display: block;
         }
     }
-    
+
     .img-fluid {
         max-width: 100%;
         height: 70px;
         object-fit: contain;
     }
-    
+
     .carousel-inner .carousel-item.active,
     .carousel-inner .carousel-item-next,
     .carousel-inner .carousel-item-prev {
         display: flex;
     }
+
     /* display 3 */
-    
+
     @media (min-width: 768px) {
+
         .carousel-inner .carousel-item-right.active,
         .carousel-inner .carousel-item-next {
             transform: translateX(33.333%);
         }
+
         .carousel-inner .carousel-item-left.active,
         .carousel-inner .carousel-item-prev {
             transform: translateX(-33.333%);
         }
     }
-    
+
     .carousel-inner .carousel-item-right,
     .carousel-inner .carousel-item-left {
         transform: translateX(0);
     }
-    
+
     #loginModal3-insurance #table-body td {
         vertical-align: middle;
     }
-    
+
     .nav-fill .nav-item {
         max-width: 200px;
     }
-    
+
     .select {
         background-color: transparent;
         border: 1px solid red;
         color: black;
         position: relative;
     }
-    
+
     .seatactive {
         background-color: blue;
     }
-    
+
     .select:hover {
         background: rgb(255, 145, 61);
     }
-    
+
     .select .label {
         visibility: hidden;
     }
-    
+
     .select::before {
         position: absolute;
         content: '\f058';
@@ -107,18 +111,18 @@
     }
 </style>
 <style type="text/css">
-     :root {
+    :root {
         --grid: 9;
     }
-    
+
     td {
         padding: 6px;
     }
-    
+
     .availableSeat {
         cursor: pointer;
     }
-    
+
     #seat-layout {
         display: grid;
         grid-auto-flow: column dense;
@@ -128,7 +132,7 @@
         box-shadow: 0 0 10px 0px rgb(0 0 0 / 20%);
         overflow-x: scroll;
     }
-    
+
     #showseat {
         display: none;
         width: 180px;
@@ -140,12 +144,12 @@
         z-index: 8;
         box-shadow: 0 4px 26px 0 rgb(60 60 60 / 50%);
     }
-    
+
     .seat-amount {
         color: green;
         font-weight: bold;
     }
-    
+
     .showseat__title {
         padding: 1.5em 0.5em;
         color: white;
@@ -155,30 +159,30 @@
         background-color: black;
         height: 30px;
     }
-    
+
     .showseat__title p {
         margin-bottom: 0;
         margin-top: 0;
     }
-    
+
     .grid-cell {
         margin: 0.8em;
     }
-    
+
     #seat-layout button {
         margin: 1px 5px;
     }
-    
+
     .row-no {
         margin: 0 0.5em;
         padding-top: 1.5px;
         text-align: center;
     }
-    
+
     .tab-pane {
         padding-top: 0 !important;
     }
-    
+
     .cn-st {
         display: flex;
         align-items: center;
@@ -187,26 +191,26 @@
         border: 1px solid black;
         border-radius: 10px;
     }
-    
+
     .num {
         display: flex;
         justify-content: center;
     }
-    
+
     .wt-sp {
         height: 20px;
     }
-    
+
     .af-st {
         position: relative;
         z-index: 5;
     }
-    
+
     .af-st img {
         position: relative;
         z-index: 33;
     }
-    
+
     .af-st::after {
         content: '';
         display: block;
@@ -219,25 +223,25 @@
         transform: translateY(2px);
         z-index: 2;
     }
-    
+
     #flight-list.active {
         display: grid;
         place-content: center;
     }
-    
+
     #flight-list.active img {
         object-fit: cover;
         width: 100%;
         height: 100%;
     }
-    
+
     #loader {
         display: none;
         color: black;
         z-index: 1;
     }
-    
-     :root {
+
+    :root {
         /* 	Size is a variable for both - height and width dimensions of the circle  */
         --size: 300px;
         /* 	First Color Value */
@@ -250,7 +254,7 @@
         --displayingTextTime: 2500ms;
         --spinnerFont: calc(var(--size)/10);
     }
-    
+
     .cn-st #loader {
         display: flex;
         align-items: center;
@@ -258,7 +262,7 @@
         margin: 0;
         font-family: 'Verdana', sans-serif;
     }
-    
+
     .spinner {
         display: flex;
         align-items: center;
@@ -267,7 +271,7 @@
         height: var(--size);
         position: relative;
     }
-    
+
     .spinner-area {
         border: 15px solid transparent;
         position: absolute;
@@ -277,53 +281,56 @@
         animation: rotate var(--duration) var(--timing) infinite;
         mix-blend-mode: overlay;
     }
-    
+
     @keyframes rotate {
         0% {
             transform: rotate(0);
         }
+
         100% {
             transform: rotate(360deg);
         }
     }
-    
+
     .spinner-third {
         border-top-color: var(--clrThirdSpin);
         --duration: 1.5s;
         --timing: ease-in;
     }
-    
+
     .spinner-second {
         border-left-color: var(--clrSecondSpin);
         --duration: 2s;
         --timing: ease-in
     }
-    
+
     .spinner-first {
         border-bottom-color: var(--clrFirstSpin);
         --duration: 3s;
         --timing: ease-in-out
     }
-    
+
     .spinner p {
         font-size: var(--spinnerFont);
         text-transform: none;
         animation: displaying-text var(--displayingTextTime) ease-in-out infinite;
         color: #000;
     }
-    
+
     @keyframes displaying-text {
         0% {
             opacity: 1;
         }
+
         50% {
             opacity: 0.2;
         }
+
         100% {
             opacity: 1;
         }
     }
-    
+
     .spinner:after {
         content: 'Nothing will be loaded!';
         width: 100px;
@@ -344,54 +351,55 @@
         animation-play-state: pause;
         opacity: 0;
     }
-    
+
     body.active {
         margin: 0;
         height: 100%;
         overflow: hidden
     }
-    
+
     .sh {
         display: block;
     }
-    
+
     .hi {
         display: none;
     }
-    
+
     .text-radio {
         border: 1px solid black;
         margin-top: 1em;
     }
-    
+
     .fttag {
         background-color: red;
     }
-    
+
     .text-radio input:checked~.trip-label {
         color: white;
     }
-    
+
     div.flight-info {
         border: 1px solid #ddd;
         border-radius: 4px;
         padding: 5px;
         width: 150px;
     }
+
     /* add by me */
-    
+
     .img-thumbnail {
         width: 100%;
         height: 200px;
         object-fit: cover;
     }
-    
+
     .list-item {
         list-style: none;
         display: flex;
         align-items: center;
     }
-    
+
     .list-item::before {
         content: "\2713";
         font-family: "Font Awesome 5 Free";
@@ -410,8 +418,8 @@
                         <h3>
 
                             <span>
-									<img src="{% static 'main/images/icon/notepad.png' %}" alt=""> Review Your Booking 
-								</span>
+                                <img src="{% static 'main/images/icon/notepad.png' %}" alt=""> Review Your Booking
+                            </span>
                             <a href="{% url 'index' %}">Change Room</a>
                         </h3>
                     </div>
@@ -424,7 +432,9 @@
                             </div>
                             <div class="col-md-9">
                                 <h3 class="mb-1">{{data.hInfo.name}}</h3>
-                                <h5 style="color: darkgray;"> {{data.hInfo.ad.adr}},{{data.hInfo.ad.adr2}},{{data.hInfo.ad.city.name}},{{data.hInfo.ad.state.name}},{{data.hInfo.ad.postalCode}}</h5>
+                                <h5 style="color: darkgray;">
+                                    {{data.hInfo.ad.adr}},{{data.hInfo.ad.adr2}},{{data.hInfo.ad.city.name}},{{data.hInfo.ad.state.name}},{{data.hInfo.ad.postalCode}}
+                                </h5>
                                 <br>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -437,7 +447,7 @@
                                             <div class="cb-top">
                                                 <span>Check-Out</span>
                                                 <h4>{{check_out|date:"d" }}</h4>
-                                                <small>{{ check_out|date:"D" }} &nbsp;|&nbsp;  11:00 AM</small>
+                                                <small>{{ check_out|date:"D" }} &nbsp;|&nbsp; 11:00 AM</small>
                                             </div>
                                         </div>
                                     </div>
@@ -472,7 +482,9 @@
                                         {% if cancellation_data.cancellationPolicy.ifra == True %}
                                         <li class="list-item">{{cancellation_data.cancellationPolicy.pd.note}}</li>
                                         {% else %}
-                                        <li class="list-item">No refund if you cancel this booking.You might be charged upto the full cost of stay (including taxes &amp; service charge) if you do not check-in to the hotel.</li>
+                                        <li class="list-item">No refund if you cancel this booking.You might be charged
+                                            upto the full cost of stay (including taxes &amp; service charge) if you do
+                                            not check-in to the hotel.</li>
                                         {% endif %}
                                     </ul>
                                 </div>
@@ -483,43 +495,41 @@
 
 
                     <form id="form_url" method="post">
-
-
+                        {% csrf_token %}
                         <div id="service-container" class="mt-3 mb-3"></div>
                         <div class="title-sec">
                             <h3>
                                 <span>
-									<img src="{% static 'main/images/icon/user-plus.png' %}" alt=""> Enter Traveller Details
-								</span>
+                                    <img src="{% static 'main/images/icon/user-plus.png' %}" alt=""> Enter Traveller
+                                    Details
+                                </span>
                             </h3>
                         </div>
                         <div class="box-one login-box">
 
                             {% comment %} <input id="pay__url" type="hidden" value="{% url  'get_payment' %}">
-                            <input id="seat__url" type="hidden" value="{% url 'select_seat' %}"> {% endcomment %} {% csrf_token %}
+                            <input id="seat__url" type="hidden" value="{% url 'select_seat' %}"> {% endcomment %}
+                            {% csrf_token %}
                             <div>
                                 <div class="col-12">
                                     <h3 style="color: darkgray;">Traveller Information</h3>
                                 </div>
-
-
                                 <div id="formContainer"></div>
-
-
-
-
                                 <div class="row">
                                     <div class="col-12">
                                         <h5 class="mb-2">Contact Details</h5>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" min="10" max="10" name="mobile" placeholder="Phone Number" value="{{gstdetail.0.0.mobile}}" required>
+                                            <input type="text" class="form-control" min="10" max="10" name="mobile"
+                                                placeholder="Phone Number" value="{{gstdetail.0.0.mobile}}" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Official Email ID (Will be your Login ID)" name="email" value="{{gstdetail.0.0.email}}" required>
+                                            <input type="text" class="form-control"
+                                                placeholder="Official Email ID (Will be your Login ID)" name="email"
+                                                value="{{gstdetail.0.0.email}}" required>
                                         </div>
                                     </div>
                                 </div>
@@ -535,48 +545,57 @@
                                 </h5>
                                 <ul>
                                     <li>
-                                        Please ensure that the names of the passengers on the travel documents is the same as on their government issued identity proof.
+                                        Please ensure that the names of the passengers on the travel documents is the
+                                        same as on their government issued identity proof.
                                     </li>
                                 </ul>
                             </div>
                             <div class="box-one service-box accordion-three" style="margin-top: 1em;">
                                 <div class="heading-one">
                                     <h4>Add your GST Details <span>(Optional)</span></h4>
-                                    <p>Claim credit of GST charges. Your taxes may get updated post submitting your GST details.</p>
-                                    <a class="" id="gst" data-toggle="collapse" data-target="#collapseg" aria-expanded="false" aria-controls="collapse2" style="float: right;margin-top: -2em;cursor: pointer;background: red;padding: 0.3em 0.8em;color: white;border-radius: 4px;">
-									Add
-								</a>
+                                    <p>Claim credit of GST charges. Your taxes may get updated post submitting your GST
+                                        details.</p>
+                                    <a class="" id="gst" data-toggle="collapse" data-target="#collapseg"
+                                        aria-expanded="false" aria-controls="collapse2"
+                                        style="float: right;margin-top: -2em;cursor: pointer;background: red;padding: 0.3em 0.8em;color: white;border-radius: 4px;">
+                                        Add
+                                    </a>
                                 </div>
                                 <div id="collapseg" class="collapse" data-parent="#option-acc-one">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">GST Number:</label>
-                                                <input id="gstnumber" type="text" class="form-control" placeholder="" name="gstno" placeholder="Gst Number">
+                                                <input id="gstnumber" type="text" class="form-control" placeholder=""
+                                                    name="gstno" placeholder="Gst Number">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">Company Name:</label>
-                                                <input id="companyname" type="text" class="form-control" placeholder="" name="company_name">
+                                                <input id="companyname" type="text" class="form-control" placeholder=""
+                                                    name="company_name">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">Email Id:</label>
-                                                <input id="gstemail" type="text" class="form-control" placeholder="Email" name="gst_email">
+                                                <input id="gstemail" type="text" class="form-control"
+                                                    placeholder="Email" name="gst_email">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">Mobile Number</label>
-                                                <input id="gstmobile" type="text" class="form-control" placeholder="" name="gst_mobile">
+                                                <input id="gstmobile" type="text" class="form-control" placeholder=""
+                                                    name="gst_mobile">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">Address:</label>
-                                                <input id="gstaddress" type="text" class="form-control" placeholder="" name="address">
+                                                <input id="gstaddress" type="text" class="form-control" placeholder=""
+                                                    name="address">
                                             </div>
                                         </div>
                                         <!-- <div class="col-md-3">
@@ -615,20 +634,22 @@
                         <input type="hidden" name="skey" value="{{skey}}">
                         <div id="makepayment" class="col-md-4 mt-3">
                             {%if not request.user.is_authenticated %}
-                            <button type="button" id="btn__submit" class="btn btn-block btn-red" data-toggle="modal" data-target="#loginModal">
-								Login
-							</button> {% else %}
+                            <button type="button" id="btn__submit" class="btn btn-block btn-red" data-toggle="modal"
+                                data-target="#loginModal">
+                                Login
+                            </button> {% else %}
                             <button id="btn__submit" class="btn btn-block btn-red" type="submit">
-							Make payment
-							<i class="la la-long-arrow-right la-lg"></i>
-							</button> {% endif %}
+                                Make payment
+                                <i class="la la-long-arrow-right la-lg"></i>
+                            </button> {% endif %}
                         </div>
                     </form>
                 </div>
 
                 <div class="col-lg-4 right-sec">
                     <div class="title-sec">
-                        <h4>Tariff Details <a href="javascript:void(0)" class="fare-sidebar-open">View Fare Rules</a></h4>
+                        <h4>Tariff Details <a href="javascript:void(0)" class="fare-sidebar-open">View Fare Rules</a>
+                        </h4>
                     </div>
                     <div class="box-one fare-box">
 
@@ -649,11 +670,11 @@
                         <div id="add-on">
                             <p>
                                 <span>
-										Savari Promo Offer
-										<a href="javascript:void(0)" class="close">
-											<i class="fa fa-close"></i>
-										</a>
-									</span>
+                                    Savari Promo Offer
+                                    <a href="javascript:void(0)" class="close">
+                                        <i class="fa fa-close"></i>
+                                    </a>
+                                </span>
                                 <span class="green savaari-save">(-) ₹ 0</span>
                             </p>
                         </div>
@@ -677,9 +698,9 @@
                         <div class="input-sec">
                             <input id="promo-code-input" type="text" value="" placeholder="Your Promo Code">
                             <button class="active">
-									Applied
-									<i class="la la-check"></i>
-								</button>
+                                Applied
+                                <i class="la la-check"></i>
+                            </button>
                         </div>
                         <div class="promocode-applied">
                             <i class="fa fa-check-circle green"></i>
@@ -689,14 +710,14 @@
                             {% for x in promo %}
                             <li>
                                 <label class="promo-radio2">
-										<input type="radio" name="promocode2" value={{x.amount}}>
-										<span class="checkmark"></span>
-										<div class="promo-info">
-											<span class="code">{{x.promo_code}}</span>
-											<span class="price yellow">Save ₹ {{x.amount}}</span>
-											<p class="small m-0">FLat 13% off on using CITI Bank Credit & Debit cards</p>
-										</div>
-									</label>
+                                    <input type="radio" name="promocode2" value={{x.amount}}>
+                                    <span class="checkmark"></span>
+                                    <div class="promo-info">
+                                        <span class="code">{{x.promo_code}}</span>
+                                        <span class="price yellow">Save ₹ {{x.amount}}</span>
+                                        <p class="small m-0">FLat 13% off on using CITI Bank Credit & Debit cards</p>
+                                    </div>
+                                </label>
                                 <div class="promo-terms">
                                     <a href="{% url 'term'%}">Terms & Conditions</a>
                                 </div>
@@ -714,7 +735,8 @@
 </main>
 
 
-<div class="modal fade login-modal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+<div class="modal fade login-modal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content " id="login-div">
             <div class="modal-header" id="loginModalLabel">
@@ -726,7 +748,8 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="">Username / Email / Mobile No.</label>
-                        <input type="text" name="username" class="form-control" placeholder="Username / Email / Mobile No." required>
+                        <input type="text" name="username" class="form-control"
+                            placeholder="Username / Email / Mobile No." required>
                     </div>
                     <div class="form-group">
                         <label for="">Password</label>
@@ -734,10 +757,10 @@
                     </div>
                     <div class="form-group">
                         <label class="custom-checkbox">
-							Remember me
-							<input type="checkbox" checked="checked">
-							<span class="checkmark"></span>
-						</label>
+                            Remember me
+                            <input type="checkbox" checked="checked">
+                            <span class="checkmark"></span>
+                        </label>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-block btn-blue" type="submit">Login</button>
@@ -752,12 +775,15 @@
 <div class="modal fade login-modal" id="loginModal2" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" id="loginModalLabel" style="display: flex;flex-direction: column;justify-content: center;align-items: center;gap:2em;">
+            <div class="modal-header" id="loginModalLabel"
+                style="display: flex;flex-direction: column;justify-content: center;align-items: center;gap:2em;">
                 <h3 class="modal-title" style="color: red;">Session Expired</h3>
-                <img src="{% static 'main/images/icons8-alarm-clock.gif' %}" alt="" style="width: 150px;height: 150px;object-fit: contain;">
+                <img src="{% static 'main/images/icons8-alarm-clock.gif' %}" alt=""
+                    style="width: 150px;height: 150px;object-fit: contain;">
                 <div style="text-align: center;">
                     <h4>Timed Out</h4>
-                    <p>Please recheck Fare & Availability of your selected flight(s) as air fares are dynamic and subject to change</p>
+                    <p>Please recheck Fare & Availability of your selected flight(s) as air fares are dynamic and
+                        subject to change</p>
                 </div>
             </div>
             <div class="modal-body d-flex" style="justify-content: center;gap:1em;">
@@ -767,7 +793,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade login-modal" id="loginModal3" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+<div class="modal fade login-modal" id="loginModal3" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header" id="loginModalLabel" style="background-color: red;">
@@ -778,7 +805,13 @@
                     <h2 style="margin: 0;">Online Savaari</h2>
                     <p style="margin: 0;">Travel Company</p>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-x">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg></button>
             </div>
             <table class="table">
                 <thead>
@@ -808,14 +841,16 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn close" style="color:black;border:1px solid red;padding: 0.5em 1.5em;">Edit</button>
+                <button type="button" class="btn close"
+                    style="color:black;border:1px solid red;padding: 0.5em 1.5em;">Edit</button>
                 <button id="contiune" type="button" class="btn">Continue</button>
             </div>
         </div>
     </div>
 </div>
 </div>
-<div class="modal fade login-modal" id="loginModal3-insurance" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+<div class="modal fade login-modal" id="loginModal3-insurance" tabindex="-1" role="dialog"
+    aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form id="insurance_data" action="">
@@ -827,7 +862,13 @@
                         <h2 style="margin: 0;">Online Savaari</h2>
                         <p style="margin: 0;">Travel Company</p>
                     </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-x">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg></button>
                 </div>
                 <table class="table">
                     <thead>
@@ -843,7 +884,8 @@
                     </tbody>
                 </table>
                 <div class="modal-footer">
-                    <button type="button" class="btn close" style="color:black;border:1px solid red;padding: 0.5em 1.5em;">Cancel</button>
+                    <button type="button" class="btn close"
+                        style="color:black;border:1px solid red;padding: 0.5em 1.5em;">Cancel</button>
                     <button id="contiune" type="submit" class="btn">Add</button>
                 </div>
             </form>
@@ -854,7 +896,12 @@
 {% include "savaari_hotel/hotel_footer.html" %}
 <div style="position: fixed;bottom: 0;width: 100%;background: #000;color: white;text-align: center;z-index: 999999;">
     <h4 class="m-0 py-3" style="display: flex;align-items: center;justify-content: center;gap:0.2em">
-        <svg class="mr-2" width="25px" height="25px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path style="fill:white;" d="M232 120C232 106.7 242.7 96 256 96C269.3 96 280 106.7 280 120V243.2L365.3 300C376.3 307.4 379.3 322.3 371.1 333.3C364.6 344.3 349.7 347.3 338.7 339.1L242.7 275.1C236 271.5 232 264 232 255.1L232 120zM256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256z"/></svg>        Session will Expires in <span id="session-timer"></span></h4>
+        <svg class="mr-2" width="25px" height="25px" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+            <path style="fill:white;"
+                d="M232 120C232 106.7 242.7 96 256 96C269.3 96 280 106.7 280 120V243.2L365.3 300C376.3 307.4 379.3 322.3 371.1 333.3C364.6 344.3 349.7 347.3 338.7 339.1L242.7 275.1C236 271.5 232 264 232 255.1L232 120zM256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256z" />
+        </svg> Session will Expires in <span id="session-timer"></span>
+    </h4>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -866,12 +913,14 @@
     const form = document.createElement('form');
     form.className = 'form-inline';
 
+    const formUrl = document.getElementById('form_url');
+
     function validateTextOnly(event) {
         const input = event.target;
         const value = input.value;
         const regex = /^[A-Za-z\s]*$/;
         if (!regex.test(value)) {
-            {}
+            { }
             input.value = value.replace(/[^A-Za-z\s]/g, '');
         }
     }
@@ -982,13 +1031,13 @@
             titleOptionMr.value = 'master';
             titleOptionMr.textContent = 'MASTER';
             titleOptionMr.className = "master_style"
-                // const titleOptionMrs = document.createElement('option');
-                // titleOptionMrs.value = 'Mrs';
-                // titleOptionMrs.textContent = 'MRS.';
-                // const titleOptionMs = document.createElement('option');
-                // titleOptionMs.value = 'Ms';
-                // titleOptionMs.textContent = 'MS.';
-                // titleSelect.appendChild(titleOptionDefault);
+            // const titleOptionMrs = document.createElement('option');
+            // titleOptionMrs.value = 'Mrs';
+            // titleOptionMrs.textContent = 'MRS.';
+            // const titleOptionMs = document.createElement('option');
+            // titleOptionMs.value = 'Ms';
+            // titleOptionMs.textContent = 'MS.';
+            // titleSelect.appendChild(titleOptionDefault);
             titleSelect.appendChild(titleOptionMr);
             // titleSelect.appendChild(titleOptionMrs);
             // titleSelect.appendChild(titleOptionMs);
@@ -1036,7 +1085,7 @@
     // button.textContent = 'Submit';
     // button.className = 'btn btn-primary mt-3';
 
-    btn__submit.addEventListener('click', function(event) {
+    btn__submit.addEventListener('click', function (event) {
         event.preventDefault();
         const travellerInfo = [];
 
@@ -1086,6 +1135,29 @@
         });
 
         console.log(travellerInfo);
+        id = hotel_review_data['hInfo']['id']
+        ops = hotel_review_data['hInfo']['ops'][0]['id']
+        url = `http://127.0.0.1:8000/Hotel/hotel-details/${id}/${ops}`
+        console.log(id, ops, url);
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                travellerInfo: JSON.stringify(travellerInfo)
+            },
+            dataType: 'json',
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+            },
+            success: function (result) {
+                // Handle the successful response
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+        console.log(travellerInfo);
+        formUrl.submit();
     });
 
     // form.appendChild(button);
