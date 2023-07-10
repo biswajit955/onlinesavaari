@@ -1019,7 +1019,6 @@
 
             const titleSelect = document.createElement('select');
             titleSelect.name = 'title_' + (index + 1) + "_" + 'Child' + "_" + (i + 1);
-            titleSelect.name = 'title';
             titleSelect.id = 'title';
             titleSelect.className = 'form-control mr-4 custom-select';
             titleSelect.required = true;
@@ -1032,15 +1031,15 @@
             titleOptionMr.value = 'Master';
             titleOptionMr.textContent = 'MASTER';
             titleOptionMr.className = "master_style"
-                // const titleOptionMrs = document.createElement('option');
-                // titleOptionMrs.value = 'Mrs';
-                // titleOptionMrs.textContent = 'MRS.';
+                const titleOptionMrs = document.createElement('option');
+                titleOptionMrs.value = 'Miss';
+                titleOptionMrs.textContent = 'MISS';
                 // const titleOptionMs = document.createElement('option');
                 // titleOptionMs.value = 'Ms';
                 // titleOptionMs.textContent = 'MS.';
                 // titleSelect.appendChild(titleOptionDefault);
             titleSelect.appendChild(titleOptionMr);
-            // titleSelect.appendChild(titleOptionMrs);
+            titleSelect.appendChild(titleOptionMrs);
             // titleSelect.appendChild(titleOptionMs);
             inlineDiv.appendChild(titleSelect);
 
