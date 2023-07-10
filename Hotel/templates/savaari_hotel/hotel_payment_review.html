@@ -910,8 +910,8 @@
     console.log(hotel_review_data);
 
     persons = hotel_review_data['hInfo']['ops'][0]['ris']
-    const form = document.createElement('form');
-    form.className = 'form-inline';
+    const form = document.createElement('div');
+    // form.className = 'form-inline';
 
     const formUrl = document.getElementById('form_url');
 
@@ -940,7 +940,7 @@
             inlineDiv.className = 'form-group';
 
             const titleSelect = document.createElement('select');
-            titleSelect.name = 'title';
+            titleSelect.name = 'title_' + (index + 1) + "_" + 'Adult' + "_" + (i + 1);
             titleSelect.id = 'title';
             titleSelect.className = 'form-control mr-4';
             titleSelect.required = true;
@@ -968,9 +968,9 @@
             firstNameInput.style.textTransform = 'uppercase';
             firstNameInput.type = 'text';
             firstNameInput.className = 'form-control mr-3 first-name';
-            // firstNameInput.name = 'first_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
+            firstNameInput.name = 'first_name_Room_' + (index + 1) + "_" + 'Adult' + "_" + (i + 1);
             // firstNameInput.placeholder = 'First Name';
-            firstNameInput.name = 'first_name';
+            // firstNameInput.name = 'first_name';
             firstNameInput.placeholder = 'First Name Room ' + (index + 1) + ' Adult ' + (i + 1);
 
             firstNameInput.addEventListener('input', validateTextOnly);
@@ -982,9 +982,9 @@
             lastNameInput.style.textTransform = 'uppercase';
             lastNameInput.type = 'text';
             lastNameInput.className = 'form-control';
-            // lastNameInput.name = 'last_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
+            lastNameInput.name = 'last_name_Room_' + (index + 1) + "_" + 'Adult' + "_" + (i + 1);
             // lastNameInput.placeholder = 'Last Name'; 
-            lastNameInput.name = 'last_name';
+            // lastNameInput.name = 'last_name';
             lastNameInput.placeholder = 'Last Name Room ' + (index + 1) + ' Adult ' + (i + 1);
             lastNameInput.addEventListener('input', validateTextOnly);
             lastNameInput.style.padding = '10px 55px';
@@ -994,7 +994,7 @@
             const panInput = document.createElement('input');
             panInput.type = 'text';
             panInput.className = 'form-control mr-2 pan_number_edit';
-            panInput.name = 'pan_number';
+            panInput.name = 'pan_number_' + (index + 1) + "_" + (i + 1);
             panInput.placeholder = 'PAN NUMBER';
             panInput.required = true;
             panInput.maxLength = 10;
@@ -1018,7 +1018,7 @@
 
             const titleSelect = document.createElement('select');
 
-            titleSelect.name = 'title';
+            titleSelect.name = 'title_' + (index + 1) + "_" + 'Child' + "_" + (i + 1);
             titleSelect.id = 'title';
             titleSelect.className = 'form-control mr-4 custom-select';
             titleSelect.required = true;
@@ -1028,7 +1028,7 @@
             // titleOptionDefault.selected = true;
             // titleOptionDefault.textContent = 'Title';
             const titleOptionMr = document.createElement('option');
-            titleOptionMr.value = 'master';
+            titleOptionMr.value = 'Master';
             titleOptionMr.textContent = 'MASTER';
             titleOptionMr.className = "master_style"
             // const titleOptionMrs = document.createElement('option');
@@ -1047,9 +1047,9 @@
             firstNameInput.style.textTransform = 'uppercase';
             firstNameInput.type = 'text';
             firstNameInput.className = 'form-control mr-3 first-name';
-            // firstNameInput.name = 'first_name_Room_'+(index + 1)+"_"+'Child'+"_"+(i + 1);
+            firstNameInput.name = 'first_name_Room_' + (index + 1) + "_" + 'Child' + "_" + (i + 1);
             // firstNameInput.placeholder = 'First Name';
-            firstNameInput.name = 'first_name';
+            // firstNameInput.name = 'first_name';
             firstNameInput.placeholder = 'First Name Room ' + (index + 1) + ' Child ' + (i + 1);
             firstNameInput.addEventListener('input', validateTextOnly);
             firstNameInput.required = true;
@@ -1061,7 +1061,7 @@
             lastNameInput.className = 'form-control';
             // lastNameInput.name = 'last_name_Room_'+(index + 1)+"_"+ 'Child'+"_"+ (i + 1);
             // lastNameInput.placeholder = 'Last Name';
-            lastNameInput.name = 'last_name';
+            lastNameInput.name = 'last_name_Room_' + (index + 1) + "_" + 'Child' + "_" + (i + 1);
             lastNameInput.placeholder = 'Last Name Room ' + (index + 1) + ' Child ' + (i + 1);
             lastNameInput.addEventListener('input', validateTextOnly);
             lastNameInput.style.padding = '10px 55px';
@@ -1084,83 +1084,6 @@
     // const button = document.createElement('button');
     // button.textContent = 'Submit';
     // button.className = 'btn btn-primary mt-3';
-
-    btn__submit.addEventListener('click', function (event) {
-        event.preventDefault();
-        const travellerInfo = [];
-
-
-
-        const fieldsets = form.querySelectorAll('fieldset');
-        fieldsets.forEach((fieldset) => {
-            const roomData = {};
-            // const titleSelect = fieldset.querySelector('select[name="title"]');
-            // if (titleSelect) {
-            //   const roomTitle = titleSelect.value;
-            //   roomData.title = roomTitle;
-            // }
-
-            const persons = [];
-
-            const adultInputs = fieldset.querySelectorAll('input[name="first_name"][placeholder*="Adult"]');
-            adultInputs.forEach((input, index) => {
-                const lastNameInput = input.closest('.form-group').querySelector('input[name="last_name"]');
-                const titleSelect = input.closest('.form-group').querySelector('select[name="title"]');
-                const panInput = input.closest('.form-group').querySelector('input[name="pan_number"]');
-                const personData = {
-                    fN: input.value,
-                    lN: lastNameInput.value,
-                    ti: titleSelect ? titleSelect.value : '',
-                    pt: 'ADULT',
-                    pan: panInput.value,
-                };
-                persons.push(personData);
-            });
-
-            const childInputs = fieldset.querySelectorAll('input[name="first_name"][placeholder*="Child"]');
-            childInputs.forEach((input, index) => {
-                const lastNameInput = input.closest('.form-group').querySelector('input[name="last_name"]');
-                const titleSelect = input.closest('.form-group').querySelector('select[name="title"]');
-                const personData = {
-                    fN: input.value,
-                    lN: lastNameInput.value,
-                    ti: titleSelect ? titleSelect.value : '',
-                    pt: 'CHILD'
-                };
-                persons.push(personData);
-            });
-            roomData.travellerInfo = persons;
-
-            travellerInfo.push(roomData);
-        });
-
-        console.log(travellerInfo);
-        id = hotel_review_data['hInfo']['id']
-        ops = hotel_review_data['hInfo']['ops'][0]['id']
-        url = `http://127.0.0.1:8000/Hotel/hotel-details/${id}/${ops}`
-        console.log(id, ops, url);
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: {
-                travellerInfo: JSON.stringify(travellerInfo)
-            },
-            dataType: 'json',
-            beforeSend: function (xhr, settings) {
-                xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
-            },
-            success: function (result) {
-                // Handle the successful response
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
-        });
-        console.log(travellerInfo);
-        formUrl.submit();
-    });
-
-    // form.appendChild(button);
 
 
     const formContainer = document.getElementById('formContainer');

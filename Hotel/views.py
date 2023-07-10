@@ -236,11 +236,11 @@ class HotelListView(View):
 
         resp = requests.post(url = hotel_details_api, data=json.dumps(body),headers=headers)
         data = resp.json()
-        with open("one_hotel.json", 'w') as file:
-            json.dump({}, file)
+        # with open("one_hotel.json", 'w') as file:
+        #     json.dump({}, file)
 
-        with open("one_hotel.json", "w") as file:
-            json.dump(data, file)
+        # with open("one_hotel.json", "w") as file:
+        #     json.dump(data, file)
         if resp.status_code == 200:
             try:
                 des = json.loads(data['hotel']["des"])
@@ -358,22 +358,30 @@ class HotelDetailsView(View):
 
         resp = requests.post(url = hotel_review_url, data=json.dumps(review_body),headers=headers)
         review_data = resp.json()
-        travellerInfo =[]
-        for num in range(1,len(review_data['hInfo']['ops'][0]['ris'])+1):
-            traveller = {"fN": request.POST.get(f'first_name{num}'),"lN": request.POST.get(f'first_name{num}'),"ti": request.POST.get(f'title{num}'),"pt": "ADULT","pan": "ABCDE1234F"}
-            travellerInfo.append(traveller)
+        final_traveller =[]
+        for count_ris, item in enumerate(review_data['hInfo']['ops'][0]['ris']):
+            travellerInfo_dict ={
+                "travellerInfo":[]
+            }
+            if item['adt'] > 0:
+                for count_adt in range(item['adt']):
+                    traveller = {"fN": request.POST.get(f'first_name_Room_{count_ris+1}_Adult_{count_adt+1}'),"lN": request.POST.get(f'last_name_Room_{count_ris+1}_Adult_{count_adt+1}'),"ti": request.POST.get(f'title_{count_ris+1}_Adult_{count_adt+1}'),"pt": "ADULT","pan": request.POST.get(f'pan_number_{count_ris+1}_{count_adt+1}')}
+                    travellerInfo_dict['travellerInfo'].append(traveller)
 
-        email = request.POST.get('email')
+            if item['chd'] > 0:
+                for count_chd in range(item['chd']):
+                    print(count_ris+1,count_chd+1,"count_chd")
+                    traveller = {"fN": request.POST.get(f'first_name_Room_{count_ris+1}_Child_{count_chd+1}'),"lN": request.POST.get(f'last_name_Room_{count_ris+1}_Child_{count_chd+1}'),"ti": request.POST.get(f'title_{count_ris+1}_Child_{count_chd+1}'),"pt": "CHILD"}
+                    travellerInfo_dict['travellerInfo'].append(traveller)
+            print(travellerInfo_dict,"mmmmmmmmmmm")
+            final_traveller.append(travellerInfo_dict)
+        print(final_traveller,"nnnnnnnnnnn")
+        email = request.POST.get('email') 
         mobile = request.POST.get('mobile')
-
 
         booking_body = {
             "bookingId": review_data['bookingId'],
-            "roomTravellerInfo": [
-                {
-                    "travellerInfo":travellerInfo
-                }
-            ],
+            "roomTravellerInfo": final_traveller,
             "deliveryInfo": {
                 "emails": [
                     email
@@ -392,6 +400,7 @@ class HotelDetailsView(View):
                 }
             ]
         }
+        print(booking_body)
         request.session['first_name'] = request.POST.get('first_name1')
         request.session['email'] = email
         request.session['mobile'] = mobile
@@ -406,6 +415,7 @@ class HotelPaymentView(View):
         email = request.session.get('email')
         mobile = request.session.get('mobile')
         review_data = request.session.get('review_data')
+        print(email,mobile,"mmmmmmmmm")
         with open("one_hotel.json", 'w') as file:
             json.dump({}, file)
 
@@ -437,7 +447,7 @@ class HotelPaymentView(View):
 
         txnid = ''.join(random.choices(string.ascii_uppercase +
                                             string.digits, k = 15))
-        pay_hash = '2PBP7IABZ2'+'|'+txnid+'|'+str(amount1)+'|'+'Online Savaari'+'|'+first_name+'|'+email+'|||||||||||'+'DAH88E3UWQ'
+        pay_hash = '2PBP7IABZ2'+'|'+txnid+'|'+str(amount1)+'|'+'Online Savaari'+'|'+email+'|||||||||||'+'DAH88E3UWQ'
         # pay_hash = 'M3YR2SW37O'+'|'+ txnid+'|'+str(amt)+'|'+'Online Savaari'+'|'+first_name+'|'+email+'|||||||||||'+'HHWBRBCYTT'
         hashed_form = encrypt_pay(pay_hash)
         print(hashed_form)
@@ -445,7 +455,7 @@ class HotelPaymentView(View):
         easebuzzObj = Easebuzz(MERCHANT_KEY, SALT, ENV)
         postDict = {
             'txnid': txnid,
-            'firstname': f'{first_name}',
+            'firstname': f'{email}',
             'phone': f'{mobile}',
             'email': f'{email}',
             'amount': f'{amount}',
@@ -480,11 +490,12 @@ class HotelPaymentView(View):
         resp = requests.post(url = hotel_booking_details_url, data=json.dumps(booking_id_body),headers=headers)
 
         if resp.status_code == 400:
+            print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
             resp = requests.post(url = hotel_booking_url, data=json.dumps(booking_body),headers=headers)
-            with open("one_hotel.json", 'w') as file:
+            with open("done.json", 'w') as file:
                 json.dump({}, file)
 
-            with open("one_hotel.json", "w") as file:
+            with open("done.json", "w") as file:
                 json.dump(resp.json(), file)
             if resp.status_code == 200:
                 booking_data = resp.json()
