@@ -475,28 +475,12 @@
                                     </ul>
                                 </div>
                                 <div class="notes-list mt-3">
-                                    <h4>
+                                    <h5>
                                         <i class="la la-info-circle"></i> Cancellation Policy:
-                                    </h4>
+                                    </h5>
                                     <ul>
                                         {% if cancellation_data.cancellationPolicy.ifra == True %}
-                                            {% if cancellation_data.cancellationPolicy.pd.note %}
-                                                <li class="list-item">{{cancellation_data.cancellationPolicy.pd.note}}</li>
-                                            {% else %}
-                                                <li class="list-item">full refund allowed</li>
-                                            {% endif %}
-                                            <br>
-                                                <h5>
-                                                    <i class="la la-info-circle"></i> List of Penalty:
-                                                </h5>
-                                                <br>
-                                                <h5>
-                                                    {% for pd in cancellation_data.cancellationPolicy.pd%}
-                                                        <li> From <b>{{pd.fdt}}</b> To <b>{{pd.tdt}}</b> Penalty amount :- <b>{{pd.am}}</b></li>
-                                                    {% endfor %}
-                                                </h5>   
-                                            
-                                        
+                                        <li class="list-item">{{cancellation_data.cancellationPolicy.pd.note}}</li>
                                         {% else %}
                                         <li class="list-item">No refund if you cancel this booking.You might be charged
                                             upto the full cost of stay (including taxes &amp; service charge) if you do
@@ -1035,6 +1019,7 @@
 
             const titleSelect = document.createElement('select');
             titleSelect.name = 'title_' + (index + 1) + "_" + 'Child' + "_" + (i + 1);
+            titleSelect.name = 'title';
             titleSelect.id = 'title';
             titleSelect.className = 'form-control mr-4 custom-select';
             titleSelect.required = true;

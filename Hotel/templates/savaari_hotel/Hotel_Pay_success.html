@@ -1,79 +1,68 @@
 {% load static %}
 {% include "savaari_hotel/hotel_header.html" %}
 <html>
-
-<head>
-  <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
-</head>
-<style>
-  body {
-    text-align: center;
-    padding: 40px 0;
-    background: #EBF0F5;
-  }
-
-  h1 {
-    color: #88B04B;
-    font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
-    font-weight: 900;
-    font-size: 40px;
-    margin-bottom: 10px;
-  }
-
-  p {
-    color: #404F5E;
-    font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
-    font-size: 20px;
-    margin: 0;
-  }
-
-  i {
-    color: #9ABC66;
-    font-size: 100px;
-    line-height: 200px;
-    margin-left: -15px;
-  }
-
-  .card {
-    background: white;
-    padding: 60px;
-    border-radius: 4px;
-    box-shadow: 0 2px 3px #C8D0D8;
-    display: inline-block;
-    margin: 0 auto;
-  }
-</style>
-
-<body>
-  <div class="card">
-    <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
-      <i class="checkmark">✓</i>
-    </div>
-    <input type="hidden" name="pay_type" value="savaari_wallet">
-    <h1>Success</h1>
-    <p>We received your purchase request;<br /> we'll be in touch shortly!</p>
-  </div>
-  <script src="{% static 'main/js/jquery.min.js' %}"></script>
-  {% csrf_token %}
-  <script>
-    let pay_type = window.sessionStorage.getItem('pay_type')
-    review_data = {}
-    review_data["csrfmiddlewaretoken"] = $('[name="csrfmiddlewaretoken"]').val();
-    review_data["pay_type"] = 'easebuzz';
-    console.log(review_data);
-    $.ajax({
-      type: "POST",
-      url: "{% url 'hotel_payments' %}",
-      data: review_data,
-      success: function (res) {
-        console.log(res)
-        location.href = "{% url 'hotel_booking_history' %}";
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
+  </head>
+    <style>
+      body {
+        text-align: center;
+        padding: 40px 0;
+        background: #EBF0F5;
       }
-    });
-  </script>
-</body>
-
+        h1 {
+          color: #88B04B;
+          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+          font-weight: 900;
+          font-size: 40px;
+          margin-bottom: 10px;
+        }
+        p {
+          color: #404F5E;
+          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+          font-size:20px;
+          margin: 0;
+        }
+      i {
+        color: #9ABC66;
+        font-size: 100px;
+        line-height: 200px;
+        margin-left:-15px;
+      }
+      .card {
+        background: white;
+        padding: 60px;
+        border-radius: 4px;
+        box-shadow: 0 2px 3px #C8D0D8;
+        display: inline-block;
+        margin: 0 auto;
+      }
+    </style>
+    <body>
+      <div class="card">
+      <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+        <i class="checkmark">✓</i>
+      </div>
+        <h1>Success</h1> 
+        <p>We received your purchase request;<br/> we'll be in touch shortly!</p>
+      </div>
+	  <script src="{% static 'main/js/jquery.min.js' %}"></script>
+    {% csrf_token %}
+	  <script>
+    // let review_form_data = window.sessionStorage.getItem('booking_body')
+    let review_data = window.sessionStorage.getItem('review_data')
+    // review_form_data = JSON.parse(review_form_data)
+    review_data = JSON.parse(review_data)
+    review_data["csrfmiddlewaretoken"] = $('[name="csrfmiddlewaretoken"]').val();
+		$.ajax({
+			type: "POST",
+			url: "{% url 'hotel_payments' %}",
+			data: {...review_data},
+		success: function(res){
+            console.log(res)
+            location.href = "{% url 'hotel_booking_history' %}";
+            }
+		});
+	  </script>
+    </body>
 </html>
-
-
-
