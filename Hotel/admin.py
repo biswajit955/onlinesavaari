@@ -1,8 +1,7 @@
 from django.contrib import admin
 
-from .models import RoomCategory, RoomType, MealBaseType, Address, PropertyType, Room, HotelRegister ,HotelBookingHistory ,TravellerInfo ,HotelMarkup
+from .models import RoomCategory, RoomType, MealBaseType, Address, PropertyType, Room, HotelRegister ,HotelBookingHistory
 
-admin.site.register(HotelMarkup)
 
 @admin.register(RoomCategory)
 class RoomCategoryAdmin(admin.ModelAdmin):
@@ -109,6 +108,9 @@ class HotelBookingHistoryAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'user',
+        'title',
+        'first_name',
+        'last_name',
         'email',
         'mobile',
         'hotel_name',
@@ -146,14 +148,4 @@ class HotelBookingHistoryAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(TravellerInfo)
-class TravellerInfoAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'title',
-        'hotelBookingHistory',
-        'first_name',
-        'last_name',
-        'type',
-        'room_no',
-    )
+

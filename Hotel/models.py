@@ -127,6 +127,9 @@ class HotelRegister(models.Model):
 
 class HotelBookingHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    title = models.CharField(max_length=7, null=True,blank=True)
+    first_name = models.CharField(max_length=100,blank=True)
+    last_name = models.CharField(max_length=100,blank=True)
     email = models.EmailField(max_length=100,null=True,blank=True)
     mobile = models.CharField(max_length=10,null=True,blank=True)
     hotel_name = models.CharField(max_length=250)
@@ -172,7 +175,10 @@ class HotelBookingHistory(models.Model):
     
     @property
     def roomInfo(self):
-        return f'Adults {self.adults_no} & Child {self.child_no}'
+        if self.child_no ==0:
+            return f'Adults {self.adults_no}'
+        else:
+            return f'Adults {self.adults_no} & Child {self.child_no}'
         
     @property
     def total_day_night(self):
@@ -181,31 +187,3 @@ class HotelBookingHistory(models.Model):
 
     def __str__(self):
         return str(self.osh_bookingId)
-    
-
-class TravellerInfo(models.Model):
-    hotelBookingHistory = models.ForeignKey(HotelBookingHistory, on_delete=models.CASCADE, null=True)
-    title = models.CharField(max_length=7, null=True,blank=True)
-    first_name = models.CharField(max_length=100,blank=True)
-    last_name = models.CharField(max_length=100,blank=True)
-    type = models.CharField(max_length=100,blank=True)
-    room_no = models.CharField(max_length=100,blank=True)
-
-    @property
-    def traveller(self):
-        return f'ROOM {self.room_no} = {self.title}, {self.first_name} {self.last_name} ({self.type})'
-
-
-    def __str__(self):
-        return str(self.hotelBookingHistory.hotel_name)
-    
-
-class HotelMarkup(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    user_type = models.CharField(max_length=100, null=True, blank=True)
-    amount_type = models.CharField(max_length=100, null=True, blank=True)
-    amount = models.CharField(max_length=100, null=True, blank=True)
-    hotel_rating = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(5.0)])
-    
-    def __str__(self):
-        return f'{self.user_type} {str(self.hotel_rating)}'
