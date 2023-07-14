@@ -11,10 +11,11 @@ from easebuzz_lib.easebuzz_payment_gateway import Easebuzz
 import string, random
 from decouple import config
 from wallet.models import WalletDetails
-from adminpanel.models import HotelMarkup
 from .models import *
 from .utils import *
-from flight.views import find_group , percentage
+from flight.views import find_group
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
 
 headers={"Content-Type": "application/json",'apikey':config("apikey")}
 hotel_listing_api = 'https://apitest.tripjack.com/hms/v1/hotel-searchquery-list'
@@ -25,54 +26,8 @@ hotel_booking_details_url = 'https://apitest.tripjack.com/oms/v1/hotel/booking-d
 hotel_booking_url = 'https://apitest.tripjack.com/oms/v1/hotel/book'
 
 # def HotelMarkup(price,grp):
-def hotel_markup_filters_for_all_hotel(price,grp,rating):
-    markup_data = {}
-    # for markup in HotelMarkup.objects.all():
-    for markup in HotelMarkup.objects.filter(user_type=grp):
-        if markup.amount_type == 'fixed' and int(markup.hotel_rating)==int(rating):
-            print(int(markup.amount) ,price,'fixed')
-            markup_data[int(markup.hotel_rating)] =  int(markup.amount) +price
-        elif markup.amount_type == 'percent' and int(markup.hotel_rating)==int(rating):
-            markup_data[int(markup.hotel_rating)] = percentage(price,int(markup.amount))
-        else:
-            markup_data[int(markup.hotel_rating)] = price
-
-    return markup_data
-
-def hotel_markup_filter_for_detail_page(price,grp,rating):
-    markup_data = 0
-    
-    for markup in HotelMarkup.objects.filter(user_type=grp):
-        if markup.amount_type == 'fixed' and int(markup.hotel_rating)==int(rating):
-            
-            markup_data =  int(markup.amount) +price
-        elif markup.amount_type == 'percent' and int(markup.hotel_rating)==int(rating):
-            
-            markup_data =   percentage(price,int(markup.amount))
-        else:
-            markup_data = price
-    if markup_data == 0:
-        markup_data = price
-
-    return round(markup_data)
 
 
-def hotel_markup_filter_one_hotel(price,grp,rating):
-    markup_data = 0
-    
-    for markup in HotelMarkup.objects.filter(user_type=grp):
-        if markup.amount_type == 'fixed' and int(markup.hotel_rating)==int(rating):
-            
-            markup_data =  int(markup.amount) +price
-        elif markup.amount_type == 'percent' and int(markup.hotel_rating)==int(rating):
-            
-            markup_data =   percentage(price,int(markup.amount))
-        else:
-            markup_data = price
-    if markup_data == 0:
-        markup_data = price
-
-    return round(markup_data)+00
 
 class HotelHomeView(View):
     def get(self, request, *args, **kwargs):
@@ -236,30 +191,37 @@ class HotelListView(View):
 
         resp = requests.post(url = hotel_details_api, data=json.dumps(body),headers=headers)
         data = resp.json()
-        # with open("one_hotel.json", 'w') as file:
-        #     json.dump({}, file)
+        with open("one_hotel.json", 'w') as file:
+            json.dump({}, file)
 
-        # with open("one_hotel.json", "w") as file:
-        #     json.dump(data, file)
+        with open("one_hotel.json", "w") as file:
+            json.dump(data, file)
         if resp.status_code == 200:
             try:
                 des = json.loads(data['hotel']["des"])
                 des_keys = [k.upper() for k in des.keys() if k != "attractions" and k != "dining"]
                 des_values = [v for k, v in des.items() if k != "attractions"and k != "dining"]
                 des_list = zip(des_keys, des_values)
+
+                a = des['attractions'].split('.  ')
+                locations_list = (a[1].split('  '))
+                Nearest_Airport = locations_list[-1]
             except:
                 des_list =""
-
-            insts = data['hotel']["inst"]
-            inst_list = []
-            for inst in insts:
-                inst_dict = json.loads(inst["msg"])
-                inst_dict["type"] = inst["type"]
-                inst_list.append(inst_dict)
-
-            a = des['attractions'].split('.  ')
-            locations_list = (a[1].split('  '))
-            Nearest_Airport = locations_list[-1]
+                des =""
+                locations_list =[]
+                Nearest_Airport = []
+            try:
+                insts = data['hotel']["inst"]
+                inst_list = []
+                for inst in insts:
+                    inst_dict = json.loads(inst["msg"])
+                    inst_dict["type"] = inst["type"]
+                    inst_list.append(inst_dict)
+            except:
+                inst_list = []
+            
+            
 
 
             tripjack_Standard_imgs = []
@@ -373,9 +335,8 @@ class HotelDetailsView(View):
                     print(count_ris+1,count_chd+1,"count_chd")
                     traveller = {"fN": request.POST.get(f'first_name_Room_{count_ris+1}_Child_{count_chd+1}'),"lN": request.POST.get(f'last_name_Room_{count_ris+1}_Child_{count_chd+1}'),"ti": request.POST.get(f'title_{count_ris+1}_Child_{count_chd+1}'),"pt": "CHILD"}
                     travellerInfo_dict['travellerInfo'].append(traveller)
-            print(travellerInfo_dict,"mmmmmmmmmmm")
             final_traveller.append(travellerInfo_dict)
-        print(final_traveller,"nnnnnnnnnnn")
+
         email = request.POST.get('email') 
         mobile = request.POST.get('mobile')
 
@@ -459,16 +420,13 @@ class HotelPaymentView(View):
             'phone': f'{mobile}',
             'email': f'{email}',
             'amount': f'{amount}',
-            'productinfo': 'Online Savaari',
-            'surl': f'https://onlinesavaari.website/Pay_success/hotel:{txnid}/',
-            'furl': f'https://onlinesavaari.website/Pay_failed/{bookingId}/',
+            'productinfo': 'Online Savaari',  
+            'surl': f'http://127.0.0.1:8000/Pay_success/hotel:{txnid}/',
+            'furl': f'https://127.0.0.1:8000Pay_failed/{bookingId}/',
             'hash': hashed_form
         }
         final_response = easebuzzObj.initiatePaymentAPI(postDict)
         result = json.loads(final_response)
-        print(result)
-
-
         return render(request, 'savaari_hotel/hotel-payments.html',context={'data':review_data,
                                                                             "review_data": json.dumps(review_data),
                                                                             "easebuzzjson":json.dumps(result),
@@ -480,98 +438,80 @@ class HotelPaymentView(View):
 
     def post(self, request, *args, **kwargs):
         review_data = request.session.get('review_data')
-        payment =  request.POST.get('payment')
+        payment_type = request.POST
+        json_payment_type = json.loads(json.dumps(payment_type))
+        print(json_payment_type,"mmmmmmmmmmm")
         booking_body = request.session.get('booking_body')
-
         booking_Id = review_data['bookingId']
+        user = request.user
+
         booking_id_body ={
                             "bookingId":booking_Id
                         }
         resp = requests.post(url = hotel_booking_details_url, data=json.dumps(booking_id_body),headers=headers)
 
+        print(resp.json())
+
         if resp.status_code == 400:
-            print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
-            resp = requests.post(url = hotel_booking_url, data=json.dumps(booking_body),headers=headers)
-            with open("done.json", 'w') as file:
-                json.dump({}, file)
+            if json_payment_type['pay_type']=='easebuzz':
+                resp = requests.post(url = hotel_booking_url, data=json.dumps(booking_body),headers=headers)
+                if resp.status_code == 200:
+                    booking_data = resp.json()
 
-            with open("done.json", "w") as file:
-                json.dump(resp.json(), file)
-            if resp.status_code == 200:
-                booking_data = resp.json()
-                print(booking_data,",,,,,,,,,,,,,,,,,,,,")
-
-                amount = review_data['hInfo']['ops'][0]['tp']
-                print(amount)
-                wallet = (WalletDetails.objects.filter(username=request.user)).latest('id')
-                final =int(wallet.wallet_balance) - int(amount)
-                wallet.wallet_balance = final
-                wallet.save()
-
-                booking_Id = booking_data['bookingId']
-                booking_id_body ={
-                                "bookingId":booking_Id
-                            }
-                resp = requests.post(url = hotel_booking_details_url, data=json.dumps(booking_id_body),headers=headers)
-                data= resp.json()
-
-                is_unique = False
-                while not is_unique:
-                    new_booking_id = generate_random_os_booking_id()
-                    if not HotelBookingHistory.objects.filter(osh_bookingId=new_booking_id).exists():
-                        is_unique = True
-
-
-                no_of_day = datetime.strptime(data['itemInfos']['HOTEL']['query']['checkoutDate'], "%Y-%m-%d")-datetime.strptime(data['itemInfos']['HOTEL']['query']['checkinDate'], "%Y-%m-%d")
-                HotelBookingHistory.objects.create( user=request.user,
-                                                    title = data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['ti'][0]['ti'],
-                                                    first_name = data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['ti'][0]['fN'],
-                                                    last_name = data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['ti'][0]['lN'],
-                                                    email = data['order']['deliveryInfo']['emails'][0],
-                                                    mobile = data['order']['deliveryInfo']['contacts'][0],
-                                                    hotel_name = data['itemInfos']['HOTEL']['hInfo']['name'],
-                                                    hotel_rating = data['itemInfos']['HOTEL']['hInfo']['rt'],
-                                                    longitude = data['itemInfos']['HOTEL']['hInfo']['gl']['ln'],
-                                                    latitude =data['itemInfos']['HOTEL']['hInfo']['gl']['lt'],
-                                                    address_details = data['itemInfos']['HOTEL']['hInfo']['ad']['adr'],
-                                                    city_name = data['itemInfos']['HOTEL']['hInfo']['ad']['city']['name'],  
-                                                    state_name = data['itemInfos']['HOTEL']['hInfo']['ad']['state']['name'],
-                                                    bookingId =  data['order']['bookingId'],
-                                                    osh_bookingId = new_booking_id,
-                                                    booking_status =  data['order']['status'],
-                                                    country_name = data['itemInfos']['HOTEL']['hInfo']['ad']['country']['name'],
-                                                    pin_code = data['itemInfos']['HOTEL']['hInfo']['ad']['postalCode'],
-                                                    room_id = data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['id'],
-                                                    room_category = data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['rc'],
-                                                    room_type = data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['rt'],
-                                                    adults_no = data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['adt'],
-                                                    child_no = data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['chd'],
-                                                    meal_base = data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['mb'],
-                                                    total_price = data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['tp'],
-                                                    taxes_fees = data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['tfcs']['TAF'],
-                                                    base_price =data['itemInfos']['HOTEL']['hInfo']['ops'][0]['ris'][0]['tfcs']['BF'],
-                                                    total_day = no_of_day.days,
-                                                    check_in_date = datetime.strptime(data['itemInfos']['HOTEL']['query']['checkinDate'], "%Y-%m-%d"),
-                                                    check_out_date = datetime.strptime(data['itemInfos']['HOTEL']['query']['checkoutDate'], "%Y-%m-%d")
-                                                )
-
-                return redirect('hotel_booking_history')
+                    booking_Id = booking_data['bookingId']
+                    booking_id_body ={
+                                    "bookingId":booking_Id
+                                }
+                    resp = requests.post(url = hotel_booking_details_url, data=json.dumps(booking_id_body),headers=headers)
+                    data= resp.json()
+                    save_to_booking_details_database(data,user)
+                    return JsonResponse({'redirect_url': 'hotel_booking_history'})
+                else:
+                    booking_data = resp.json()
+                    mgs = booking_data['errors'][0]['message']
+                    messages.error(request, f"{mgs}")
+                    return JsonResponse({'redirect_url': 'hotel_home'})
             else:
-                booking_data = resp.json()
-                print(booking_data)
-                mgs = booking_data['errors'][0]['message']
-                messages.error(request, f"{mgs}")
-                return redirect('hotel_home')
+                amount = review_data['hInfo']['ops'][0]['tp']
+                wallet = (WalletDetails.objects.filter(username=request.user)).latest('id')
+                if int(wallet.wallet_balance) > int(amount):
+                    resp = requests.post(url = hotel_booking_url, data=json.dumps(booking_body),headers=headers)
+                    print(resp.json())
+                    if resp.status_code == 200:
+                        booking_data = resp.json()
+                        final =int(wallet.wallet_balance) - int(amount)
+                        wallet.wallet_balance = final
+                        wallet.save()
+
+                        booking_Id = booking_data['bookingId']
+                        booking_id_body ={
+                                        "bookingId":booking_Id
+                                    }
+                        resp = requests.post(url = hotel_booking_details_url, data=json.dumps(booking_id_body),headers=headers)
+                        data= resp.json()
+                        save_to_booking_details_database(data,user)
+                        return JsonResponse({'redirect_url': 'hotel_booking_history'})
+
+                    else:
+                        booking_data = resp.json()
+                        mgs = booking_data['errors'][0]['message']
+                        messages.error(request, f"{mgs}")
+                        return JsonResponse({'redirect_url': 'hotel_home'})
+
+                else:
+                    messages.error(request, f"You don't have sufficient balance for booking this ticket")
+                    return JsonResponse({'redirect_url': 'hotel_home'})
+
         
         else:
             messages.error(request, f"This order is not allready completed")
-            return redirect('hotel_home')
+            return JsonResponse({'redirect_url': 'hotel_home'})
 
 
 class HotelBookingHistoryView(View):
     def get(self, request, *args, **kwargs):
         obj = HotelBookingHistory.objects.filter(user=request.user)
-        print(obj)
+    
         return render(request, 'savaari_hotel/booking-history.html',context={'objects':obj})
 
     def post(self, request, *args, **kwargs):
@@ -580,10 +520,11 @@ class HotelBookingHistoryView(View):
 
 class HotelBookingHistoryDetailsView(View):
     def get(self, request,ids, *args, **kwargs):
-        print(ids)
-        obj = HotelBookingHistory.objects.get(osh_bookingId=ids)
-        print(obj.total_day_night)
-        return render(request, 'savaari_hotel/Hotel_booking-invoice.html',context={'objects':obj})
+        Hotel_obj = HotelBookingHistory.objects.get(osh_bookingId=ids)
+        travellerInfo = TravellerInfo.objects.filter(hotelBookingHistory=Hotel_obj)
+        print(travellerInfo)
+        return render(request, 'savaari_hotel/Hotel_booking-invoice.html',context={'objects':Hotel_obj,
+                                                                                   'travellerInfo':travellerInfo})
 
     def post(self, request, *args, **kwargs):
         return render(request, 'savaari_hotel/Hotel_booking-invoice.html')
@@ -601,4 +542,33 @@ def hotel_cancel(request):
 
 
 
-    
+class HotelCancel(View):
+    def get(self, request,ids, *args, **kwargs):
+        print(ids)
+        return render(request, 'savaari_hotel/cancel.html')
+
+    def post(self, request, *args, **kwargs):
+        return HttpResponse('POST request!')
+
+
+
+def hotel_get_data(request):
+    login_user = request.user
+    os = request.POST.get('osh_bookingId')
+
+    if not login_user.is_authenticated:
+        return JsonResponse({'status': False, 'msg': "User is not logged in!"})
+
+    passengers = HotelBookingHistory.objects.filter(osh_bookingId=os)
+
+    # Convert passengers to dictionaries
+    passengers_dict = []
+    for passenger in passengers:
+        passenger_dict = model_to_dict(passenger)
+        
+        # Convert ImageFieldFile to string
+        passenger_dict['image'] = str(passenger_dict['image'])
+        
+        passengers_dict.append(passenger_dict)
+
+    return JsonResponse({'passengers': passengers_dict}, safe=False)
