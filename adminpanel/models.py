@@ -143,14 +143,3 @@ class Pcc(models.Model):
     purpose = models.CharField(max_length=10, null=True, blank=True)
     pcc_status = models.CharField(max_length=10, null=True, blank=True, default="inactive")
     
-    
-    
-class HotelMarkup(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    user_type = models.CharField(max_length=100, null=True, blank=True)
-    amount_type = models.CharField(max_length=100, null=True, blank=True)
-    amount = models.CharField(max_length=100, null=True, blank=True)
-    hotel_rating = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(5.0)])
-    
-    def __str__(self):
-        return f'{self.user_type} {str(self.hotel_rating)}'
