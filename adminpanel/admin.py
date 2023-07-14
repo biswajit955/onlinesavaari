@@ -14,7 +14,7 @@ from django.contrib.auth.models import Group
 
 admin.site.register(Card)
 admin.site.register(Pcc)
-
+admin.site.register(HotelMarkup)
 
 admin.site.register(Commission)
 @admin.register(Markup)
