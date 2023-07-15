@@ -174,7 +174,10 @@
             </div>
             <div class="contact-detail pt-3">
               <ul>
-                <li><b>Name</b></li>
+                {% for each in travellerInfo %}
+                <b><li>{{each.traveller}}</li></b>
+                {% endfor %}
+                
                 <li>Email ID:- {{objects.email}}</li>
                 <li>Phone Number:- {{objects.mobile}}</li>
               </ul>

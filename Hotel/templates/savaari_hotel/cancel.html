@@ -1,0 +1,359 @@
+{% load static %}
+{% load flight_tags %}
+{% include "online_savaari/header.html" %}
+<style>
+	.popup-screen {
+		z-index: 999999;
+		position: fixed;
+		background: rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(10px);
+		width: 100%;
+		height: 100vh;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		visibility: hidden;
+		transition: 0.5s ease;
+		transition-property: visibility;
+	}
+
+	.popup-screen.active {
+		visibility: visible;
+	}
+
+	.popup-box {
+		position: relative;
+		background: rgba(255, 255, 255, 0.8);
+		backdrop-filter: blur(10px);
+		max-width: 350px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		margin: 20px;
+		padding: 50px 40px;
+		border-radius: 20px;
+		box-shadow: 0 5px 25px rgb(0 0 0 / 20%);
+		transform: scale(0);
+		transition: 0.5s ease;
+		transition-property: transform;
+	}
+
+	.popup-screen.active .popup-box {
+		transform: scale(1);
+	}
+
+	.popup-box h2 {
+		font-size: 2.1em;
+		font-weight: 800;
+		margin-bottom: 20px;
+	}
+
+	.popup-box p {
+		font-size: 1em;
+		margin-bottom: 30px;
+	}
+
+	.popup-box .btn {
+		color: #fff;
+		background: red;
+		font-size: 1.1em;
+		font-weight: 500;
+		text-decoration: none;
+		text-transform: uppercase;
+		padding: 7px 27px;
+		border-radius: 3px;
+	}
+
+	.close-btn {
+		position: absolute;
+		font-size: 1em;
+		top: 0;
+		right: 0;
+		margin: 15px;
+		cursor: pointer;
+		opacity: 0.5;
+		transition: 0.3s ease;
+		transition-property: opacity;
+	}
+
+	.close-btn:hover {
+		opacity: 1;
+	}
+
+	section {
+		padding: 50px 100px;
+	}
+
+	.home {
+		position: relative;
+		width: 100%;
+		min-height: 100vh;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.image {
+		position: relative;
+		width: 45%;
+		min-height: 450px;
+	}
+
+	.image img {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 10px;
+	}
+
+	.info {
+		position: relative;
+		width: 52%;
+	}
+
+	.info h2 {
+		font-size: 2em;
+		font-weight: 800;
+	}
+
+	.info p {
+		font-size: 1em;
+		text-align: justify;
+		margin-top: 10px;
+	}
+
+	.trip-type-radio {
+		display: flex;
+		gap: 1em;
+	}
+
+	.trip-type-radio li {
+		border-radius: 6px;
+		border: 1px solid black;
+	}
+
+
+	.box-one .box-one {
+		padding-bottom: 0;
+		border: 0;
+		box-shadow: none;
+	}
+
+	@media (max-width: 990px) {
+		section {
+			padding: 50px 30px;
+		}
+
+		.home {
+			display: block;
+		}
+
+		.image {
+			width: 100%;
+		}
+
+		.info {
+			width: 100%;
+			margin-top: 15px;
+		}
+	}
+</style>
+<main class="main-body">
+	<section class="cancel-pg">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="box-one">
+						<form id="form_submit" action="{% url 'hotel_get_data' %}" method="POST">
+							{% csrf_token %}
+							<h4>Cancellation request</h4>
+							<ul class="trip-type-radio">
+								<li>
+									<label class="text-radio">
+										<input id="one-way" type="radio" name="radio1" checked
+											value="cancel_conplete_trip" onclick="waySelect('one-way')">
+										<span class="checkmark"></span>
+										<span class="trip-label">cancel trip</span>
+									</label>
+								</li>
+								<!-- <li>
+								<label class="text-radio">
+									<input id="round-trip" type="radio" name="radio1" onclick="waySelect('round-trip')" value="cancel_traveller" >
+									<span class="checkmark"></span>
+									<span class="trip-label">Cancel Traveller</span>
+								</label>
+							</li>
+							<li>
+								<label class="text-radio">
+									<input id="multi-city" type="radio" name="radio1"  onclick="waySelect('multi-city')" value="cancel_route">
+									<span class="checkmark"></span>
+									<span class="trip-label">Cancel Route</span>
+								</label>
+							</li> -->
+							</ul>
+							<div class>
+								<div class="box-one">
+									{% if msg%}
+									<h3 style="color: red">{{msg}}</h3>
+									{% endif %}
+									<div class="row">
+										<div class="col-md-6 col-12">
+											<p>
+												Enter your Savari booking reference number <span>*</span>
+											</p>
+										</div>
+										<div class="col-md-6 col-12">
+											<div class="form-group">
+												<input type="text" class="form-control"
+													placeholder="Savari Booking Reference Number" name="osh_bookingId"
+													value="{{bookingId}}" required>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6 col-12">
+											<div class="captcha">
+												<img class="main-img" src="images/captchaImage.png" alt="">
+												<a href="#">
+													<img src="images/refreshCaptchaIcon.png" alt="">
+												</a>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-12 text-center">
+											<button id="submit" class="btn btn-red" type="submit">Submit</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+						<div class="full-cancel">
+							<div class="box-one">
+								<h3>
+									ticket details
+								</h3>
+								<div class="table-responsive">
+									<div id="full-cancel-form" action="{% url 'cancel_booking' %}" method="POST">
+										<h1 id="bid-title"></h1>
+										<!-- <p id="des"></p>
+										<input type="hidden" class="form-control" name="bookingId">
+										<input type="hidden" name="radio1" value="complete">
+										<table class="table table-bordered table-hover table-striped table-checkable table-highlight-head mb-4">
+											<thead>
+												<tr>
+													<th class="checkbox-column">
+														<div class="custom-control custom-checkbox checkbox-primary">
+														  <input type="checkbox" class="custom-control-input todochkbox" id="todoAll">
+														  <label class="custom-control-label" for="todoAll"></label>
+														</div>
+													</th>
+													<th class="">Name</th>
+													<th class="">Date</th>
+													<th class="">Sales</th>
+												</tr>
+											</thead>
+											<tbody id="pax">
+											</tbody>
+										</table> -->
+										<button id="submit" class="btn btn-red" style="display: none;">Cancel</button>
+										<h3></h3>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+{% include "online_savaari/footer.html" %}
+
+<!-- Jquery min -->
+<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+<!-- Popper Min -->
+<script src="{% static 'main/plugins/bootstrap/js/popper.min.js' %}"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'main/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+<!-- Jquery UI -->
+<script src="{% static 'main/plugins/Jquery-ui/jquery-ui.min.js' %}"></script>
+
+<!-- Owl Carousel -->
+<script src="{% static 'main/plugins/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+<!-- Star Rating -->
+<script src="{% static 'main/plugins/star_rating/star-rating.js' %}"></script>
+
+<!-- Quantity -->
+<script src="{% static 'main/plugins/quantity.js' %}"></script>
+
+<!-- Phone -->
+<script src="{% static 'main/plugins/phone/phone.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/selectbox.js' %}"></script>
+
+<!-- Select -->
+<script src="{% static 'main/plugins/seat-booking/seat.js' %}"></script>
+
+<!-- Custom -->
+<script src="{% static 'main/js/default.js' %}"></script>
+
+<script type="text/javascript">
+	
+	$('#form_submit').on('submit', function (e) {
+		e.preventDefault()
+		console.log("done")
+		let mode = $('[name="radio1"]:checked').val();
+		$.ajax({
+			url: $('#form_submit').attr('action'),
+			type: "POST",
+			data: {
+				csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+				osh_bookingId: $('[name="osh_bookingId"]').val(),
+			},
+			success: function (data) {
+				bookingId = data['passengers'][0]['bookingId'];
+				console.log(bookingId);
+				$('#bid-title').text($('[name="osh_bookingId"]').val())
+				$('#des').text('Are you sure!');
+				$('#full-cancel-form #submit').show();
+				$('#full-cancel-form #submit').text("Yes");
+
+				$('#full-cancel-form #submit').click(function () {
+					// Update the URL
+					var cancelUrl = `https://apitest.tripjack.com/oms/v1/hotel/cancel-booking/${bookingId}`;
+					console.log(cancelUrl);
+					$.ajax({
+						url: cancelUrl,
+						type: "POST",
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("apikey", "2120183a3d1670-91ac-4f08-8026-db803a04fbdc");
+							xhr.setRequestHeader("Content-Type", "application/json");
+						},
+						success: function (data) {
+							console.log(data);
+							$('#full-cancel-form #h3').text("Booking canceled successfully!");
+							window.location.href = "https://www.onlinesavaari.com//Hotel/booking-history/";
+						},
+					});
+				});
+
+				
+			}
+		});
+	})
+
+
+</script>
+
+</body>
+
+</html>

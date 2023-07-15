@@ -14,6 +14,8 @@ urlpatterns = [
     
 	path('booking-history-details/<str:ids>/', HotelBookingHistoryDetailsView.as_view(), name='hotel_booking_history_details'),
     
+	path('hotel-cancel/<str:ids>/', HotelCancel.as_view(), name='hotel_cancel'),
     
+	path('hotel_get_data/', hotel_get_data, name='hotel_get_data'),
     
 ]
