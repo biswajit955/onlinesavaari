@@ -421,8 +421,8 @@ class HotelPaymentView(View):
             'email': f'{email}',
             'amount': f'{amount}',
             'productinfo': 'Online Savaari',
-            'surl': f'https://onlinesavaari.com/Pay_success_hotel/hotel:{txnid}/',
-            'furl': f'https://onlinesavaari.com/Pay_failed/{bookingId}/',
+            'surl': f'http://127.0.0.1:8000/Pay_success_hotel/hotel:{txnid}/',
+            'furl': f'http://127.0.0.1:8000/Pay_failed/{bookingId}/',
             'hash': hashed_form
         }
         final_response = easebuzzObj.initiatePaymentAPI(postDict)
