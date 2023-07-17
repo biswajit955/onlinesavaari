@@ -80,7 +80,7 @@
 
     .form-group.inline-wrapper-child>div>input:first-child {
         order: 2;
-        width: 228px;
+        width: 280px;
     }
 
     .form-group.inline-wrapper-child>div>input:last-child {
@@ -593,8 +593,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" min="10" max="10" name="mobile"
-                                                placeholder="Phone Number" value="{{gstdetail.0.0.mobile}}" required>
+                                            <input type="tel" class="form-control" pattern="[0-9]{10}" maxlength="10"
+                                                id="mobile" name="mobile" placeholder="Phone Number"
+                                                value="{{gstdetail.0.0.mobile}}" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -1204,7 +1205,17 @@
 
 
 </script>
+<script>
+    const mobileInput = document.getElementById('mobile');
+    const mobileForm = document.getElementById('mobileForm');
 
+    mobileInput.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '');
+
+        const enteredNumber = this.value;
+        const valid = /^\d{10}$/.test(enteredNumber);
+    });
+</script>
 
 </body>
 
