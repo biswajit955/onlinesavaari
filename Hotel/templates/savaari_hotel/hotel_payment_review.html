@@ -11,9 +11,81 @@
         color: #a5a2a2;
     }
 
-    .pan_number_edit {
-        margin-left: 110px;
-        margin-top: 20Px;
+    .title_style {
+        margin-right: 10px !important;
+
+    }
+
+    .inline-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .inline-wrapper .form-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .form-group.inline-wrapper>div {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .form-group.inline-wrapper>div>select,
+    .form-group.inline-wrapper>div>input {
+        flex: 1;
+    }
+
+    .form-group.inline-wrapper>div>select {
+        flex: 0.2;
+    }
+
+    .form-group.inline-wrapper>div>input:first-child {
+        order: 2;
+    }
+
+    .form-group.inline-wrapper>div>input:last-child {
+        order: 3;
+    }
+
+    .inline-wrapper-child {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .inline-wrapper-child .form-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .form-group.inline-wrapper-child>div {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .form-group.inline-wrapper-child>div>select,
+    .form-group.inline-wrapper-child>div>input {
+        flex: 1;
+    }
+
+    .form-group.inline-wrapper-child>div>select {
+        flex: 0.2;
+        order: 1;
+        width: 120px;
+    }
+
+    .form-group.inline-wrapper-child>div>input:first-child {
+        order: 2;
+        width: 228px;
+    }
+
+    .form-group.inline-wrapper-child>div>input:last-child {
+        order: 3;
+
     }
 
     .logo-widget,
@@ -53,7 +125,7 @@
         display: flex;
     }
 
-    /* display 3 */
+
 
     @media (min-width: 768px) {
 
@@ -475,28 +547,12 @@
                                     </ul>
                                 </div>
                                 <div class="notes-list mt-3">
-                                    <h4>
+                                    <h5>
                                         <i class="la la-info-circle"></i> Cancellation Policy:
-                                    </h4>
+                                    </h5>
                                     <ul>
                                         {% if cancellation_data.cancellationPolicy.ifra == True %}
-                                            {% if cancellation_data.cancellationPolicy.pd.note %}
-                                                <li class="list-item">{{cancellation_data.cancellationPolicy.pd.note}}</li>
-                                            {% else %}
-                                                <li class="list-item">full refund allowed</li>
-                                            {% endif %}
-                                            <br>
-                                                <h5>
-                                                    <i class="la la-info-circle"></i> List of Penalty:
-                                                </h5>
-                                                <br>
-                                                <h5>
-                                                    {% for pd in cancellation_data.cancellationPolicy.pd%}
-                                                        <li> From <b>{{pd.fdt}}</b> To <b>{{pd.tdt}}</b> Penalty amount :- <b>{{pd.am}}</b></li>
-                                                    {% endfor %}
-                                                </h5>   
-                                            
-                                        
+                                        <li class="list-item">{{cancellation_data.cancellationPolicy.pd.note}}</li>
                                         {% else %}
                                         <li class="list-item">No refund if you cancel this booking.You might be charged
                                             upto the full cost of stay (including taxes &amp; service charge) if you do
@@ -952,13 +1008,19 @@
             const adultHeading = document.createElement('p');
             adultHeading.textContent = 'Adult ' + (i + 1);
             adultHeading.style.marginBottom = '0';
+
             const inlineDiv = document.createElement('div');
-            inlineDiv.className = 'form-group';
+            inlineDiv.className = 'form-group inline-wrapper';
+
+
+            const nameGroupDiv = document.createElement('div');
+            nameGroupDiv.style.display = 'flex';
+            nameGroupDiv.style.gap = '10px';
 
             const titleSelect = document.createElement('select');
             titleSelect.name = 'title_' + (index + 1) + "_" + 'Adult' + "_" + (i + 1);
             titleSelect.id = 'title';
-            titleSelect.className = 'form-control mr-4';
+            titleSelect.className = 'form-control mr-4 title_style';
             titleSelect.required = true;
             const titleOptionDefault = document.createElement('option');
             titleOptionDefault.value = '';
@@ -992,9 +1054,14 @@
 
             firstNameInput.addEventListener('input', validateTextOnly);
             firstNameInput.required = true;
-            firstNameInput.style.padding = '10px 55px';
+            firstNameInput.style.padding = '10px';
             firstNameInput.setAttribute = 'required'
+
             inlineDiv.appendChild(firstNameInput);
+            nameGroupDiv.appendChild(titleSelect);
+            nameGroupDiv.appendChild(firstNameInput);
+            inlineDiv.appendChild(nameGroupDiv);
+
             const lastNameInput = document.createElement('input');
             lastNameInput.style.textTransform = 'uppercase';
             lastNameInput.type = 'text';
@@ -1004,10 +1071,13 @@
             // lastNameInput.name = 'last_name';
             lastNameInput.placeholder = 'Last Name Room ' + (index + 1) + ' Adult ' + (i + 1);
             lastNameInput.addEventListener('input', validateTextOnly);
-            lastNameInput.style.padding = '10px 55px';
+            lastNameInput.style.padding = '10px';
             inlineDiv.appendChild(lastNameInput);
             fieldset.appendChild(adultHeading);
             fieldset.appendChild(inlineDiv);
+            nameGroupDiv.appendChild(titleSelect);
+            nameGroupDiv.appendChild(lastNameInput);
+            inlineDiv.appendChild(nameGroupDiv);
             const panInput = document.createElement('input');
             panInput.type = 'text';
             panInput.className = 'form-control mr-2 pan_number_edit';
@@ -1020,6 +1090,17 @@
 
             fieldset.appendChild(adultHeading);
             fieldset.appendChild(inlineDiv);
+
+            panInput.addEventListener('input', function () {
+                const isValid = isValidPanNumber(panInput.value);
+                if (isValid) {
+                    panInput.style.border = '1px solid green';
+                } else if (panInput.value === '') {
+                    panInput.style.border = '1px solid #007bff';
+                } else {
+                    panInput.style.border = '1px solid red';
+                }
+            });
         }
 
         const headingGap = document.createElement('div');
@@ -1030,13 +1111,17 @@
             const childHeading = document.createElement('p');
             childHeading.textContent = 'Child ' + (i + 1);
             childHeading.style.marginBottom = '0';
-            const inlineDiv = document.createElement('div');
-            inlineDiv.className = 'form-group';
 
+            const inlineDiv = document.createElement('div');
+            inlineDiv.className = 'form-group inline-wrapper-child';
+
+            const nameGroupDiv = document.createElement('div');
+            nameGroupDiv.style.display = 'flex';
+            nameGroupDiv.style.gap = '10px';
             const titleSelect = document.createElement('select');
             titleSelect.name = 'title_' + (index + 1) + "_" + 'Child' + "_" + (i + 1);
             titleSelect.id = 'title';
-            titleSelect.className = 'form-control mr-4 custom-select';
+            titleSelect.className = 'form-control mr-4 title_style';
             titleSelect.required = true;
             const titleOptionDefault = document.createElement('option');
             titleOptionDefault.value = '';
@@ -1047,18 +1132,18 @@
             titleOptionMr.value = 'Master';
             titleOptionMr.textContent = 'MASTER';
             titleOptionMr.className = "master_style"
-                const titleOptionMrs = document.createElement('option');
-                titleOptionMrs.value = 'Miss';
-                titleOptionMrs.textContent = 'MISS';
-                // const titleOptionMs = document.createElement('option');
-                // titleOptionMs.value = 'Ms';
-                // titleOptionMs.textContent = 'MS.';
-                // titleSelect.appendChild(titleOptionDefault);
+            const titleOptionMrs = document.createElement('option');
+            titleOptionMrs.value = 'Miss';
+            titleOptionMrs.textContent = 'MISS';
+            // const titleOptionMs = document.createElement('option');
+            // titleOptionMs.value = 'Ms';
+            // titleOptionMs.textContent = 'MS.';
+            // titleSelect.appendChild(titleOptionDefault);
             titleSelect.appendChild(titleOptionMr);
             titleSelect.appendChild(titleOptionMrs);
             // titleSelect.appendChild(titleOptionMs);
             inlineDiv.appendChild(titleSelect);
-
+            inlineDiv.appendChild(nameGroupDiv);
             const firstNameInput = document.createElement('input');
             firstNameInput.style.textTransform = 'uppercase';
             firstNameInput.type = 'text';
@@ -1069,8 +1154,11 @@
             firstNameInput.placeholder = 'First Name Room ' + (index + 1) + ' Child ' + (i + 1);
             firstNameInput.addEventListener('input', validateTextOnly);
             firstNameInput.required = true;
-            firstNameInput.style.padding = '10px 55px';
+            firstNameInput.style.padding = '10px';
             inlineDiv.appendChild(firstNameInput);
+            nameGroupDiv.appendChild(titleSelect);
+            nameGroupDiv.appendChild(firstNameInput);
+            inlineDiv.appendChild(nameGroupDiv);
             const lastNameInput = document.createElement('input');
             lastNameInput.style.textTransform = 'uppercase';
             lastNameInput.type = 'text';
@@ -1080,7 +1168,10 @@
             lastNameInput.name = 'last_name_Room_' + (index + 1) + "_" + 'Child' + "_" + (i + 1);
             lastNameInput.placeholder = 'Last Name Room ' + (index + 1) + ' Child ' + (i + 1);
             lastNameInput.addEventListener('input', validateTextOnly);
-            lastNameInput.style.padding = '10px 55px';
+            lastNameInput.style.padding = '10px';
+            nameGroupDiv.appendChild(titleSelect);
+            nameGroupDiv.appendChild(lastNameInput);
+            inlineDiv.appendChild(nameGroupDiv);
             inlineDiv.appendChild(lastNameInput);
             fieldset.appendChild(childHeading);
             fieldset.appendChild(inlineDiv);
@@ -1093,11 +1184,25 @@
         fieldset.appendChild(hr);
         form.appendChild(fieldset);
     });
+
+
+
+
     // const button = document.createElement('button');
     // button.textContent = 'Submit';
     // button.className = 'btn btn-primary mt-3';
     const formContainer = document.getElementById('formContainer');
     formContainer.appendChild(form);
+
+
+
+    function isValidPanNumber(panNumber) {
+        const panRegex = /^([A-Z]{5})(\d{4})([A-Z])$/;
+        return panRegex.test(panNumber.toUpperCase());
+    }
+
+
+
 </script>
 
 
