@@ -596,13 +596,18 @@
                                             <input type="tel" class="form-control" pattern="[0-9]{10}" maxlength="10"
                                                 id="mobile" name="mobile" placeholder="Phone Number"
                                                 value="{{gstdetail.0.0.mobile}}" required>
+                                            <p id="error-msg" style="color: red; display: none;">Please enter a valid
+                                                10-digit mobile number.</p>
+
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input type="text" class="form-control"
+                                            <input type="text" class="form-control" id="email"
                                                 placeholder="Official Email ID (Will be your Login ID)" name="email"
                                                 value="{{gstdetail.0.0.email}}" required>
+                                            <p id="error-sms" style="color: red; display: none;">Please enter a valid
+                                                email address.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1208,13 +1213,44 @@
 </script>
 <script>
     const mobileInput = document.getElementById('mobile');
-    const mobileForm = document.getElementById('mobileForm');
+    const errorMsg = document.getElementById('error-msg');
+
+    mobileInput.addEventListener('keydown', function (event) {
+        const key = event.key;
+        const isNumeric = /^\d$/.test(key);
+        const isControlKey = ["Backspace", "ArrowLeft", "ArrowRight", "Delete", "Tab"].includes(key);
+
+        if (!isNumeric && !isControlKey) {
+            event.preventDefault();
+            errorMsg.style.display = 'block';
+        } else {
+            errorMsg.style.display = 'none';
+        }
+    });
 
     mobileInput.addEventListener('input', function () {
-        this.value = this.value.replace(/\D/g, '');
+        const mobileValue = mobileInput.value.trim();
+        if (mobileValue.length !== 10) {
+            errorMsg.style.display = 'block';
+        } else {
+            errorMsg.style.display = 'none';
+        }
+    });
+</script>
+<script>
+    const emailInput = document.getElementById('email');
+    const errorSms = document.getElementById('error-sms');
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        const enteredNumber = this.value;
-        const valid = /^\d{10}$/.test(enteredNumber);
+    emailInput.addEventListener('input', function () {
+        const emailValue = emailInput.value.trim();
+        if (!emailValue) {
+            errorSms.style.display = 'none';
+        } else if (!emailPattern.test(emailValue)) {
+            errorSms.style.display = 'block';
+        } else {
+            errorSms.style.display = 'none';
+        }
     });
 </script>
 
