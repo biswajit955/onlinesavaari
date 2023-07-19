@@ -1090,10 +1090,15 @@
             panInput.className = 'form-control mr-2 pan_number_edit';
             panInput.name = 'pan_number_' + (index + 1) + "_" + (i + 1);
             panInput.placeholder = 'PAN NUMBER';
+            panInput.id = 'pancard';
             panInput.required = true;
             panInput.maxLength = 10;
             panInput.style.padding = '10px 55px';
             inlineDiv.appendChild(panInput);
+
+            const panValidationMessage = document.createElement('div');
+            panValidationMessage.id = 'panValidationMessages';
+            inlineDiv.appendChild(panValidationMessage);
 
             fieldset.appendChild(adultHeading);
             fieldset.appendChild(inlineDiv);
@@ -1210,6 +1215,55 @@
 
 
 
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('form_url').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const panNumberInputs = document.querySelectorAll('.pan_number_edit');
+            let isFormValid = true;
+
+            panNumberInputs.forEach(input => {
+                const panNumber = input.value.trim();
+                const panValidationMessage = input.nextElementSibling;
+
+                if (!validatePanNumber(panNumber)) {
+                    isFormValid = false;
+                    panValidationMessage.textContent = 'Invalid PAN card format. Please enter a valid PAN number.';
+                    panValidationMessage.style.color = 'red';
+                } else {
+                    panValidationMessage.textContent = '';
+                }
+            });
+
+            if (isFormValid) {
+                event.target.submit();
+            }
+        });
+
+        const panNumberInputs = document.querySelectorAll('.pan_number_edit');
+        panNumberInputs.forEach(input => {
+            input.addEventListener('input', function () {
+                const panNumber = input.value.trim();
+                const panValidationMessage = input.nextElementSibling;
+
+                if (!validatePanNumber(panNumber)) {
+                    panValidationMessage.textContent = 'Invalid PAN card format. Please enter a valid PAN number.';
+                    panValidationMessage.style.color = 'red';
+                } else {
+                    panValidationMessage.textContent = '';
+                }
+            });
+        });
+
+        // PAN number validation function
+        function validatePanNumber(panNumber) {
+            const panRegex = /^[A-Za-z]{5}\d{4}[A-Za-z]$/;
+            return panRegex.test(panNumber);
+        }
+    });
 </script>
 <script>
     const mobileInput = document.getElementById('mobile');
