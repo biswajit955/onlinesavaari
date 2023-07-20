@@ -48,17 +48,13 @@ class HotelHomeView(View):
             check_in_time = request.POST.get('check_in_time')
             check_out_date = request.POST.get('check_out_date')
             check_out_time = request.POST.get('check_out_time')
-            no_of_adultes = request.POST.get('no_of_adulte')
-            no_of_childs = request.POST.get('no_of_child')
+            # no_of_adultes = request.POST.get('no_of_adulte')
+            # no_of_childs = request.POST.get('no_of_child')
             no_of_day = datetime.strptime(check_out_date, "%d-%m-%Y")-datetime.strptime(check_in_date, "%d-%m-%Y")
             check_in_date = datetime.strptime(check_in_date, "%d-%m-%Y").strftime('%Y-%m-%d')
             check_out_date = datetime.strptime(check_out_date, "%d-%m-%Y").strftime('%Y-%m-%d')
-            print(no_of_adultes)
-            if no_of_childs == None:
-                no_of_childs = 0
 
-            city_name = city_name.split(',')[0]
-            
+            city_name = city_name.split(',')[0]           
             
             with open("static/hotel/tripjack_City_hotel_Data2.json") as json_file:
                 json_data = json.load(json_file)
@@ -139,7 +135,7 @@ class HotelHomeView(View):
 
                 if resp.status_code == 200:
                     json_data = resp.json()
-                    hotel_data = json_data['searchResult']['his'][0:100]
+                    hotel_data = json_data['searchResult']['his']
                     data = {'all_data': []}
 
                     for i in hotel_data:
@@ -161,16 +157,18 @@ class HotelHomeView(View):
                         
                         data['all_data'].append(temp_dict)
 
-
                     if data2 is not None:
                         data['all_data'].extend(data2['all_data'])
-
+                    
+                    no_of_adultes = [int(numberOfAdults["numberOfAdults"]) for numberOfAdults in json_data["searchQuery"]["roomInfo"]]
+                    no_of_childs = [int(numberOfChild["numberOfChild"]) for numberOfChild in json_data["searchQuery"]["roomInfo"]]
+                    print(no_of_adultes, no_of_childs)
                     return render(request, 'savaari_hotel/hotel-listing.html',context={'data':data,
                                                                                     'no_of_day':no_of_day.days,
                                                                                     'check_in_date':check_in_date,
                                                                                     'check_out_date':check_out_date,
-                                                                                    'no_of_adultes':no_of_adultes,
-                                                                                    'no_of_child':no_of_childs})
+                                                                                    'no_of_adultes':sum(no_of_adultes),
+                                                                                    'no_of_child':sum(no_of_childs)})
                 elif resp.status_code == 400:
                     json_data = resp.json()
                     hotel_data = json_data['errors'][0]['message']
